@@ -25,8 +25,8 @@ public class ItemETBase extends Item
         this.setHasSubtypes(true);
     }
 
-    public HashMap<Integer, String> items = new HashMap();
-    public HashMap<String, Icon> icons = new HashMap();
+    public HashMap<Integer, String> items = new HashMap<Integer, String>();
+    public HashMap<String, Icon> icons = new HashMap<String, Icon>();
 
     public ItemStack addItem(int number, String name, boolean shouldRegister)
     {

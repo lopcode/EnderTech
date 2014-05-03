@@ -85,6 +85,7 @@ public class GUIBlockOverlay extends Gui
                                 am = "Inf"; // infinity
 
                             FontHelper.drawItemQuantity(mc.fontRenderer, 3, 3, am);
+                            FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2, 3, 1.0, "Radius: " + exchanger.getTargetRadius(player.inventory.getCurrentItem()));
 
                             GL11.glPopMatrix();
                             GL11.glPopMatrix();

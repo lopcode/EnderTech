@@ -75,7 +75,7 @@ public class WorldTickHandler implements ITickHandler
             {
                 int blockId = world.getBlockId(exchange.coord.x, exchange.coord.y, exchange.coord.z);
                 int blockMetadata = world.getBlockMetadata(exchange.coord.x, exchange.coord.y, exchange.coord.z);
-                ItemExchanger exchanger = null;
+                ItemExchanger exchanger;
 
                 if ((exchange.player.inventory.getStackInSlot(exchange.hotbar_id) != null) && ((exchange.player.inventory.getStackInSlot(exchange.hotbar_id).getItem() instanceof ItemExchanger)))
                 {

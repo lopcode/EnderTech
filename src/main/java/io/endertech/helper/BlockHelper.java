@@ -45,11 +45,8 @@ public class BlockHelper
 
     public static boolean isBlockExposed(World world, int x, int y, int z)
     {
-        if (isSoftBlock(world, x + 1, y, z) || isSoftBlock(world, x - 1, y, z)
+        return isSoftBlock(world, x + 1, y, z) || isSoftBlock(world, x - 1, y, z)
                 || isSoftBlock(world, x, y + 1, z) || isSoftBlock(world, x, y - 1, z)
-                || isSoftBlock(world, x, y, z + 1) || isSoftBlock(world, x, y, z - 1))
-            return true;
-        else
-            return false;
+                || isSoftBlock(world, x, y, z + 1) || isSoftBlock(world, x, y, z - 1);
     }
 }

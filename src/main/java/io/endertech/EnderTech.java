@@ -1,6 +1,7 @@
 package io.endertech;
 
 import codechicken.lib.math.MathHelper;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -8,8 +9,10 @@ import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.client.GUIBlockOverlay;
+import io.endertech.client.KeyBindingHandler;
 import io.endertech.common.CommonProxy;
 import io.endertech.config.ConfigHandler;
 import io.endertech.gui.CreativeTabItems;
@@ -17,6 +20,7 @@ import io.endertech.helper.BlockHelper;
 import io.endertech.helper.LogHelper;
 import io.endertech.items.ETItems;
 import io.endertech.lib.Reference;
+import io.endertech.network.packet.PacketHandlerET;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,6 +32,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import java.io.File;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, certificateFingerprint = Reference.FINGERPRINT, dependencies = "required-after:ThermalExpansion@[3.0.0.2,);required-after:ForgeMultipart")
+@NetworkMod(channels = {Reference.MOD_ID}, packetHandler = PacketHandlerET.class)
 public class EnderTech
 {
     @Mod.Instance(Reference.MOD_ID)
@@ -68,6 +73,7 @@ public class EnderTech
         proxy.registerTickerHandlers();
 
         // KeyBinding handler
+        KeyBindingRegistry.registerKeyBinding(new KeyBindingHandler());
 
         // Sound handler
 
