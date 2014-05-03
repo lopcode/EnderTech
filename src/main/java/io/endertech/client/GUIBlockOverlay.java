@@ -1,6 +1,6 @@
 package io.endertech.client;
 
-import codechicken.lib.render.FontUtils;
+import io.endertech.helper.FontHelper;
 import io.endertech.items.ItemExchanger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -84,7 +84,7 @@ public class GUIBlockOverlay extends Gui
                             if (!player.inventory.getCurrentItem().isItemDamaged())
                                 am = "Inf"; // infinity
 
-                            FontUtils.drawItemQuantity(3, 3, am);
+                            FontHelper.drawItemQuantity(mc.fontRenderer, 3, 3, am);
 
                             GL11.glPopMatrix();
                             GL11.glPopMatrix();
