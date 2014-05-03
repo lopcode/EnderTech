@@ -98,11 +98,11 @@ public class EnderTech
         LogHelper.info("Registering recipes");
         ItemStack capacitorReinforced = GameRegistry.findItemStack("ThermalExpansion", "capacitorReinforced", 1);
         ItemStack capacitorResonant = GameRegistry.findItemStack("ThermalExpansion", "capacitorResonant", 1);
-        ItemStack tesseractFrameFull = GameRegistry.findItemStack("ThermalExpansion", "tesseractFrameFull", 1);
+        ItemStack tesseract = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Tesseract"));
 
         ItemStack enderEyeStack = new ItemStack(Item.eyeOfEnder);
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerBasic, new Object[]{"XE", "XC", "XT", 'E', enderEyeStack, 'C', capacitorReinforced, 'T', tesseractFrameFull}));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerAdvanced, new Object[]{"XE", "XC", "XT", 'E', enderEyeStack, 'C', capacitorResonant, 'T', tesseractFrameFull}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerBasic, new Object[]{"XE", "XC", "XT", 'E', enderEyeStack, 'C', capacitorReinforced, 'T', tesseract}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerAdvanced, new Object[]{"XE", "XC", "XT", 'E', enderEyeStack, 'C', capacitorResonant, 'T', tesseract}));
     }
 }
