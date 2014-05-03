@@ -164,7 +164,7 @@ public class ItemExchanger extends ItemETEnergyContainer
         }
     }
 
-    public static final int[] RECEIVE = {0, 1 * 1000, 10 * 1000};
+    public static final int[] RECEIVE = {0, 1 * 2000, 10 * 2000};
     public static final int[] SEND = {10 * 1000000, 10 * 1000000, 10 * 1000000};
-    public static final int[] CAPACITY = {0, 1 * 1000000, 10 * 1000000};
+    public static final int[] CAPACITY = {0, 1 * 2000000, 10 * 1000000};
 }

@@ -8,6 +8,7 @@ import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.client.GUIBlockOverlay;
 import io.endertech.common.CommonProxy;
 import io.endertech.config.ConfigHandler;
@@ -19,7 +20,10 @@ import io.endertech.lib.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.io.File;
 
@@ -90,5 +94,15 @@ public class EnderTech
         MinecraftForge.EVENT_BUS.register(new GUIBlockOverlay((Minecraft.getMinecraft())));
 
         BlockHelper.initSoftBlocks();
+
+        LogHelper.info("Registering recipes");
+        ItemStack capacitorReinforced = GameRegistry.findItemStack("ThermalExpansion", "capacitorReinforced", 1);
+        ItemStack capacitorResonant = GameRegistry.findItemStack("ThermalExpansion", "capacitorResonant", 1);
+        ItemStack tesseractFrameFull = GameRegistry.findItemStack("ThermalExpansion", "tesseractFrameFull", 1);
+
+        ItemStack enderEyeStack = new ItemStack(Item.eyeOfEnder);
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerBasic, new Object[] { "XE", "XC", "XT", 'E', enderEyeStack, 'C', capacitorReinforced, 'T', tesseractFrameFull}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerAdvanced, new Object[] { "XE", "XC", "XT", 'E', enderEyeStack, 'C', capacitorResonant, 'T', tesseractFrameFull}));
     }
 }
