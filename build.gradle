@@ -1,0 +1,148 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
+    }
+}
+
+repositories {
+    ivy {
+        name 'Forge FS legacy'
+        artifactPattern "http://files.minecraftforge.net/[module]/[module]-dev-[revision].[ext]"
+    }
+
+    ivy {
+        name 'CB FS'
+        artifactPattern "http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.6.4/[module]-dev%20[revision].[ext]"
+    }
+}
+
+apply plugin: 'forge'
+
+def loadProperties(propsFilename) {
+    def props = new Properties()
+    new File(propsFilename).withInputStream {
+        stream -> props.load(stream)
+    }
+
+    return new ConfigSlurper().parse(props)
+}
+
+def config = loadProperties("build.properties")
+ext.keystore_config = null
+ext.keystore = null
+
+if (project.hasProperty("endertech_keystore_dir")) {
+    ext.keystore_config = loadProperties(project.endertech_keystore_dir + File.separator + "keystore.properties")
+    ext.keystore = project.endertech_keystore_dir + File.separator + ext.keystore_config.key_store
+}
+
+def env = System.getenv()
+
+// Get Jenkins metadata
+ext.jenkinsManifest = manifest {
+    if (env.BUILD_TAG != null) { // If this works, we'll assume we're in Jenkins at least.
+        attributes("Jenkins-Build": "true", "Jenkins-Tag": env.BUILD_TAG, "Jenkins-ID": env.BUILD_ID)
+    } else {
+        attributes("Jenkins-Build": "false")
+    }
+}
+// Get Git metadata (if in Jenkins)
+ext.gitManifest = manifest {
+    if (env.GIT_BRANCH != null) {
+        attributes("Git-Branch": env.GIT_BRANCH, "Git-Hash": env.GIT_COMMIT)
+    }
+}
+
+dependencies {
+    //compile fileTree(dir: 'lib', includes: ['*.jar'])
+    compile name: 'ForgeMultipart', version: "${config.minecraft_version}-${config.FMP_version}", ext: 'jar'
+    compile name: 'CodeChickenLib', version: "${config.minecraft_version}-${config.CCLIB_version}", ext: 'jar'
+    compile name: 'NotEnoughItems', version: "${config.NEI_version}", type: 'jar'
+}
+
+group = "io.endertech"
+version = config.mod_version
+archivesBaseName = "EnderTech"
+
+minecraft {
+    version = config.minecraft_version + "-" + config.forge_version
+    assetDir = 'run/assets'
+
+    replaceIn "lib/Reference.java"
+    if (keystore_config != null)
+        replace "@FINGERPRINT@", keystore_config.key_sha1
+}
+
+task buildInfo {
+    if (env.BUILD_NUMBER != null) {
+        ext.build_number = "${env.BUILD_NUMBER}"
+    } else {
+        def tag_cmd = "git rev-parse --short HEAD"
+        def tag_proc = tag_cmd.execute()
+        tag_proc.waitFor()
+
+        def branch_cmd = "git branch"
+        def branch_proc = branch_cmd.execute()
+        branch_proc.waitFor()
+
+        if (tag_proc.exitValue() == 0 && branch_proc.exitValue() == 0) {
+            ext.build_number = branch_proc.text.split(' ')[1].trim() + "-" + tag_proc.text.trim()
+        } else {
+            ext.build_number = "unknown"
+        }
+    }
+}
+
+version = "${config.minecraft_version}-${config.mod_version}.${project.buildInfo.build_number}"
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        include 'version.properties'
+
+        expand 'version': project.version, 'build_number': project.buildInfo.build_number, 'mcversion': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+        exclude 'version.properties'
+    }
+}
+
+// Merge Jenkins and Git manifests to form final manifest in final release jar
+jar {
+    manifest {
+        from jenkinsManifest, gitManifest
+    }
+}
+
+task signJar(dependsOn: 'reobf') {
+    inputs.file jar.getArchivePath()
+    outputs.file jar.getArchivePath()
+
+    onlyIf {
+        return keystore_config != null
+    }
+
+    doLast {
+        ant.signjar(jar: jar.getArchivePath(),
+                alias: keystore_config.key_alias,
+                keystore: keystore,
+                storepass: keystore_config.key_store_password,
+                keypass: keystore_config.key_alias_password,
+                destDir: jar.destinationDir)
+    }
+}

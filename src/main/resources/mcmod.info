@@ -1,0 +1,17 @@
+[{
+    "modid": "EnderTech",
+    "name": "EnderTech",
+    "description": "Unlocking the potential of Ender!",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "http://endertech.io/",
+    "updateUrl": "",
+    "authorList": ["drayshak"],
+    "credits": "drayshak",
+    "screenshots": [],
+    "parent": "",
+    "requiredMods": [],
+    "dependencies": [],
+    "dependants": [],
+    "useDependencyInformation": "false"
+}]
