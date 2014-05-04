@@ -170,12 +170,12 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
         int radius = this.getTargetRadius(itemStack);
 
-        if (keyDescription.equals(KeyBindingHandler.keyToolIncrease.keyDescription))
+        if (keyDescription.equals(KeyBindingHandler.keyToolIncreaseDescription))
         {
             radius++;
 
             LogHelper.info("Tool Increase");
-        } else if (keyDescription.equals(KeyBindingHandler.keyToolDecrease.keyDescription))
+        } else if (keyDescription.equals(KeyBindingHandler.keyToolDecreaseDescription))
         {
             radius--;
 

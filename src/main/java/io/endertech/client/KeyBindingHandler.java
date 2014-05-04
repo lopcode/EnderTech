@@ -17,8 +17,11 @@ import java.util.EnumSet;
 
 public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
 {
-    public static KeyBinding keyToolIncrease = new KeyBinding("ET Tool Increase", Keyboard.KEY_PRIOR);
-    public static KeyBinding keyToolDecrease = new KeyBinding("ET Tool Decrease", Keyboard.KEY_NEXT);
+    public static String keyToolIncreaseDescription = "ET Tool Increase";
+    public static String keyToolDecreaseDescription = "ET Tool Decrease";
+
+    public static KeyBinding keyToolIncrease = new KeyBinding(keyToolIncreaseDescription, Keyboard.KEY_PRIOR);
+    public static KeyBinding keyToolDecrease = new KeyBinding(keyToolDecreaseDescription, Keyboard.KEY_NEXT);
 
     public static KeyBinding[] keyArray = new KeyBinding[]{keyToolIncrease, keyToolDecrease};
     public static boolean[] keyRepeating = new boolean[]{false, false};
