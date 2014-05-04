@@ -4,6 +4,7 @@ import codechicken.lib.vec.BlockCoord;
 import io.endertech.EnderTech;
 import io.endertech.client.KeyBindingHandler;
 import io.endertech.common.WorldTickHandler;
+import io.endertech.config.KeyConfig;
 import io.endertech.helper.BlockHelper;
 import io.endertech.helper.LogHelper;
 import net.minecraft.block.Block;
@@ -170,12 +171,12 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
         int radius = this.getTargetRadius(itemStack);
 
-        if (keyDescription.equals(KeyBindingHandler.keyToolIncreaseDescription))
+        if (keyDescription.equals(KeyConfig.keyToolIncreaseDescription))
         {
             radius++;
 
             LogHelper.info("Tool Increase");
-        } else if (keyDescription.equals(KeyBindingHandler.keyToolDecreaseDescription))
+        } else if (keyDescription.equals(KeyConfig.keyToolDecreaseDescription))
         {
             radius--;
 
