@@ -4,6 +4,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import io.endertech.config.KeyConfig;
 import io.endertech.helper.LogHelper;
 import io.endertech.items.IKeyHandler;
 import io.endertech.lib.Reference;
@@ -17,11 +18,8 @@ import java.util.EnumSet;
 
 public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
 {
-    public static String keyToolIncreaseDescription = "ET Tool Increase";
-    public static String keyToolDecreaseDescription = "ET Tool Decrease";
-
-    public static KeyBinding keyToolIncrease = new KeyBinding(keyToolIncreaseDescription, Keyboard.KEY_PRIOR);
-    public static KeyBinding keyToolDecrease = new KeyBinding(keyToolDecreaseDescription, Keyboard.KEY_NEXT);
+    public static KeyBinding keyToolIncrease = new KeyBinding(KeyConfig.keyToolIncreaseDescription, Keyboard.KEY_PRIOR);
+    public static KeyBinding keyToolDecrease = new KeyBinding(KeyConfig.keyToolDecreaseDescription, Keyboard.KEY_NEXT);
 
     public static KeyBinding[] keyArray = new KeyBinding[]{keyToolIncrease, keyToolDecrease};
     public static boolean[] keyRepeating = new boolean[]{false, false};
