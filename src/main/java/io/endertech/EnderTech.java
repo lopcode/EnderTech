@@ -2,6 +2,7 @@ package io.endertech;
 
 import codechicken.lib.math.MathHelper;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -73,7 +74,8 @@ public class EnderTech
         proxy.registerTickerHandlers();
 
         // KeyBinding handler
-        KeyBindingRegistry.registerKeyBinding(new KeyBindingHandler());
+        if (FMLCommonHandler.instance().getSide().isClient())
+            KeyBindingRegistry.registerKeyBinding(new KeyBindingHandler());
 
         // Sound handler
 
