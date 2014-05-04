@@ -45,6 +45,7 @@ public class GUIBlockOverlay extends Gui
                     if ((player.inventory.getCurrentItem().getItem() instanceof ItemExchanger))
                     {
                         ItemExchanger exchanger = (ItemExchanger) player.inventory.getCurrentItem().getItem();
+                        ItemStack exchangerStack = player.inventory.getCurrentItem();
                         ItemStack source = exchanger.getSourceBlock(player.inventory.getCurrentItem());
                         if (source != null)
                         {
@@ -81,11 +82,11 @@ public class GUIBlockOverlay extends Gui
                             GL11.glPushMatrix();
 
                             String am = Integer.toString(this.lastExchangeSourceCount);
-                            if (!player.inventory.getCurrentItem().isItemDamaged())
+                            if (exchanger.isCreative(exchangerStack))
                                 am = "Inf"; // infinity
 
                             FontHelper.drawItemQuantity(mc.fontRenderer, 3, 3, am);
-                            FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2, 3, 1.0, "Radius: " + exchanger.getTargetRadius(player.inventory.getCurrentItem()));
+                            FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2, 3, 1.0, "Radius: " + exchanger.getTargetRadius(exchangerStack));
 
                             GL11.glPopMatrix();
                             GL11.glPopMatrix();

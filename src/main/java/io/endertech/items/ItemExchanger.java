@@ -18,14 +18,19 @@ import java.util.List;
 
 public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 {
-    public static final int MIN_RADIUS = 0;
-    public static final int MAX_RADIUS = 7;
+    public static final int MIN_RADIUS = 1;
+    public static final int MAX_RADIUS = 8;
 
     public ItemExchanger(int itemID)
     {
         super(itemID);
         this.setMaxStackSize(1);
         this.setCreativeTab(EnderTech.tabItems);
+    }
+
+    public boolean isCreative(ItemStack stack)
+    {
+        return stack.getItemDamage() == Types.CREATIVE.ordinal();
     }
 
     @Override
@@ -64,7 +69,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
                 setDefaultTag(stack, 0);
             }
 
-            if (stack.getItemDamage() == Types.CREATIVE.ordinal())
+            if (this.isCreative(stack))
                 list.add("Charge: Infinite");
             else
                 list.add("Charge: " + (int) (this.getEnergyStored(stack) / 1000.0) + "k / " + (int) (this.getMaxEnergyStored(stack) / 1000.0) + "k RF");
@@ -116,7 +121,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
         if ((pb != null) && (player.worldObj.getBlockTileEntity(x, y, z) == null) && !player.worldObj.isRemote)
         {
-            WorldTickHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), player.worldObj.getBlockId(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb.itemID, pb.getItemDamage(), this.getTargetRadius(itemstack), player, player.inventory.currentItem, new HashSet<BlockCoord>());
+            WorldTickHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), player.worldObj.getBlockId(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb.itemID, pb.getItemDamage(), this.getTargetRadius(itemstack) - 1, player, player.inventory.currentItem, new HashSet<BlockCoord>());
         }
 
         return true;
@@ -125,7 +130,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     @Override
     public int extractEnergy(ItemStack container, int maxExtract, boolean simulate)
     {
-        if (container.getItemDamage() == Types.CREATIVE.ordinal())
+        if (this.isCreative(container))
             return maxExtract;
         else
             return super.extractEnergy(container, maxExtract, simulate);

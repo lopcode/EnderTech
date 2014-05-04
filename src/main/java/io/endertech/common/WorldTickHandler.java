@@ -9,6 +9,7 @@ import io.endertech.items.ItemExchanger;
 import io.endertech.lib.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -65,12 +66,12 @@ public class WorldTickHandler implements ITickHandler
         if (queue == null)
             return;
 
-        boolean polled = false;
-        while (!polled)
+        int rounds = 2;
+        while (rounds > 0)
         {
             Exchange exchange = (Exchange) queue.poll();
             if (exchange == null)
-                polled = true;
+                rounds = 0;
             else
             {
                 int blockId = world.getBlockId(exchange.coord.x, exchange.coord.y, exchange.coord.z);
@@ -79,11 +80,13 @@ public class WorldTickHandler implements ITickHandler
 
                 if ((exchange.player.inventory.getStackInSlot(exchange.hotbar_id) != null) && ((exchange.player.inventory.getStackInSlot(exchange.hotbar_id).getItem() instanceof ItemExchanger)))
                 {
-                    exchanger = (ItemExchanger) exchange.player.inventory.getStackInSlot(exchange.hotbar_id).getItem();
+                    ItemStack exchangerStack = exchange.player.inventory.getStackInSlot(exchange.hotbar_id);
+                    exchanger = (ItemExchanger) exchangerStack.getItem();
 
                     if (((blockId != exchange.targetId) || (blockMetadata != exchange.targetMetadata)) && (exchanger != null) && exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, true) >= ItemConfig.itemExchangerBlockCost && !exchange.visits.contains(exchange.coord))
                     {
-                        polled = true;
+                        if (!exchanger.isCreative(exchangerStack))
+                            rounds--;
 
                         world.setBlock(exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.targetId, exchange.targetMetadata, 3);
                         exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, false);
