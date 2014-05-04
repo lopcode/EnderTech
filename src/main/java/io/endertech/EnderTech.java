@@ -99,7 +99,8 @@ public class EnderTech
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-        MinecraftForge.EVENT_BUS.register(new GUIBlockOverlay((Minecraft.getMinecraft())));
+        if (FMLCommonHandler.instance().getSide().isClient())
+            MinecraftForge.EVENT_BUS.register(new GUIBlockOverlay((Minecraft.getMinecraft())));
 
         BlockHelper.initSoftBlocks();
 
