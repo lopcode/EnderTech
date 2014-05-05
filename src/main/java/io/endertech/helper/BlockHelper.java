@@ -1,6 +1,7 @@
 package io.endertech.helper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFluid;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fluids.BlockFluidBase;
@@ -18,7 +19,7 @@ public class BlockHelper
         {
             Block block = (Block) o;
 
-            if (block instanceof BlockFluidBase || block instanceof IPlantable)
+            if (block instanceof BlockFluidBase || block instanceof BlockFluid || block instanceof IPlantable)
             {
                 softBlocks.add(block);
             }
