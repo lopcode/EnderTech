@@ -14,10 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class WorldTickHandler implements ITickHandler
@@ -90,29 +87,58 @@ public class WorldTickHandler implements ITickHandler
 
                         if (sourceSlot > 0 || exchanger.isCreative(exchangerStack))
                         {
+                            boolean inventoryModify = true;
+
                             if (!exchanger.isCreative(exchangerStack))
                             {
-                                codechicken.lib.inventory.InventoryUtils.consumeItem(exchange.player.inventory, sourceSlot);
-                                rounds--;
+                                ArrayList<ItemStack> droppedItems = Block.blocksList[exchange.sourceId].getBlockDropped(exchange.player.worldObj, exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.sourceMetadata, 0);
+
+                                boolean canFitDroppedItemsInInventory = true;
+                                for (ItemStack droppedItem : droppedItems)
+                                {
+                                    if (codechicken.lib.inventory.InventoryUtils.insertItem(exchange.player.inventory, droppedItem, true) > 0)
+                                        canFitDroppedItemsInInventory = false;
+
+                                    if (!canFitDroppedItemsInInventory) break;
+                                }
+
+                                if (canFitDroppedItemsInInventory)
+                                {
+                                    for (ItemStack droppedItem : droppedItems)
+                                    {
+                                        codechicken.lib.inventory.InventoryUtils.insertItem(exchange.player.inventory, droppedItem, false);
+                                    }
+
+                                    codechicken.lib.inventory.InventoryUtils.consumeItem(exchange.player.inventory, sourceSlot);
+
+                                    rounds--;
+                                } else
+                                {
+                                    rounds = 0;
+                                    inventoryModify = false;
+                                }
                             }
 
-                            world.setBlock(exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.targetId, exchange.targetMetadata, 3);
-                            exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, false);
-                            world.playAuxSFX(2001, exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.sourceId + (exchange.sourceMetadata << 12));
-                            exchange.visits.add(exchange.coord);
-
-                            if (exchange.remainingTicks > 0)
+                            if (inventoryModify)
                             {
-                                // TODO: Make this smarter about sides, replace in a plane
-                                for (int xx = -1; xx <= 1; xx++)
+                                world.setBlock(exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.targetId, exchange.targetMetadata, 3);
+                                exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, false);
+                                world.playAuxSFX(2001, exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.sourceId + (exchange.sourceMetadata << 12));
+                                exchange.visits.add(exchange.coord);
+
+                                if (exchange.remainingTicks > 0)
                                 {
-                                    for (int yy = -1; yy <= 1; yy++)
+                                    // TODO: Make this smarter about sides, replace in a plane
+                                    for (int xx = -1; xx <= 1; xx++)
                                     {
-                                        for (int zz = -1; zz <= 1; zz++)
+                                        for (int yy = -1; yy <= 1; yy++)
                                         {
-                                            if (!(xx == 0 && yy == 0 && zz == 0) && (world.getBlockId(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceId) && (world.getBlockMetadata(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceMetadata) && (BlockHelper.isBlockExposed(world, exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz)))
+                                            for (int zz = -1; zz <= 1; zz++)
                                             {
-                                                queue.offer(new Exchange(new BlockCoord(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz), exchange.sourceId, exchange.sourceMetadata, exchange.targetId, exchange.targetMetadata, exchange.remainingTicks - 1, exchange.player, exchange.hotbar_id, exchange.visits));
+                                                if (!(xx == 0 && yy == 0 && zz == 0) && (world.getBlockId(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceId) && (world.getBlockMetadata(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceMetadata) && (BlockHelper.isBlockExposed(world, exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz)))
+                                                {
+                                                    queue.offer(new Exchange(new BlockCoord(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz), exchange.sourceId, exchange.sourceMetadata, exchange.targetId, exchange.targetMetadata, exchange.remainingTicks - 1, exchange.player, exchange.hotbar_id, exchange.visits));
+                                                }
                                             }
                                         }
                                     }
