@@ -1,6 +1,7 @@
 package io.endertech.client;
 
 import io.endertech.helper.FontHelper;
+import io.endertech.helper.InventoryHelper;
 import io.endertech.items.ItemExchanger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -53,14 +54,7 @@ public class GUIBlockOverlay extends Gui
 
                             if (player.inventory.inventoryChanged || !source.isItemEqual(this.lastExchangeSource))
                             {
-                                this.lastExchangeSourceCount = 0;
-                                for (ItemStack is : player.inventory.mainInventory)
-                                {
-                                    if (is != null && is.isItemEqual(source))
-                                    {
-                                        lastExchangeSourceCount += is.stackSize;
-                                    }
-                                }
+                                this.lastExchangeSourceCount = InventoryHelper.getExtractableQuantity(player.inventory, source);
 
                                 player.inventory.inventoryChanged = false;
                                 this.lastExchangeSource = source;

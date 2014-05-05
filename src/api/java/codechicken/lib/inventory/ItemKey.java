@@ -1,4 +1,4 @@
-package lib.inventory;
+package codechicken.lib.inventory;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

@@ -2,7 +2,6 @@ package io.endertech.items;
 
 import codechicken.lib.vec.BlockCoord;
 import io.endertech.EnderTech;
-import io.endertech.client.KeyBindingHandler;
 import io.endertech.common.WorldTickHandler;
 import io.endertech.config.KeyConfig;
 import io.endertech.helper.BlockHelper;

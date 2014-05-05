@@ -1,4 +1,4 @@
-package lib.inventory;
+package codechicken.lib.inventory;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;

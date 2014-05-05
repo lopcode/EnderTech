@@ -5,6 +5,7 @@ import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import io.endertech.config.ItemConfig;
 import io.endertech.helper.BlockHelper;
+import io.endertech.helper.InventoryHelper;
 import io.endertech.items.ItemExchanger;
 import io.endertech.lib.Reference;
 import net.minecraft.block.Block;
@@ -85,26 +86,34 @@ public class WorldTickHandler implements ITickHandler
 
                     if (((blockId != exchange.targetId) || (blockMetadata != exchange.targetMetadata)) && (exchanger != null) && exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, true) >= ItemConfig.itemExchangerBlockCost && !exchange.visits.contains(exchange.coord))
                     {
-                        if (!exchanger.isCreative(exchangerStack))
-                            rounds--;
+                        int sourceSlot = InventoryHelper.findFirstItemStack(exchange.player.inventory, new ItemStack(exchange.targetId, 1, exchange.targetMetadata));
 
-                        world.setBlock(exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.targetId, exchange.targetMetadata, 3);
-                        exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, false);
-                        world.playAuxSFX(2001, exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.sourceId + (exchange.sourceMetadata << 12));
-                        exchange.visits.add(exchange.coord);
-
-                        if (exchange.remainingTicks > 0)
+                        if (sourceSlot > 0 || exchanger.isCreative(exchangerStack))
                         {
-                            // TODO: Make this smarter about sides, replace in a plane
-                            for (int xx = -1; xx <= 1; xx++)
+                            if (!exchanger.isCreative(exchangerStack))
                             {
-                                for (int yy = -1; yy <= 1; yy++)
+                                codechicken.lib.inventory.InventoryUtils.consumeItem(exchange.player.inventory, sourceSlot);
+                                rounds--;
+                            }
+
+                            world.setBlock(exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.targetId, exchange.targetMetadata, 3);
+                            exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, false);
+                            world.playAuxSFX(2001, exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.sourceId + (exchange.sourceMetadata << 12));
+                            exchange.visits.add(exchange.coord);
+
+                            if (exchange.remainingTicks > 0)
+                            {
+                                // TODO: Make this smarter about sides, replace in a plane
+                                for (int xx = -1; xx <= 1; xx++)
                                 {
-                                    for (int zz = -1; zz <= 1; zz++)
+                                    for (int yy = -1; yy <= 1; yy++)
                                     {
-                                        if (!(xx == 0 && yy == 0 && zz == 0) && (world.getBlockId(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceId) && (world.getBlockMetadata(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceMetadata) && (BlockHelper.isBlockExposed(world, exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz)))
+                                        for (int zz = -1; zz <= 1; zz++)
                                         {
-                                            queue.offer(new Exchange(new BlockCoord(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz), exchange.sourceId, exchange.sourceMetadata, exchange.targetId, exchange.targetMetadata, exchange.remainingTicks - 1, exchange.player, exchange.hotbar_id, exchange.visits));
+                                            if (!(xx == 0 && yy == 0 && zz == 0) && (world.getBlockId(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceId) && (world.getBlockMetadata(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceMetadata) && (BlockHelper.isBlockExposed(world, exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz)))
+                                            {
+                                                queue.offer(new Exchange(new BlockCoord(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz), exchange.sourceId, exchange.sourceMetadata, exchange.targetId, exchange.targetMetadata, exchange.remainingTicks - 1, exchange.player, exchange.hotbar_id, exchange.visits));
+                                            }
                                         }
                                     }
                                 }
