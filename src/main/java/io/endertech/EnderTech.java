@@ -32,7 +32,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.io.File;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, certificateFingerprint = Reference.FINGERPRINT, dependencies = "required-after:ThermalExpansion@[3.0.0.2,);required-after:CodeChickenLib@[1.0.0.62,);required-after:ForgeMultipart")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, certificateFingerprint = Reference.FINGERPRINT, dependencies = "required-after:ThermalExpansion@[3.0.0.2,);required-after:ForgeMultipart")
 @NetworkMod(channels = {Reference.MOD_ID}, packetHandler = PacketHandlerET.class)
 public class EnderTech
 {
