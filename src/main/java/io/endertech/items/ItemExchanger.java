@@ -96,22 +96,22 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     @Override
     public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float xFloat, float yFloat, float zFloat)
     {
-        LogHelper.info("Item use on " + x + " " + y + " " + z);
+        LogHelper.debug("Exchanger use on " + x + " " + y + " " + z);
 
         if (player.isSneaking())
         {
-            LogHelper.info("Shift right click");
+            LogHelper.debug("Shift right click");
 
             int sourceId = player.worldObj.getBlockId(x, y, z);
             int sourceMetadata = player.worldObj.getBlockMetadata(x, y, z);
 
             if (sourceId > 0 && world.getBlockTileEntity(x, y, z) == null && !BlockHelper.softBlocks.contains(Block.blocksList[sourceId]))
             {
-                LogHelper.info("Setting source block to " + Block.blocksList[sourceId].getLocalizedName());
+                LogHelper.debug("Setting source block to " + Block.blocksList[sourceId].getLocalizedName());
                 setSourceBlock(itemstack, sourceId, sourceMetadata);
             } else
             {
-                LogHelper.info("Failed to set source block");
+                LogHelper.debug("Failed to set source block");
             }
 
             return false;
@@ -166,7 +166,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     @Override
     public void handleKey(EntityPlayer player, ItemStack itemStack, String keyDescription)
     {
-        LogHelper.info("Handling key for Exchanger");
+        //LogHelper.debug("Handling key for Exchanger");
 
         int radius = this.getTargetRadius(itemStack);
 
@@ -174,12 +174,12 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
         {
             radius++;
 
-            LogHelper.info("Tool Increase");
+            //LogHelper.info("Tool Increase");
         } else if (keyDescription.equals(KeyConfig.keyToolDecreaseDescription))
         {
             radius--;
 
-            LogHelper.info("Tool Decrease");
+           // LogHelper.info("Tool Decrease");
         }
 
         if (radius > ItemExchanger.MAX_RADIUS)
@@ -188,7 +188,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
         if (radius < ItemExchanger.MIN_RADIUS)
             radius = ItemExchanger.MIN_RADIUS;
 
-        LogHelper.info("Setting tool radius to " + radius);
+        //LogHelper.info("Setting tool radius to " + radius);
         this.setTargetRadius(itemStack, radius);
     }
 

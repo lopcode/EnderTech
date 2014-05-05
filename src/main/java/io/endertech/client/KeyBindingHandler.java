@@ -32,25 +32,25 @@ public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
     @Override
     public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
     {
-        LogHelper.info("KeyDown");
+        //LogHelper.info("KeyDown");
         if (tickEnd && FMLClientHandler.instance().getClient().inGameHasFocus)
         {
-            LogHelper.info("End&Focus");
+            //LogHelper.info("End&Focus");
             EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
             if (player != null)
             {
-                LogHelper.info("PlayerNotNull");
+                //LogHelper.info("PlayerNotNull");
                 ItemStack equippedItem = player.getCurrentEquippedItem();
 
                 if (equippedItem != null && equippedItem.getItem() instanceof IKeyHandler)
                 {
                     if (player.worldObj.isRemote)
                     {
-                        LogHelper.info("Remote, sent packet to server");
+                        //LogHelper.info("Remote, sent packet to server");
                         PacketDispatcher.sendPacketToServer(new PacketKeyPressed(kb.keyDescription).makePacket());
                     } else
                     {
-                        LogHelper.info("Client, handling key press");
+                        //LogHelper.info("Client, handling key press");
                         ((IKeyHandler) player.getCurrentEquippedItem().getItem()).handleKey(player, equippedItem, kb.keyDescription);
                     }
                 }

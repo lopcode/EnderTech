@@ -90,8 +90,8 @@ public class EnderTech
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        LogHelper.debug("DIRT BLOCK >> " + Block.dirt.getUnlocalizedName());
-        LogHelper.info("Sin 360: " + MathHelper.sin(2 * MathHelper.pi));
+        //LogHelper.debug("DIRT BLOCK >> " + Block.dirt.getUnlocalizedName());
+        //LogHelper.info("Sin 360: " + MathHelper.sin(2 * MathHelper.pi));
 
         LogHelper.debug("init complete");
     }
