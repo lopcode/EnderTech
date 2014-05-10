@@ -1,9 +1,9 @@
 # Note: these are GB spellings because Forge defaults to expecting en_US and refuses to accept en_GB stupidly
 
 # Item localisations
-item.endertech.exchanger.exchangerBasic.name=Basic Esoteric Exchanger
-item.endertech.exchanger.exchangerAdvanced.name=Advanced Esoteric Exchanger
-item.endertech.exchanger.exchangerCreative.name=Creative Esoteric Exchanger
+item.endertech.exchanger.exchangerBasic.name=Reinforced Exchanger
+item.endertech.exchanger.exchangerAdvanced.name=Resonant Exchanger
+item.endertech.exchanger.exchangerCreative.name=Creative Exchanger
 
 # Creative tab
 itemGroup.EnderTechItems=EnderTech: Items
