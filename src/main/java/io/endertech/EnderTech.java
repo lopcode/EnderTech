@@ -20,7 +20,7 @@ import io.endertech.helper.BlockHelper;
 import io.endertech.helper.LogHelper;
 import io.endertech.items.ETItems;
 import io.endertech.lib.Reference;
-import io.endertech.network.packet.PacketHandlerET;
+import io.endertech.network.PacketHandlerET;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;

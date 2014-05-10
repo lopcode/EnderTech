@@ -1,9 +1,11 @@
-package io.endertech.network.packet;
+package io.endertech.network;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
+import io.endertech.network.packet.PacketET;
+import io.endertech.network.packet.ProtocolException;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
