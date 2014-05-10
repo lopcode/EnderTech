@@ -69,25 +69,22 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
                 setDefaultTag(stack, 0);
             }
 
-            if (this.isCreative(stack))
-                list.add("Charge: Infinite");
+            if (this.isCreative(stack)) list.add("Charge: Infinite");
             else
                 list.add("Charge: " + (int) (this.getEnergyStored(stack) / 1000.0) + "k / " + (int) (this.getMaxEnergyStored(stack) / 1000.0) + "k RF");
 
             //if (this.getMaxExtractRate(stack) > 0)
             //    list.add("Send: " + this.getMaxExtractRate(stack) + " RF/t");
 
-            if (this.getMaxReceiveRate(stack) > 0)
-                list.add("Receive: " + this.getMaxReceiveRate(stack) + " RF/t");
+            if (this.getMaxReceiveRate(stack) > 0) list.add("Receive: " + this.getMaxReceiveRate(stack) + " RF/t");
 
             ItemStack pb = getSourceBlock(stack);
-            if (pb == null)
-                list.add("Source block: None");
-            else
-                list.add("Source block: " + pb.getDisplayName());
+            if (pb == null) list.add("Source block: None");
+            else list.add("Source block: " + pb.getDisplayName());
 
             list.add("Radius: " + this.getTargetRadius(stack));
-        } else
+        }
+        else
         {
             list.add("Hold Shift for info");
         }
@@ -109,7 +106,8 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             {
                 LogHelper.debug("Setting source block to " + Block.blocksList[sourceId].getLocalizedName());
                 setSourceBlock(itemstack, sourceId, sourceMetadata);
-            } else
+            }
+            else
             {
                 LogHelper.debug("Failed to set source block");
             }
@@ -130,10 +128,8 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     @Override
     public int extractEnergy(ItemStack container, int maxExtract, boolean simulate)
     {
-        if (this.isCreative(container))
-            return maxExtract;
-        else
-            return super.extractEnergy(container, maxExtract, simulate);
+        if (this.isCreative(container)) return maxExtract;
+        else return super.extractEnergy(container, maxExtract, simulate);
     }
 
     public void setSourceBlock(ItemStack stack, int sourceId, int sourceMetadata)
@@ -159,8 +155,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
         int radius = 3;
         if (stack.hasTagCompound() && (stack.getTagCompound().hasKey("targetRadius")))
             return stack.getTagCompound().getInteger("targetRadius");
-        else
-            return radius;
+        else return radius;
     }
 
     @Override
@@ -175,18 +170,17 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             radius++;
 
             //LogHelper.info("Tool Increase");
-        } else if (keyDescription.equals(KeyConfig.keyToolDecreaseDescription))
+        }
+        else if (keyDescription.equals(KeyConfig.keyToolDecreaseDescription))
         {
             radius--;
 
-           // LogHelper.info("Tool Decrease");
+            // LogHelper.info("Tool Decrease");
         }
 
-        if (radius > ItemExchanger.MAX_RADIUS)
-            radius = ItemExchanger.MAX_RADIUS;
+        if (radius > ItemExchanger.MAX_RADIUS) radius = ItemExchanger.MAX_RADIUS;
 
-        if (radius < ItemExchanger.MIN_RADIUS)
-            radius = ItemExchanger.MIN_RADIUS;
+        if (radius < ItemExchanger.MIN_RADIUS) radius = ItemExchanger.MIN_RADIUS;
 
         //LogHelper.info("Setting tool radius to " + radius);
         this.setTargetRadius(itemStack, radius);

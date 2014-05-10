@@ -20,10 +20,12 @@ public class PacketHandlerET implements IPacketHandler
             PacketET packetET = PacketET.constructPacket(packetId);
             packetET.read(in);
             packetET.execute(manager, player);
-        } catch (ProtocolException e)
+        }
+        catch (ProtocolException e)
         {
             throw new RuntimeException("Failed to construct packet!", e);
-        } catch (ReflectiveOperationException e)
+        }
+        catch (ReflectiveOperationException e)
         {
             throw new RuntimeException("Failed to construct packet!", e);
         }

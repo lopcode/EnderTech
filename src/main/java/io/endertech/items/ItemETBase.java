@@ -30,14 +30,12 @@ public class ItemETBase extends Item
 
     public ItemStack addItem(int number, String name, boolean shouldRegister)
     {
-        if (this.items.containsKey(number))
-            return null;
+        if (this.items.containsKey(number)) return null;
 
         this.items.put(number, name);
 
         ItemStack item = new ItemStack(this, 1, number);
-        if (shouldRegister)
-            GameRegistry.registerCustomItemStack(name, item);
+        if (shouldRegister) GameRegistry.registerCustomItemStack(name, item);
 
         return item;
     }

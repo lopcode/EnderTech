@@ -15,10 +15,12 @@ public class GeneralConfig
         try
         {
             generalConfig.load();
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             LogHelper.error("Failed to load general config");
-        } finally
+        }
+        finally
         {
             generalConfig.save();
         }

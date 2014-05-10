@@ -1,6 +1,5 @@
 package io.endertech;
 
-import codechicken.lib.math.MathHelper;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -22,7 +21,6 @@ import io.endertech.helper.LogHelper;
 import io.endertech.items.ETItems;
 import io.endertech.lib.Reference;
 import io.endertech.network.packet.PacketHandlerET;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -50,7 +48,8 @@ public class EnderTech
         if (Reference.FINGERPRINT.equals("@FINGERPRINT@"))
         {
             LogHelper.warn("Fingerprint was missing from the jar, this mod could have been tampered with!");
-        } else
+        }
+        else
         {
             LogHelper.fatal("Fingerprint doesn't match - this mod has been tampered with!");
         }
@@ -111,7 +110,7 @@ public class EnderTech
 
         ItemStack enderEyeStack = new ItemStack(Item.eyeOfEnder);
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerBasic, new Object[]{"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorReinforced, 'T', tesseract}));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerAdvanced, new Object[]{"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorResonant, 'T', tesseract}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerBasic, new Object[] {"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorReinforced, 'T', tesseract}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerAdvanced, new Object[] {"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorResonant, 'T', tesseract}));
     }
 }

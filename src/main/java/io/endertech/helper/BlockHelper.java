@@ -33,8 +33,7 @@ public class BlockHelper
     public static boolean isSoftBlock(World world, int x, int y, int z)
     {
         int blockId = world.getBlockId(x, y, z);
-        if (blockId <= 0)
-            return true;
+        if (blockId <= 0) return true;
 
         return isSoftBlock(Block.blocksList[blockId], world, x, y, z);
     }
@@ -46,8 +45,6 @@ public class BlockHelper
 
     public static boolean isBlockExposed(World world, int x, int y, int z)
     {
-        return isSoftBlock(world, x + 1, y, z) || isSoftBlock(world, x - 1, y, z)
-                || isSoftBlock(world, x, y + 1, z) || isSoftBlock(world, x, y - 1, z)
-                || isSoftBlock(world, x, y, z + 1) || isSoftBlock(world, x, y, z - 1);
+        return isSoftBlock(world, x + 1, y, z) || isSoftBlock(world, x - 1, y, z) || isSoftBlock(world, x, y + 1, z) || isSoftBlock(world, x, y - 1, z) || isSoftBlock(world, x, y, z + 1) || isSoftBlock(world, x, y, z - 1);
     }
 }

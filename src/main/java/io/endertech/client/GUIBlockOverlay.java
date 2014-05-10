@@ -76,8 +76,7 @@ public class GUIBlockOverlay extends Gui
                             GL11.glPushMatrix();
 
                             String am = Integer.toString(this.lastExchangeSourceCount);
-                            if (exchanger.isCreative(exchangerStack))
-                                am = "Inf"; // infinity
+                            if (exchanger.isCreative(exchangerStack)) am = "Inf"; // infinity
 
                             FontHelper.drawItemQuantity(mc.fontRenderer, 3, 3, am);
                             FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2, 3, 1.0, "Radius: " + exchanger.getTargetRadius(exchangerStack));

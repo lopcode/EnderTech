@@ -5,7 +5,6 @@ import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import io.endertech.config.KeyConfig;
-import io.endertech.helper.LogHelper;
 import io.endertech.items.IKeyHandler;
 import io.endertech.lib.Reference;
 import io.endertech.network.packet.PacketKeyPressed;
@@ -21,8 +20,8 @@ public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
     public static KeyBinding keyToolIncrease = new KeyBinding(KeyConfig.keyToolIncreaseDescription, Keyboard.KEY_PRIOR);
     public static KeyBinding keyToolDecrease = new KeyBinding(KeyConfig.keyToolDecreaseDescription, Keyboard.KEY_NEXT);
 
-    public static KeyBinding[] keyArray = new KeyBinding[]{keyToolIncrease, keyToolDecrease};
-    public static boolean[] keyRepeating = new boolean[]{false, false};
+    public static KeyBinding[] keyArray = new KeyBinding[] {keyToolIncrease, keyToolDecrease};
+    public static boolean[] keyRepeating = new boolean[] {false, false};
 
     public KeyBindingHandler()
     {
@@ -48,7 +47,8 @@ public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
                     {
                         //LogHelper.info("Remote, sent packet to server");
                         PacketDispatcher.sendPacketToServer(new PacketKeyPressed(kb.keyDescription).makePacket());
-                    } else
+                    }
+                    else
                     {
                         //LogHelper.info("Client, handling key press");
                         ((IKeyHandler) player.getCurrentEquippedItem().getItem()).handleKey(player, equippedItem, kb.keyDescription);

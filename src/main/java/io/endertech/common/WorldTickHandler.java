@@ -61,15 +61,13 @@ public class WorldTickHandler implements ITickHandler
         int dimensionId = world.provider.dimensionId;
         LinkedBlockingQueue<Exchange> queue = (LinkedBlockingQueue) exchanges.get(dimensionId);
 
-        if (queue == null)
-            return;
+        if (queue == null) return;
 
         int rounds = 2;
         while (rounds > 0)
         {
             Exchange exchange = (Exchange) queue.poll();
-            if (exchange == null)
-                rounds = 0;
+            if (exchange == null) rounds = 0;
             else
             {
                 int blockId = world.getBlockId(exchange.coord.x, exchange.coord.y, exchange.coord.z);
@@ -112,7 +110,8 @@ public class WorldTickHandler implements ITickHandler
                                     codechicken.lib.inventory.InventoryUtils.consumeItem(exchange.player.inventory, sourceSlot);
 
                                     rounds--;
-                                } else
+                                }
+                                else
                                 {
                                     rounds = 0;
                                     inventoryModify = false;

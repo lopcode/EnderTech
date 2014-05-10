@@ -21,10 +21,12 @@ public class ItemConfig
 
             itemExchangerID = itemConfig.getItem("Tool.Exchanger", 15363).getInt(15363);
             itemExchangerBlockCost = itemConfig.get("item.general", "Exchanger.BlockCost", 8192).getInt(8192);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             LogHelper.error("Failed to load item config");
-        } finally
+        }
+        finally
         {
             itemConfig.save();
         }
