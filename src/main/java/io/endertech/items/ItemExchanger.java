@@ -188,7 +188,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
     public static enum Types
     {
-        CREATIVE, BASIC, ADVANCED;
+        CREATIVE, REDSTONE, RESONANT;
 
         private Types()
         {

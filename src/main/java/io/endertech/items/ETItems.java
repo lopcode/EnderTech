@@ -8,8 +8,8 @@ public class ETItems
 {
     public static ItemExchanger itemExchanger;
     public static ItemStack toolExchangerCreative;
-    public static ItemStack toolExchangerBasic;
-    public static ItemStack toolExchangerAdvanced;
+    public static ItemStack toolExchangerRedstone;
+    public static ItemStack toolExchangerResonant;
 
     public static void init()
     {
@@ -21,7 +21,7 @@ public class ETItems
     public static void loadItems()
     {
         toolExchangerCreative = itemExchanger.addItem(ItemExchanger.Types.CREATIVE.ordinal(), Strings.EXCHANGER_CREATIVE);
-        toolExchangerBasic = itemExchanger.addItem(ItemExchanger.Types.BASIC.ordinal(), Strings.EXCHANGER_BASIC);
-        toolExchangerAdvanced = itemExchanger.addItem(ItemExchanger.Types.ADVANCED.ordinal(), Strings.EXCHANGER_ADVANCED);
+        toolExchangerRedstone = itemExchanger.addItem(ItemExchanger.Types.REDSTONE.ordinal(), Strings.EXCHANGER_REDSTONE);
+        toolExchangerResonant = itemExchanger.addItem(ItemExchanger.Types.RESONANT.ordinal(), Strings.EXCHANGER_RESONANT);
     }
 }

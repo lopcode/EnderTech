@@ -110,7 +110,7 @@ public class EnderTech
 
         ItemStack enderEyeStack = new ItemStack(Item.eyeOfEnder);
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerBasic, new Object[] {"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorReinforced, 'T', tesseract}));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerAdvanced, new Object[] {"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorResonant, 'T', tesseract}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerRedstone, new Object[] {"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorReinforced, 'T', tesseract}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerResonant, new Object[] {"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorResonant, 'T', tesseract}));
     }
 }
