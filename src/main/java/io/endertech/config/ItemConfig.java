@@ -11,6 +11,7 @@ public class ItemConfig
 
     public static int itemExchangerID;
     public static int itemExchangerBlockCost;
+    public static int itemExchangerMaxRadius;
 
     protected static void init(File configFile)
     {
@@ -19,8 +20,11 @@ public class ItemConfig
         {
             itemConfig.load();
 
-            itemExchangerID = itemConfig.getItem("Tool.Exchanger", 15363).getInt(15363);
+            itemExchangerID = itemConfig.getItem("item.id", "Tool.Exchanger", 15363).getInt(15363);
             itemExchangerBlockCost = itemConfig.get("item.general", "Exchanger.BlockCost", 8192).getInt(8192);
+            itemExchangerMaxRadius = itemConfig.get("item.general", "Exchanger.MaxRadius", 8).getInt(8);
+            if (itemExchangerMaxRadius < 1) itemExchangerMaxRadius = 1;
+            if (itemExchangerMaxRadius > 64) itemExchangerMaxRadius = 64;
         }
         catch (Exception e)
         {

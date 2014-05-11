@@ -3,6 +3,7 @@ package io.endertech.items;
 import codechicken.lib.vec.BlockCoord;
 import io.endertech.EnderTech;
 import io.endertech.common.WorldTickHandler;
+import io.endertech.config.ItemConfig;
 import io.endertech.config.KeyConfig;
 import io.endertech.helper.BlockHelper;
 import io.endertech.helper.KeyHelper;
@@ -21,9 +22,6 @@ import java.util.List;
 
 public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 {
-    public static final int MIN_RADIUS = 1;
-    public static final int MAX_RADIUS = 8;
-
     public ItemExchanger(int itemID)
     {
         super(itemID);
@@ -159,9 +157,13 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     public int getTargetRadius(ItemStack stack)
     {
         int radius = 3;
+
         if (stack.hasTagCompound() && (stack.getTagCompound().hasKey("targetRadius")))
-            return stack.getTagCompound().getInteger("targetRadius");
-        else return radius;
+            radius = stack.getTagCompound().getInteger("targetRadius");
+
+        if (radius > ItemConfig.itemExchangerMaxRadius) radius = ItemConfig.itemExchangerMaxRadius;
+
+        return radius;
     }
 
     @Override
@@ -184,9 +186,9 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             // LogHelper.info("Tool Decrease");
         }
 
-        if (radius > ItemExchanger.MAX_RADIUS) radius = ItemExchanger.MAX_RADIUS;
+        if (radius > ItemConfig.itemExchangerMaxRadius) radius = ItemConfig.itemExchangerMaxRadius;
 
-        if (radius < ItemExchanger.MIN_RADIUS) radius = ItemExchanger.MIN_RADIUS;
+        if (radius < 1) radius = 1;
 
         //LogHelper.info("Setting tool radius to " + radius);
         this.setTargetRadius(itemStack, radius);
