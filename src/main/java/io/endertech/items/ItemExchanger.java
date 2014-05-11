@@ -5,13 +5,16 @@ import io.endertech.EnderTech;
 import io.endertech.common.WorldTickHandler;
 import io.endertech.config.KeyConfig;
 import io.endertech.helper.BlockHelper;
+import io.endertech.helper.KeyHelper;
 import io.endertech.helper.LogHelper;
+import io.endertech.helper.StringHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import org.lwjgl.input.Keyboard;
 
 import java.util.HashSet;
 import java.util.List;
@@ -62,7 +65,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     {
         super.addInformation(stack, player, list, check);
 
-        if (Keyboard.isKeyDown(42) || (Keyboard.isKeyDown(54)))
+        if (KeyHelper.isShiftDown())
         {
             if (stack.stackTagCompound == null)
             {
@@ -71,22 +74,25 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
             if (this.isCreative(stack)) list.add("Charge: Infinite");
             else
-                list.add("Charge: " + (int) (this.getEnergyStored(stack) / 1000.0) + "k / " + (int) (this.getMaxEnergyStored(stack) / 1000.0) + "k RF");
+                list.add("Charge: " + StringHelper.getEnergyString(this.getEnergyStored(stack)) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(stack)) + " RF");
 
             //if (this.getMaxExtractRate(stack) > 0)
             //    list.add("Send: " + this.getMaxExtractRate(stack) + " RF/t");
 
-            if (this.getMaxReceiveRate(stack) > 0) list.add("Receive: " + this.getMaxReceiveRate(stack) + " RF/t");
+            if (this.getMaxReceiveRate(stack) > 0)
+                list.add("Receive: " + StringHelper.getEnergyString(this.getMaxReceiveRate(stack)) + " RF/t");
 
             ItemStack pb = getSourceBlock(stack);
             if (pb == null) list.add("Source block: None");
-            else list.add("Source block: " + pb.getDisplayName());
+            else list.add(EnumChatFormatting.GREEN + "Source block: " + pb.getDisplayName());
 
-            list.add("Radius: " + this.getTargetRadius(stack));
+            list.add(EnumChatFormatting.GREEN + "Radius: " + this.getTargetRadius(stack));
+
+            list.add(EnumChatFormatting.AQUA + "" + EnumChatFormatting.ITALIC + "Use while sneaking to choose source." + EnumChatFormatting.RESET);
         }
         else
         {
-            list.add("Hold Shift for info");
+            list.add(StringHelper.holdShiftForDetails);
         }
     }
 
@@ -184,6 +190,17 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
         //LogHelper.info("Setting tool radius to " + radius);
         this.setTargetRadius(itemStack, radius);
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack par1ItemStack)
+    {
+        int type = par1ItemStack.getItemDamage();
+
+        if (type == Types.CREATIVE.ordinal()) return EnumRarity.epic;
+        else if (type == Types.REDSTONE.ordinal()) return EnumRarity.uncommon;
+        else if (type == Types.RESONANT.ordinal()) return EnumRarity.rare;
+        else return EnumRarity.common;
     }
 
     public static enum Types
