@@ -1,13 +1,13 @@
 package io.endertech.common;
 
-import codechicken.lib.vec.BlockCoord;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import io.endertech.config.ItemConfig;
 import io.endertech.helper.BlockHelper;
-import io.endertech.helper.InventoryHelper;
+import io.endertech.helper.inventory.InventoryHelper;
 import io.endertech.items.ItemExchanger;
 import io.endertech.lib.Reference;
+import io.endertech.util.BlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -94,7 +94,7 @@ public class WorldTickHandler implements ITickHandler
                                 boolean canFitDroppedItemsInInventory = true;
                                 for (ItemStack droppedItem : droppedItems)
                                 {
-                                    if (codechicken.lib.inventory.InventoryUtils.insertItem(exchange.player.inventory, droppedItem, true) > 0)
+                                    if (InventoryHelper.insertItem(exchange.player.inventory, droppedItem, true) != null)
                                         canFitDroppedItemsInInventory = false;
 
                                     if (!canFitDroppedItemsInInventory) break;
@@ -104,10 +104,10 @@ public class WorldTickHandler implements ITickHandler
                                 {
                                     for (ItemStack droppedItem : droppedItems)
                                     {
-                                        codechicken.lib.inventory.InventoryUtils.insertItem(exchange.player.inventory, droppedItem, false);
+                                        InventoryHelper.insertItem(exchange.player.inventory, droppedItem, false);
                                     }
 
-                                    codechicken.lib.inventory.InventoryUtils.consumeItem(exchange.player.inventory, sourceSlot);
+                                    InventoryHelper.consumeItem(exchange.player.inventory, sourceSlot);
 
                                     rounds--;
                                 }

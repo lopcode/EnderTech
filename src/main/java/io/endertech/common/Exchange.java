@@ -1,6 +1,6 @@
 package io.endertech.common;
 
-import codechicken.lib.vec.BlockCoord;
+import io.endertech.util.BlockCoord;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.Set;

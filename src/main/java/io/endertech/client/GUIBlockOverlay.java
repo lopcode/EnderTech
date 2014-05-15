@@ -1,7 +1,7 @@
 package io.endertech.client;
 
 import io.endertech.helper.FontHelper;
-import io.endertech.helper.InventoryHelper;
+import io.endertech.helper.inventory.InventoryHelper;
 import io.endertech.items.ItemExchanger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;

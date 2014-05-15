@@ -30,6 +30,5 @@ public class Reference
     public static final String VERSION_NUMBER;
     public static final String FINGERPRINT = "@FINGERPRINT@";
     public static final String CHANNEL_NAME = MOD_ID;
-    public static final String DEPENDENCIES = "required-after:Forge@[10.12.0.1024,)";
     public static final int ONE_SECOND_IN_TICKS = 20;
 }

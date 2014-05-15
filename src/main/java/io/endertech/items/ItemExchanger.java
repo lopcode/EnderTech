@@ -1,6 +1,5 @@
 package io.endertech.items;
 
-import codechicken.lib.vec.BlockCoord;
 import io.endertech.EnderTech;
 import io.endertech.common.WorldTickHandler;
 import io.endertech.config.ItemConfig;
@@ -9,6 +8,7 @@ import io.endertech.helper.BlockHelper;
 import io.endertech.helper.KeyHelper;
 import io.endertech.helper.LogHelper;
 import io.endertech.helper.StringHelper;
+import io.endertech.util.BlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
