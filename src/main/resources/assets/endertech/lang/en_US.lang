@@ -6,4 +6,4 @@ item.endertech.exchanger.exchangerResonant.name=Resonant Exchanger
 item.endertech.exchanger.exchangerCreative.name=Creative Exchanger
 
 # Creative tab
-itemGroup.EnderTechItems=EnderTech: Items
+itemGroup.EnderTechAll=EnderTech: All

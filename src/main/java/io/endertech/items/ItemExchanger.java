@@ -26,7 +26,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     {
         super(itemID);
         this.setMaxStackSize(1);
-        this.setCreativeTab(EnderTech.tabItems);
+        this.setCreativeTab(EnderTech.tabET);
     }
 
     public boolean isCreative(ItemStack stack)

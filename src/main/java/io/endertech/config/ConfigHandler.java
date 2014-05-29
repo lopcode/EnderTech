@@ -12,5 +12,6 @@ public class ConfigHandler
     {
         GeneralConfig.init(new File(configPath + "general.cfg"));
         ItemConfig.init(new File(configPath + "items.cfg"));
+        BlockConfig.init(new File(configPath + "blocks.cfg"));
     }
 }

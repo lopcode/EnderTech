@@ -6,11 +6,11 @@ import io.endertech.lib.Strings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
-public class CreativeTabItems extends CreativeTabs
+public class CreativeTabET extends CreativeTabs
 {
-    public CreativeTabItems()
+    public CreativeTabET()
     {
-        super(Strings.CREATIVE_TAB_ITEMS);
+        super(Strings.CREATIVE_TAB_ET);
     }
 
     @SideOnly(Side.CLIENT)

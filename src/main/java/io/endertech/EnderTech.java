@@ -11,11 +11,12 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
+import io.endertech.block.ETBlocks;
 import io.endertech.client.GUIBlockOverlay;
 import io.endertech.client.KeyBindingHandler;
 import io.endertech.common.CommonProxy;
 import io.endertech.config.ConfigHandler;
-import io.endertech.gui.CreativeTabItems;
+import io.endertech.gui.CreativeTabET;
 import io.endertech.helper.BlockHelper;
 import io.endertech.helper.LogHelper;
 import io.endertech.items.ETItems;
@@ -40,7 +41,7 @@ public class EnderTech
     @SidedProxy(clientSide = "io.endertech.client.ClientProxy", serverSide = "io.endertech.common.CommonProxy")
     public static CommonProxy proxy;
 
-    public static final CreativeTabs tabItems = new CreativeTabItems();
+    public static final CreativeTabs tabET = new CreativeTabET();
 
     @EventHandler
     public void invalidFingerprint(FMLFingerprintViolationEvent event)
@@ -79,6 +80,7 @@ public class EnderTech
         // Sound handler
 
         // Blocks
+        ETBlocks.init();
 
         // Items
         ETItems.init();
