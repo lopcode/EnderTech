@@ -11,8 +11,12 @@ public class StringHelper
 
     public static String getEnergyString(int energy)
     {
-        if (energy >= 1000000) return String.valueOf(twoDP.format(energy / 1000000.0)) + "M";
-        else if (energy >= 1000) return String.valueOf(energy / 1000) + "k";
-        else return String.valueOf(energy);
+        if (energy >= 1000000) {
+            return String.valueOf(twoDP.format(energy / 1000000.0)) + "M";
+        } else if (energy >= 1000) {
+            return String.valueOf(energy / 1000) + "k";
+        } else {
+            return String.valueOf(energy);
+        }
     }
 }

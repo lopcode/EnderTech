@@ -5,6 +5,7 @@ import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import io.endertech.config.KeyConfig;
+import io.endertech.helper.LogHelper;
 import io.endertech.items.IKeyHandler;
 import io.endertech.lib.Reference;
 import io.endertech.network.packet.PacketKeyPressed;
@@ -21,7 +22,7 @@ public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
     public static KeyBinding keyToolDecrease = new KeyBinding(KeyConfig.keyToolDecreaseDescription, Keyboard.KEY_NEXT);
 
     public static KeyBinding[] keyArray = new KeyBinding[] {keyToolIncrease, keyToolDecrease};
-    public static boolean[] keyRepeating = new boolean[] {false, false};
+    public static boolean[] keyRepeating = new boolean[] {false, false, false};
 
     public KeyBindingHandler()
     {
@@ -32,26 +33,20 @@ public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
     public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
     {
         //LogHelper.info("KeyDown");
-        if (tickEnd && FMLClientHandler.instance().getClient().inGameHasFocus)
-        {
+        if (tickEnd && FMLClientHandler.instance().getClient().inGameHasFocus) {
             //LogHelper.info("End&Focus");
             EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-            if (player != null)
-            {
+            if (player != null) {
                 //LogHelper.info("PlayerNotNull");
                 ItemStack equippedItem = player.getCurrentEquippedItem();
 
-                if (equippedItem != null && equippedItem.getItem() instanceof IKeyHandler)
-                {
-                    if (player.worldObj.isRemote)
-                    {
-                        //LogHelper.info("Remote, sent packet to server");
-                        PacketDispatcher.sendPacketToServer(new PacketKeyPressed(kb.keyDescription).makePacket());
-                    }
-                    else
-                    {
-                        //LogHelper.info("Client, handling key press");
-                        ((IKeyHandler) player.getCurrentEquippedItem().getItem()).handleKey(player, equippedItem, kb.keyDescription);
+                if (equippedItem != null && equippedItem.getItem() instanceof IKeyHandler) {
+                    if (player.worldObj.isRemote) {
+                        LogHelper.info("Remote, sent packet to server");
+                        PacketDispatcher.sendPacketToServer(new PacketKeyPressed(KeyConfig.descriptionToCode(kb.keyDescription)).makePacket());
+                    } else {
+                        LogHelper.info("Client, handling key press");
+                        ((IKeyHandler) player.getCurrentEquippedItem().getItem()).handleKey(player, equippedItem, KeyConfig.descriptionToCode(kb.keyDescription));
                     }
                 }
             }

@@ -10,8 +10,7 @@ public class LogHelper
 {
     private static final Logger ET_LOGGER = Logger.getLogger(Reference.MOD_ID);
 
-    static
-    {
+    static {
         ET_LOGGER.setParent(FMLLog.getLogger());
     }
 

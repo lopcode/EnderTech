@@ -42,16 +42,14 @@ public class ItemETEnergyContainer extends ItemETBase implements IEnergyContaine
     @Override
     public int receiveEnergy(ItemStack container, int maxReceive, boolean simulate)
     {
-        if (container.stackTagCompound == null)
-        {
+        if (container.stackTagCompound == null) {
             container.stackTagCompound = new NBTTagCompound();
         }
 
         int energy = container.stackTagCompound.getInteger("Energy");
         int energyReceived = Math.min(this.getMaxEnergyStored(container) - energy, Math.min(this.getMaxReceiveRate(container), maxReceive));
 
-        if (!simulate)
-        {
+        if (!simulate) {
             energy += energyReceived;
             container.stackTagCompound.setInteger("Energy", energy);
         }
@@ -62,16 +60,14 @@ public class ItemETEnergyContainer extends ItemETBase implements IEnergyContaine
     @Override
     public int extractEnergy(ItemStack container, int maxExtract, boolean simulate)
     {
-        if (container.stackTagCompound == null || !container.stackTagCompound.hasKey("Energy") || this.getMaxExtractRate(container) == 0)
-        {
+        if (container.stackTagCompound == null || !container.stackTagCompound.hasKey("Energy") || this.getMaxExtractRate(container) == 0) {
             return 0;
         }
 
         int energy = container.stackTagCompound.getInteger("Energy");
         int energyExtracted = Math.min(energy, Math.min(this.getMaxExtractRate(container), maxExtract));
 
-        if (!simulate)
-        {
+        if (!simulate) {
             energy -= energyExtracted;
             container.stackTagCompound.setInteger("Energy", energy);
         }
@@ -82,8 +78,7 @@ public class ItemETEnergyContainer extends ItemETBase implements IEnergyContaine
     @Override
     public int getEnergyStored(ItemStack container)
     {
-        if (container.stackTagCompound == null || !container.stackTagCompound.hasKey("Energy"))
-        {
+        if (container.stackTagCompound == null || !container.stackTagCompound.hasKey("Energy")) {
             return 0;
         }
         return container.stackTagCompound.getInteger("Energy");
@@ -114,8 +109,7 @@ public class ItemETEnergyContainer extends ItemETBase implements IEnergyContaine
     @Override
     public int getDisplayDamage(ItemStack stack)
     {
-        if (stack.stackTagCompound == null)
-        {
+        if (stack.stackTagCompound == null) {
             return 1 + this.getMaxEnergyStored(stack);
         }
 

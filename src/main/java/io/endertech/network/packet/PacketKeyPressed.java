@@ -9,11 +9,11 @@ import net.minecraft.network.INetworkManager;
 
 public class PacketKeyPressed extends PacketET
 {
-    private String keyDescription;
+    private byte keyCode;
 
-    public PacketKeyPressed(String keyDescription)
+    public PacketKeyPressed(byte keyCode)
     {
-        this.keyDescription = keyDescription;
+        this.keyCode = keyCode;
     }
 
     public PacketKeyPressed()
@@ -23,13 +23,13 @@ public class PacketKeyPressed extends PacketET
     @Override
     public void write(ByteArrayDataOutput out)
     {
-        out.writeUTF(this.keyDescription);
+        out.writeByte(this.keyCode);
     }
 
     @Override
     public void read(ByteArrayDataInput in) throws ProtocolException
     {
-        keyDescription = in.readUTF();
+        keyCode = in.readByte();
     }
 
     @Override
@@ -37,9 +37,8 @@ public class PacketKeyPressed extends PacketET
     {
         EntityPlayer thePlayer = (EntityPlayer) player;
 
-        if (thePlayer.getCurrentEquippedItem() != null && thePlayer.getCurrentEquippedItem().getItem() instanceof IKeyHandler)
-        {
-            ((IKeyHandler) thePlayer.getCurrentEquippedItem().getItem()).handleKey(thePlayer, thePlayer.getCurrentEquippedItem(), keyDescription);
+        if (thePlayer.getCurrentEquippedItem() != null && thePlayer.getCurrentEquippedItem().getItem() instanceof IKeyHandler) {
+            ((IKeyHandler) thePlayer.getCurrentEquippedItem().getItem()).handleKey(thePlayer, thePlayer.getCurrentEquippedItem(), keyCode);
         }
     }
 }

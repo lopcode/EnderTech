@@ -14,18 +14,13 @@ public class BlockConfig
     protected static void init(File configFile)
     {
         blockConfig = new Configuration(configFile);
-        try
-        {
+        try {
             blockConfig.load();
 
             blockTankID = blockConfig.getBlock("block.id", "Tank", 3500).getInt(3500);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             LogHelper.error("Failed to load block config");
-        }
-        finally
-        {
+        } finally {
             blockConfig.save();
         }
     }

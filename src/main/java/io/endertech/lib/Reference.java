@@ -7,18 +7,14 @@ import java.util.Properties;
 
 public class Reference
 {
-    static
-    {
+    static {
         Properties prop = new Properties();
 
-        try
-        {
+        try {
             InputStream stream = Reference.class.getClassLoader().getResourceAsStream("version.properties");
             prop.load(stream);
             stream.close();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Throwables.propagate(e);
         }
 

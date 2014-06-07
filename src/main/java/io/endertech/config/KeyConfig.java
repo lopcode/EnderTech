@@ -2,6 +2,20 @@ package io.endertech.config;
 
 public class KeyConfig
 {
-    public static String keyToolIncreaseDescription = "ET Tool Increase";
-    public static String keyToolDecreaseDescription = "ET Tool Decrease";
+    public static final String keyToolIncreaseDescription = "ET Tool Increase";
+    public static final byte keyToolIncreaseCode = 0x01;
+
+    public static final String keyToolDecreaseDescription = "ET Tool Decrease";
+    public static final byte keyToolDecreaseCode = 0x02;
+
+    public static byte descriptionToCode(String description)
+    {
+        if (description.equals(keyToolIncreaseDescription)) {
+            return keyToolIncreaseCode;
+        } else if (description.equals(keyToolDecreaseDescription)) {
+            return keyToolDecreaseCode;
+        }
+
+        return 0;
+    }
 }

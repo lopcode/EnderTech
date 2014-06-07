@@ -21,8 +21,7 @@ public class TileTank extends TileET implements IFluidHandler
     @Override
     public final void readFromNBT(NBTTagCompound nbt)
     {
-        if (nbt.hasKey(TANK_NAME))
-        {
+        if (nbt.hasKey(TANK_NAME)) {
             NBTTagCompound tankNBT = nbt.getCompoundTag(TANK_NAME);
             super.readFromNBT(tankNBT);
             tank.readFromNBT(tankNBT);
