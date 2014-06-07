@@ -81,7 +81,7 @@ dependencies {
     //compile name: 'ForgeMultipart', version: "${config.minecraft_version}-${config.FMP_version}", ext: 'jar'
     //compile name: 'CodeChickenLib', version: "${config.minecraft_version}-${config.CCLIB_version}", ext: 'jar'
     //compile name: 'NotEnoughItems', version: "${config.NEI_version}", type: 'jar'
-    compile "mcp.mobius.waila:Waila:1.5.2a"
+    //compile "mcp.mobius.waila:Waila:1.5.2a"
 }
 
 group = "io.endertech"
