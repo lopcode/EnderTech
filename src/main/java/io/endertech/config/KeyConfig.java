@@ -2,10 +2,10 @@ package io.endertech.config;
 
 public class KeyConfig
 {
-    public static final String keyToolIncreaseDescription = "ET Tool Increase";
+    public static final String keyToolIncreaseDescription = "Tool Increase";
     public static final byte keyToolIncreaseCode = 0x01;
 
-    public static final String keyToolDecreaseDescription = "ET Tool Decrease";
+    public static final String keyToolDecreaseDescription = "Tool Decrease";
     public static final byte keyToolDecreaseCode = 0x02;
 
     public static byte descriptionToCode(String description)
