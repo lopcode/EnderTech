@@ -59,7 +59,7 @@ public class InventoryHelper
         //   If the slot is empty, put as much as possible in it
         // Return whatever's left
 
-        for (int pass = 1; pass < 3; pass++) {
+        for (int pass = 1; pass <= 2; pass++) {
             for (int slot : inventory.slots) {
                 ItemStack slotStack = inventory.getStackInSlot(slot);
                 if ((slotStack == null && pass == 1) || !inventory.canInsertItem(slot, stack)) {

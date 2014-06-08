@@ -1,11 +1,16 @@
 package io.endertech.tile;
 
+import cofh.block.ITileInfo;
 import cpw.mods.fml.common.registry.GameRegistry;
+import io.endertech.helper.StringHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
-public class TileTank extends TileET implements IFluidHandler
+import java.util.List;
+
+public class TileTank extends TileET implements IFluidHandler, ITileInfo
 {
     private FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 32);
     private static final String TANK_NAME = "MainTank";
@@ -55,7 +60,7 @@ public class TileTank extends TileET implements IFluidHandler
     @Override
     public boolean canDrain(ForgeDirection from, Fluid fluid)
     {
-        return true;
+        return false;
     }
 
     @Override
@@ -67,5 +72,22 @@ public class TileTank extends TileET implements IFluidHandler
     public static void init()
     {
         GameRegistry.registerTileEntity(TileTank.class, "endertech.Tank");
+    }
+
+    @Override
+    public void getTileInfo(List<String> info, ForgeDirection side, EntityPlayer player, boolean debug)
+    {
+        if (debug) {
+            return;
+        }
+
+        info.add("EnderTech Tank");
+
+        if (tank.getFluidAmount() <= 0) {
+            info.add(" Fluid: none");
+        } else {
+            info.add(" Fluid: " + StringHelper.getFluidString(tank.getFluid().getFluid()));
+            info.add(" Contents: " + tank.getFluidAmount() + " / " + tank.getCapacity() + " mB");
+        }
     }
 }

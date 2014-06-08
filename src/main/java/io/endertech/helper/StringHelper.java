@@ -1,6 +1,8 @@
 package io.endertech.helper;
 
+import net.minecraft.item.EnumRarity;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fluids.Fluid;
 
 import java.text.DecimalFormat;
 
@@ -18,5 +20,23 @@ public class StringHelper
         } else {
             return String.valueOf(energy);
         }
+    }
+
+    public static String getFluidString(Fluid fluid)
+    {
+        String name = "";
+
+        // Uncommon is yellow (redstone, glowstone, ender)
+        // Rare is aqua (pyrotheum, cryotheum)
+
+        EnumRarity rarity = fluid.getRarity();
+
+        if (rarity == EnumRarity.uncommon) {
+            name += EnumChatFormatting.YELLOW;
+        } else if (rarity == EnumRarity.rare) {
+            name += EnumChatFormatting.AQUA;
+        }
+
+        return name + fluid.getLocalizedName() + EnumChatFormatting.RESET;
     }
 }
