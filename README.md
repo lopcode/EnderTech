@@ -32,3 +32,8 @@ These terms are formally defined by the Creative Commons Attribution-NonCommerci
 Signed jars are available on Vaen.
 
 [http://vaen.emberwalker.cc/job/EnderTech/]
+
+## With thanks to
+* Pahimar (Modding guides and [EE3](https://github.com/pahimar/Equivalent-Exchange-3)),
+* Team CoFH ([Thermal Expansion](http://teamcofh.com/)),
+* Azanor ([Thaumcraft](http://www.minecraftforum.net/topic/2011841-thaumcraft-41114-updated-2052014/))
