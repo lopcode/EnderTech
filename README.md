@@ -5,15 +5,16 @@ This is my first foray in to Minecraft modding. It's intended to be a tech theme
 
 I don't promise to finish it, or keep it stable, and I'm not interested in formal feature requests, but feel free to suggest things to me in #MultiMC on Esper anyway. I've opened the repository up because other open source projects are proving extremely helpful in learning my way around Forge. If it did become popular, or get included in a larger modpack, I'll commit to something more formal to make things better for users and modpack makers.
 
+There are no textures (or I've used debug textures) whilst I figure out what sort of aesthetic I want.
+
 If you spot that I'm doing something particularly heinous, it's because I don't know any better. Tell me on IRC (Esper/#MultiMC)!
 
 ##License and terms
 Things I want you to do:
 * Learn from the source,
-  * Include a thank-you, or put me in your credits (as ``Drayshak''),
+  * Include a thank-you, or put me in your credits (as "Drayshak"),
 * If you're feeling generous:
   * Tell me you enjoy using the mod in IRC (Esper/#MultiMC) or on Twitter ([@Drayshak](https://twitter.com/drayshak)),
-  * Drop me a donation (Patreon link ``coming soon''),
 * Enjoy the mod.
 
 Things I don't want you to do:
@@ -26,12 +27,12 @@ Things I don't want you to do:
 
 These terms are formally defined by the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) license.
 
-[http://creativecommons.org/licenses/by-nc-nd/4.0/]
+http://creativecommons.org/licenses/by-nc-nd/4.0/
 
 ##Builds
 Signed jars are available on Vaen.
 
-[http://vaen.emberwalker.cc/job/EnderTech/]
+http://vaen.emberwalker.cc/job/EnderTech/
 
 ## With thanks to
 * Pahimar (Modding guides and [EE3](https://github.com/pahimar/Equivalent-Exchange-3)),
