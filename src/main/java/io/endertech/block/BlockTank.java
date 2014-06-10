@@ -17,7 +17,7 @@ public class BlockTank extends BlockContainer
     {
         super(id, Material.glass);
         setCreativeTab(EnderTech.tabET);
-        setUnlocalizedName(Strings.TANK_TILE_NAME);
+        setUnlocalizedName(Strings.TANK_NAME);
     }
 
     @Override

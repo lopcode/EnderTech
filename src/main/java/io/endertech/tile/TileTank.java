@@ -2,6 +2,7 @@ package io.endertech.tile;
 
 import cofh.block.ITileInfo;
 import cpw.mods.fml.common.registry.GameRegistry;
+import io.endertech.helper.LogHelper;
 import io.endertech.helper.StringHelper;
 import io.endertech.lib.Strings;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +20,7 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
     @Override
     public final void writeToNBT(NBTTagCompound nbt)
     {
-        //LogHelper.info("Writing tank at " + this.xCoord + " " + this.yCoord + " " + this.zCoord);
+        LogHelper.debug("Writing tank at " + this.xCoord + " " + this.yCoord + " " + this.zCoord);
         super.writeToNBT(nbt);
 
         NBTTagCompound tankNBT = new NBTTagCompound();
@@ -31,14 +32,14 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
     public final void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
-        //LogHelper.info("Reading tank at " + this.xCoord + " " + this.yCoord + " " + this.zCoord);
+        LogHelper.debug("Reading tank at " + this.xCoord + " " + this.yCoord + " " + this.zCoord);
 
         if (nbt.hasKey(TANK_NAME)) {
-            //LogHelper.info("Got tank NBT data");
+            LogHelper.debug("Got tank NBT data");
             NBTTagCompound tankNBT = nbt.getCompoundTag(TANK_NAME);
             tank.readFromNBT(tankNBT);
         } else {
-            //LogHelper.info("Didn't have tank NBT data - new tank");
+            LogHelper.debug("Didn't have tank NBT data - new tank");
         }
     }
 
@@ -80,7 +81,7 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
 
     public static void init()
     {
-        GameRegistry.registerTileEntity(TileTank.class, "tile." + Strings.TANK_TILE_NAME);
+        GameRegistry.registerTileEntity(TileTank.class, "tile." + Strings.TANK_NAME);
     }
 
     @Override

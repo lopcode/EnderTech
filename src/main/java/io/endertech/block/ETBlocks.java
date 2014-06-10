@@ -13,7 +13,7 @@ public class ETBlocks
     {
         blockTank = new BlockTank(BlockConfig.blockTankID);
 
-        GameRegistry.registerBlock(blockTank, ItemBlockTank.class, Strings.TANK_TILE_NAME);
+        GameRegistry.registerBlock(blockTank, ItemBlockTank.class, Strings.TANK_NAME);
 
         ((BlockTank) blockTank).init();
     }
