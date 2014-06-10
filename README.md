@@ -37,4 +37,5 @@ http://vaen.emberwalker.cc/job/EnderTech/
 ## With thanks to
 * Pahimar (Modding guides and [EE3](https://github.com/pahimar/Equivalent-Exchange-3)),
 * Team CoFH ([Thermal Expansion](http://teamcofh.com/)),
-* Azanor ([Thaumcraft](http://www.minecraftforum.net/topic/2011841-thaumcraft-41114-updated-2052014/))
+* Azanor ([Thaumcraft](http://www.minecraftforum.net/topic/2011841-thaumcraft-41114-updated-2052014/)),
+* [Arkan](https://github.com/emberwalker) (Build server).
