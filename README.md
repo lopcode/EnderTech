@@ -34,6 +34,15 @@ Signed jars are available on Vaen.
 
 http://vaen.emberwalker.cc/job/EnderTech/
 
+##Building
+This mod uses Forge's Gradle wrapper for pretty easy setup and building. There are better guides around the internet for using it, and I don't do anything particularly special.
+
+The general idea:
+* **Setup**: `gradlew [setupDevWorkspace/setupDecompWorkspace] [idea/eclipse]`
+* **Building**: `gradlew build`
+
+If you run in to odd Gradle issues, doing `gradlew clean` usually fixes it.
+
 ## With thanks to
 * Pahimar (Modding guides and [EE3](https://github.com/pahimar/Equivalent-Exchange-3)),
 * Team CoFH ([Thermal Expansion](http://teamcofh.com/)),
