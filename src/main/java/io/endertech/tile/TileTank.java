@@ -19,6 +19,9 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
     @Override
     public final void writeToNBT(NBTTagCompound nbt)
     {
+        //LogHelper.info("Writing tank at " + this.xCoord + " " + this.yCoord + " " + this.zCoord);
+        super.writeToNBT(nbt);
+
         NBTTagCompound tankNBT = new NBTTagCompound();
         tank.writeToNBT(tankNBT);
         nbt.setTag(TANK_NAME, tankNBT);
@@ -27,10 +30,15 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
     @Override
     public final void readFromNBT(NBTTagCompound nbt)
     {
+        super.readFromNBT(nbt);
+        //LogHelper.info("Reading tank at " + this.xCoord + " " + this.yCoord + " " + this.zCoord);
+
         if (nbt.hasKey(TANK_NAME)) {
+            //LogHelper.info("Got tank NBT data");
             NBTTagCompound tankNBT = nbt.getCompoundTag(TANK_NAME);
-            super.readFromNBT(tankNBT);
             tank.readFromNBT(tankNBT);
+        } else {
+            //LogHelper.info("Didn't have tank NBT data - new tank");
         }
     }
 
