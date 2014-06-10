@@ -3,6 +3,7 @@ package io.endertech.tile;
 import cofh.block.ITileInfo;
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.helper.StringHelper;
+import io.endertech.lib.Strings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
@@ -71,7 +72,7 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
 
     public static void init()
     {
-        GameRegistry.registerTileEntity(TileTank.class, "endertech.Tank");
+        GameRegistry.registerTileEntity(TileTank.class, "tile." + Strings.TANK_TILE_NAME);
     }
 
     @Override

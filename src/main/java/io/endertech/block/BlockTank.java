@@ -1,6 +1,7 @@
 package io.endertech.block;
 
 import io.endertech.EnderTech;
+import io.endertech.lib.Strings;
 import io.endertech.tile.TileTank;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -16,6 +17,7 @@ public class BlockTank extends BlockContainer
     {
         super(id, Material.glass);
         setCreativeTab(EnderTech.tabET);
+        setUnlocalizedName(Strings.TANK_TILE_NAME);
     }
 
     @Override

@@ -7,3 +7,6 @@ item.endertech.exchanger.exchangerCreative.name=Creative Exchanger
 
 # Creative tab
 itemGroup.EnderTechAll=EnderTech: All
+
+# Blocks
+tile.endertech.enderTank.name=Ender Tank
