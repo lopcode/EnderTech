@@ -5,7 +5,7 @@ This is my first foray in to Minecraft modding. It's intended to be a tech theme
 
 I don't promise to finish it, or keep it stable, and I'm not interested in formal feature requests, but feel free to suggest things to me in #MultiMC on Esper anyway. I've opened the repository up because other open source projects are proving extremely helpful in learning my way around Forge. If it did become popular, or get included in a larger modpack, I'll commit to something more formal to make things better for users and modpack makers.
 
-There are no textures (or I've used debug textures) whilst I figure out what sort of aesthetic I want.
+There are no textures (or I've used debug textures) whilst I figure out what sort of aesthetic I want, get a design document sorted, and bribe a texture artist with false claims of fame and fortune.
 
 If you spot that I'm doing something particularly heinous, it's because I don't know any better. Tell me on IRC (Esper/#MultiMC)!
 
