@@ -52,7 +52,7 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
     @Override
     public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain)
     {
-        if (this.canDrain(from, resource.getFluid())) {
+        if (this.canDrain(from, null)) {
             return this.drain(from, resource.amount, doDrain);
         } else {
             return null;
@@ -62,7 +62,7 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
     @Override
     public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain)
     {
-        if (this.tank.getFluid() != null && this.canDrain(from, this.tank.getFluid().getFluid())) {
+        if (this.canDrain(from, null)) {
             return tank.drain(maxDrain, doDrain);
         } else {
             return null;
@@ -78,7 +78,7 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
     @Override
     public boolean canDrain(ForgeDirection from, Fluid fluid)
     {
-        return true;
+        return this.tank.getFluidAmount() > 0;
     }
 
     @Override
