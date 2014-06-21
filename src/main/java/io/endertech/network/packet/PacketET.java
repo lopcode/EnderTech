@@ -15,7 +15,8 @@ public abstract class PacketET
 {
     private static final BiMap<Integer, Class<? extends PacketET>> idMap;
 
-    static {
+    static
+    {
         ImmutableBiMap.Builder<Integer, Class<? extends PacketET>> packetMapBuilder = ImmutableBiMap.builder();
         packetMapBuilder.put(0, PacketKeyPressed.class);
         idMap = packetMapBuilder.build();
@@ -24,18 +25,24 @@ public abstract class PacketET
     public static PacketET constructPacket(int packetId) throws ProtocolException, ReflectiveOperationException
     {
         Class<? extends PacketET> clazz = idMap.get(packetId);
-        if (clazz == null) {
+        if (clazz == null)
+        {
             throw new ProtocolException("Unknown packet ID: " + packetId);
-        } else {
+        }
+        else
+        {
             return clazz.newInstance();
         }
     }
 
     public final int getPacketId()
     {
-        if (idMap.inverse().containsKey(getClass())) {
+        if (idMap.inverse().containsKey(getClass()))
+        {
             return idMap.inverse().get(getClass()).intValue();
-        } else {
+        }
+        else
+        {
             throw new RuntimeException("Unknown packet mapping: " + getClass().getSimpleName());
         }
     }

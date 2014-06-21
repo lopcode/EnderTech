@@ -30,14 +30,16 @@ public class ItemETBase extends Item
 
     public ItemStack addItem(int number, String name, boolean shouldRegister)
     {
-        if (this.items.containsKey(number)) {
+        if (this.items.containsKey(number))
+        {
             return null;
         }
 
         this.items.put(number, name);
 
         ItemStack item = new ItemStack(this, 1, number);
-        if (shouldRegister) {
+        if (shouldRegister)
+        {
             GameRegistry.registerCustomItemStack(name, item);
         }
 
@@ -52,12 +54,14 @@ public class ItemETBase extends Item
     @Override
     public void registerIcons(IconRegister iconRegister)
     {
-        if (!this.hasTextures) {
+        if (!this.hasTextures)
+        {
             return;
         }
 
         Iterator it = items.entrySet().iterator();
-        while (it.hasNext()) {
+        while (it.hasNext())
+        {
             Map.Entry entry = (Map.Entry) it.next();
 
             String name = (String) entry.getValue();
@@ -70,7 +74,8 @@ public class ItemETBase extends Item
     @Override
     public Icon getIconFromDamage(int i)
     {
-        if (!this.items.containsKey(i)) {
+        if (!this.items.containsKey(i))
+        {
             return null;
         }
 
@@ -82,7 +87,8 @@ public class ItemETBase extends Item
     public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         Iterator it = items.entrySet().iterator();
-        while (it.hasNext()) {
+        while (it.hasNext())
+        {
             Map.Entry entry = (Map.Entry) it.next();
 
             par3List.add(new ItemStack(par1, 1, (Integer) entry.getKey()));
@@ -93,7 +99,8 @@ public class ItemETBase extends Item
     public String getUnlocalizedName(ItemStack stack)
     {
         int i = stack.getItemDamage();
-        if (!this.items.containsKey(i)) {
+        if (!this.items.containsKey(i))
+        {
             return "item.invalid";
         }
 

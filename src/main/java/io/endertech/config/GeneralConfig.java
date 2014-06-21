@@ -12,11 +12,16 @@ public class GeneralConfig
     protected static void init(File configFile)
     {
         generalConfig = new Configuration(configFile);
-        try {
+        try
+        {
             generalConfig.load();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             LogHelper.error("Failed to load general config");
-        } finally {
+        }
+        finally
+        {
             generalConfig.save();
         }
     }

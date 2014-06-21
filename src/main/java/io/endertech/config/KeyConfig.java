@@ -10,9 +10,12 @@ public class KeyConfig
 
     public static byte descriptionToCode(String description)
     {
-        if (description.equals(keyToolIncreaseDescription)) {
+        if (description.equals(keyToolIncreaseDescription))
+        {
             return keyToolIncreaseCode;
-        } else if (description.equals(keyToolDecreaseDescription)) {
+        }
+        else if (description.equals(keyToolDecreaseDescription))
+        {
             return keyToolDecreaseCode;
         }
 

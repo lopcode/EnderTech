@@ -63,35 +63,46 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     {
         super.addInformation(stack, player, list, check);
 
-        if (KeyHelper.isShiftDown()) {
-            if (stack.stackTagCompound == null) {
+        if (KeyHelper.isShiftDown())
+        {
+            if (stack.stackTagCompound == null)
+            {
                 setDefaultTag(stack, 0);
             }
 
-            if (this.isCreative(stack)) {
+            if (this.isCreative(stack))
+            {
                 list.add("Charge: Infinite");
-            } else {
+            }
+            else
+            {
                 list.add("Charge: " + StringHelper.getEnergyString(this.getEnergyStored(stack)) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(stack)) + " RF");
             }
 
             //if (this.getMaxExtractRate(stack) > 0)
             //    list.add("Send: " + this.getMaxExtractRate(stack) + " RF/t");
 
-            if (this.getMaxReceiveRate(stack) > 0) {
+            if (this.getMaxReceiveRate(stack) > 0)
+            {
                 list.add("Receive: " + StringHelper.getEnergyString(this.getMaxReceiveRate(stack)) + " RF/t");
             }
 
             ItemStack pb = getSourceBlock(stack);
-            if (pb == null) {
+            if (pb == null)
+            {
                 list.add("Source block: None");
-            } else {
+            }
+            else
+            {
                 list.add(EnumChatFormatting.GREEN + "Source block: " + pb.getDisplayName());
             }
 
             list.add(EnumChatFormatting.GREEN + "Radius: " + this.getTargetRadius(stack));
 
             list.add(EnumChatFormatting.AQUA + "" + EnumChatFormatting.ITALIC + "Use while sneaking to choose source." + EnumChatFormatting.RESET);
-        } else {
+        }
+        else
+        {
             list.add(StringHelper.holdShiftForDetails);
         }
     }
@@ -101,16 +112,20 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     {
         LogHelper.debug("Exchanger use on " + x + " " + y + " " + z);
 
-        if (player.isSneaking()) {
+        if (player.isSneaking())
+        {
             LogHelper.debug("Shift right click");
 
             int sourceId = player.worldObj.getBlockId(x, y, z);
             int sourceMetadata = player.worldObj.getBlockMetadata(x, y, z);
 
-            if (sourceId > 0 && world.getBlockTileEntity(x, y, z) == null && !BlockHelper.softBlocks.contains(Block.blocksList[sourceId])) {
+            if (sourceId > 0 && world.getBlockTileEntity(x, y, z) == null && !BlockHelper.softBlocks.contains(Block.blocksList[sourceId]))
+            {
                 LogHelper.debug("Setting source block to " + Block.blocksList[sourceId].getLocalizedName());
                 setSourceBlock(itemstack, sourceId, sourceMetadata);
-            } else {
+            }
+            else
+            {
                 LogHelper.debug("Failed to set source block");
             }
 
@@ -119,7 +134,8 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
         ItemStack pb = getSourceBlock(itemstack);
 
-        if ((pb != null) && (player.worldObj.getBlockTileEntity(x, y, z) == null) && !player.worldObj.isRemote) {
+        if ((pb != null) && (player.worldObj.getBlockTileEntity(x, y, z) == null) && !player.worldObj.isRemote)
+        {
             WorldTickHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), player.worldObj.getBlockId(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb.itemID, pb.getItemDamage(), this.getTargetRadius(itemstack) - 1, player, player.inventory.currentItem, new HashSet<BlockCoord>());
         }
 
@@ -129,16 +145,20 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     @Override
     public int extractEnergy(ItemStack container, int maxExtract, boolean simulate)
     {
-        if (this.isCreative(container)) {
+        if (this.isCreative(container))
+        {
             return maxExtract;
-        } else {
+        }
+        else
+        {
             return super.extractEnergy(container, maxExtract, simulate);
         }
     }
 
     public void setSourceBlock(ItemStack stack, int sourceId, int sourceMetadata)
     {
-        if (!stack.hasTagCompound()) {
+        if (!stack.hasTagCompound())
+        {
             stack.setTagCompound(new NBTTagCompound());
         }
         stack.getTagCompound().setInteger("sourceId", sourceId);
@@ -152,7 +172,8 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
     public void setTargetRadius(ItemStack stack, int radius)
     {
-        if (!stack.hasTagCompound()) {
+        if (!stack.hasTagCompound())
+        {
             stack.setTagCompound(new NBTTagCompound());
         }
         stack.getTagCompound().setInteger("targetRadius", radius);
@@ -162,11 +183,13 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     {
         int radius = 3;
 
-        if (stack.hasTagCompound() && (stack.getTagCompound().hasKey("targetRadius"))) {
+        if (stack.hasTagCompound() && (stack.getTagCompound().hasKey("targetRadius")))
+        {
             radius = stack.getTagCompound().getInteger("targetRadius");
         }
 
-        if (radius > ItemConfig.itemExchangerMaxRadius) {
+        if (radius > ItemConfig.itemExchangerMaxRadius)
+        {
             radius = ItemConfig.itemExchangerMaxRadius;
         }
 
@@ -180,29 +203,40 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
         int radius = this.getTargetRadius(itemStack);
 
-        if (keyCode == KeyConfig.keyToolIncreaseCode) {
-            if (player.isSneaking()) {
+        if (keyCode == KeyConfig.keyToolIncreaseCode)
+        {
+            if (player.isSneaking())
+            {
                 radius = ItemConfig.itemExchangerMaxRadius;
-            } else {
+            }
+            else
+            {
                 radius++;
             }
 
             //LogHelper.info("Tool Increase");
-        } else if (keyCode == KeyConfig.keyToolDecreaseCode) {
-            if (player.isSneaking()) {
+        }
+        else if (keyCode == KeyConfig.keyToolDecreaseCode)
+        {
+            if (player.isSneaking())
+            {
                 radius = 1;
-            } else {
+            }
+            else
+            {
                 radius--;
             }
 
             // LogHelper.info("Tool Decrease");
         }
 
-        if (radius > ItemConfig.itemExchangerMaxRadius) {
+        if (radius > ItemConfig.itemExchangerMaxRadius)
+        {
             radius = ItemConfig.itemExchangerMaxRadius;
         }
 
-        if (radius < 1) {
+        if (radius < 1)
+        {
             radius = 1;
         }
 
@@ -215,13 +249,20 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     {
         int type = par1ItemStack.getItemDamage();
 
-        if (type == Types.CREATIVE.ordinal()) {
+        if (type == Types.CREATIVE.ordinal())
+        {
             return EnumRarity.epic;
-        } else if (type == Types.REDSTONE.ordinal()) {
+        }
+        else if (type == Types.REDSTONE.ordinal())
+        {
             return EnumRarity.uncommon;
-        } else if (type == Types.RESONANT.ordinal()) {
+        }
+        else if (type == Types.RESONANT.ordinal())
+        {
             return EnumRarity.rare;
-        } else {
+        }
+        else
+        {
             return EnumRarity.common;
         }
     }

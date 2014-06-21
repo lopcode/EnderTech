@@ -46,9 +46,12 @@ public class EnderTech
     @EventHandler
     public void invalidFingerprint(FMLFingerprintViolationEvent event)
     {
-        if (Reference.FINGERPRINT.equals("@FINGERPRINT@")) {
+        if (Reference.FINGERPRINT.equals("@FINGERPRINT@"))
+        {
             LogHelper.warn("Fingerprint was missing from the jar, this mod could have been tampered with!");
-        } else {
+        }
+        else
+        {
             LogHelper.fatal("Fingerprint doesn't match - this mod has been tampered with!");
         }
     }
@@ -71,7 +74,8 @@ public class EnderTech
         proxy.registerTickerHandlers();
 
         // KeyBinding handler
-        if (FMLCommonHandler.instance().getSide().isClient()) {
+        if (FMLCommonHandler.instance().getSide().isClient())
+        {
             KeyBindingRegistry.registerKeyBinding(new KeyBindingHandler());
         }
 
@@ -100,7 +104,8 @@ public class EnderTech
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-        if (FMLCommonHandler.instance().getSide().isClient()) {
+        if (FMLCommonHandler.instance().getSide().isClient())
+        {
             MinecraftForge.EVENT_BUS.register(new GUIBlockOverlay((Minecraft.getMinecraft())));
         }
 

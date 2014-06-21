@@ -37,7 +37,8 @@ public class PacketKeyPressed extends PacketET
     {
         EntityPlayer thePlayer = (EntityPlayer) player;
 
-        if (thePlayer.getCurrentEquippedItem() != null && thePlayer.getCurrentEquippedItem().getItem() instanceof IKeyHandler) {
+        if (thePlayer.getCurrentEquippedItem() != null && thePlayer.getCurrentEquippedItem().getItem() instanceof IKeyHandler)
+        {
             ((IKeyHandler) thePlayer.getCurrentEquippedItem().getItem()).handleKey(thePlayer, thePlayer.getCurrentEquippedItem(), keyCode);
         }
     }

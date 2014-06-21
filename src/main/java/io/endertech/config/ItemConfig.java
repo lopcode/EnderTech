@@ -16,21 +16,28 @@ public class ItemConfig
     protected static void init(File configFile)
     {
         itemConfig = new Configuration(configFile);
-        try {
+        try
+        {
             itemConfig.load();
 
             itemExchangerID = itemConfig.getItem("item.id", "Tool.Exchanger", 15363).getInt(15363);
             itemExchangerBlockCost = itemConfig.get("item.general", "Exchanger.BlockCost", 8192).getInt(8192);
             itemExchangerMaxRadius = itemConfig.get("item.general", "Exchanger.MaxRadius", 8).getInt(8);
-            if (itemExchangerMaxRadius < 1) {
+            if (itemExchangerMaxRadius < 1)
+            {
                 itemExchangerMaxRadius = 1;
             }
-            if (itemExchangerMaxRadius > 64) {
+            if (itemExchangerMaxRadius > 64)
+            {
                 itemExchangerMaxRadius = 64;
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             LogHelper.error("Failed to load item config");
-        } finally {
+        }
+        finally
+        {
             itemConfig.save();
         }
     }

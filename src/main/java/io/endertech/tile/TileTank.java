@@ -34,11 +34,14 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
         super.readFromNBT(nbt);
         LogHelper.debug("Reading tank at " + this.xCoord + " " + this.yCoord + " " + this.zCoord);
 
-        if (nbt.hasKey(TANK_NAME)) {
+        if (nbt.hasKey(TANK_NAME))
+        {
             LogHelper.debug("Got tank NBT data");
             NBTTagCompound tankNBT = nbt.getCompoundTag(TANK_NAME);
             tank.readFromNBT(tankNBT);
-        } else {
+        }
+        else
+        {
             LogHelper.debug("Didn't have tank NBT data - new tank");
         }
     }
@@ -52,9 +55,12 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
     @Override
     public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain)
     {
-        if (this.canDrain(from, null)) {
+        if (this.canDrain(from, null))
+        {
             return this.drain(from, resource.amount, doDrain);
-        } else {
+        }
+        else
+        {
             return null;
         }
     }
@@ -62,9 +68,12 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
     @Override
     public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain)
     {
-        if (this.canDrain(from, null)) {
+        if (this.canDrain(from, null))
+        {
             return tank.drain(maxDrain, doDrain);
-        } else {
+        }
+        else
+        {
             return null;
         }
     }
@@ -95,15 +104,19 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
     @Override
     public void getTileInfo(List<String> info, ForgeDirection side, EntityPlayer player, boolean debug)
     {
-        if (debug) {
+        if (debug)
+        {
             return;
         }
 
         info.add("EnderTech Tank");
 
-        if (tank.getFluidAmount() <= 0) {
+        if (tank.getFluidAmount() <= 0)
+        {
             info.add(" Fluid: none");
-        } else {
+        }
+        else
+        {
             info.add(" Fluid: " + StringHelper.getFluidString(tank.getFluid().getFluid()));
             info.add(" Contents: " + tank.getFluidAmount() + " / " + tank.getCapacity() + " mB");
         }

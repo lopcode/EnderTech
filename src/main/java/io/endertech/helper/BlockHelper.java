@@ -15,10 +15,12 @@ public class BlockHelper
 
     public static void initSoftBlocks()
     {
-        for (Object o : Block.blocksList) {
+        for (Object o : Block.blocksList)
+        {
             Block block = (Block) o;
 
-            if (block instanceof BlockFluidBase || block instanceof BlockFluid || block instanceof IPlantable) {
+            if (block instanceof BlockFluidBase || block instanceof BlockFluid || block instanceof IPlantable)
+            {
                 softBlocks.add(block);
             }
         }
@@ -31,7 +33,8 @@ public class BlockHelper
     public static boolean isSoftBlock(World world, int x, int y, int z)
     {
         int blockId = world.getBlockId(x, y, z);
-        if (blockId <= 0) {
+        if (blockId <= 0)
+        {
             return true;
         }
 

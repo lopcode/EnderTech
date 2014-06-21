@@ -30,23 +30,30 @@ public class GUIBlockOverlay extends Gui
     @ForgeSubscribe(priority = EventPriority.NORMAL)
     public void onRenderExperienceBar(RenderGameOverlayEvent event)
     {
-        if (event.isCancelable() || event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE) {
+        if (event.isCancelable() || event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE)
+        {
             return;
         }
 
-        if ((mc.renderViewEntity instanceof EntityPlayer)) {
+        if ((mc.renderViewEntity instanceof EntityPlayer))
+        {
             EntityPlayer player = (EntityPlayer) mc.renderViewEntity;
 
-            if ((player != null) && (mc.inGameHasFocus) && (Minecraft.isGuiEnabled())) {
-                if (player.inventory.getCurrentItem() != null) {
-                    if ((player.inventory.getCurrentItem().getItem() instanceof ItemExchanger)) {
+            if ((player != null) && (mc.inGameHasFocus) && (Minecraft.isGuiEnabled()))
+            {
+                if (player.inventory.getCurrentItem() != null)
+                {
+                    if ((player.inventory.getCurrentItem().getItem() instanceof ItemExchanger))
+                    {
                         ItemExchanger exchanger = (ItemExchanger) player.inventory.getCurrentItem().getItem();
                         ItemStack exchangerStack = player.inventory.getCurrentItem();
                         ItemStack source = exchanger.getSourceBlock(player.inventory.getCurrentItem());
-                        if (source != null) {
+                        if (source != null)
+                        {
                             //LogHelper.info("Rendering item");
 
-                            if (player.inventory.inventoryChanged || !source.isItemEqual(this.lastExchangeSource)) {
+                            if (player.inventory.inventoryChanged || !source.isItemEqual(this.lastExchangeSource))
+                            {
                                 this.lastExchangeSourceCount = InventoryHelper.getExtractableQuantity(player.inventory, source);
 
                                 player.inventory.inventoryChanged = false;
@@ -69,7 +76,8 @@ public class GUIBlockOverlay extends Gui
                             GL11.glPushMatrix();
 
                             String am = Integer.toString(this.lastExchangeSourceCount);
-                            if (exchanger.isCreative(exchangerStack)) {
+                            if (exchanger.isCreative(exchangerStack))
+                            {
                                 am = "Inf"; // infinity
                             }
 

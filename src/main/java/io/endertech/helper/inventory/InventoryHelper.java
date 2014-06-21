@@ -8,9 +8,11 @@ public class InventoryHelper
     public static int getExtractableQuantity(InventoryAbstracted inventory, ItemStack stack)
     {
         int quantity = 0;
-        for (int slot : inventory.slots) {
+        for (int slot : inventory.slots)
+        {
             ItemStack is = inventory.getStackInSlot(slot);
-            if (is != null && is.isItemEqual(stack)) {
+            if (is != null && is.isItemEqual(stack))
+            {
                 quantity += is.stackSize;
             }
         }
@@ -25,9 +27,11 @@ public class InventoryHelper
 
     public static int findFirstItemStack(InventoryAbstracted inventory, ItemStack stack)
     {
-        for (int slot : inventory.slots) {
+        for (int slot : inventory.slots)
+        {
             ItemStack is = inventory.getStackInSlot(slot);
-            if (is != null && is.isItemEqual(stack) && is.stackSize > 0) {
+            if (is != null && is.isItemEqual(stack) && is.stackSize > 0)
+            {
                 return slot;
             }
         }
@@ -42,11 +46,13 @@ public class InventoryHelper
 
     public static ItemStack insertItem(InventoryAbstracted inventory, ItemStack tStack, boolean simulate)
     {
-        if (tStack == null) {
+        if (tStack == null)
+        {
             return null;
         }
 
-        if (inventory.slots == null) {
+        if (inventory.slots == null)
+        {
             return tStack;
         }
 
@@ -59,46 +65,57 @@ public class InventoryHelper
         //   If the slot is empty, put as much as possible in it
         // Return whatever's left
 
-        for (int pass = 1; pass <= 2; pass++) {
-            for (int slot : inventory.slots) {
+        for (int pass = 1; pass <= 2; pass++)
+        {
+            for (int slot : inventory.slots)
+            {
                 ItemStack slotStack = inventory.getStackInSlot(slot);
-                if ((slotStack == null && pass == 1) || !inventory.canInsertItem(slot, stack)) {
+                if ((slotStack == null && pass == 1) || !inventory.canInsertItem(slot, stack))
+                {
                     continue;
                 }
 
                 boolean canStack = (slotStack == null) || (slotStack.getItem().equals(stack.getItem()) && ItemStack.areItemStackTagsEqual(slotStack, stack) && slotStack.isStackable() && stack.isStackable() && (!slotStack.getHasSubtypes() || (slotStack.getItemDamage() == stack.getItemDamage())));
-                if (!canStack) {
+                if (!canStack)
+                {
                     continue;
                 }
 
                 int fittable = 0;
-                if (slotStack == null) {
+                if (slotStack == null)
+                {
                     fittable = stack.getMaxStackSize();
-                } else {
+                }
+                else
+                {
                     fittable = slotStack.getMaxStackSize() - slotStack.stackSize;
                 }
 
                 //LogHelper.info("Fittable is " + fittable);
-                if (fittable <= 0) {
+                if (fittable <= 0)
+                {
                     continue;
                 }
 
                 int fit = Math.min(fittable, stack.stackSize);
                 stack.stackSize -= fit;
 
-                if (slotStack == null) {
+                if (slotStack == null)
+                {
                     slotStack = stack.copy();
                     slotStack.stackSize = 0;
                 }
 
-                if (!simulate) {
+                if (!simulate)
+                {
                     slotStack.stackSize += fit;
 
                     //LogHelper.info("Setting inventory contents " + slotStack.stackSize);
                     inventory.inventory.setInventorySlotContents(slot, slotStack);
                 }
 
-                if (stack.stackSize <= 0) {
+                if (stack.stackSize <= 0)
+                {
                     return null;
                 }
             }
