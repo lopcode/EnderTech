@@ -19,9 +19,11 @@ import io.endertech.config.ConfigHandler;
 import io.endertech.gui.CreativeTabET;
 import io.endertech.helper.BlockHelper;
 import io.endertech.helper.LogHelper;
+import io.endertech.helper.ModuleHelper;
 import io.endertech.items.ETItems;
 import io.endertech.lib.Reference;
 import io.endertech.network.PacketHandlerET;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -35,6 +37,7 @@ import java.io.File;
 @NetworkMod(channels = {Reference.MOD_ID}, packetHandler = PacketHandlerET.class)
 public class EnderTech
 {
+    @SuppressWarnings("unused")
     @Mod.Instance(Reference.MOD_ID)
     public static EnderTech instance;
 
@@ -44,6 +47,7 @@ public class EnderTech
     public static final CreativeTabs tabET = new CreativeTabET();
 
     @EventHandler
+    @SuppressWarnings("unused")
     public void invalidFingerprint(FMLFingerprintViolationEvent event)
     {
         if (Reference.FINGERPRINT.equals("@FINGERPRINT@"))
@@ -68,6 +72,10 @@ public class EnderTech
 
         LogHelper.debug("Loaded config");
 
+        // Pulsar module loading
+        ModuleHelper.setupModules();
+        ModuleHelper.pulsar.preInit(event);
+
         // Version checker
 
         // Tick handlers
@@ -91,8 +99,12 @@ public class EnderTech
     }
 
     @EventHandler
+    @SuppressWarnings("unused")
     public void init(FMLInitializationEvent event)
     {
+        // Pulsar loading
+        ModuleHelper.pulsar.init(event);
+
         //LogHelper.debug("DIRT BLOCK >> " + Block.dirt.getUnlocalizedName());
         //LogHelper.info("Sin 360: " + MathHelper.sin(2 * MathHelper.pi));
 
@@ -102,8 +114,12 @@ public class EnderTech
     }
 
     @EventHandler
+    @SuppressWarnings("unused")
     public void postInit(FMLPostInitializationEvent event)
     {
+        // Pulsar loading
+        ModuleHelper.pulsar.postInit(event);
+
         if (FMLCommonHandler.instance().getSide().isClient())
         {
             MinecraftForge.EVENT_BUS.register(new GUIBlockOverlay((Minecraft.getMinecraft())));
