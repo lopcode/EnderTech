@@ -2,7 +2,6 @@ package io.endertech.config;
 
 import io.endertech.helper.LogHelper;
 import net.minecraftforge.common.Configuration;
-
 import java.io.File;
 
 public class ItemConfig
@@ -31,12 +30,10 @@ public class ItemConfig
             {
                 itemExchangerMaxRadius = 64;
             }
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             LogHelper.error("Failed to load item config");
-        }
-        finally
+        } finally
         {
             itemConfig.save();
         }

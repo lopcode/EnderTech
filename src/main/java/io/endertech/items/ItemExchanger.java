@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-
 import java.util.HashSet;
 import java.util.List;
 
@@ -73,8 +72,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             if (this.isCreative(stack))
             {
                 list.add("Charge: Infinite");
-            }
-            else
+            } else
             {
                 list.add("Charge: " + StringHelper.getEnergyString(this.getEnergyStored(stack)) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(stack)) + " RF");
             }
@@ -91,8 +89,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             if (pb == null)
             {
                 list.add("Source block: None");
-            }
-            else
+            } else
             {
                 list.add(EnumChatFormatting.GREEN + "Source block: " + pb.getDisplayName());
             }
@@ -100,8 +97,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             list.add(EnumChatFormatting.GREEN + "Radius: " + this.getTargetRadius(stack));
 
             list.add(EnumChatFormatting.AQUA + "" + EnumChatFormatting.ITALIC + "Use while sneaking to choose source." + EnumChatFormatting.RESET);
-        }
-        else
+        } else
         {
             list.add(StringHelper.holdShiftForDetails);
         }
@@ -123,8 +119,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             {
                 LogHelper.debug("Setting source block to " + Block.blocksList[sourceId].getLocalizedName());
                 setSourceBlock(itemstack, sourceId, sourceMetadata);
-            }
-            else
+            } else
             {
                 LogHelper.debug("Failed to set source block");
             }
@@ -148,8 +143,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
         if (this.isCreative(container))
         {
             return maxExtract;
-        }
-        else
+        } else
         {
             return super.extractEnergy(container, maxExtract, simulate);
         }
@@ -208,21 +202,18 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             if (player.isSneaking())
             {
                 radius = ItemConfig.itemExchangerMaxRadius;
-            }
-            else
+            } else
             {
                 radius++;
             }
 
             //LogHelper.info("Tool Increase");
-        }
-        else if (keyCode == KeyConfig.keyToolDecreaseCode)
+        } else if (keyCode == KeyConfig.keyToolDecreaseCode)
         {
             if (player.isSneaking())
             {
                 radius = 1;
-            }
-            else
+            } else
             {
                 radius--;
             }
@@ -252,16 +243,13 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
         if (type == Types.CREATIVE.ordinal())
         {
             return EnumRarity.epic;
-        }
-        else if (type == Types.REDSTONE.ordinal())
+        } else if (type == Types.REDSTONE.ordinal())
         {
             return EnumRarity.uncommon;
-        }
-        else if (type == Types.RESONANT.ordinal())
+        } else if (type == Types.RESONANT.ordinal())
         {
             return EnumRarity.rare;
-        }
-        else
+        } else
         {
             return EnumRarity.common;
         }

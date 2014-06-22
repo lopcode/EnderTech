@@ -2,7 +2,6 @@ package io.endertech.common;
 
 import io.endertech.util.BlockCoord;
 import net.minecraft.entity.player.EntityPlayer;
-
 import java.util.Set;
 
 public class Exchange

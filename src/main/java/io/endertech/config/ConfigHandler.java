@@ -1,7 +1,6 @@
 package io.endertech.config;
 
 import net.minecraftforge.common.Configuration;
-
 import java.io.File;
 
 public class ConfigHandler

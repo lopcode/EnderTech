@@ -13,7 +13,6 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
-
 import java.util.EnumSet;
 
 public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
@@ -48,8 +47,7 @@ public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
                     {
                         LogHelper.info("Remote, sent packet to server");
                         PacketDispatcher.sendPacketToServer(new PacketKeyPressed(KeyConfig.descriptionToCode(kb.keyDescription)).makePacket());
-                    }
-                    else
+                    } else
                     {
                         LogHelper.info("Client, handling key press");
                         ((IKeyHandler) player.getCurrentEquippedItem().getItem()).handleKey(player, equippedItem, KeyConfig.descriptionToCode(kb.keyDescription));

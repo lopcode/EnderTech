@@ -2,7 +2,6 @@ package io.endertech.helper;
 
 import cpw.mods.fml.common.FMLLog;
 import io.endertech.lib.Reference;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

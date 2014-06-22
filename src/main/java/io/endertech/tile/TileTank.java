@@ -9,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
-
 import java.util.List;
 
 public class TileTank extends TileET implements IFluidHandler, ITileInfo
@@ -39,8 +38,7 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
             LogHelper.debug("Got tank NBT data");
             NBTTagCompound tankNBT = nbt.getCompoundTag(TANK_NAME);
             tank.readFromNBT(tankNBT);
-        }
-        else
+        } else
         {
             LogHelper.debug("Didn't have tank NBT data - new tank");
         }
@@ -58,8 +56,7 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
         if (this.canDrain(from, null))
         {
             return this.drain(from, resource.amount, doDrain);
-        }
-        else
+        } else
         {
             return null;
         }
@@ -71,8 +68,7 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
         if (this.canDrain(from, null))
         {
             return tank.drain(maxDrain, doDrain);
-        }
-        else
+        } else
         {
             return null;
         }
@@ -114,8 +110,7 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
         if (tank.getFluidAmount() <= 0)
         {
             info.add(" Fluid: none");
-        }
-        else
+        } else
         {
             info.add(" Fluid: " + StringHelper.getFluidString(tank.getFluid().getFluid()));
             info.add(" Contents: " + tank.getFluidAmount() + " / " + tank.getCapacity() + " mB");

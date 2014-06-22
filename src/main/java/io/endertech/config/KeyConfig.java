@@ -13,8 +13,7 @@ public class KeyConfig
         if (description.equals(keyToolIncreaseDescription))
         {
             return keyToolIncreaseCode;
-        }
-        else if (description.equals(keyToolDecreaseDescription))
+        } else if (description.equals(keyToolDecreaseDescription))
         {
             return keyToolDecreaseCode;
         }

@@ -3,7 +3,6 @@ package io.endertech.helper;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fluids.Fluid;
-
 import java.text.DecimalFormat;
 
 public class StringHelper
@@ -16,12 +15,10 @@ public class StringHelper
         if (energy >= 1000000)
         {
             return String.valueOf(twoDP.format(energy / 1000000.0)) + "M";
-        }
-        else if (energy >= 1000)
+        } else if (energy >= 1000)
         {
             return String.valueOf(energy / 1000) + "k";
-        }
-        else
+        } else
         {
             return String.valueOf(energy);
         }
@@ -39,8 +36,7 @@ public class StringHelper
         if (rarity == EnumRarity.uncommon)
         {
             name += EnumChatFormatting.YELLOW;
-        }
-        else if (rarity == EnumRarity.rare)
+        } else if (rarity == EnumRarity.rare)
         {
             name += EnumChatFormatting.AQUA;
         }

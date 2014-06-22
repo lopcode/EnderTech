@@ -2,7 +2,6 @@ package io.endertech.config;
 
 import io.endertech.helper.LogHelper;
 import net.minecraftforge.common.Configuration;
-
 import java.io.File;
 
 public class BlockConfig
@@ -19,12 +18,10 @@ public class BlockConfig
             blockConfig.load();
 
             blockTankID = blockConfig.getBlock("block.id", "Tank", 3500).getInt(3500);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             LogHelper.error("Failed to load block config");
-        }
-        finally
+        } finally
         {
             blockConfig.save();
         }

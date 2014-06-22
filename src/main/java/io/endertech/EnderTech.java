@@ -23,14 +23,12 @@ import io.endertech.helper.ModuleHelper;
 import io.endertech.items.ETItems;
 import io.endertech.lib.Reference;
 import io.endertech.network.PacketHandlerET;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-
 import java.io.File;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, certificateFingerprint = Reference.FINGERPRINT, dependencies = "required-after:ThermalExpansion@[3.0.0.2,)")
@@ -53,8 +51,7 @@ public class EnderTech
         if (Reference.FINGERPRINT.equals("@FINGERPRINT@"))
         {
             LogHelper.warn("Fingerprint was missing from the jar, this mod could have been tampered with!");
-        }
-        else
+        } else
         {
             LogHelper.fatal("Fingerprint doesn't match - this mod has been tampered with!");
         }

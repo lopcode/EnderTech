@@ -13,7 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -75,8 +74,7 @@ public class WorldTickHandler implements ITickHandler
             if (exchange == null)
             {
                 rounds = 0;
-            }
-            else
+            } else
             {
                 int blockId = world.getBlockId(exchange.coord.x, exchange.coord.y, exchange.coord.z);
                 int blockMetadata = world.getBlockMetadata(exchange.coord.x, exchange.coord.y, exchange.coord.z);
@@ -123,8 +121,7 @@ public class WorldTickHandler implements ITickHandler
                                     InventoryHelper.consumeItem(exchange.player.inventory, sourceSlot);
 
                                     rounds--;
-                                }
-                                else
+                                } else
                                 {
                                     rounds = 0;
                                     inventoryModify = false;

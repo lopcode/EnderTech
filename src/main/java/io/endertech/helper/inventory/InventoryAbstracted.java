@@ -23,8 +23,7 @@ public class InventoryAbstracted
         if (inventory instanceof ISidedInventory)
         {
             this.slots = ((ISidedInventory) this.inventory).getAccessibleSlotsFromSide(this.side);
-        }
-        else
+        } else
         {
             this.slots = new int[inventory.getSizeInventory()];
 
@@ -45,8 +44,7 @@ public class InventoryAbstracted
         if (inventory instanceof ISidedInventory)
         {
             return ((ISidedInventory) inventory).canInsertItem(slot, item, this.side);
-        }
-        else
+        } else
         {
             return inventory.isItemValidForSlot(slot, item);
         }
@@ -57,8 +55,7 @@ public class InventoryAbstracted
         if (inventory instanceof ISidedInventory)
         {
             return ((ISidedInventory) inventory).canExtractItem(slot, item, this.side);
-        }
-        else
+        } else
         {
             return inventory.isItemValidForSlot(slot, item);
         }

@@ -85,8 +85,7 @@ public class InventoryHelper
                 if (slotStack == null)
                 {
                     fittable = stack.getMaxStackSize();
-                }
-                else
+                } else
                 {
                     fittable = slotStack.getMaxStackSize() - slotStack.stackSize;
                 }

@@ -2,7 +2,6 @@ package io.endertech.config;
 
 import io.endertech.helper.LogHelper;
 import net.minecraftforge.common.Configuration;
-
 import java.io.File;
 
 public class GeneralConfig
@@ -15,12 +14,10 @@ public class GeneralConfig
         try
         {
             generalConfig.load();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             LogHelper.error("Failed to load general config");
-        }
-        finally
+        } finally
         {
             generalConfig.save();
         }

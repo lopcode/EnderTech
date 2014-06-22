@@ -28,8 +28,7 @@ public abstract class PacketET
         if (clazz == null)
         {
             throw new ProtocolException("Unknown packet ID: " + packetId);
-        }
-        else
+        } else
         {
             return clazz.newInstance();
         }
@@ -40,8 +39,7 @@ public abstract class PacketET
         if (idMap.inverse().containsKey(getClass()))
         {
             return idMap.inverse().get(getClass()).intValue();
-        }
-        else
+        } else
         {
             throw new RuntimeException("Unknown packet mapping: " + getClass().getSimpleName());
         }
