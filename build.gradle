@@ -140,6 +140,18 @@ jar {
     }
 }
 
+// Dev jars
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+// Add dev jars to master artifacts list
+artifacts {
+    archives deobfJar
+}
+
+// Sign release jar
 task signJar(dependsOn: 'reobf') {
     inputs.file jar.getArchivePath()
     outputs.file jar.getArchivePath()
@@ -157,3 +169,16 @@ task signJar(dependsOn: 'reobf') {
                 destDir: jar.destinationDir)
     }
 }
+
+// Maven deployment
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://${env.DEPLOY_DIR}")
+        }
+    }
+}
+
+uploadArchives.onlyIf { return env.DEPLOY_DIR != null }
