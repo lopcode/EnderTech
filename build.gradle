@@ -180,6 +180,10 @@ task signJar(dependsOn: 'reobf') {
 // Maven deployment
 apply plugin: 'maven'
 
+if (!project.hasProperty("DEPLOY_DIR")) {
+    ext.DEPLOY_DIR = null
+}
+
 uploadArchives {
     repositories {
         mavenDeployer {
