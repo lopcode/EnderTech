@@ -100,8 +100,11 @@ minecraft {
     assetDir = 'run/assets'
 
     replaceIn "lib/Reference.java"
+
     if (keystore_config != null)
         replace "@FINGERPRINT@", keystore_config.key_sha1
+
+    srgExtra "PK: io/drakon/pulsar io/endertech/repack/pulsar" // WARN: This will only work in 1.7 (FG 1.1+) - Sorry. -- Arkan
 }
 
 task buildInfo {
@@ -140,8 +143,19 @@ processResources {
     }
 }
 
-// Merge Jenkins and Git manifests to form final manifest in final release jar
 jar {
+    // Grab deps for shading
+    from {
+        configurations.compile.resolvedConfiguration.resolvedArtifacts.findAll {
+            id = it.moduleVersion.id
+            logger.info("Analysing: {}:{}", id.group, id.name)
+            id.group.equals("io.drakon") and id.name.equals("Pulsar")
+        }.collect {
+            it.file.isDirectory() ? it.file : zipTree(it.file)
+        }
+    }
+
+    // Merge Jenkins and Git manifests to form final manifest in final release jar
     manifest {
         from jenkinsManifest, gitManifest
     }
