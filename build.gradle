@@ -23,6 +23,12 @@ repositories {
         artifactPattern "http://files.minecraftforge.net/[module]/[module]-dev-[revision].[ext]"
     }
 
+    // Pulsar
+    maven {
+        name 'Drakon.io Arca'
+        url "http://arca.drakon.io/"
+    }
+
     //ivy {
     //    name 'CB FS'
     //    artifactPattern "http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.6.4/[module]-dev%20[revision].[ext]"
@@ -77,7 +83,8 @@ ext.gitManifest = manifest {
 }
 
 dependencies {
-    compile fileTree(dir: 'lib', includes: ['*.jar'])
+    //compile fileTree(dir: 'lib', includes: ['*.jar'])
+    compile 'io.drakon:Pulsar:0.0.1'
     //compile name: 'ForgeMultipart', version: "${config.minecraft_version}-${config.FMP_version}", ext: 'jar'
     //compile name: 'CodeChickenLib', version: "${config.minecraft_version}-${config.CCLIB_version}", ext: 'jar'
     //compile name: 'NotEnoughItems', version: "${config.NEI_version}", type: 'jar'
@@ -176,9 +183,9 @@ apply plugin: 'maven'
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "file://${env.DEPLOY_DIR}")
+            repository(url: "file://${DEPLOY_DIR}")
         }
     }
 }
 
-uploadArchives.onlyIf { return env.DEPLOY_DIR != null }
+uploadArchives.onlyIf { return DEPLOY_DIR != null }
