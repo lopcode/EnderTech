@@ -1,6 +1,7 @@
 package io.endertech.helper;
 
 import io.drakon.pulsar.control.PulseManager;
+import io.endertech.modules.TestPulse;
 import static io.endertech.lib.Reference.MOD_ID;
 
 /**
@@ -10,7 +11,6 @@ import static io.endertech.lib.Reference.MOD_ID;
  */
 public class ModuleHelper
 {
-
     private ModuleHelper() {} // No touchy.
 
     private static boolean modulesConfigured = false;
@@ -22,6 +22,7 @@ public class ModuleHelper
 
         // TODO: Register modules with Pulsar here.
         // e.g. pulsar.registerPulse(new PulseClass());
+        pulsar.registerPulse(new TestPulse());
 
         modulesConfigured = true;
     }
