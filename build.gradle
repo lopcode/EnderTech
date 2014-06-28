@@ -95,6 +95,10 @@ group = "io.endertech"
 version = config.mod_version
 archivesBaseName = "EnderTech"
 
+// Add packapi source set
+sourceSets.main.java.srcDir "src/packapi/java"
+sourceSets.main.resources.srcDir "src/packapi/resources"
+
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version
     assetDir = 'run/assets'
