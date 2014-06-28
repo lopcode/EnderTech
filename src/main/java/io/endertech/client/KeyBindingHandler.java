@@ -1,21 +1,19 @@
 package io.endertech.client;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
-import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import io.endertech.config.KeyConfig;
 import io.endertech.helper.LogHelper;
 import io.endertech.items.IKeyHandler;
-import io.endertech.lib.Reference;
-import io.endertech.network.packet.PacketKeyPressed;
+import io.endertech.network.message.MessageKeyPressed;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
-import java.util.EnumSet;
 
-public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
+public class KeyBindingHandler
 {
     public static KeyBinding keyToolIncrease = new KeyBinding(KeyConfig.keyToolIncreaseDescription, Keyboard.KEY_PRIOR);
     public static KeyBinding keyToolDecrease = new KeyBinding(KeyConfig.keyToolDecreaseDescription, Keyboard.KEY_NEXT);
@@ -28,11 +26,11 @@ public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
         super(keyArray, keyRepeating);
     }
 
-    @Override
-    public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
+    @SubscribeEvent
+    public void handleKeyInputEvent(InputEvent.KeyInputEvent event)
     {
         //LogHelper.info("KeyDown");
-        if (tickEnd && FMLClientHandler.instance().getClient().inGameHasFocus)
+        if (FMLClientHandler.instance().getClient().inGameHasFocus)
         {
             //LogHelper.info("End&Focus");
             EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
@@ -46,7 +44,7 @@ public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
                     if (player.worldObj.isRemote)
                     {
                         LogHelper.info("Remote, sent packet to server");
-                        PacketDispatcher.sendPacketToServer(new PacketKeyPressed(KeyConfig.descriptionToCode(kb.keyDescription)).makePacket());
+                        PacketDispatcher.sendPacketToServer(new MessageKeyPressed(KeyConfig.descriptionToCode(kb.keyDescription)).makePacket());
                     } else
                     {
                         LogHelper.info("Client, handling key press");
@@ -55,23 +53,5 @@ public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler
                 }
             }
         }
-    }
-
-    @Override
-    public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)
-    {
-
-    }
-
-    @Override
-    public EnumSet<TickType> ticks()
-    {
-        return EnumSet.of(TickType.CLIENT);
-    }
-
-    @Override
-    public String getLabel()
-    {
-        return Reference.MOD_ID + "KeyBindingHandler";
     }
 }

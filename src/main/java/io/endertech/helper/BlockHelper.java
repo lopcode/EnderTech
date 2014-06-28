@@ -2,6 +2,7 @@ package io.endertech.helper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fluids.BlockFluidBase;
@@ -14,7 +15,7 @@ public class BlockHelper
 
     public static void initSoftBlocks()
     {
-        for (Object o : Block.blocksList)
+        for (Object o : Blocks.blocksList)
         {
             Block block = (Block) o;
 

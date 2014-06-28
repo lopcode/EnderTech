@@ -23,17 +23,17 @@ import io.endertech.helper.LogHelper;
 import io.endertech.helper.ModuleHelper;
 import io.endertech.items.ETItems;
 import io.endertech.lib.Reference;
-import io.endertech.network.PacketHandlerET;
+import io.endertech.network.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import java.io.File;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, certificateFingerprint = Reference.FINGERPRINT, dependencies = "after:ThermalExpansion@[3.0.0.2,)")
-@NetworkMod(channels = {Reference.MOD_ID}, packetHandler = PacketHandlerET.class)
+@NetworkMod(channels = {Reference.MOD_ID}, packetHandler = NetworkHandler.class)
 public class EnderTech
 {
     @SuppressWarnings("unused")
@@ -126,13 +126,13 @@ public class EnderTech
         BlockHelper.initSoftBlocks();
 
         LogHelper.info("Registering recipes");
-        if(Loader.isModLoaded("ThermalExpansion"))
+        if (Loader.isModLoaded("ThermalExpansion"))
         {
             ItemStack capacitorReinforced = GameRegistry.findItemStack("ThermalExpansion", "capacitorReinforced", 1);
             ItemStack capacitorResonant = GameRegistry.findItemStack("ThermalExpansion", "capacitorResonant", 1);
             ItemStack tesseract = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Tesseract"));
 
-            ItemStack enderEyeStack = new ItemStack(Item.eyeOfEnder);
+            ItemStack enderEyeStack = new ItemStack(Items.ender_eye);
 
             GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerRedstone, new Object[] {"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorReinforced, 'T', tesseract}));
             GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerResonant, new Object[] {"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorResonant, 'T', tesseract}));

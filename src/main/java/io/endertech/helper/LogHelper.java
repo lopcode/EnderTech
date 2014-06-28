@@ -2,36 +2,28 @@ package io.endertech.helper;
 
 import cpw.mods.fml.common.FMLLog;
 import io.endertech.lib.Reference;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Level;
 
 public class LogHelper
 {
-    private static final Logger ET_LOGGER = Logger.getLogger(Reference.MOD_ID);
-
-    static
-    {
-        ET_LOGGER.setParent(FMLLog.getLogger());
-    }
-
     public static void log(Level logLevel, Object object)
     {
-        ET_LOGGER.log(logLevel, String.valueOf(object));
+        FMLLog.log(Reference.MOD_NAME, logLevel, String.valueOf(object));
     }
 
     public static void debug(Object object)
     {
-        log(Level.FINE, object);
+        log(Level.DEBUG, object);
     }
 
     public static void error(Object object)
     {
-        log(Level.SEVERE, object);
+        log(Level.ERROR, object);
     }
 
     public static void fatal(Object object)
     {
-        log(Level.SEVERE, object);
+        log(Level.FATAL, object);
     }
 
     public static void info(Object object)
@@ -41,6 +33,6 @@ public class LogHelper
 
     public static void warn(Object object)
     {
-        log(Level.WARNING, object);
+        log(Level.WARN, object);
     }
 }
