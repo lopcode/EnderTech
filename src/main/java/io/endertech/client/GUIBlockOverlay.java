@@ -1,5 +1,6 @@
 package io.endertech.client;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import io.endertech.helper.FontHelper;
 import io.endertech.helper.inventory.InventoryHelper;
 import io.endertech.items.ItemExchanger;
@@ -9,8 +10,6 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.event.EventPriority;
-import net.minecraftforge.event.ForgeSubscribe;
 import org.lwjgl.opengl.GL11;
 
 public class GUIBlockOverlay extends Gui
@@ -27,8 +26,8 @@ public class GUIBlockOverlay extends Gui
         this.mc = mc;
     }
 
-    @ForgeSubscribe(priority = EventPriority.NORMAL)
-    public void onRenderExperienceBar(RenderGameOverlayEvent event)
+    @SubscribeEvent
+    public void onGameOverlayRender(RenderGameOverlayEvent event)
     {
         if (event.isCancelable() || event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE)
         {

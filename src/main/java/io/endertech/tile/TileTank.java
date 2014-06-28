@@ -1,6 +1,5 @@
 package io.endertech.tile;
 
-import cofh.block.ITileInfo;
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.helper.LogHelper;
 import io.endertech.helper.StringHelper;
@@ -11,7 +10,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import java.util.List;
 
-public class TileTank extends TileET implements IFluidHandler, ITileInfo
+public class TileTank extends TileET implements IFluidHandler
 {
     private FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 32);
     private static final String TANK_NAME = "MainTank";
@@ -97,7 +96,7 @@ public class TileTank extends TileET implements IFluidHandler, ITileInfo
         GameRegistry.registerTileEntity(TileTank.class, "tile." + Strings.TANK_NAME);
     }
 
-    @Override
+    // TODO: Include in debug item interaction change
     public void getTileInfo(List<String> info, ForgeDirection side, EntityPlayer player, boolean debug)
     {
         if (debug)

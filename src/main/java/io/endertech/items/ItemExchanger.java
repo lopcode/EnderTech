@@ -9,6 +9,7 @@ import io.endertech.helper.KeyHelper;
 import io.endertech.helper.LogHelper;
 import io.endertech.helper.StringHelper;
 import io.endertech.util.BlockCoord;
+import io.endertech.util.Key;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
@@ -21,11 +22,9 @@ import java.util.List;
 
 public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 {
-    public ItemExchanger(int itemID)
+    public ItemExchanger(int capacity, int maxReceive, int maxExtract)
     {
-        super(itemID);
-        this.setMaxStackSize(1);
-        this.setCreativeTab(EnderTech.tabET);
+        super(capacity, maxReceive, maxExtract);
     }
 
     public boolean isCreative(ItemStack stack)
@@ -191,13 +190,13 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     }
 
     @Override
-    public void handleKey(EntityPlayer player, ItemStack itemStack, byte keyCode)
+    public void handleKey(EntityPlayer player, ItemStack itemStack, Key.KeyCode key)
     {
         //LogHelper.info("Handling key for Exchanger " + keyCode);
 
         int radius = this.getTargetRadius(itemStack);
 
-        if (keyCode == KeyConfig.keyToolIncreaseCode)
+        if (key == Key.KeyCode.TOOL_INCREASE)
         {
             if (player.isSneaking())
             {
@@ -208,7 +207,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             }
 
             //LogHelper.info("Tool Increase");
-        } else if (keyCode == KeyConfig.keyToolDecreaseCode)
+        } else if (key == Key.KeyCode.TOOL_DECREASE)
         {
             if (player.isSneaking())
             {

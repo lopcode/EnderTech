@@ -3,12 +3,13 @@ package io.endertech.items;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.endertech.EnderTech;
 import io.endertech.helper.LogHelper;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -18,14 +19,15 @@ public class ItemETBase extends Item
 {
     private boolean hasTextures = true;
 
-    public ItemETBase(int id)
+    public ItemETBase()
     {
-        super(id);
+        this.maxStackSize = 1;
         this.setHasSubtypes(true);
+        this.setCreativeTab(EnderTech.tabET);
     }
 
     public HashMap<Integer, String> items = new HashMap<Integer, String>();
-    public HashMap<String, Icon> icons = new HashMap<String, Icon>();
+    public HashMap<String, IIcon> icons = new HashMap<String, IIcon>();
 
     public ItemStack addItem(int number, String name, boolean shouldRegister)
     {
@@ -51,7 +53,7 @@ public class ItemETBase extends Item
     }
 
     @Override
-    public void registerIcons(IconRegister iconRegister)
+    public void registerIcons(IIconRegister iconRegister)
     {
         if (!this.hasTextures)
         {
@@ -71,7 +73,7 @@ public class ItemETBase extends Item
     }
 
     @Override
-    public Icon getIconFromDamage(int i)
+    public IIcon getIconFromDamage(int i)
     {
         if (!this.items.containsKey(i))
         {
@@ -83,7 +85,7 @@ public class ItemETBase extends Item
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         Iterator it = items.entrySet().iterator();
         while (it.hasNext())

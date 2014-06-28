@@ -2,6 +2,8 @@ package io.endertech.common;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import io.endertech.config.ItemConfig;
 import io.endertech.helper.BlockHelper;
 import io.endertech.helper.inventory.InventoryHelper;
@@ -16,7 +18,7 @@ import net.minecraft.world.WorldServer;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class WorldTickHandler implements ITickHandler
+public class WorldTickHandler
 {
     // Do exchanges per dimension
     public static Map<Integer, LinkedBlockingQueue<Exchange>> exchanges = new HashMap();
@@ -42,22 +44,13 @@ public class WorldTickHandler implements ITickHandler
         exchanges.put(dimensionId, queue);
     }
 
-    @Override
-    public void tickStart(EnumSet<TickType> type, Object... tickData)
+    @SubscribeEvent
+    public void onServerTick(TickEvent.WorldTickEvent event)
     {
-        //LogHelper.info("Tick start");
+        exchangeTick(event.world);
     }
 
-    @Override
-    public void tickEnd(EnumSet<TickType> type, Object... tickData)
-    {
-        //LogHelper.info("Tick end");
-        WorldServer world = (WorldServer) tickData[0];
-
-        exchangeTick(world);
-    }
-
-    private void exchangeTick(WorldServer world)
+    private void exchangeTick(World world)
     {
         int dimensionId = world.provider.dimensionId;
         LinkedBlockingQueue<Exchange> queue = (LinkedBlockingQueue) exchanges.get(dimensionId);
@@ -160,17 +153,5 @@ public class WorldTickHandler implements ITickHandler
         }
 
         exchanges.put(dimensionId, queue);
-    }
-
-    @Override
-    public EnumSet<TickType> ticks()
-    {
-        return EnumSet.of(TickType.WORLD);
-    }
-
-    @Override
-    public String getLabel()
-    {
-        return Reference.MOD_ID + "World";
     }
 }

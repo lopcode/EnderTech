@@ -12,6 +12,11 @@ public class MessageKeyPressed implements IMessage, IMessageHandler<MessageKeyPr
 {
     private byte keyCode;
 
+    public MessageKeyPressed(Key.KeyCode key)
+    {
+        this.keyCode = Key.toByte(key);
+    }
+
     @Override
     public void fromBytes(ByteBuf buf)
     {
