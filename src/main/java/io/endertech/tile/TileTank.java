@@ -7,7 +7,7 @@ import io.endertech.helper.StringHelper;
 import io.endertech.lib.Strings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import java.util.List;
 
