@@ -1,14 +1,17 @@
 package io.endertech.helper;
 
-import cpw.mods.fml.common.FMLLog;
 import io.endertech.lib.Reference;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class LogHelper
 {
+    private static final Logger logger = LogManager.getLogger(Reference.MOD_ID);
+
     public static void log(Level logLevel, Object object)
     {
-        FMLLog.log(Reference.MOD_NAME, logLevel, String.valueOf(object));
+        logger.log(logLevel, String.valueOf(object));
     }
 
     public static void debug(Object object)
