@@ -20,6 +20,11 @@ import java.util.List;
 
 public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 {
+    public ItemExchanger()
+    {
+        super();
+    }
+
     public boolean isCreative(ItemStack stack)
     {
         return stack.getItemDamage() == Types.CREATIVE.ordinal();

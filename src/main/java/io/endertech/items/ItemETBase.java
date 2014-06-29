@@ -21,9 +21,11 @@ public class ItemETBase extends Item
 
     public ItemETBase()
     {
+        super();
         this.maxStackSize = 1;
         this.setHasSubtypes(true);
         this.setCreativeTab(EnderTech.tabET);
+        this.setNoRepair();
     }
 
     public HashMap<Integer, String> items = new HashMap<Integer, String>();
