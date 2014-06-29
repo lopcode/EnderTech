@@ -46,7 +46,7 @@ public class GUIBlockOverlay extends Gui
                     {
                         ItemExchanger exchanger = (ItemExchanger) player.inventory.getCurrentItem().getItem();
                         ItemStack exchangerStack = player.inventory.getCurrentItem();
-                        ItemStack source = exchanger.getSourceBlock(player.inventory.getCurrentItem());
+                        ItemStack source = exchanger.getSourceItemStack(player.inventory.getCurrentItem());
                         if (source != null)
                         {
                             //LogHelper.info("Rendering item");

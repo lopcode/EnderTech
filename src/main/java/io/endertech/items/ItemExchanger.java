@@ -10,6 +10,7 @@ import io.endertech.util.BlockCoord;
 import io.endertech.util.Key;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -82,7 +83,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
                 list.add("Receive: " + StringHelper.getEnergyString(this.getMaxReceiveRate(stack)) + " RF/t");
             }
 
-            ItemStack pb = getSourceBlock(stack);
+            ItemStack pb = getSourceItemStack(stack);
             if (pb == null)
             {
                 list.add("Source block: None");
@@ -110,12 +111,12 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             LogHelper.debug("Shift right click");
 
             Block source = player.worldObj.getBlock(x, y, z);
-            int sourceMetadata = player.worldObj.getBlockMetadata(x, y, z);
+            int sourceMeta = player.worldObj.getBlockMetadata(x, y, z);
 
             if (!world.isAirBlock(x, y, z) && world.getTileEntity(x, y, z) == null && !BlockHelper.softBlocks.contains(source))
             {
                 LogHelper.debug("Setting source block to " + source.getLocalizedName());
-                setSourceBlock(itemstack, source, sourceMetadata);
+                setSourceBlock(itemstack, new ItemStack(source, 1, sourceMeta));
             } else
             {
                 LogHelper.debug("Failed to set source block");
@@ -124,7 +125,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             return false;
         }
 
-        ItemStack pb = getSourceBlock(itemstack);
+        ItemStack pb = getSourceItemStack(itemstack);
 
         if ((pb != null) && (player.worldObj.getTileEntity(x, y, z) == null) && !player.worldObj.isRemote)
         {
@@ -146,19 +147,28 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
         }
     }
 
-    public void setSourceBlock(ItemStack stack, Block source, int sourceMetadata)
+    public void setSourceBlock(ItemStack stack, ItemStack source)
     {
         if (!stack.hasTagCompound())
         {
             stack.setTagCompound(new NBTTagCompound());
         }
-        stack.getTagCompound().setString("source", source.getUnlocalizedName());
-        stack.getTagCompound().setInteger("sourceMetadata", sourceMetadata);
+
+        NBTTagCompound sourceNBT = new NBTTagCompound();
+        stack.setTagInfo("source", source.writeToNBT(sourceNBT));
     }
 
-    public ItemStack getSourceBlock(ItemStack stack)
+    public ItemStack getSourceItemStack(ItemStack stack)
     {
-        return (stack.hasTagCompound()) && (stack.getTagCompound().hasKey("source")) && (stack.getTagCompound().hasKey("sourceMetadata")) ? new ItemStack(Block.getBlockFromName(stack.getTagCompound().getString("source")), 1, stack.getTagCompound().getInteger("sourceMetadata")) : null;
+        boolean hasKey = (stack.hasTagCompound()) && (stack.stackTagCompound.hasKey("source"));
+        if (hasKey)
+        {
+            ItemStack ret = new ItemStack(Blocks.air);
+            ret.readFromNBT(stack.stackTagCompound.getCompoundTag("source"));
+            return ret;
+        }
+
+        return null;
     }
 
     public void setTargetRadius(ItemStack stack, int radius)

@@ -1,5 +1,6 @@
 package io.endertech.items;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.lib.Strings;
 import net.minecraft.item.ItemStack;
 
@@ -13,6 +14,8 @@ public class ETItems
     public static void init()
     {
         itemExchanger = (ItemExchanger) new ItemExchanger().setUnlocalizedName(Strings.EXCHANGER_BASE);
+
+        GameRegistry.registerItem(itemExchanger, Strings.EXCHANGER_BASE);
 
         loadItems();
     }
