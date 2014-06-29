@@ -1,21 +1,20 @@
 package io.endertech.common;
 
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import io.endertech.config.ItemConfig;
 import io.endertech.helper.BlockHelper;
 import io.endertech.helper.inventory.InventoryHelper;
 import io.endertech.items.ItemExchanger;
-import io.endertech.lib.Reference;
 import io.endertech.util.BlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class WorldTickHandler
@@ -23,9 +22,9 @@ public class WorldTickHandler
     // Do exchanges per dimension
     public static Map<Integer, LinkedBlockingQueue<Exchange>> exchanges = new HashMap();
 
-    public static void queueExchangeRequest(World world, BlockCoord coord, int sourceId, int sourceMetadata, int targetId, int targetMetadata, int life, EntityPlayer player, int hotbar_id, Set<BlockCoord> visits)
+    public static void queueExchangeRequest(World world, BlockCoord coord, Block source, int sourceMeta, ItemStack target, int life, EntityPlayer player, int hotbar_id, Set<BlockCoord> visits)
     {
-        if ((Block.blocksList[sourceId] == null) || ((sourceId == targetId) && (sourceMetadata == targetMetadata)))
+        if (target.isItemEqual(new ItemStack(source, 1, sourceMeta)))
         {
             return;
         }
@@ -39,13 +38,13 @@ public class WorldTickHandler
             queue = (LinkedBlockingQueue) exchanges.get(dimensionId);
         }
 
-        queue.offer(new Exchange(coord, sourceId, sourceMetadata, targetId, targetMetadata, life, player, hotbar_id, visits));
+        queue.offer(new Exchange(coord, source, sourceMeta, target, life, player, hotbar_id, visits));
         world.playSoundAtEntity(player, "mob.endermen.portal", 1.0F, 1.0F);
         exchanges.put(dimensionId, queue);
     }
 
     @SubscribeEvent
-    public void onServerTick(TickEvent.WorldTickEvent event)
+    public void onWorldTick(TickEvent.WorldTickEvent event)
     {
         exchangeTick(event.world);
     }
@@ -69,8 +68,8 @@ public class WorldTickHandler
                 rounds = 0;
             } else
             {
-                int blockId = world.getBlockId(exchange.coord.x, exchange.coord.y, exchange.coord.z);
-                int blockMetadata = world.getBlockMetadata(exchange.coord.x, exchange.coord.y, exchange.coord.z);
+                Block block = world.getBlock(exchange.coord.x, exchange.coord.y, exchange.coord.z);
+                int blockMeta = world.getBlockMetadata(exchange.coord.x, exchange.coord.y, exchange.coord.z);
                 ItemExchanger exchanger;
 
                 if ((exchange.player.inventory.getStackInSlot(exchange.hotbar_id) != null) && ((exchange.player.inventory.getStackInSlot(exchange.hotbar_id).getItem() instanceof ItemExchanger)))
@@ -78,9 +77,9 @@ public class WorldTickHandler
                     ItemStack exchangerStack = exchange.player.inventory.getStackInSlot(exchange.hotbar_id);
                     exchanger = (ItemExchanger) exchangerStack.getItem();
 
-                    if (((blockId != exchange.targetId) || (blockMetadata != exchange.targetMetadata)) && (exchanger != null) && exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, true) >= ItemConfig.itemExchangerBlockCost && !exchange.visits.contains(exchange.coord))
+                    if (!exchange.target.isItemEqual(new ItemStack(block, 1, blockMeta)) && (exchanger != null) && exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, true) >= ItemConfig.itemExchangerBlockCost && !exchange.visits.contains(exchange.coord))
                     {
-                        int sourceSlot = InventoryHelper.findFirstItemStack(exchange.player.inventory, new ItemStack(exchange.targetId, 1, exchange.targetMetadata));
+                        int sourceSlot = InventoryHelper.findFirstItemStack(exchange.player.inventory, exchange.target);
 
                         if (sourceSlot > 0 || exchanger.isCreative(exchangerStack))
                         {
@@ -88,7 +87,7 @@ public class WorldTickHandler
 
                             if (!exchanger.isCreative(exchangerStack))
                             {
-                                ArrayList<ItemStack> droppedItems = Block.blocksList[exchange.sourceId].getBlockDropped(exchange.player.worldObj, exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.sourceMetadata, 0);
+                                ArrayList<ItemStack> droppedItems = block.getDrops(exchange.player.worldObj, exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.sourceMeta, 0);
 
                                 boolean canFitDroppedItemsInInventory = true;
                                 for (ItemStack droppedItem : droppedItems)
@@ -123,9 +122,9 @@ public class WorldTickHandler
 
                             if (inventoryModify)
                             {
-                                world.setBlock(exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.targetId, exchange.targetMetadata, 3);
+                                world.setBlock(exchange.coord.x, exchange.coord.y, exchange.coord.z, Block.getBlockFromItem(exchange.target.getItem()), exchange.target.getItemDamage(), 3);
                                 exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, false);
-                                world.playAuxSFX(2001, exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.sourceId + (exchange.sourceMetadata << 12));
+                                world.playAuxSFX(2001, exchange.coord.x, exchange.coord.y, exchange.coord.z, Block.getIdFromBlock(exchange.source) + (exchange.sourceMeta << 12));
                                 exchange.visits.add(exchange.coord);
 
                                 if (exchange.remainingTicks > 0)
@@ -137,9 +136,9 @@ public class WorldTickHandler
                                         {
                                             for (int zz = -1; zz <= 1; zz++)
                                             {
-                                                if (!(xx == 0 && yy == 0 && zz == 0) && (world.getBlockId(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceId) && (world.getBlockMetadata(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceMetadata) && (BlockHelper.isBlockExposed(world, exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz)))
+                                                if (!(xx == 0 && yy == 0 && zz == 0) && (world.getBlock(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.source) && (world.getBlockMetadata(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceMeta) && (BlockHelper.isBlockExposed(world, exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz)))
                                                 {
-                                                    queue.offer(new Exchange(new BlockCoord(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz), exchange.sourceId, exchange.sourceMetadata, exchange.targetId, exchange.targetMetadata, exchange.remainingTicks - 1, exchange.player, exchange.hotbar_id, exchange.visits));
+                                                    queue.offer(new Exchange(new BlockCoord(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz), exchange.source, exchange.sourceMeta, exchange.target, exchange.remainingTicks - 1, exchange.player, exchange.hotbar_id, exchange.visits));
                                                 }
                                             }
                                         }

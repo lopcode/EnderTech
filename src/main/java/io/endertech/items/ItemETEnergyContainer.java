@@ -17,6 +17,11 @@ public class ItemETEnergyContainer extends ItemETBase implements IEnergyContaine
     private int maxReceive;
     private int maxExtract;
 
+    public ItemETEnergyContainer()
+    {
+        super();
+    }
+
     public ItemETEnergyContainer(int capacity, int maxReceive, int maxExtract)
     {
         super();

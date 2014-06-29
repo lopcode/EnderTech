@@ -1,9 +1,8 @@
 package io.endertech.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.lib.Strings;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
 public class CreativeTabET extends CreativeTabs
@@ -13,9 +12,9 @@ public class CreativeTabET extends CreativeTabs
         super(Strings.CREATIVE_TAB_ET);
     }
 
-    @SideOnly(Side.CLIENT)
-    public int getTabIconItemIndex()
+    @Override
+    public Item getTabIconItem()
     {
-        return Item.enderPearl.itemID;
+        return Items.ender_pearl;
     }
 }

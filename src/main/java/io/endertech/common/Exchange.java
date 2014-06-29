@@ -1,28 +1,28 @@
 package io.endertech.common;
 
 import io.endertech.util.BlockCoord;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import java.util.Set;
 
 public class Exchange
 {
     public int remainingTicks = 0;
     public BlockCoord coord = null;
-    public int sourceId = 0;
-    public int sourceMetadata = 0;
-    public int targetId = 0;
-    public int targetMetadata = 0;
+    public Block source;
+    public int sourceMeta;
+    ItemStack target;
     public int hotbar_id = 0;
     public EntityPlayer player = null;
     public Set<BlockCoord> visits;
 
-    Exchange(BlockCoord coord, int sourceId, int sourceMetadata, int targetId, int targetMetadata, int remainingTicks, EntityPlayer p, int hotbar_id, Set<BlockCoord> visits)
+    Exchange(BlockCoord coord, Block source, int sourceMeta, ItemStack target, int remainingTicks, EntityPlayer p, int hotbar_id, Set<BlockCoord> visits)
     {
         this.coord = coord;
-        this.sourceId = sourceId;
-        this.sourceMetadata = sourceMetadata;
-        this.targetId = targetId;
-        this.targetMetadata = targetMetadata;
+        this.source = source;
+        this.sourceMeta = sourceMeta;
+        this.target = target;
         this.remainingTicks = remainingTicks;
         this.player = p;
         this.hotbar_id = hotbar_id;

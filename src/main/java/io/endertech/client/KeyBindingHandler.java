@@ -47,7 +47,7 @@ public class KeyBindingHandler
 
     public static Map<Integer, Key.KeyCode> keyCodeMap = new HashMap<Integer, Key.KeyCode>();
 
-    public void init()
+    public static void init()
     {
         for (ETKeyBinding keyBinding : keyBindings)
         {
@@ -56,7 +56,7 @@ public class KeyBindingHandler
         }
     }
 
-    public Key.KeyCode whichKeyPressed()
+    public static Key.KeyCode whichKeyPressed()
     {
         for (ETKeyBinding keyBinding : keyBindings)
         {
@@ -70,7 +70,7 @@ public class KeyBindingHandler
     }
 
     @SubscribeEvent
-    public void handleKeyInputEvent(InputEvent.KeyInputEvent event)
+    public static void handleKeyInputEvent(InputEvent.KeyInputEvent event)
     {
         //LogHelper.info("KeyDown");
         if (FMLClientHandler.instance().getClient().inGameHasFocus)

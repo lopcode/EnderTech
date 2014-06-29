@@ -1,6 +1,5 @@
 package io.endertech.items;
 
-import io.endertech.config.ItemConfig;
 import io.endertech.lib.Strings;
 import net.minecraft.item.ItemStack;
 
@@ -13,7 +12,7 @@ public class ETItems
 
     public static void init()
     {
-        itemExchanger = (ItemExchanger) new ItemExchanger(ItemConfig.itemExchangerID).setUnlocalizedName(Strings.EXCHANGER_BASE);
+        itemExchanger = (ItemExchanger) new ItemExchanger().setUnlocalizedName(Strings.EXCHANGER_BASE);
 
         loadItems();
     }

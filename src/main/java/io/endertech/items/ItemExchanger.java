@@ -1,9 +1,7 @@
 package io.endertech.items;
 
-import io.endertech.EnderTech;
 import io.endertech.common.WorldTickHandler;
 import io.endertech.config.ItemConfig;
-import io.endertech.config.KeyConfig;
 import io.endertech.helper.BlockHelper;
 import io.endertech.helper.KeyHelper;
 import io.endertech.helper.LogHelper;
@@ -22,11 +20,6 @@ import java.util.List;
 
 public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 {
-    public ItemExchanger(int capacity, int maxReceive, int maxExtract)
-    {
-        super(capacity, maxReceive, maxExtract);
-    }
-
     public boolean isCreative(ItemStack stack)
     {
         return stack.getItemDamage() == Types.CREATIVE.ordinal();
@@ -111,13 +104,13 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
         {
             LogHelper.debug("Shift right click");
 
-            int sourceId = player.worldObj.getBlockId(x, y, z);
+            Block source = player.worldObj.getBlock(x, y, z);
             int sourceMetadata = player.worldObj.getBlockMetadata(x, y, z);
 
-            if (sourceId > 0 && world.getBlockTileEntity(x, y, z) == null && !BlockHelper.softBlocks.contains(Block.blocksList[sourceId]))
+            if (!world.isAirBlock(x, y, z) && world.getTileEntity(x, y, z) == null && !BlockHelper.softBlocks.contains(source))
             {
-                LogHelper.debug("Setting source block to " + Block.blocksList[sourceId].getLocalizedName());
-                setSourceBlock(itemstack, sourceId, sourceMetadata);
+                LogHelper.debug("Setting source block to " + source.getLocalizedName());
+                setSourceBlock(itemstack, source, sourceMetadata);
             } else
             {
                 LogHelper.debug("Failed to set source block");
@@ -128,9 +121,9 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
         ItemStack pb = getSourceBlock(itemstack);
 
-        if ((pb != null) && (player.worldObj.getBlockTileEntity(x, y, z) == null) && !player.worldObj.isRemote)
+        if ((pb != null) && (player.worldObj.getTileEntity(x, y, z) == null) && !player.worldObj.isRemote)
         {
-            WorldTickHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), player.worldObj.getBlockId(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb.itemID, pb.getItemDamage(), this.getTargetRadius(itemstack) - 1, player, player.inventory.currentItem, new HashSet<BlockCoord>());
+            WorldTickHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), player.worldObj.getBlock(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb, this.getTargetRadius(itemstack) - 1, player, player.inventory.currentItem, new HashSet<BlockCoord>());
         }
 
         return true;
@@ -148,19 +141,19 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
         }
     }
 
-    public void setSourceBlock(ItemStack stack, int sourceId, int sourceMetadata)
+    public void setSourceBlock(ItemStack stack, Block source, int sourceMetadata)
     {
         if (!stack.hasTagCompound())
         {
             stack.setTagCompound(new NBTTagCompound());
         }
-        stack.getTagCompound().setInteger("sourceId", sourceId);
+        stack.getTagCompound().setString("source", source.getUnlocalizedName());
         stack.getTagCompound().setInteger("sourceMetadata", sourceMetadata);
     }
 
     public ItemStack getSourceBlock(ItemStack stack)
     {
-        return (stack.hasTagCompound()) && (stack.getTagCompound().hasKey("sourceId")) && (stack.getTagCompound().hasKey("sourceMetadata")) ? new ItemStack(stack.getTagCompound().getInteger("sourceId"), 1, stack.getTagCompound().getInteger("sourceMetadata")) : null;
+        return (stack.hasTagCompound()) && (stack.getTagCompound().hasKey("source")) && (stack.getTagCompound().hasKey("sourceMetadata")) ? new ItemStack(Block.getBlockFromName(stack.getTagCompound().getString("source")), 1, stack.getTagCompound().getInteger("sourceMetadata")) : null;
     }
 
     public void setTargetRadius(ItemStack stack, int radius)

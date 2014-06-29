@@ -1,7 +1,7 @@
 package io.endertech.config;
 
 import io.endertech.helper.LogHelper;
-import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 
 public class GeneralConfig

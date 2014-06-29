@@ -1,7 +1,7 @@
 package io.endertech.helper;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFluid;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -15,35 +15,35 @@ public class BlockHelper
 
     public static void initSoftBlocks()
     {
-        for (Object o : Blocks.blocksList)
+        for (Object o : Block.blockRegistry)
         {
             Block block = (Block) o;
 
-            if (block instanceof BlockFluidBase || block instanceof BlockFluid || block instanceof IPlantable)
+            if (block instanceof BlockFluidBase || block instanceof BlockLiquid || block instanceof IPlantable)
             {
                 softBlocks.add(block);
             }
         }
 
-        softBlocks.add(Block.snow);
-        softBlocks.add(Block.vine);
-        softBlocks.add(Block.fire);
+        softBlocks.add(Blocks.snow);
+        softBlocks.add(Blocks.vine);
+        softBlocks.add(Blocks.fire);
     }
 
     public static boolean isSoftBlock(World world, int x, int y, int z)
     {
-        int blockId = world.getBlockId(x, y, z);
-        if (blockId <= 0)
+        Block block = world.getBlock(x, y, z);
+        if (block == Blocks.air)
         {
             return true;
         }
 
-        return isSoftBlock(Block.blocksList[blockId], world, x, y, z);
+        return isSoftBlock(block, world, x, y, z);
     }
 
     public static boolean isSoftBlock(Block block, World world, int x, int y, int z)
     {
-        return block == null || softBlocks.contains(block) || block.isAirBlock(world, x, y, z);
+        return block == null || softBlocks.contains(block) || world.isAirBlock(x, y, z);
     }
 
     public static boolean isBlockExposed(World world, int x, int y, int z)

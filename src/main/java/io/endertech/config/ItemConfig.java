@@ -1,14 +1,13 @@
 package io.endertech.config;
 
 import io.endertech.helper.LogHelper;
-import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 
 public class ItemConfig
 {
     private static Configuration itemConfig;
 
-    public static int itemExchangerID;
     public static int itemExchangerBlockCost;
     public static int itemExchangerMaxRadius;
 
@@ -18,8 +17,6 @@ public class ItemConfig
         try
         {
             itemConfig.load();
-
-            itemExchangerID = itemConfig.getItem("item.id", "Tool.Exchanger", 15363).getInt(15363);
             itemExchangerBlockCost = itemConfig.get("item.general", "Exchanger.BlockCost", 8192).getInt(8192);
             itemExchangerMaxRadius = itemConfig.get("item.general", "Exchanger.MaxRadius", 8).getInt(8);
             if (itemExchangerMaxRadius < 1)

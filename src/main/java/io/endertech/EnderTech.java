@@ -1,6 +1,5 @@
 package io.endertech;
 
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -10,7 +9,6 @@ import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.block.ETBlocks;
 import io.endertech.client.GUIBlockOverlay;
@@ -23,7 +21,6 @@ import io.endertech.helper.LogHelper;
 import io.endertech.helper.ModuleHelper;
 import io.endertech.items.ETItems;
 import io.endertech.lib.Reference;
-import io.endertech.network.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -33,7 +30,6 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import java.io.File;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, certificateFingerprint = Reference.FINGERPRINT, dependencies = "after:ThermalExpansion@[3.0.0.2,)")
-@NetworkMod(channels = {Reference.MOD_ID}, packetHandler = NetworkHandler.class)
 public class EnderTech
 {
     @SuppressWarnings("unused")
@@ -82,7 +78,7 @@ public class EnderTech
         // KeyBinding handler
         if (FMLCommonHandler.instance().getSide().isClient())
         {
-            KeyBindingRegistry.registerKeyBinding(new KeyBindingHandler());
+            KeyBindingHandler.init();
         }
 
         // Sound handler

@@ -13,15 +13,15 @@ public class BlockTank extends BlockContainer
 {
     public static ItemStack itemTank;
 
-    public BlockTank(int id)
+    public BlockTank()
     {
-        super(id, Material.glass);
-        setCreativeTab(EnderTech.tabET);
-        setUnlocalizedName(Strings.TANK_NAME);
+        super(Material.glass);
+        this.setCreativeTab(EnderTech.tabET);
+        this.setBlockName(Strings.TANK_NAME);
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world)
+    public TileEntity createNewTileEntity(World world, int metadata)
     {
         return new TileTank();
     }
