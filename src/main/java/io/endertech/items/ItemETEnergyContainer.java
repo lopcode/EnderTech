@@ -89,6 +89,16 @@ public class ItemETEnergyContainer extends ItemETBase implements IEnergyContaine
         return container.stackTagCompound.getInteger("Energy");
     }
 
+    public void setEnergyStored(ItemStack container, int energy)
+    {
+        if (container.stackTagCompound == null)
+        {
+            container.stackTagCompound = new NBTTagCompound();
+        }
+
+        container.stackTagCompound.setInteger("Energy", energy);
+    }
+
     @Override
     public boolean isDamaged(ItemStack stack)
     {
