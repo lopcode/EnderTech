@@ -21,6 +21,7 @@ import io.endertech.helper.LogHelper;
 import io.endertech.helper.ModuleHelper;
 import io.endertech.items.ETItems;
 import io.endertech.lib.Reference;
+import io.endertech.network.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -69,6 +70,9 @@ public class EnderTech
         // Pulsar module loading
         ModuleHelper.setupModules();
         ModuleHelper.pulsar.preInit(event);
+
+        // Network handler
+        NetworkHandler.init();
 
         // Version checker
 

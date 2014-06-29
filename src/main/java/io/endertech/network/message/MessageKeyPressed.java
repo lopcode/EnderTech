@@ -12,6 +12,8 @@ public class MessageKeyPressed implements IMessage, IMessageHandler<MessageKeyPr
 {
     private byte keyCode;
 
+    public MessageKeyPressed() {} // Do not optimise away
+
     public MessageKeyPressed(Key.KeyCode key)
     {
         this.keyCode = Key.toByte(key);
@@ -36,7 +38,7 @@ public class MessageKeyPressed implements IMessage, IMessageHandler<MessageKeyPr
 
         if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof IKeyHandler)
         {
-            ((IKeyHandler) player.getCurrentEquippedItem().getItem()).handleKey(player, player.getCurrentEquippedItem(), Key.fromByte(this.keyCode));
+            ((IKeyHandler) player.getCurrentEquippedItem().getItem()).handleKey(player, player.getCurrentEquippedItem(), Key.fromByte(message.keyCode));
         }
 
         return null;

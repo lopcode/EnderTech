@@ -18,9 +18,19 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 {
+    private static Set<Key.KeyCode> handledKeys;
+
+    static
+    {
+        handledKeys = new HashSet<Key.KeyCode>();
+        handledKeys.add(Key.KeyCode.TOOL_INCREASE);
+        handledKeys.add(Key.KeyCode.TOOL_DECREASE);
+    }
+
     public ItemExchanger()
     {
         super();
@@ -200,7 +210,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
     @Override
     public void handleKey(EntityPlayer player, ItemStack itemStack, Key.KeyCode key)
     {
-        //LogHelper.info("Handling key for Exchanger " + keyCode);
+        LogHelper.debug("Handling key for Exchanger " + key.toString());
 
         int radius = this.getTargetRadius(itemStack);
 
@@ -214,7 +224,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
                 radius++;
             }
 
-            //LogHelper.info("Tool Increase");
+            LogHelper.debug("Tool Increase");
         } else if (key == Key.KeyCode.TOOL_DECREASE)
         {
             if (player.isSneaking())
@@ -225,7 +235,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
                 radius--;
             }
 
-            // LogHelper.info("Tool Decrease");
+            LogHelper.debug("Tool Decrease");
         }
 
         if (radius > ItemConfig.itemExchangerMaxRadius)
@@ -238,8 +248,14 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
             radius = 1;
         }
 
-        //LogHelper.info("Setting tool radius to " + radius);
+        LogHelper.debug("Setting tool radius to " + radius);
         this.setTargetRadius(itemStack, radius);
+    }
+
+    @Override
+    public Set<Key.KeyCode> getHandledKeys()
+    {
+        return ItemExchanger.handledKeys;
     }
 
     @Override

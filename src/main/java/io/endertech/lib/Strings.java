@@ -9,4 +9,10 @@ public class Strings
     public static final String CREATIVE_TAB_ET = "EnderTechAll";
 
     public static final String TANK_NAME = "endertech.enderTank";
+
+    public static final class Keys
+    {
+        public static final String keyToolIncreaseDescription = "Tool Increase";
+        public static final String keyToolDecreaseDescription = "Tool Decrease";
+    }
 }

@@ -4,9 +4,9 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
-import io.endertech.config.KeyConfig;
 import io.endertech.helper.LogHelper;
 import io.endertech.items.IKeyHandler;
+import io.endertech.lib.Strings;
 import io.endertech.network.NetworkHandler;
 import io.endertech.network.message.MessageKeyPressed;
 import io.endertech.util.Key;
@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class KeyBindingHandler
 {
@@ -41,18 +42,18 @@ public class KeyBindingHandler
         }
     }
 
-    public static ETKeyBinding keyToolIncrease = new ETKeyBinding(KeyConfig.keyToolIncreaseDescription, Keyboard.KEY_PRIOR, "key.endertech.tools", Key.KeyCode.TOOL_INCREASE);
-    public static ETKeyBinding keyToolDecrease = new ETKeyBinding(KeyConfig.keyToolDecreaseDescription, Keyboard.KEY_NEXT, "key.endertech.tools", Key.KeyCode.TOOL_DECREASE);
+    public static ETKeyBinding keyToolIncrease = new ETKeyBinding(Strings.Keys.keyToolIncreaseDescription, Keyboard.KEY_PRIOR, "key.endertech.tools", Key.KeyCode.TOOL_INCREASE);
+    public static ETKeyBinding keyToolDecrease = new ETKeyBinding(Strings.Keys.keyToolDecreaseDescription, Keyboard.KEY_NEXT, "key.endertech.tools", Key.KeyCode.TOOL_DECREASE);
     public static ETKeyBinding[] keyBindings = new ETKeyBinding[] {keyToolIncrease, keyToolDecrease};
 
-    public static Map<Integer, Key.KeyCode> keyCodeMap = new HashMap<Integer, Key.KeyCode>();
+    public static Map<String, Key.KeyCode> keyCodeMap = new HashMap<String, Key.KeyCode>();
 
     public static void init()
     {
         for (ETKeyBinding keyBinding : keyBindings)
         {
             ClientRegistry.registerKeyBinding(keyBinding.getMinecraftKeyBinding());
-            keyCodeMap.put(keyBinding.getMinecraftKeyBinding().getKeyCode(), keyBinding.getKeyCode());
+            keyCodeMap.put(keyBinding.getMinecraftKeyBinding().getKeyDescription(), keyBinding.getKeyCode());
         }
     }
 
@@ -62,7 +63,7 @@ public class KeyBindingHandler
         {
             if (keyBinding.getMinecraftKeyBinding().getIsKeyPressed())
             {
-                return keyCodeMap.get(keyBinding.getKeyCode());
+                return keyCodeMap.get(keyBinding.getMinecraftKeyBinding().getKeyDescription());
             }
         }
 
@@ -70,7 +71,7 @@ public class KeyBindingHandler
     }
 
     @SubscribeEvent
-    public static void handleKeyInputEvent(InputEvent.KeyInputEvent event)
+    public void handleKeyInputEvent(InputEvent.KeyInputEvent event)
     {
         //LogHelper.info("KeyDown");
         if (FMLClientHandler.instance().getClient().inGameHasFocus)
@@ -84,14 +85,19 @@ public class KeyBindingHandler
 
                 if (equippedItem != null && equippedItem.getItem() instanceof IKeyHandler)
                 {
+                    Key.KeyCode keyCode = whichKeyPressed();
+                    Set<Key.KeyCode> handledKeyCodes = ((IKeyHandler) equippedItem.getItem()).getHandledKeys();
+
+                    if (!handledKeyCodes.contains(keyCode)) return;
+
                     if (player.worldObj.isRemote)
                     {
-                        LogHelper.info("Remote, sent packet to server");
-                        NetworkHandler.INSTANCE.sendToServer(new MessageKeyPressed(whichKeyPressed()));
+                        LogHelper.debug("Remote, sent " + keyCode.toString() + " to server");
+                        NetworkHandler.INSTANCE.sendToServer(new MessageKeyPressed(keyCode));
                     } else
                     {
-                        LogHelper.info("Client, handling key press");
-                        ((IKeyHandler) player.getCurrentEquippedItem().getItem()).handleKey(player, equippedItem, whichKeyPressed());
+                        LogHelper.debug("Client, handling key press: " + keyCode.toString());
+                        ((IKeyHandler) player.getCurrentEquippedItem().getItem()).handleKey(player, equippedItem, keyCode);
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package io.endertech.client;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import io.endertech.common.CommonProxy;
 
 public class ClientProxy extends CommonProxy
@@ -8,5 +9,7 @@ public class ClientProxy extends CommonProxy
     public void registerTickerHandlers()
     {
         super.registerTickerHandlers();
+
+        FMLCommonHandler.instance().bus().register(new KeyBindingHandler());
     }
 }
