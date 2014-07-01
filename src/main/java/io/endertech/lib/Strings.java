@@ -15,4 +15,9 @@ public class Strings
         public static final String keyToolIncreaseDescription = "Tool Increase";
         public static final String keyToolDecreaseDescription = "Tool Decrease";
     }
+
+    public static final class Blocks
+    {
+        public static final String SPINNING_CUBE_NAME = "endertech.spinningCube";
+    }
 }

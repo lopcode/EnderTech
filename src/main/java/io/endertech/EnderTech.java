@@ -106,6 +106,9 @@ public class EnderTech
         //LogHelper.debug("DIRT BLOCK >> " + Block.dirt.getUnlocalizedName());
         //LogHelper.info("Sin 360: " + MathHelper.sin(2 * MathHelper.pi));
 
+        // Renderers
+        proxy.registerTESRs();
+
         LogHelper.debug("init complete");
 
         // IMC

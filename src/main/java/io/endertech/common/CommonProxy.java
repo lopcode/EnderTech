@@ -12,6 +12,8 @@ public class CommonProxy implements IGuiHandler
         FMLCommonHandler.instance().bus().register(new WorldTickHandler());
     }
 
+    public void registerTESRs() { }
+
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
