@@ -12,6 +12,7 @@ public class TileSpinningCube extends TileET
     public double speed;
     public Vec3 randomAddition;
     public Vec3[] cubeVertices;
+    public double yAddition = 0.0;
 
     public TileSpinningCube()
     {
@@ -22,7 +23,7 @@ public class TileSpinningCube extends TileET
         }
 
         this.speed = random.nextDouble() / 100.0;
-        this.randomAddition = Vec3.createVectorHelper(random.nextDouble() / 10.00, random.nextDouble() / 10.00, random.nextDouble() / 10.0);
+        this.randomAddition = Vec3.createVectorHelper(((random.nextDouble() * 2) - 1) / 10.00, ((random.nextDouble() * 2) - 1) / 10.00, ((random.nextDouble() * 2) - 1) / 10.00);
     }
 
     public static void init()

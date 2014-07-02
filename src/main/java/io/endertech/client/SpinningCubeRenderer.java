@@ -26,6 +26,9 @@ public class SpinningCubeRenderer extends TileEntitySpecialRenderer
         float yAngleRadians = (float) (tile.speed + tile.randomAddition.yCoord) * partialTick;
         float zAngleRadians = (float) (tile.speed + tile.randomAddition.zCoord) * partialTick;
 
+        tile.yAddition += tile.speed * 3;
+        if (tile.yAddition >= (2.0 * Math.PI)) tile.yAddition = tile.yAddition - (2.0 * Math.PI);
+
         for (Vec3 cubeVertex : tile.cubeVertices)
         {
             cubeVertex.rotateAroundX(xAngleRadians);
@@ -40,7 +43,7 @@ public class SpinningCubeRenderer extends TileEntitySpecialRenderer
 
         GL11.glDisable(GL11.GL_LIGHTING);
 
-        GL11.glTranslated(x, y, z);
+        GL11.glTranslated(x, y + 0.5 + ((Math.sin(tile.yAddition) + 1) / 3.0), z);
 
         tessellator.startDrawingQuads();
 
