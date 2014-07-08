@@ -1,4 +1,4 @@
-EnderTech
+#EnderTech
 
 ##Introduction
 This is my first foray in to Minecraft modding. It's intended to be a tech themed mod, starting at around Thermal Expansion's end-game, and as such will contain tech (and likely Ender) themed things that make my own personal game more fun. At the time of writing there's a fully functional item called the 'Exchanger' - for swapping blocks from your inventory with blocks in the world, inspired by Thaumcraft's ``Wand of Equal Trade'', but using a decent amount of RF and with a lot of modified behaviour.
