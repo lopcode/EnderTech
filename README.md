@@ -1,4 +1,4 @@
-#EnderTech
+EnderTech
 
 ##Introduction
 This is my first foray in to Minecraft modding. It's intended to be a tech themed mod, starting at around Thermal Expansion's end-game, and as such will contain tech (and likely Ender) themed things that make my own personal game more fun. At the time of writing there's a fully functional item called the 'Exchanger' - for swapping blocks from your inventory with blocks in the world, inspired by Thaumcraft's ``Wand of Equal Trade'', but using a decent amount of RF and with a lot of modified behaviour.
@@ -19,9 +19,9 @@ Things I want you to do:
 
 Things I don't want you to do:
 * Copy large sections of source (functions and ideas are examples of things that are, generally, fine),
-* Redistribute custom built jars (all the jars on Vaen are signed appropriately),
+* Redistribute custom built jars (all the jars on Hydria are signed appropriately),
   * Building your own jar is fine, but don't make it public,
-  * Redistributing a signed jar from Vaen is fine.
+  * Redistributing a signed jar from Hydria is fine.
 * Copy ideas and pass them off as your own,
 * Make money from the mod (no paywalls, adf.ly links, charging for access to items or any other bullshit like that).
 
@@ -30,9 +30,9 @@ These terms are formally defined by the Creative Commons Attribution-NonCommerci
 http://creativecommons.org/licenses/by-nc-nd/4.0/
 
 ##Builds
-Signed jars are available on Vaen.
+Signed jars are available on Hydria.
 
-http://vaen.emberwalker.cc/job/EnderTech/
+http://hydria.drakon.io/job/EnderTech/
 
 ##Building
 This mod uses Forge's Gradle wrapper for pretty easy setup and building. There are better guides around the internet for using it, and I don't do anything particularly special.
