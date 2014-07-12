@@ -1,6 +1,5 @@
 package io.endertech.util;
 
-import io.endertech.util.BlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,7 +16,7 @@ public class Exchange
     public EntityPlayer player = null;
     public Set<BlockCoord> visits;
 
-    Exchange(BlockCoord coord, Block source, int sourceMeta, ItemStack target, int remainingTicks, EntityPlayer p, int hotbar_id, Set<BlockCoord> visits)
+    public Exchange(BlockCoord coord, Block source, int sourceMeta, ItemStack target, int remainingTicks, EntityPlayer p, int hotbar_id, Set<BlockCoord> visits)
     {
         this.coord = coord;
         this.source = source;

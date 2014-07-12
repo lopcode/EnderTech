@@ -89,7 +89,7 @@ configurations {
 
 dependencies {
     //compile fileTree(dir: 'lib', includes: ['*.jar'])
-    shade 'io.drakon:Pulsar:0.2.1'
+    shade 'io.drakon:Pulsar:0.3.0'
     //compile name: 'ForgeMultipart', version: "${config.minecraft_version}-${config.FMP_version}", ext: 'jar'
     //compile name: 'CodeChickenLib', version: "${config.minecraft_version}-${config.CCLIB_version}", ext: 'jar'
     //compile name: 'NotEnoughItems', version: "${config.NEI_version}", type: 'jar'
