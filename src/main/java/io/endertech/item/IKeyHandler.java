@@ -1,4 +1,4 @@
-package io.endertech.items;
+package io.endertech.item;
 
 import io.endertech.util.Key;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,4 +1,4 @@
-package io.endertech.helper;
+package io.endertech.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;

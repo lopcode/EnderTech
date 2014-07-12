@@ -3,9 +3,9 @@ package io.endertech.network;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
-import io.endertech.lib.Reference;
 import io.endertech.network.message.MessageKeyPressed;
 import io.endertech.network.message.MessageTileSpinningCube;
+import io.endertech.reference.Reference;
 
 public class NetworkHandler
 {

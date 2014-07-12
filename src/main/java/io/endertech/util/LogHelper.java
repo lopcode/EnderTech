@@ -1,6 +1,6 @@
-package io.endertech.helper;
+package io.endertech.util;
 
-import io.endertech.lib.Reference;
+import io.endertech.reference.Reference;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

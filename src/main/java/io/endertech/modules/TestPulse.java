@@ -5,7 +5,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import io.drakon.pulsar.pulse.Handler;
 import io.drakon.pulsar.pulse.Pulse;
-import io.endertech.helper.LogHelper;
+import io.endertech.util.LogHelper;
 
 @Pulse(id = "TestPulse", description = "This one's for testing. It goes up to 11.")
 public class TestPulse

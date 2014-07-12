@@ -1,9 +1,9 @@
 package io.endertech.tile;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import io.endertech.helper.LogHelper;
-import io.endertech.helper.StringHelper;
-import io.endertech.lib.Strings;
+import io.endertech.reference.Strings;
+import io.endertech.util.LogHelper;
+import io.endertech.util.StringHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;

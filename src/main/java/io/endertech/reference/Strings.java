@@ -1,4 +1,4 @@
-package io.endertech.lib;
+package io.endertech.reference;
 
 public class Strings
 {

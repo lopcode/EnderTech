@@ -1,4 +1,4 @@
-package io.endertech.client;
+package io.endertech.client.renderer;
 
 import io.endertech.tile.TileSpinningCube;
 import net.minecraft.client.renderer.Tessellator;
@@ -11,8 +11,6 @@ import org.lwjgl.opengl.GL11;
 public class SpinningCubeRenderer extends TileEntitySpecialRenderer
 {
     private ResourceLocation emerald_block_texture = new ResourceLocation("textures/blocks/emerald_block.png");
-    private Vec3 translation = Vec3.createVectorHelper(0, 0, 0);
-    private Vec3 rotation = Vec3.createVectorHelper(0, 0, 0);
 
     public void addVertexWithUVFromVector(Tessellator tessellator, Vec3 vector, float size, double U, double V)
     {
@@ -50,31 +48,31 @@ public class SpinningCubeRenderer extends TileEntitySpecialRenderer
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[2], tile.size, 0, 1);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[3], tile.size, 0, 0);
 
-        //Front
+        //Back
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[5], tile.size, 1, 0);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[4], tile.size, 1, 1);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[7], tile.size, 0, 1);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[6], tile.size, 0, 0);
 
-        //Front
+        //Bottom
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[6], tile.size, 1, 0);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[7], tile.size, 1, 1);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[3], tile.size, 0, 1);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[2], tile.size, 0, 0);
 
-        //Front
+        //Top
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[4], tile.size, 1, 0);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[5], tile.size, 1, 1);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[1], tile.size, 0, 1);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[0], tile.size, 0, 0);
 
-        //Front
+        //Left
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[4], tile.size, 1, 0);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[0], tile.size, 1, 1);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[3], tile.size, 0, 1);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[7], tile.size, 0, 0);
 
-        //Front
+        //Right
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[1], tile.size, 1, 0);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[5], tile.size, 1, 1);
         this.addVertexWithUVFromVector(tessellator, tile.cubeVertices[6], tile.size, 0, 1);

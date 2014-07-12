@@ -1,4 +1,4 @@
-package io.endertech.common;
+package io.endertech.util;
 
 import io.endertech.util.BlockCoord;
 import net.minecraft.block.Block;
@@ -12,7 +12,7 @@ public class Exchange
     public BlockCoord coord = null;
     public Block source;
     public int sourceMeta;
-    ItemStack target;
+    public ItemStack target;
     public int hotbar_id = 0;
     public EntityPlayer player = null;
     public Set<BlockCoord> visits;

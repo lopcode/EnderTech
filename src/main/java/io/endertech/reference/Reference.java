@@ -1,4 +1,4 @@
-package io.endertech.lib;
+package io.endertech.reference;
 
 import com.google.common.base.Throwables;
 import java.io.InputStream;

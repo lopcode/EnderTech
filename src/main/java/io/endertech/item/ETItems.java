@@ -1,7 +1,7 @@
-package io.endertech.items;
+package io.endertech.item;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import io.endertech.lib.Strings;
+import io.endertech.reference.Strings;
 import net.minecraft.item.ItemStack;
 
 public class ETItems

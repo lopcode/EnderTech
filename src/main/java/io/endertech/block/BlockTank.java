@@ -1,7 +1,7 @@
 package io.endertech.block;
 
 import io.endertech.EnderTech;
-import io.endertech.lib.Strings;
+import io.endertech.reference.Strings;
 import io.endertech.tile.TileTank;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

@@ -11,17 +11,17 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.block.ETBlocks;
-import io.endertech.client.GUIBlockOverlay;
-import io.endertech.client.KeyBindingHandler;
-import io.endertech.common.CommonProxy;
+import io.endertech.client.handler.GUIEventHandler;
+import io.endertech.client.handler.KeyBindingHandler;
 import io.endertech.config.ConfigHandler;
-import io.endertech.gui.CreativeTabET;
-import io.endertech.helper.BlockHelper;
-import io.endertech.helper.LogHelper;
-import io.endertech.helper.ModuleHelper;
-import io.endertech.items.ETItems;
-import io.endertech.lib.Reference;
+import io.endertech.creativetab.CreativeTabET;
+import io.endertech.item.ETItems;
 import io.endertech.network.NetworkHandler;
+import io.endertech.proxy.CommonProxy;
+import io.endertech.reference.Reference;
+import io.endertech.util.BlockHelper;
+import io.endertech.util.LogHelper;
+import io.endertech.util.ModuleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -37,7 +37,7 @@ public class EnderTech
     @Mod.Instance(Reference.MOD_ID)
     public static EnderTech instance;
 
-    @SidedProxy(clientSide = "io.endertech.client.ClientProxy", serverSide = "io.endertech.common.CommonProxy")
+    @SidedProxy(clientSide = "io.endertech.proxy.ClientProxy", serverSide = "io.endertech.proxy.CommonProxy")
     public static CommonProxy proxy;
 
     public static final CreativeTabs tabET = new CreativeTabET();
@@ -123,7 +123,7 @@ public class EnderTech
 
         if (FMLCommonHandler.instance().getSide().isClient())
         {
-            MinecraftForge.EVENT_BUS.register(new GUIBlockOverlay((Minecraft.getMinecraft())));
+            MinecraftForge.EVENT_BUS.register(new GUIEventHandler((Minecraft.getMinecraft())));
         }
 
         BlockHelper.initSoftBlocks();

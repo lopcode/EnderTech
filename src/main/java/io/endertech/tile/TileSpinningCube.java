@@ -1,11 +1,11 @@
 package io.endertech.tile;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import io.endertech.helper.LogHelper;
-import io.endertech.lib.Strings;
 import io.endertech.network.NetworkHandler;
 import io.endertech.network.message.MessageTileSpinningCube;
+import io.endertech.reference.Strings;
 import io.endertech.util.Geometry;
+import io.endertech.util.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.util.Vec3;

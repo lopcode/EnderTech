@@ -1,4 +1,4 @@
-package io.endertech.helper;
+package io.endertech.util;
 
 import net.minecraft.item.EnumRarity;
 import net.minecraft.util.EnumChatFormatting;

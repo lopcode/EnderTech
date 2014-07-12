@@ -113,7 +113,7 @@ minecraft {
     if (keystore_config != null)
         replace "@FINGERPRINT@", keystore_config.key_sha1
 
-    srgExtra "PK: io/drakon/pulsar io/endertech/repack/pulsar" // WARN: This will only work in 1.7 (FG 1.1+) - Sorry. -- Arkan
+    srgExtra "PK: io/drakon/pulsar io/endertech/repack/pulsar"
 }
 
 task buildInfo {

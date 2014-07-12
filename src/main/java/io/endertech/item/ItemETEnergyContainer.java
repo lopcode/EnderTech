@@ -1,4 +1,4 @@
-package io.endertech.items;
+package io.endertech.item;
 
 import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.item.ItemStack;

@@ -1,15 +1,15 @@
-package io.endertech.client;
+package io.endertech.client.handler;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
-import io.endertech.helper.LogHelper;
-import io.endertech.items.IKeyHandler;
-import io.endertech.lib.Strings;
+import io.endertech.item.IKeyHandler;
 import io.endertech.network.NetworkHandler;
 import io.endertech.network.message.MessageKeyPressed;
+import io.endertech.reference.Strings;
 import io.endertech.util.Key;
+import io.endertech.util.LogHelper;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

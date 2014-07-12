@@ -1,12 +1,13 @@
-package io.endertech.common;
+package io.endertech.handler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import io.endertech.util.Exchange;
 import io.endertech.config.ItemConfig;
-import io.endertech.helper.BlockHelper;
-import io.endertech.helper.inventory.InventoryHelper;
-import io.endertech.items.ItemExchanger;
+import io.endertech.item.ItemExchanger;
 import io.endertech.util.BlockCoord;
+import io.endertech.util.BlockHelper;
+import io.endertech.util.inventory.InventoryHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class WorldTickHandler
+public class WorldEventHandler
 {
     // Do exchanges per dimension
     public static Map<Integer, LinkedBlockingQueue<Exchange>> exchanges = new HashMap();

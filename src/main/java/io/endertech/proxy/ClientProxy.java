@@ -1,8 +1,9 @@
-package io.endertech.client;
+package io.endertech.proxy;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
-import io.endertech.common.CommonProxy;
+import io.endertech.client.handler.KeyBindingHandler;
+import io.endertech.client.renderer.SpinningCubeRenderer;
 import io.endertech.tile.TileSpinningCube;
 
 public class ClientProxy extends CommonProxy

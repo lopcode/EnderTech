@@ -1,9 +1,9 @@
-package io.endertech.client;
+package io.endertech.client.handler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import io.endertech.helper.FontHelper;
-import io.endertech.helper.inventory.InventoryHelper;
-import io.endertech.items.ItemExchanger;
+import io.endertech.item.ItemExchanger;
+import io.endertech.util.FontHelper;
+import io.endertech.util.inventory.InventoryHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -12,14 +12,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.lwjgl.opengl.GL11;
 
-public class GUIBlockOverlay extends Gui
+public class GUIEventHandler extends Gui
 {
     private Minecraft mc;
     private RenderItem ri = new RenderItem();
     private ItemStack lastExchangeSource = null;
     private int lastExchangeSourceCount = 0;
 
-    public GUIBlockOverlay(Minecraft mc)
+    public GUIEventHandler(Minecraft mc)
     {
         super();
 

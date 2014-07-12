@@ -1,6 +1,6 @@
-package io.endertech.gui;
+package io.endertech.creativetab;
 
-import io.endertech.lib.Strings;
+import io.endertech.reference.Strings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;

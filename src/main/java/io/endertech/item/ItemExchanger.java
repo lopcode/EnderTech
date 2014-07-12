@@ -1,13 +1,8 @@
-package io.endertech.items;
+package io.endertech.item;
 
-import io.endertech.common.WorldTickHandler;
 import io.endertech.config.ItemConfig;
-import io.endertech.helper.BlockHelper;
-import io.endertech.helper.KeyHelper;
-import io.endertech.helper.LogHelper;
-import io.endertech.helper.StringHelper;
-import io.endertech.util.BlockCoord;
-import io.endertech.util.Key;
+import io.endertech.handler.WorldEventHandler;
+import io.endertech.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -139,7 +134,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
         if ((pb != null) && (player.worldObj.getTileEntity(x, y, z) == null) && !player.worldObj.isRemote)
         {
-            WorldTickHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), player.worldObj.getBlock(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb, this.getTargetRadius(itemstack) - 1, player, player.inventory.currentItem, new HashSet<BlockCoord>());
+            WorldEventHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), player.worldObj.getBlock(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb, this.getTargetRadius(itemstack) - 1, player, player.inventory.currentItem, new HashSet<BlockCoord>());
         }
 
         return true;

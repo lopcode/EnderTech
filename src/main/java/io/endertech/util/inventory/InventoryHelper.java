@@ -1,4 +1,4 @@
-package io.endertech.helper.inventory;
+package io.endertech.util.inventory;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
