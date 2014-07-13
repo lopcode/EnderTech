@@ -2,6 +2,7 @@ package io.endertech.util.inventory;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import java.util.ArrayList;
 
 public class InventoryHelper
 {
@@ -131,5 +132,25 @@ public class InventoryHelper
     public static ItemStack insertItem(IInventory inventory, ItemStack stack, boolean simulate)
     {
         return insertItem(new InventoryAbstracted(inventory), stack, simulate);
+    }
+
+    public static boolean checkAndPutItemStacksInToInventory(IInventory inventory, ArrayList<ItemStack> itemStacks)
+    {
+        return checkAndPutItemStacksInToInventory(new InventoryAbstracted(inventory), itemStacks);
+    }
+
+    public static boolean checkAndPutItemStacksInToInventory(InventoryAbstracted inventory, ArrayList<ItemStack> itemStacks)
+    {
+        for (ItemStack droppedItem : itemStacks)
+        {
+            if (InventoryHelper.insertItem(inventory, droppedItem, true) != null) return false;
+        }
+
+        for (ItemStack droppedItem : itemStacks)
+        {
+            InventoryHelper.insertItem(inventory, droppedItem, false);
+        }
+
+        return true;
     }
 }
