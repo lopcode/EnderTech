@@ -15,6 +15,7 @@ import io.endertech.client.handler.GUIEventHandler;
 import io.endertech.client.handler.KeyBindingHandler;
 import io.endertech.config.ConfigHandler;
 import io.endertech.creativetab.CreativeTabET;
+import io.endertech.fluid.ETFluids;
 import io.endertech.item.ETItems;
 import io.endertech.network.NetworkHandler;
 import io.endertech.proxy.CommonProxy;
@@ -92,6 +93,9 @@ public class EnderTech
 
         // Items
         ETItems.init();
+
+        // Fluids
+        ETFluids.init();
 
         LogHelper.debug("preInit complete");
     }
