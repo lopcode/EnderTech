@@ -112,11 +112,17 @@ public class WorldEventHandler
         for (Exchange exchange : queue)
         {
             ItemStack exchangerStack = exchange.player.inventory.getStackInSlot(exchange.hotbar_id);
-            if (exchangerStack == null) return;
-            if (!(exchangerStack.getItem() instanceof ItemExchanger)) return;
+            boolean cullExchange = false;
+            if (exchangerStack == null || !(exchangerStack.getItem() instanceof ItemExchanger)) cullExchange = true;
 
             ItemExchanger exchanger = (ItemExchanger) exchangerStack.getItem();
-            if (exchanger == null) return;
+            if (exchanger == null) cullExchange = true;
+
+            if (cullExchange)
+            {
+                removals.add(exchange);
+                continue;
+            }
 
             exchange.currentRadiusTicks--;
             if (exchange.currentRadiusTicks > 0) continue;
