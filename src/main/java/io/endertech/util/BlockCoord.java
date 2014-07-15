@@ -12,4 +12,14 @@ public class BlockCoord
         this.y = y;
         this.z = z;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof BlockCoord)) return false;
+        if (o == this) return true;
+        BlockCoord blockCoord = (BlockCoord) o;
+        return (blockCoord.x == this.x && blockCoord.y == this.y && blockCoord.z == this.z);
+    }
+
 }

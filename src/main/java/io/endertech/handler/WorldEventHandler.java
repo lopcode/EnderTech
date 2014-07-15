@@ -12,18 +12,25 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.*;
 
 public class WorldEventHandler
 {
     // Do exchanges per dimension
-    public static Map<Integer, LinkedBlockingQueue<Exchange>> exchanges = new HashMap();
+    public static Map<Integer, Set<Exchange>> exchanges = new HashMap();
 
-    public static void queueExchangeRequest(World world, BlockCoord coord, Block source, int sourceMeta, ItemStack target, int life, EntityPlayer player, int hotbar_id, Set<BlockCoord> visits)
+    public static enum ExchangeResult
+    {
+        FAIL_ENERGY,
+        FAIL_MISMATCH,
+        FAIL_NO_SOURCE_BLOCKS,
+        FAIL_INVENTORY_SPACE,
+        FAIL_BLOCK_NOT_REPLACEABLE,
+        FAIL_BLOCK_NOT_EXPOSED,
+        SUCCESS
+    }
+
+    public static void queueExchangeRequest(World world, BlockCoord origin, int radius, Block source, int sourceMeta, ItemStack target, EntityPlayer player, int hotbar_id)
     {
         if (target.isItemEqual(new ItemStack(source, 1, sourceMeta)))
         {
@@ -31,15 +38,15 @@ public class WorldEventHandler
         }
 
         int dimensionId = world.provider.dimensionId;
-        LinkedBlockingQueue<Exchange> queue = (LinkedBlockingQueue) exchanges.get(dimensionId);
+        Set<Exchange> queue = (LinkedHashSet) exchanges.get(dimensionId);
 
         if (queue == null)
         {
-            exchanges.put(dimensionId, new LinkedBlockingQueue());
-            queue = (LinkedBlockingQueue) exchanges.get(dimensionId);
+            exchanges.put(dimensionId, new LinkedHashSet());
+            queue = exchanges.get(dimensionId);
         }
 
-        queue.offer(new Exchange(coord, source, sourceMeta, target, life, player, hotbar_id, visits));
+        queue.add(new Exchange(origin, radius, source, sourceMeta, target, player, hotbar_id));
         world.playSoundAtEntity(player, "mob.endermen.portal", 1.0F, 1.0F);
         exchanges.put(dimensionId, queue);
     }
@@ -53,81 +60,130 @@ public class WorldEventHandler
     private void exchangeTick(World world)
     {
         int dimensionId = world.provider.dimensionId;
-        LinkedBlockingQueue<Exchange> queue = (LinkedBlockingQueue) exchanges.get(dimensionId);
-        if (queue == null) return;
+        Set<Exchange> queue = exchanges.get(dimensionId);
+        if (queue == null || queue.size() == 0) return;
 
-        checkAndPerformExchange(queue, world);
+        checkAndPerformExchanges(queue, world);
     }
 
-    private void checkAndPerformExchange(LinkedBlockingQueue<Exchange> queue, World world)
+    private Set<BlockCoord> squareSet(int radius, BlockCoord origin)
     {
-        Exchange exchange = queue.poll();
-        if (exchange == null) return;
+        Set<BlockCoord> ret = new LinkedHashSet<BlockCoord>();
+        if (radius <= 0)
+        {
+            ret.add(origin);
+            return ret;
+        }
 
-        ItemStack exchangerStack = exchange.player.inventory.getStackInSlot(exchange.hotbar_id);
+        // Top edge
+        for (int x = -radius; x < radius; x++)
+        {
+            int z = radius;
+            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+        }
 
-        if (exchangerStack == null) return;
+        // Right edge
+        for (int z = radius; z > -radius; z--)
+        {
+            int x = radius;
+            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+        }
 
-        if (!(exchangerStack.getItem() instanceof ItemExchanger)) return;
+        // Bottom edge
+        for (int x = radius; x > -radius; x--)
+        {
+            int z = -radius;
+            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+        }
 
-        ItemExchanger exchanger = (ItemExchanger) exchangerStack.getItem();
+        // Left edge
+        for (int z = -radius; z < radius; z++)
+        {
+            int x = -radius;
+            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+        }
 
-        if (exchanger == null) return;
+        return ret;
+    }
 
-        Block block = world.getBlock(exchange.coord.x, exchange.coord.y, exchange.coord.z);
-        int blockMeta = world.getBlockMetadata(exchange.coord.x, exchange.coord.y, exchange.coord.z);
+    private void checkAndPerformExchanges(Set<Exchange> queue, World world)
+    {
+        Set<Exchange> removals = new HashSet<Exchange>();
+        for (Exchange exchange : queue)
+        {
+            ItemStack exchangerStack = exchange.player.inventory.getStackInSlot(exchange.hotbar_id);
+            if (exchangerStack == null) return;
+            if (!(exchangerStack.getItem() instanceof ItemExchanger)) return;
 
-        if (exchange.target.isItemEqual(new ItemStack(block, 1, blockMeta))) return;
+            ItemExchanger exchanger = (ItemExchanger) exchangerStack.getItem();
+            if (exchanger == null) return;
 
-        if (exchange.visits.contains(exchange.coord)) return;
+            exchange.currentRadiusTicks--;
+            if (exchange.currentRadiusTicks > 0) continue;
+
+            Set<BlockCoord> blocks = this.squareSet(exchange.currentRadius - 1, exchange.origin);
+            boolean stop = false;
+            for (BlockCoord blockCoord : blocks)
+            {
+                if (stop) break;
+                ExchangeResult result = checkAndPerformExchange(exchange, exchanger, exchangerStack, world, new BlockCoord(blockCoord.x, exchange.origin.y, blockCoord.z));
+                switch (result)
+                {
+                    case FAIL_ENERGY:
+                    case FAIL_NO_SOURCE_BLOCKS:
+                    case FAIL_INVENTORY_SPACE:
+                        stop = true;
+                        removals.add(exchange);
+                        break;
+                }
+            }
+
+            exchange.currentRadius++;
+            if (exchange.currentRadius > exchange.radius) removals.add(exchange);
+            else exchange.currentRadiusTicks = Exchange.radiusTicksDefault;
+        }
+
+        for (Exchange removal : removals)
+            queue.remove(removal);
+    }
+
+    private ExchangeResult checkAndPerformExchange(Exchange exchange, ItemExchanger exchanger, ItemStack exchangerStack, World world, BlockCoord blockCoord)
+    {
+        Block block = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
+        int blockMeta = world.getBlockMetadata(blockCoord.x, blockCoord.y, blockCoord.z);
+        if (!BlockHelper.isBlockExposed(world, blockCoord.x, blockCoord.y, blockCoord.z))
+            return ExchangeResult.FAIL_BLOCK_NOT_EXPOSED;
+        if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z))
+            return ExchangeResult.FAIL_BLOCK_NOT_REPLACEABLE;
+
+        if (exchange.source != block && exchange.sourceMeta != blockMeta) return ExchangeResult.FAIL_MISMATCH;
+        if (exchange.target.isItemEqual(new ItemStack(block, 1, blockMeta))) return ExchangeResult.FAIL_MISMATCH;
 
         if (exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, true) < ItemConfig.itemExchangerBlockCost)
-            return;
+            return ExchangeResult.FAIL_ENERGY;
 
         int sourceSlot = InventoryHelper.findFirstItemStack(exchange.player.inventory, exchange.target);
 
-        if (sourceSlot <= 0 && !exchanger.isCreative(exchangerStack)) return;
+        if (sourceSlot <= 0 && !exchanger.isCreative(exchangerStack)) return ExchangeResult.FAIL_NO_SOURCE_BLOCKS;
 
         if (!exchanger.isCreative(exchangerStack))
         {
-            ArrayList<ItemStack> droppedItems = block.getDrops(exchange.player.worldObj, exchange.coord.x, exchange.coord.y, exchange.coord.z, exchange.sourceMeta, 0);
+            ArrayList<ItemStack> droppedItems = block.getDrops(exchange.player.worldObj, blockCoord.x, blockCoord.y, blockCoord.z, exchange.sourceMeta, 0);
             boolean didPutItemsInInventory = InventoryHelper.checkAndPutItemStacksInToInventory(exchange.player.inventory, droppedItems);
             if (didPutItemsInInventory)
             {
                 InventoryHelper.consumeItem(exchange.player.inventory, sourceSlot);
-                performExchangeAndPropagate(queue, exchange, exchanger, world);
-            }
-        } else performExchangeAndPropagate(queue, exchange, exchanger, world);
+                performExchange(exchange, blockCoord, exchanger, world);
+            } else return ExchangeResult.FAIL_INVENTORY_SPACE;
+        } else performExchange(exchange, blockCoord, exchanger, world);
+
+        return ExchangeResult.SUCCESS;
     }
 
-    private void performExchangeAndPropagate(LinkedBlockingQueue<Exchange> queue, Exchange exchange, ItemExchanger exchanger, World world)
+    private void performExchange(Exchange exchange, BlockCoord blockCoord, ItemExchanger exchanger, World world)
     {
-        performExchange(exchange, exchanger, world);
-        if (exchange.remainingTicks > 0) propagateExchange(queue, world, exchange);
-    }
-
-    private void performExchange(Exchange exchange, ItemExchanger exchanger, World world)
-    {
-        world.setBlock(exchange.coord.x, exchange.coord.y, exchange.coord.z, Block.getBlockFromItem(exchange.target.getItem()), exchange.target.getItemDamage(), 3);
+        world.setBlock(blockCoord.x, blockCoord.y, blockCoord.z, Block.getBlockFromItem(exchange.target.getItem()), exchange.target.getItemDamage(), 3);
         exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, false);
-        world.playAuxSFX(2001, exchange.coord.x, exchange.coord.y, exchange.coord.z, Block.getIdFromBlock(exchange.source) + (exchange.sourceMeta << 12));
-        exchange.visits.add(exchange.coord);
-    }
-
-    private void propagateExchange(LinkedBlockingQueue<Exchange> queue, World world, Exchange exchange)
-    {
-        for (int xx = -1; xx <= 1; xx++)
-        {
-            for (int yy = -1; yy <= 1; yy++)
-            {
-                for (int zz = -1; zz <= 1; zz++)
-                {
-                    if (!(xx == 0 && yy == 0 && zz == 0) && (world.getBlock(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.source) && (world.getBlockMetadata(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz) == exchange.sourceMeta) && (BlockHelper.isBlockExposed(world, exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz)))
-                    {
-                        queue.offer(new Exchange(new BlockCoord(exchange.coord.x + xx, exchange.coord.y + yy, exchange.coord.z + zz), exchange.source, exchange.sourceMeta, exchange.target, exchange.remainingTicks - 1, exchange.player, exchange.hotbar_id, exchange.visits));
-                    }
-                }
-            }
-        }
+        world.playAuxSFX(2001, blockCoord.x, blockCoord.y, blockCoord.z, Block.getIdFromBlock(exchange.source) + (exchange.sourceMeta << 12));
     }
 }

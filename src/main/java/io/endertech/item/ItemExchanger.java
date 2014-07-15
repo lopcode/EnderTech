@@ -134,7 +134,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
 
         if ((pb != null) && (player.worldObj.getTileEntity(x, y, z) == null) && !player.worldObj.isRemote)
         {
-            WorldEventHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), player.worldObj.getBlock(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb, this.getTargetRadius(itemstack) - 1, player, player.inventory.currentItem, new HashSet<BlockCoord>());
+            WorldEventHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), this.getTargetRadius(itemstack), player.worldObj.getBlock(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb, player, player.inventory.currentItem);
         }
 
         return true;
