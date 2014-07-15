@@ -156,7 +156,7 @@ public class WorldEventHandler
         if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z))
             return ExchangeResult.FAIL_BLOCK_NOT_REPLACEABLE;
 
-        if (exchange.source != block && exchange.sourceMeta != blockMeta) return ExchangeResult.FAIL_MISMATCH;
+        if (exchange.source != block || exchange.sourceMeta != blockMeta) return ExchangeResult.FAIL_MISMATCH;
         if (exchange.target.isItemEqual(new ItemStack(block, 1, blockMeta))) return ExchangeResult.FAIL_MISMATCH;
 
         if (exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, true) < ItemConfig.itemExchangerBlockCost)
