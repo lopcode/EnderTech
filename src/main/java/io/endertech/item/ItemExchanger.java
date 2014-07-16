@@ -11,11 +11,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
+public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler, IOutlineDrawer
 {
     private static Set<Key.KeyCode> handledKeys;
 
@@ -271,6 +272,12 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler
         {
             return EnumRarity.common;
         }
+    }
+
+    @Override
+    public void drawOutline(DrawBlockHighlightEvent event)
+    {
+        return;
     }
 
     public static enum Types
