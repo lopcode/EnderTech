@@ -1,6 +1,8 @@
 package io.endertech.util;
 
 import net.minecraft.util.Vec3;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class Geometry
 {
@@ -40,5 +42,45 @@ public class Geometry
         cubeFaces[BOTTOM_FACE] = new Vec3[] {cubeVertices[LEFT_TOP_BACK], cubeVertices[LEFT_TOP_FRONT], cubeVertices[LEFT_BOTTOM_FRONT], cubeVertices[LEFT_BOTTOM_BACK]};
         cubeFaces[RIGHT_FACE] = new Vec3[] {cubeVertices[RIGHT_BOTTOM_BACK], cubeVertices[RIGHT_TOP_BACK], cubeVertices[LEFT_TOP_BACK], cubeVertices[LEFT_BOTTOM_BACK]};
         cubeFaces[LEFT_FACE] = new Vec3[] {cubeVertices[RIGHT_BOTTOM_BACK], cubeVertices[RIGHT_BOTTOM_FRONT], cubeVertices[LEFT_BOTTOM_FRONT], cubeVertices[LEFT_TOP_FRONT]};
+    }
+
+    public static Set<BlockCoord> squareSet(int radius, BlockCoord origin)
+    {
+        Set<BlockCoord> ret = new LinkedHashSet<BlockCoord>();
+        if (radius <= 0)
+        {
+            ret.add(origin);
+            return ret;
+        }
+
+        // Top edge
+        for (int x = -radius; x < radius; x++)
+        {
+            int z = radius;
+            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+        }
+
+        // Right edge
+        for (int z = radius; z > -radius; z--)
+        {
+            int x = radius;
+            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+        }
+
+        // Bottom edge
+        for (int x = radius; x > -radius; x--)
+        {
+            int z = -radius;
+            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+        }
+
+        // Left edge
+        for (int z = -radius; z < radius; z++)
+        {
+            int x = -radius;
+            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+        }
+
+        return ret;
     }
 }

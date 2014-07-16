@@ -277,7 +277,22 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler,
     @Override
     public void drawOutline(DrawBlockHighlightEvent event)
     {
-        return;
+        Block targetBlock = event.player.worldObj.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ);
+        int targetMeta = event.player.worldObj.getBlockMetadata(event.target.blockX, event.target.blockY, event.target.blockZ);
+
+        int exchangerRadius = this.getTargetRadius(event.currentItem) - 1;
+
+        for (int radius = 0; radius <= exchangerRadius; radius++)
+        {
+            Set<BlockCoord> squareSet = Geometry.squareSet(radius, new BlockCoord(event.target.blockX, event.target.blockY, event.target.blockZ));
+            for (BlockCoord blockCoord : squareSet)
+            {
+                if (WorldEventHandler.blockSuitableForExchange(blockCoord, event.player.worldObj, targetBlock, targetMeta, this.getSourceItemStack(event.currentItem)))
+                {
+                    // Draw outline for each block here
+                }
+            }
+        }
     }
 
     public static enum Types

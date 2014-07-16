@@ -7,6 +7,7 @@ import io.endertech.item.ItemExchanger;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.BlockHelper;
 import io.endertech.util.Exchange;
+import io.endertech.util.Geometry;
 import io.endertech.util.inventory.InventoryHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,46 +67,6 @@ public class WorldEventHandler
         checkAndPerformExchanges(queue, world);
     }
 
-    private Set<BlockCoord> squareSet(int radius, BlockCoord origin)
-    {
-        Set<BlockCoord> ret = new LinkedHashSet<BlockCoord>();
-        if (radius <= 0)
-        {
-            ret.add(origin);
-            return ret;
-        }
-
-        // Top edge
-        for (int x = -radius; x < radius; x++)
-        {
-            int z = radius;
-            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
-        }
-
-        // Right edge
-        for (int z = radius; z > -radius; z--)
-        {
-            int x = radius;
-            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
-        }
-
-        // Bottom edge
-        for (int x = radius; x > -radius; x--)
-        {
-            int z = -radius;
-            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
-        }
-
-        // Left edge
-        for (int z = -radius; z < radius; z++)
-        {
-            int x = -radius;
-            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
-        }
-
-        return ret;
-    }
-
     private void checkAndPerformExchanges(Set<Exchange> queue, World world)
     {
         Set<Exchange> removals = new HashSet<Exchange>();
@@ -127,7 +88,7 @@ public class WorldEventHandler
             exchange.currentRadiusTicks--;
             if (exchange.currentRadiusTicks > 0) continue;
 
-            Set<BlockCoord> blocks = this.squareSet(exchange.currentRadius - 1, exchange.origin);
+            Set<BlockCoord> blocks = Geometry.squareSet(exchange.currentRadius - 1, exchange.origin);
             boolean stop = false;
             for (BlockCoord blockCoord : blocks)
             {
@@ -153,17 +114,26 @@ public class WorldEventHandler
             queue.remove(removal);
     }
 
+    public static boolean blockSuitableForExchange(BlockCoord blockCoord, World world, Block source, int sourceMeta, ItemStack target)
+    {
+        Block worldBlock = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
+        int worldMeta = world.getBlockMetadata(blockCoord.x, blockCoord.y, blockCoord.z);
+
+        if (!BlockHelper.isBlockExposed(world, blockCoord.x, blockCoord.y, blockCoord.z)) return false;
+        if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
+
+        if (source != worldBlock || sourceMeta != worldMeta) return false;
+        if (target.isItemEqual(new ItemStack(source, 1, sourceMeta))) return false;
+
+        return true;
+    }
+
     private ExchangeResult checkAndPerformExchange(Exchange exchange, ItemExchanger exchanger, ItemStack exchangerStack, World world, BlockCoord blockCoord)
     {
         Block block = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
-        int blockMeta = world.getBlockMetadata(blockCoord.x, blockCoord.y, blockCoord.z);
-        if (!BlockHelper.isBlockExposed(world, blockCoord.x, blockCoord.y, blockCoord.z))
-            return ExchangeResult.FAIL_BLOCK_NOT_EXPOSED;
-        if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z))
-            return ExchangeResult.FAIL_BLOCK_NOT_REPLACEABLE;
 
-        if (exchange.source != block || exchange.sourceMeta != blockMeta) return ExchangeResult.FAIL_MISMATCH;
-        if (exchange.target.isItemEqual(new ItemStack(block, 1, blockMeta))) return ExchangeResult.FAIL_MISMATCH;
+        if (!blockSuitableForExchange(blockCoord, world, exchange.source, exchange.sourceMeta, exchange.target))
+            return ExchangeResult.FAIL_BLOCK_NOT_REPLACEABLE;
 
         if (exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, true) < ItemConfig.itemExchangerBlockCost)
             return ExchangeResult.FAIL_ENERGY;
