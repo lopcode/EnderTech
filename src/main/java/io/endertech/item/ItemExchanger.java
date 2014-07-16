@@ -275,8 +275,12 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler,
     }
 
     @Override
-    public void drawOutline(DrawBlockHighlightEvent event)
+    public boolean drawOutline(DrawBlockHighlightEvent event)
     {
+        if (event.player.isSneaking()) return false;
+
+        if (this.getSourceItemStack(event.currentItem) == null) return false;
+
         Block targetBlock = event.player.worldObj.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ);
         int targetMeta = event.player.worldObj.getBlockMetadata(event.target.blockX, event.target.blockY, event.target.blockZ);
 
@@ -289,10 +293,12 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler,
             {
                 if (WorldEventHandler.blockSuitableForExchange(blockCoord, event.player.worldObj, targetBlock, targetMeta, this.getSourceItemStack(event.currentItem)))
                 {
-                    // Draw outline for each block here
+                    RenderHelper.renderBlockOutline(event.context, event.player, blockCoord, RGBA.White.setAlpha(0.6f), 2.0f, event.partialTicks);
                 }
             }
         }
+
+        return true;
     }
 
     public static enum Types

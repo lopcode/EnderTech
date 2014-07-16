@@ -4,5 +4,5 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 
 public interface IOutlineDrawer
 {
-    public void drawOutline(DrawBlockHighlightEvent event);
+    public boolean drawOutline(DrawBlockHighlightEvent event);
 }

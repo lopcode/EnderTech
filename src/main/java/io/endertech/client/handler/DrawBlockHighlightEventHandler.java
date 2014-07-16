@@ -18,7 +18,8 @@ public class DrawBlockHighlightEventHandler
         Item item = event.currentItem.getItem();
         if (!(item instanceof IOutlineDrawer)) return;
 
-        event.setCanceled(true);
-        ((IOutlineDrawer) item).drawOutline(event);
+        boolean cancelEvent = ((IOutlineDrawer) item).drawOutline(event);
+        event.setCanceled(cancelEvent);
+
     }
 }
