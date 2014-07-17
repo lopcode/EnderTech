@@ -31,11 +31,14 @@ public class Exchange
 
     public static boolean blockSuitableForExchange(BlockCoord blockCoord, World world, Block source, int sourceMeta, ItemStack target)
     {
+        if (world.getTileEntity(blockCoord.x, blockCoord.y, blockCoord.z) != null)
+            return false;
+
         Block worldBlock = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
         int worldMeta = world.getBlockMetadata(blockCoord.x, blockCoord.y, blockCoord.z);
 
-        if (!BlockHelper.isBlockExposed(world, blockCoord.x, blockCoord.y, blockCoord.z)) return false;
         if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
+        if (!BlockHelper.isBlockExposed(world, blockCoord.x, blockCoord.y, blockCoord.z)) return false;
 
         if (source != worldBlock || sourceMeta != worldMeta) return false;
         if (target.isItemEqual(new ItemStack(source, 1, sourceMeta))) return false;

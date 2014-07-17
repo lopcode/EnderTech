@@ -19,5 +19,6 @@ public class Strings
     public static final class Blocks
     {
         public static final String SPINNING_CUBE_NAME = "endertech.spinningCube";
+        public static final String CHARGED_PLANE_NAME = "endertech.chargedPlane";
     }
 }
