@@ -3,6 +3,7 @@ package io.endertech.util;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class Exchange
 {
@@ -26,5 +27,19 @@ public class Exchange
         this.target = target;
         this.player = p;
         this.hotbar_id = hotbar_id;
+    }
+
+    public static boolean blockSuitableForExchange(BlockCoord blockCoord, World world, Block source, int sourceMeta, ItemStack target)
+    {
+        Block worldBlock = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
+        int worldMeta = world.getBlockMetadata(blockCoord.x, blockCoord.y, blockCoord.z);
+
+        if (!BlockHelper.isBlockExposed(world, blockCoord.x, blockCoord.y, blockCoord.z)) return false;
+        if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
+
+        if (source != worldBlock || sourceMeta != worldMeta) return false;
+        if (target.isItemEqual(new ItemStack(source, 1, sourceMeta))) return false;
+
+        return true;
     }
 }

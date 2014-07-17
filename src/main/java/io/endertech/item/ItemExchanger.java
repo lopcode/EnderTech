@@ -13,10 +13,11 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler, IOutlineDrawer
+public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler, IOutlineDrawer, IItemBlockAffector
 {
     private static Set<Key.KeyCode> handledKeys;
 
@@ -107,6 +108,19 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler,
         }
     }
 
+    public static boolean isBlockSuitableForSelection(World world, BlockCoord blockCoord)
+    {
+        if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
+
+        if (world.getTileEntity(blockCoord.x, blockCoord.y, blockCoord.z) != null) return false;
+
+        Block block = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
+
+        if (BlockHelper.softBlocks.contains(block)) return false;
+
+        return true;
+    }
+
     @Override
     public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float xFloat, float yFloat, float zFloat)
     {
@@ -119,7 +133,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler,
             Block source = player.worldObj.getBlock(x, y, z);
             int sourceMeta = player.worldObj.getBlockMetadata(x, y, z);
 
-            if (!world.isAirBlock(x, y, z) && world.getTileEntity(x, y, z) == null && !BlockHelper.softBlocks.contains(source))
+            if (ItemExchanger.isBlockSuitableForSelection(world, new BlockCoord(x, y, z)))
             {
                 LogHelper.debug("Setting source block to " + source.getLocalizedName());
                 setSourceBlock(itemstack, new ItemStack(source, 1, sourceMeta));
@@ -277,28 +291,54 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler,
     @Override
     public boolean drawOutline(DrawBlockHighlightEvent event)
     {
-        if (event.player.isSneaking()) return false;
+        BlockCoord target = new BlockCoord(event.target.blockX, event.target.blockY, event.target.blockZ);
+        World world = event.player.worldObj;
+
+        if (event.player.isSneaking())
+        {
+            if (!ItemExchanger.isBlockSuitableForSelection(world, target))
+                RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Red.setAlpha(0.6f), 2.0f, event.partialTicks);
+            else
+                RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Green.setAlpha(0.6f), 2.0f, event.partialTicks);
+
+            return true;
+        }
 
         if (this.getSourceItemStack(event.currentItem) == null) return false;
 
-        Block targetBlock = event.player.worldObj.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ);
-        int targetMeta = event.player.worldObj.getBlockMetadata(event.target.blockX, event.target.blockY, event.target.blockZ);
+        Set<BlockCoord> blocks = this.blocksAffected(event.currentItem, world, target);
+        if (blocks == null || blocks.size() == 0) return false;
 
-        int exchangerRadius = this.getTargetRadius(event.currentItem) - 1;
-
-        for (int radius = 0; radius <= exchangerRadius; radius++)
+        for (BlockCoord blockCoord : blocks)
         {
-            Set<BlockCoord> squareSet = Geometry.squareSet(radius, new BlockCoord(event.target.blockX, event.target.blockY, event.target.blockZ));
-            for (BlockCoord blockCoord : squareSet)
-            {
-                if (WorldEventHandler.blockSuitableForExchange(blockCoord, event.player.worldObj, targetBlock, targetMeta, this.getSourceItemStack(event.currentItem)))
-                {
-                    RenderHelper.renderBlockOutline(event.context, event.player, blockCoord, RGBA.White.setAlpha(0.6f), 2.0f, event.partialTicks);
-                }
-            }
+            RenderHelper.renderBlockOutline(event.context, event.player, blockCoord, RGBA.White.setAlpha(0.6f), 2.0f, event.partialTicks);
         }
 
         return true;
+    }
+
+    @Override
+    public Set<BlockCoord> blocksAffected(ItemStack item, World world, BlockCoord origin)
+    {
+        if (!(item.getItem() instanceof ItemExchanger)) return null;
+
+        Set<BlockCoord> ret = new LinkedHashSet<BlockCoord>();
+        int exchangerRadius = this.getTargetRadius(item) - 1;
+
+        Block targetBlock = world.getBlock(origin.x, origin.y, origin.z);
+        int targetMeta = world.getBlockMetadata(origin.x, origin.y, origin.z);
+
+        for (int radius = 0; radius <= exchangerRadius; radius++)
+        {
+            Set<BlockCoord> squareSet = Geometry.squareSet(radius, new BlockCoord(origin.x, origin.y, origin.z));
+            for (BlockCoord blockCoord : squareSet)
+            {
+                if (Exchange.blockSuitableForExchange(blockCoord, world, targetBlock, targetMeta, this.getSourceItemStack(item)))
+                    ret.add(blockCoord);
+            }
+        }
+
+        return ret;
     }
 
     public static enum Types

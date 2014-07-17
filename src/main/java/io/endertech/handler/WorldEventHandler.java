@@ -5,7 +5,6 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import io.endertech.config.ItemConfig;
 import io.endertech.item.ItemExchanger;
 import io.endertech.util.BlockCoord;
-import io.endertech.util.BlockHelper;
 import io.endertech.util.Exchange;
 import io.endertech.util.Geometry;
 import io.endertech.util.inventory.InventoryHelper;
@@ -114,25 +113,11 @@ public class WorldEventHandler
             queue.remove(removal);
     }
 
-    public static boolean blockSuitableForExchange(BlockCoord blockCoord, World world, Block source, int sourceMeta, ItemStack target)
-    {
-        Block worldBlock = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
-        int worldMeta = world.getBlockMetadata(blockCoord.x, blockCoord.y, blockCoord.z);
-
-        if (!BlockHelper.isBlockExposed(world, blockCoord.x, blockCoord.y, blockCoord.z)) return false;
-        if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
-
-        if (source != worldBlock || sourceMeta != worldMeta) return false;
-        if (target.isItemEqual(new ItemStack(source, 1, sourceMeta))) return false;
-
-        return true;
-    }
-
     private ExchangeResult checkAndPerformExchange(Exchange exchange, ItemExchanger exchanger, ItemStack exchangerStack, World world, BlockCoord blockCoord)
     {
         Block block = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
 
-        if (!blockSuitableForExchange(blockCoord, world, exchange.source, exchange.sourceMeta, exchange.target))
+        if (!Exchange.blockSuitableForExchange(blockCoord, world, exchange.source, exchange.sourceMeta, exchange.target))
             return ExchangeResult.FAIL_BLOCK_NOT_REPLACEABLE;
 
         if (exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, true) < ItemConfig.itemExchangerBlockCost)
