@@ -31,8 +31,7 @@ public class Exchange
 
     public static boolean blockSuitableForExchange(BlockCoord blockCoord, World world, Block source, int sourceMeta, ItemStack target)
     {
-        if (world.getTileEntity(blockCoord.x, blockCoord.y, blockCoord.z) != null)
-            return false;
+        if (world.getTileEntity(blockCoord.x, blockCoord.y, blockCoord.z) != null) return false;
 
         Block worldBlock = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
         int worldMeta = world.getBlockMetadata(blockCoord.x, blockCoord.y, blockCoord.z);
