@@ -9,33 +9,30 @@ public class LogHelper
 {
     private static final Logger logger = LogManager.getLogger(Reference.MOD_ID);
 
-    public static void log(Level logLevel, Object object)
+    public static void log(Level logLevel, String format, Object... data) { logger.log(logLevel, format, data); }
+
+    public static void debug(String format, Object... data)
     {
-        logger.log(logLevel, String.valueOf(object));
+        log(Level.DEBUG, format, data);
     }
 
-    public static void debug(Object object)
+    public static void error(String format, Object... data)
     {
-        log(Level.DEBUG, object);
+        log(Level.ERROR, format, data);
     }
 
-    public static void error(Object object)
+    public static void fatal(String format, Object... data)
     {
-        log(Level.ERROR, object);
+        log(Level.FATAL, format, data);
     }
 
-    public static void fatal(Object object)
+    public static void info(String format, Object... data)
     {
-        log(Level.FATAL, object);
+        log(Level.INFO, format, data);
     }
 
-    public static void info(Object object)
+    public static void warn(String format, Object... data)
     {
-        log(Level.INFO, object);
-    }
-
-    public static void warn(Object object)
-    {
-        log(Level.WARN, object);
+        log(Level.WARN, format, data);
     }
 }
