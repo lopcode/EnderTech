@@ -9,6 +9,7 @@ public class ItemBlockBasic extends ItemBlock
     public ItemBlockBasic(Block block)
     {
         super(block);
+
         setHasSubtypes(true);
     }
 
@@ -21,7 +22,8 @@ public class ItemBlockBasic extends ItemBlock
     @Override
     public String getUnlocalizedName(ItemStack itemStack)
     {
-        return super.getUnlocalizedName(itemStack);
+        int metadata = itemStack.getItemDamage();
+        return super.getUnlocalizedName(itemStack) + "." + Integer.toString(metadata);
     }
 
     @Override

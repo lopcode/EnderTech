@@ -2,6 +2,7 @@ package io.endertech.block;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.multiblock.block.BlockTankPart;
+import io.endertech.multiblock.item.ItemBlockTankPart;
 import io.endertech.reference.Strings;
 import net.minecraft.block.Block;
 
@@ -22,7 +23,7 @@ public class ETBlocks
         GameRegistry.registerBlock(blockTank, ItemBlockBasic.class, Strings.TANK_NAME);
         GameRegistry.registerBlock(blockSpinningCube, ItemBlockBasic.class, Strings.Blocks.SPINNING_CUBE_NAME);
         GameRegistry.registerBlock(blockChargedPlane, ItemBlockBasic.class, Strings.Blocks.CHARGED_PLANE_NAME);
-        GameRegistry.registerBlock(blockTankPart, ItemBlockBasic.class, Strings.Blocks.TANK_PART_NAME);
+        GameRegistry.registerBlock(blockTankPart, ItemBlockTankPart.class, Strings.Blocks.TANK_PART_NAME);
 
         ((BlockTank) blockTank).init();
         ((BlockSpinningCube) blockSpinningCube).init();

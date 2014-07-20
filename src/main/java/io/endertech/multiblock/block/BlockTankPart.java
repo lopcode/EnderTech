@@ -6,6 +6,7 @@ import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockTileEntityBase;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.multiblock.tile.TileTankPart;
+import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
@@ -44,6 +45,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
     {
         super(Material.glass);
         this.setCreativeTab(EnderTech.tabET);
+        this.setBlockName(Strings.Blocks.TANK_PART_NAME);
     }
 
     public void init()
@@ -201,5 +203,14 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
         }
 
         return false;
+    }
+
+    @Override
+    public int damageDropped(int meta)
+    {
+        if (isFrame(meta)) return FRAME_METADATA_BASE;
+        else if (isController(meta)) return CONTROLLER_METADATA_BASE;
+
+        return FRAME_METADATA_BASE;
     }
 }
