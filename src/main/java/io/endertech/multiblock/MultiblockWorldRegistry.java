@@ -59,8 +59,6 @@ public class MultiblockWorldRegistry
 
     /**
      * Called before Tile Entities are ticked in the world. Run gamelogic.
-     *
-     * @param world The world being ticked
      */
     public void tickStart()
     {
@@ -87,8 +85,6 @@ public class MultiblockWorldRegistry
 
     /**
      * Called after Tile Entities are ticked in the world. Do bookkeeping.
-     *
-     * @param world The world being ticked
      */
     public void tickEnd()
     {

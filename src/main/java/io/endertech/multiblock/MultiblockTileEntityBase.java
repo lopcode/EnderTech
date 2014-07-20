@@ -369,7 +369,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
 
     ///// Private/Protected Logic Helpers
     /*
-	 * Detaches this block from its controller. Calls detachBlock() and clears the controller member.
+     * Detaches this block from its controller. Calls detachBlock() and clears the controller member.
 	 */
     protected void detachSelf(boolean chunkUnloading)
     {

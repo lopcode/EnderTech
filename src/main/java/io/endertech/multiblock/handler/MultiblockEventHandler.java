@@ -1,9 +1,9 @@
-package io.endertech.multiblock;
+package io.endertech.multiblock.handler;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import io.endertech.multiblock.MultiblockRegistry;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.event.EventPriority;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -15,8 +15,8 @@ import net.minecraftforge.event.world.WorldEvent;
  */
 public class MultiblockEventHandler
 {
-    @ForgeSubscribe(priority = EventPriority.NORMAL)
-    public void onChunkLoad(ChunkEvent.Load loadEvent)
+    @SubscribeEvent
+    public void onChunkLoadEvent(ChunkEvent.Load loadEvent)
     {
         Chunk chunk = loadEvent.getChunk();
         World world = loadEvent.world;
@@ -24,8 +24,8 @@ public class MultiblockEventHandler
     }
 
     // Cleanup, for nice memory usageness
-    @ForgeSubscribe(priority = EventPriority.NORMAL)
-    public void onWorldUnload(WorldEvent.Unload unloadWorldEvent)
+    @SubscribeEvent
+    public void onWorldUnloadEvent(WorldEvent.Unload unloadWorldEvent)
     {
         MultiblockRegistry.onWorldUnloaded(unloadWorldEvent.world);
     }

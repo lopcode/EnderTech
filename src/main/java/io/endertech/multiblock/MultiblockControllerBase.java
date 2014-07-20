@@ -686,7 +686,7 @@ public abstract class MultiblockControllerBase
     /**
      * Called when the save delegate's tile entity is being asked for its description packet
      *
-     * @param tag A fresh compound tag to write your multiblock data into
+     * @param data A fresh compound tag to write your multiblock data into
      */
     public abstract void formatDescriptionPacket(NBTTagCompound data);
 
