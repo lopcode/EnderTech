@@ -1,5 +1,6 @@
 package io.endertech.multiblock;
 
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
@@ -491,8 +492,6 @@ public abstract class MultiblockControllerBase
     /**
      * Driver for the update loop. If the machine is assembled, runs
      * the game logic update method.
-     *
-     * @see io.endertech.multiblock.MultiblockControllerBase#update()
      */
     public final void updateMultiblockEntity()
     {
@@ -683,19 +682,15 @@ public abstract class MultiblockControllerBase
         return maximumCoord.copy();
     }
 
-    /**
-     * Called when the save delegate's tile entity is being asked for its description packet
-     *
-     * @param data A fresh compound tag to write your multiblock data into
-     */
-    public abstract void formatDescriptionPacket(NBTTagCompound data);
+    /*
+    * Called when the save delegate's tile entity is being asked for its description packet
+    */
+    public abstract IMessage formatMessage();
 
     /**
      * Called when the save delegate's tile entity receiving a description packet
-     *
-     * @param data A compound tag containing multiblock data to import
      */
-    public abstract void decodeDescriptionPacket(NBTTagCompound data);
+    public abstract void decodeMessage(IMessage message);
 
     /**
      * @return True if this controller has no associated blocks, false otherwise

@@ -1,8 +1,11 @@
 package io.endertech.multiblock;
 
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import io.endertech.network.NetworkHandler;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.chunk.IChunkProvider;
 import java.util.ArrayList;
@@ -174,15 +177,8 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     @Override
     public Packet getDescriptionPacket()
     {
-        NBTTagCompound packetData = new NBTTagCompound();
-        encodeDescriptionPacket(packetData);
-        return new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, packetData);
-    }
-
-    @Override
-    public void onDataPacket(INetworkManager network, Packet132TileEntityData packet)
-    {
-        decodeDescriptionPacket(packet.data);
+        IMessage message = this.encodeMessage();
+        return NetworkHandler.INSTANCE.getPacketFrom(message);
     }
 
     ///// Things to override in most implementations (IMultiblockPart)
@@ -190,41 +186,26 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     /**
      * Override this to easily modify the description packet's data without having
      * to worry about sending the packet itself.
-     * Decode this data in decodeDescriptionPacket.
-     *
-     * @param packetData An NBT compound tag into which you should write your custom description data.
-     * @see io.endertech.multiblock.MultiblockTileEntityBase#decodeDescriptionPacket(net.minecraft.nbt.NBTTagCompound)
      */
-    protected void encodeDescriptionPacket(NBTTagCompound packetData)
+    protected IMessage encodeMessage()
     {
         if (this.isMultiblockSaveDelegate() && isConnected())
         {
-            NBTTagCompound tag = new NBTTagCompound();
-            getMultiblockController().formatDescriptionPacket(tag);
-            packetData.setTag("multiblockData", tag);
+            return getMultiblockController().formatMessage();
         }
+
+        return null;
     }
 
     /**
      * Override this to easily read in data from a TileEntity's description packet.
-     * Encoded in encodeDescriptionPacket.
-     *
-     * @param packetData The NBT data from the tile entity's description packet.
-     * @see io.endertech.multiblock.MultiblockTileEntityBase#encodeDescriptionPacket(net.minecraft.nbt.NBTTagCompound)
+     * Encoded in encodeMessage.
      */
-    protected void decodeDescriptionPacket(NBTTagCompound packetData)
+    protected void decodeMessage(IMessage message)
     {
-        if (packetData.hasKey("multiblockData"))
+        if (isConnected())
         {
-            NBTTagCompound tag = packetData.getCompoundTag("multiblockData");
-            if (isConnected())
-            {
-                getMultiblockController().decodeDescriptionPacket(tag);
-            } else
-            {
-                // This part hasn't been added to a machine yet, so cache the data.
-                this.cachedMultiblockData = tag;
-            }
+            getMultiblockController().decodeMessage(message);
         }
     }
 
