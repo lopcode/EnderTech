@@ -566,7 +566,7 @@ public abstract class MultiblockControllerBase
      */
     protected void isBlockGoodForFrame(World world, int x, int y, int z) throws MultiblockValidationException
     {
-        throw new MultiblockValidationException(String.format("%d, %d, %d - Block is not valid for use in the machine's interior", x, y, z));
+        throw new MultiblockValidationException(String.format("%d, %d, %d - Block is not valid for use in the machine's frame", x, y, z));
     }
 
     /**
@@ -580,7 +580,7 @@ public abstract class MultiblockControllerBase
      */
     protected void isBlockGoodForTop(World world, int x, int y, int z) throws MultiblockValidationException
     {
-        throw new MultiblockValidationException(String.format("%d, %d, %d - Block is not valid for use in the machine's interior", x, y, z));
+        throw new MultiblockValidationException(String.format("%d, %d, %d - Block is not valid for use in the machine's top", x, y, z));
     }
 
     /**
@@ -608,7 +608,7 @@ public abstract class MultiblockControllerBase
      */
     protected void isBlockGoodForSides(World world, int x, int y, int z) throws MultiblockValidationException
     {
-        throw new MultiblockValidationException(String.format("%d, %d, %d - Block is not valid for use in the machine's interior", x, y, z));
+        throw new MultiblockValidationException(String.format("%d, %d, %d - Block is not valid for use in the machine's sides", x, y, z));
     }
 
     /**
@@ -632,6 +632,11 @@ public abstract class MultiblockControllerBase
     {
         if (referenceCoord == null) { selectNewReferenceCoord(); }
         return referenceCoord;
+    }
+
+    public Set<IMultiblockPart> getConnectedParts()
+    {
+        return this.connectedParts;
     }
 
     /**

@@ -8,7 +8,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class RectangularMultiblockTileEntityBase extends MultiblockTileEntityBase
 {
-
     PartPosition position;
     ForgeDirection outwards;
 

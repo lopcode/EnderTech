@@ -3,6 +3,7 @@ package io.endertech.multiblock.rectangular;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.util.BlockCoord;
+import io.endertech.util.LogHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -19,8 +20,10 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
      */
     protected void isMachineWhole() throws MultiblockValidationException
     {
+        LogHelper.info(connectedParts.size() + " blocks connected to multiblock");
         if (connectedParts.size() < getMinimumNumberOfBlocksForAssembledMachine())
         {
+            LogHelper.info("Machine too small");
             throw new MultiblockValidationException("Machine is too small.");
         }
 
