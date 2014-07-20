@@ -1,17 +1,24 @@
 package io.endertech.tile;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 import io.endertech.network.NetworkHandler;
-import io.endertech.network.message.MessageTileSpinningCube;
+import io.endertech.network.message.MessageTileUpdate;
 import io.endertech.reference.Strings;
 import io.endertech.util.Geometry;
 import io.endertech.util.LogHelper;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
 import java.util.Random;
 
-public class TileSpinningCube extends TileET
+public class TileSpinningCube extends TileET implements IMessageHandler<TileSpinningCube.MessageTileSpinningCubeUpdate, IMessage>
 {
     public Random random = new Random();
     public float size = 0.5f;
@@ -37,6 +44,7 @@ public class TileSpinningCube extends TileET
     public static void init()
     {
         GameRegistry.registerTileEntity(TileSpinningCube.class, "tile." + Strings.Blocks.SPINNING_CUBE_NAME);
+        NetworkHandler.INSTANCE.registerMessage(TileSpinningCube.class, TileSpinningCube.MessageTileSpinningCubeUpdate.class, NetworkHandler.getDiscriminator(), Side.CLIENT);
     }
 
     public void createRandomAddition()
@@ -111,7 +119,7 @@ public class TileSpinningCube extends TileET
     @Override
     public Packet getDescriptionPacket()
     {
-        return NetworkHandler.INSTANCE.getPacketFrom(new MessageTileSpinningCube(this));
+        return NetworkHandler.INSTANCE.getPacketFrom(new MessageTileSpinningCubeUpdate(this));
     }
 
     public void applySpeedUp()
@@ -123,5 +131,58 @@ public class TileSpinningCube extends TileET
     public String toString()
     {
         return "Spinning cube: position " + this.xCoord + ", " + this.yCoord + ", " + this.zCoord + " S: " + this.speed + " R: " + this.randomAddition.xCoord + ", " + this.randomAddition.yCoord + ", " + this.randomAddition.zCoord;
+    }
+
+    @Override
+    public IMessage onMessage(MessageTileSpinningCubeUpdate message, MessageContext ctx)
+    {
+        TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
+
+        if (tileEntity instanceof TileSpinningCube)
+        {
+            ((TileSpinningCube) tileEntity).speed = message.speed;
+            ((TileSpinningCube) tileEntity).randomAddition = Vec3.createVectorHelper(message.rx, message.ry, message.rz);
+
+            LogHelper.info("Setting cube data from message: " + tileEntity.toString());
+        }
+
+        return null;
+    }
+
+    public static class MessageTileSpinningCubeUpdate extends MessageTileUpdate
+    {
+        public double rx, ry, rz;
+        public double speed;
+
+        public MessageTileSpinningCubeUpdate() { }
+
+        public MessageTileSpinningCubeUpdate(TileSpinningCube tileSpinningCube)
+        {
+            super(tileSpinningCube);
+            this.rx = tileSpinningCube.randomAddition.xCoord;
+            this.ry = tileSpinningCube.randomAddition.yCoord;
+            this.rz = tileSpinningCube.randomAddition.zCoord;
+            this.speed = tileSpinningCube.speed;
+        }
+
+        @Override
+        public void fromBytes(ByteBuf buf)
+        {
+            super.fromBytes(buf);
+            this.rx = buf.readDouble();
+            this.ry = buf.readDouble();
+            this.rz = buf.readDouble();
+            this.speed = buf.readDouble();
+        }
+
+        @Override
+        public void toBytes(ByteBuf buf)
+        {
+            super.toBytes(buf);
+            buf.writeDouble(this.rx);
+            buf.writeDouble(this.ry);
+            buf.writeDouble(this.rz);
+            buf.writeDouble(this.speed);
+        }
     }
 }
