@@ -7,6 +7,7 @@ import io.endertech.multiblock.handler.MultiblockEventHandler;
 import io.endertech.multiblock.handler.MultiblockServerTickHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public class CommonProxy implements IGuiHandler
 {
@@ -14,7 +15,7 @@ public class CommonProxy implements IGuiHandler
     {
         FMLCommonHandler.instance().bus().register(new WorldEventHandler());
         FMLCommonHandler.instance().bus().register(new MultiblockServerTickHandler());
-        FMLCommonHandler.instance().bus().register(new MultiblockEventHandler());
+        MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
     }
 
     public void registerTESRs() { }

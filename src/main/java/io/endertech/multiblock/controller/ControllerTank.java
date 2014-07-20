@@ -4,19 +4,25 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockValidationException;
+import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.multiblock.rectangular.RectangularMultiblockControllerBase;
+import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.util.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ControllerTank extends RectangularMultiblockControllerBase
 {
     protected boolean active;
+    private Set<TileTankPart> attachedControllers;
 
     public ControllerTank(World world)
     {
         super(world);
         active = false;
+        attachedControllers = new HashSet<TileTankPart>();
     }
 
     @Override
@@ -28,13 +34,38 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     @Override
     protected void onBlockAdded(IMultiblockPart newPart)
     {
-
+        if (newPart instanceof TileTankPart)
+        {
+            TileTankPart tankPart = (TileTankPart) newPart;
+            if (BlockTankPart.isController(tankPart.getBlockMetadata()))
+            {
+                attachedControllers.add(tankPart);
+            }
+        }
     }
 
     @Override
     protected void onBlockRemoved(IMultiblockPart oldPart)
     {
+        if (oldPart instanceof TileTankPart)
+        {
+            TileTankPart tankPart = (TileTankPart) oldPart;
+            if (BlockTankPart.isController(tankPart.getBlockMetadata()))
+            {
+                attachedControllers.remove(tankPart);
+            }
+        }
+    }
 
+    @Override
+    protected void isMachineWhole() throws MultiblockValidationException
+    {
+        if (attachedControllers.size() != 1)
+        {
+            throw new MultiblockValidationException("You must have 1 controller in the tank structure (currently " + attachedControllers.size() + ")");
+        }
+
+        super.isMachineWhole();
     }
 
     @Override
@@ -103,7 +134,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     @Override
     protected void onAssimilated(MultiblockControllerBase assimilator)
     {
-
+        this.attachedControllers.clear();
     }
 
     @Override

@@ -4,6 +4,7 @@ import io.endertech.EnderTech;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockTileEntityBase;
+import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
@@ -17,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import java.util.List;
@@ -82,11 +84,29 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
                     MultiblockControllerBase controller = ((IMultiblockPart) te).getMultiblockController();
                     if (controller != null)
                     {
+                        String chatLine = "Tank status: ";
+
+                        if (controller.isAssembled())
+                            chatLine += EnumChatFormatting.GREEN + "assembled" + EnumChatFormatting.RESET + ", ";
+                        else chatLine += EnumChatFormatting.RED + "not assembled" + EnumChatFormatting.RESET + ", ";
+
+                        boolean active = false;
+                        if (controller instanceof ControllerTank)
+                        {
+                            ControllerTank tankController = (ControllerTank) controller;
+                            active = tankController.isActive();
+                        }
+
+                        if (active) chatLine += EnumChatFormatting.GREEN + "active" + EnumChatFormatting.RESET + ".";
+                        else chatLine += EnumChatFormatting.RED + "not active" + EnumChatFormatting.RESET + ".";
+
+                        player.addChatComponentMessage(new ChatComponentText(chatLine));
+
                         Exception e = controller.getLastValidationException();
                         if (e != null)
                         {
+                            player.addChatComponentMessage(new ChatComponentText("Last reason for not being able to assemble:"));
                             player.addChatComponentMessage(new ChatComponentText(e.getMessage()));
-                            return true;
                         }
                     } else
                     {
@@ -165,10 +185,15 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
 
             for (IMultiblockPart part : connectedParts)
             {
-                if (!part.isMultiblockSaveDelegate())
-                    RenderHelper.renderBlockOutline(event.context, event.player, part.getWorldLocation(), colour, 2.0f, event.partialTicks);
+                BlockCoord partCoord = part.getWorldLocation();
+
+                if (BlockTankPart.isController(world.getBlockMetadata(partCoord.x, partCoord.y, partCoord.z)))
+                    RenderHelper.renderBlockOutline(event.context, event.player, partCoord, RGBA.White.setAlpha(0.6f), 10.0f, event.partialTicks);
                 else
-                    RenderHelper.renderBlockOutline(event.context, event.player, part.getWorldLocation(), RGBA.Red, 10.0f, event.partialTicks);
+                    RenderHelper.renderBlockOutline(event.context, event.player, partCoord, colour, 2.0f, event.partialTicks);
+
+                if (part.isMultiblockSaveDelegate())
+                    RenderHelper.renderBlockOutline(event.context, event.player, partCoord, RGBA.Red, 10.0f, event.partialTicks);
             }
 
 
