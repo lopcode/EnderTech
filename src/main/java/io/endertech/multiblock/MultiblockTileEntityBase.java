@@ -174,6 +174,9 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     }
 
     // Network Communication
+
+    // Subclasses should implement IMessageHandler<<UpdateMessage>, IMessage>
+
     @Override
     public Packet getDescriptionPacket()
     {

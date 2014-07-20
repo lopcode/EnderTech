@@ -5,6 +5,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import io.endertech.client.handler.DrawBlockHighlightEventHandler;
 import io.endertech.client.handler.KeyBindingHandler;
 import io.endertech.client.renderer.SpinningCubeRenderer;
+import io.endertech.multiblock.handler.MultiblockClientTickHandler;
 import io.endertech.tile.TileSpinningCube;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -16,6 +17,7 @@ public class ClientProxy extends CommonProxy
         super.registerTickerHandlers();
 
         FMLCommonHandler.instance().bus().register(new KeyBindingHandler());
+        FMLCommonHandler.instance().bus().register(new MultiblockClientTickHandler());
         MinecraftForge.EVENT_BUS.register(new DrawBlockHighlightEventHandler());
     }
 

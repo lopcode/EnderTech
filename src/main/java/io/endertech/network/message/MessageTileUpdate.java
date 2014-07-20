@@ -1,8 +1,8 @@
 package io.endertech.network.message;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import io.endertech.tile.TileET;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.tileentity.TileEntity;
 
 public class MessageTileUpdate implements IMessage
 {
@@ -10,7 +10,7 @@ public class MessageTileUpdate implements IMessage
 
     public MessageTileUpdate() { }
 
-    public MessageTileUpdate(TileET tile)
+    public MessageTileUpdate(TileEntity tile)
     {
         this.x = tile.xCoord;
         this.y = tile.yCoord;
