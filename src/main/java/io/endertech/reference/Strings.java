@@ -21,5 +21,6 @@ public class Strings
         public static final String SPINNING_CUBE_NAME = "endertech.spinningCube";
         public static final String CHARGED_PLANE_NAME = "endertech.chargedPlane";
         public static final String TANK_PART_NAME = "endertech.enderTankPart";
+        public static final String MULTIBLOCK_GLASS_NAME = "endertech.multiblockGlass";
     }
 }
