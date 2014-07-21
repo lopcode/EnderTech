@@ -93,14 +93,19 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
                         else chatLine += EnumChatFormatting.RED + "not assembled" + EnumChatFormatting.RESET + ", ";
 
                         boolean active = false;
+                        int randomNumber = -1;
                         if (controller instanceof ControllerTank)
                         {
                             ControllerTank tankController = (ControllerTank) controller;
                             active = tankController.isActive();
+                            randomNumber = tankController.random_number;
+
                         }
 
-                        if (active) chatLine += EnumChatFormatting.GREEN + "active" + EnumChatFormatting.RESET + ".";
-                        else chatLine += EnumChatFormatting.RED + "not active" + EnumChatFormatting.RESET + ".";
+                        if (active) chatLine += EnumChatFormatting.GREEN + "active" + EnumChatFormatting.RESET + ", ";
+                        else chatLine += EnumChatFormatting.RED + "not active" + EnumChatFormatting.RESET + ", ";
+
+                        chatLine += "random number: " + EnumChatFormatting.AQUA + randomNumber + EnumChatFormatting.RESET;
 
                         player.addChatComponentMessage(new ChatComponentText(chatLine));
 

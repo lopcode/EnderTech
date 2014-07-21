@@ -11,18 +11,21 @@ import io.endertech.util.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public class ControllerTank extends RectangularMultiblockControllerBase
 {
     protected boolean active;
     private Set<TileTankPart> attachedControllers;
+    public int random_number;
 
     public ControllerTank(World world)
     {
         super(world);
         active = false;
         attachedControllers = new HashSet<TileTankPart>();
+        random_number = new Random().nextInt(1000000000);
     }
 
     @Override
@@ -128,7 +131,10 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     @Override
     protected void onAssimilate(MultiblockControllerBase assimilated)
     {
-
+        if (assimilated instanceof ControllerTank)
+        {
+            this.random_number = ((ControllerTank) assimilated).random_number;
+        }
     }
 
     @Override
@@ -150,6 +156,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     public void writeToNBT(NBTTagCompound data)
     {
         data.setBoolean("tankActive", this.isActive());
+        data.setInteger("randomNumber", this.random_number);
     }
 
     @Override
@@ -158,6 +165,11 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         if (data.hasKey("tankActive"))
         {
             setActive(data.getBoolean("tankActive"));
+        }
+
+        if (data.hasKey("randomNumber"))
+        {
+            this.random_number = data.getInteger("randomNumber");
         }
     }
 
