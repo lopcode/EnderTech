@@ -47,10 +47,10 @@ If you run in to odd Gradle issues, doing `gradlew clean` usually fixes it.
 * Pahimar (Modding guides and [EE3](https://github.com/pahimar/Equivalent-Exchange-3)),
 * Team CoFH ([Thermal Expansion](http://teamcofh.com/)),
 * Azanor ([Thaumcraft](http://www.minecraftforum.net/topic/2011841-thaumcraft-41114-updated-2052014/)),
+* ErogenousBeef (huge help with multiblocks, connected textures, [BigReactors / BeefCore](https://github.com/erogenousbeef)),
 * [Arkan](https://github.com/emberwalker) (Build server).
 
 ## Things planned
 * Tank infrastructure,
 * Teleportation infrastructure,
-* Multiblocks,
-* Exchanger rewrite to make things per-player.
+* Spinning out useful things as libraries (maybe).
