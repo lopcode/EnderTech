@@ -3,8 +3,8 @@ package io.endertech.multiblock.block;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
+import io.endertech.multiblock.texture.ConnectedTextureManager;
 import io.endertech.multiblock.tile.TileTankGlass;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -15,16 +15,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import java.util.List;
 
 public class BlockMultiblockGlass extends BlockContainer
 {
     public static final int METADATA_TANK = 0;
     private static String[] subBlocks = new String[] {"tank"};
-    private IIcon[][] icons = new IIcon[subBlocks.length][16];
-    private IIcon transparentIcon;
     public static ItemStack itemBlockMultiblockGlass;
+    private ConnectedTextureManager[] textureManagers;
+    private static final String TEXTURE_BASE = "endertech:multiblockGlass";
 
     public BlockMultiblockGlass()
     {
@@ -33,8 +32,16 @@ public class BlockMultiblockGlass extends BlockContainer
         setStepSound(soundTypeGlass);
         setHardness(2.0f);
         setBlockName("multiblockGlass");
-        this.setBlockTextureName("endertech:multiblockGlass");
+        this.setBlockTextureName(TEXTURE_BASE);
         setCreativeTab(EnderTech.tabET);
+
+        this.initialiseTextureManagers();
+    }
+
+    public void initialiseTextureManagers()
+    {
+        textureManagers = new ConnectedTextureManager[subBlocks.length];
+        textureManagers[0] = new ConnectedTextureManager(TEXTURE_BASE + "." + subBlocks[0], null);
     }
 
     public void init()
@@ -59,56 +66,21 @@ public class BlockMultiblockGlass extends BlockContainer
     @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
-        this.transparentIcon = iconRegister.registerIcon("endertech:" + getUnlocalizedName() + ".transparent");
-
-        for (int metadata = 0; metadata < subBlocks.length; metadata++)
-        {
-            for (int i = 0; i < 16; ++i)
-            {
-                icons[metadata][i] = iconRegister.registerIcon("endertech:" + getUnlocalizedName() + "." + subBlocks[metadata] + "." + Integer.toString(i));
-            }
-        }
+        for (ConnectedTextureManager textureManager : textureManagers)
+            textureManager.registerBlockIcons(iconRegister);
     }
-
-    public static final ForgeDirection neighborsBySide[][] = new ForgeDirection[][] {{ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST}, {ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.EAST, ForgeDirection.WEST}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.WEST, ForgeDirection.EAST}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.NORTH, ForgeDirection.SOUTH}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.SOUTH, ForgeDirection.NORTH}};
 
     @Override
     public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side)
     {
-        ForgeDirection[] dirsToCheck = neighborsBySide[side];
-        ForgeDirection dir;
-        Block myBlock = blockAccess.getBlock(x, y, z);
         int myBlockMetadata = blockAccess.getBlockMetadata(x, y, z);
-
-        // First check if we have a block in front of us of the same type - if so, just be completely transparent on this side
-        ForgeDirection out = ForgeDirection.getOrientation(side);
-        if (blockAccess.getBlock(x + out.offsetX, y + out.offsetY, z + out.offsetZ) == myBlock && blockAccess.getBlockMetadata(x + out.offsetX, y + out.offsetY, z + out.offsetZ) == myBlockMetadata)
-        {
-            return transparentIcon;
-        }
-
-        // Calculate icon index based on whether the blocks around this block match it
-        // Icons use a naming pattern so that the bits correspond to:
-        // 1 = Connected on top, 2 = connected on bottom, 4 = connected on left, 8 = connected on right
-        int iconIdx = 0;
-        for (int i = 0; i < dirsToCheck.length; i++)
-        {
-            dir = dirsToCheck[i];
-            // Same blockID and metadata on this side?
-            if (blockAccess.getBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ) == myBlock && blockAccess.getBlockMetadata(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ) == myBlockMetadata)
-            {
-                // Connected!
-                iconIdx |= 1 << i;
-            }
-        }
-
-        return icons[myBlockMetadata][iconIdx];
+        return textureManagers[myBlockMetadata].getIcon(blockAccess, x, y, z, side);
     }
 
     @Override
     public IIcon getIcon(int side, int metadata)
     {
-        return icons[metadata][0];
+        return textureManagers[metadata].getUnconnectedTexture();
     }
 
     @Override
