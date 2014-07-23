@@ -57,10 +57,9 @@ public class ConnectedRenderBlocks extends RenderBlocks
 
     }
 
+
     public void renderSide(Block tBlock, double x, double y, double z, ConnectedTextureIcon icon, int side)
     {
-        renderSideFace(icon, 0, x, y, z, side);
-
         int ix = (int) x;
         int iy = (int) y;
         int iz = (int) z;
@@ -72,6 +71,8 @@ public class ConnectedRenderBlocks extends RenderBlocks
         {
             return;
         }
+
+        renderSideFace(icon, 0, x, y, z, side);
 
         // Calculate icon index based on whether the blocks around this block match it
         // 1 = Connected on top, 2 = connected on bottom, 4 = connected on left, 8 = connected on right
@@ -87,18 +88,25 @@ public class ConnectedRenderBlocks extends RenderBlocks
             }
         }
 
-        if (!checkBit(iconIdx, 1) && !checkBit(iconIdx, 2))
+        if (!checkBit(iconIdx, 1))
         {
-            // Connected on top and bottom
-            renderSideFace(icon, 1, x, y, z, side);
+            renderSideFace(icon, ConnectedTextureIcon.TOP, x, y, z, side);
         }
 
-        if (!checkBit(iconIdx, 4) && !checkBit(iconIdx, 8))
+        if (!checkBit(iconIdx, 2))
         {
-            // Connected on left and right
-            renderSideFace(icon, 2, x, y, z, side);
+            renderSideFace(icon, ConnectedTextureIcon.BOTTOM, x, y, z, side);
         }
 
+        if (!checkBit(iconIdx, 4))
+        {
+            renderSideFace(icon, ConnectedTextureIcon.LEFT, x, y, z, side);
+        }
+
+        if (!checkBit(iconIdx, 8))
+        {
+            renderSideFace(icon, ConnectedTextureIcon.RIGHT, x, y, z, side);
+        }
         // Potential for corners:
         //  eg connected top+left = render top left corner
 
