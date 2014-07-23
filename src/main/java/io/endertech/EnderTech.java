@@ -113,6 +113,8 @@ public class EnderTech
         // Renderers
         proxy.registerTESRs();
 
+        proxy.registerRenderers();
+
         LogHelper.debug("init complete");
 
         // IMC

@@ -1,10 +1,9 @@
 package io.endertech.multiblock.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
-import io.endertech.multiblock.texture.ConnectedTextureManager;
+import io.endertech.multiblock.texture.ConnectedTextureIcon;
 import io.endertech.multiblock.tile.TileTankGlass;
+import io.endertech.proxy.ClientProxy;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -13,7 +12,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import java.util.List;
 
@@ -22,8 +20,8 @@ public class BlockMultiblockGlass extends BlockContainer
     public static final int METADATA_TANK = 0;
     private static String[] subBlocks = new String[] {"tank"};
     public static ItemStack itemBlockMultiblockGlass;
-    private ConnectedTextureManager[] textureManagers;
     private static final String TEXTURE_BASE = "endertech:multiblockGlass";
+    private ConnectedTextureIcon[] icons;
 
     public BlockMultiblockGlass()
     {
@@ -35,13 +33,7 @@ public class BlockMultiblockGlass extends BlockContainer
         this.setBlockTextureName(TEXTURE_BASE);
         setCreativeTab(EnderTech.tabET);
 
-        this.initialiseTextureManagers();
-    }
-
-    public void initialiseTextureManagers()
-    {
-        textureManagers = new ConnectedTextureManager[subBlocks.length];
-        textureManagers[0] = new ConnectedTextureManager(TEXTURE_BASE + "." + subBlocks[0], null);
+        icons = new ConnectedTextureIcon[6];
     }
 
     public void init()
@@ -66,21 +58,16 @@ public class BlockMultiblockGlass extends BlockContainer
     @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
-        for (ConnectedTextureManager textureManager : textureManagers)
-            textureManager.registerBlockIcons(iconRegister);
-    }
-
-    @Override
-    public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side)
-    {
-        int myBlockMetadata = blockAccess.getBlockMetadata(x, y, z);
-        return textureManagers[myBlockMetadata].getIcon(blockAccess, x, y, z, side);
+        for (int side = 0; side < 6; side++)
+        {
+            this.icons[side] = new ConnectedTextureIcon(iconRegister, TEXTURE_BASE + "." + subBlocks[0]);
+        }
     }
 
     @Override
     public IIcon getIcon(int side, int metadata)
     {
-        return textureManagers[metadata].getUnconnectedTexture();
+        return this.icons[side];
     }
 
     @Override
@@ -104,12 +91,7 @@ public class BlockMultiblockGlass extends BlockContainer
         return null;
     }
 
-    // Same rendering as glass
-    @SideOnly(Side.CLIENT)
-    public int getRenderBlockPass()
-    {
-        return 0;
-    }
+    // Custom connected textures rendering
 
     public boolean isOpaqueCube()
     {
@@ -119,5 +101,11 @@ public class BlockMultiblockGlass extends BlockContainer
     public boolean renderAsNormalBlock()
     {
         return false;
+    }
+
+    @Override
+    public int getRenderType()
+    {
+        return ClientProxy.connectedTexturesRenderID;
     }
 }
