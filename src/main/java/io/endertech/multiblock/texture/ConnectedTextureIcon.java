@@ -6,7 +6,7 @@ import net.minecraft.util.IIcon;
 public class ConnectedTextureIcon implements IIcon
 {
     public IIcon[] icons;
-    private static final String[] ICON_TYPES = {"central", "top", "bottom", "left", "right"};
+    public static final String[] ICON_TYPES = {"central", "top", "bottom", "left", "right"};
     public static final int CENTRAL = 0;
     public static final int TOP = 1;
     public static final int BOTTOM = 2;
