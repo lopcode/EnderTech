@@ -3,7 +3,12 @@ package io.endertech.multiblock.block;
 import io.endertech.EnderTech;
 import io.endertech.multiblock.texture.ConnectedTextureIcon;
 import io.endertech.multiblock.tile.TileTankGlass;
+import io.endertech.multiblock.tile.TileTankPartBase;
 import io.endertech.proxy.ClientProxy;
+import io.endertech.util.BlockCoord;
+import io.endertech.util.IOutlineDrawer;
+import io.endertech.util.RGBA;
+import io.endertech.util.RenderHelper;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -13,9 +18,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import java.util.List;
 
-public class BlockMultiblockGlass extends BlockContainer
+public class BlockMultiblockGlass extends BlockContainer implements IOutlineDrawer
 {
     public static final int METADATA_TANK = 0;
     private static String[] subBlocks = new String[] {"tank"};
@@ -107,5 +113,26 @@ public class BlockMultiblockGlass extends BlockContainer
     public int getRenderType()
     {
         return ClientProxy.connectedTexturesRenderID;
+    }
+
+    @Override
+    public boolean drawOutline(DrawBlockHighlightEvent event)
+    {
+        BlockCoord target = new BlockCoord(event.target.blockX, event.target.blockY, event.target.blockZ);
+        World world = event.player.worldObj;
+
+        TileEntity tile = world.getTileEntity(target.x, target.y, target.z);
+        if (tile == null)
+        {
+            RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Blue.setAlpha(0.6f), 2.0f, event.partialTicks);
+            return true;
+        }
+
+        if (tile instanceof TileTankPartBase)
+        {
+            return ((TileTankPartBase) tile).drawOutline(event);
+        }
+
+        return false;
     }
 }

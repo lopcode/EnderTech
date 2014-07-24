@@ -3,9 +3,9 @@ package io.endertech.multiblock.block;
 import io.endertech.EnderTech;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
-import io.endertech.multiblock.MultiblockTileEntityBase;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.multiblock.tile.TileTankPart;
+import io.endertech.multiblock.tile.TileTankPartBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
@@ -23,7 +23,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import java.util.List;
-import java.util.Set;
 
 public class BlockTankPart extends BlockContainer implements IOutlineDrawer
 {
@@ -169,42 +168,9 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
             return true;
         }
 
-        if (tile instanceof IMultiblockPart)
+        if (tile instanceof TileTankPartBase)
         {
-            MultiblockControllerBase controller = ((MultiblockTileEntityBase) tile).getMultiblockController();
-            if (controller == null)
-            {
-                RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Red.setAlpha(0.6f), 2.0f, event.partialTicks);
-                return true;
-            }
-
-            Set<IMultiblockPart> connectedParts = controller.getConnectedParts();
-            if (connectedParts.isEmpty())
-            {
-                RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.White.setAlpha(0.6f), 2.0f, event.partialTicks);
-            }
-
-            RGBA colour = RGBA.Blue.setAlpha(0.6f);
-            if (controller.isAssembled())
-            {
-                colour = RGBA.Green.setAlpha(0.6f);
-            }
-
-            for (IMultiblockPart part : connectedParts)
-            {
-                BlockCoord partCoord = part.getWorldLocation();
-
-                if (BlockTankPart.isController(world.getBlockMetadata(partCoord.x, partCoord.y, partCoord.z)))
-                    RenderHelper.renderBlockOutline(event.context, event.player, partCoord, RGBA.White.setAlpha(0.6f), 10.0f, event.partialTicks);
-                else
-                    RenderHelper.renderBlockOutline(event.context, event.player, partCoord, colour, 2.0f, event.partialTicks);
-
-                if (part.isMultiblockSaveDelegate())
-                    RenderHelper.renderBlockOutline(event.context, event.player, partCoord, RGBA.Red, 10.0f, event.partialTicks);
-            }
-
-
-            return true;
+            return ((TileTankPartBase) tile).drawOutline(event);
         }
 
         return false;

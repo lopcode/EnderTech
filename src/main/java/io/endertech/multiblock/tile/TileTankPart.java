@@ -7,9 +7,10 @@ import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
+import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.LogHelper;
 
-public class TileTankPart extends TileTankPartBase
+public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
 {
     public TileTankPart()
     {
