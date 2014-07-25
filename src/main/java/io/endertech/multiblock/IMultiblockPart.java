@@ -1,5 +1,6 @@
 package io.endertech.multiblock;
 
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.endertech.util.BlockCoord;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -189,12 +190,16 @@ public abstract class IMultiblockPart extends TileEntity
     /**
      * @return True if a part has multiblock game-data saved inside it.
      */
-    public abstract boolean hasMultiblockSaveData();
+    public abstract boolean hasMultiblockNBTCache();
+
+    public abstract boolean hasMultiblockMessageCache();
 
     /**
      * @return The part's saved multiblock game-data in NBT format, or null if there isn't any.
      */
-    public abstract NBTTagCompound getMultiblockSaveData();
+    public abstract NBTTagCompound getMultiblockNBTCache();
+
+    public abstract IMessage getMultiblockMessageCache();
 
     /**
      * Called after a block is added and the controller has incorporated the part's saved

@@ -1,16 +1,24 @@
 package io.endertech.multiblock.tile;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 import io.endertech.block.ETBlocks;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.block.BlockTankPart;
+import io.endertech.multiblock.controller.ControllerTank;
+import io.endertech.network.NetworkHandler;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.LogHelper;
+import net.minecraft.tileentity.TileEntity;
 
-public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
+public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IMessageHandler<ControllerTank.MessageTankUpdate, IMessage>
 {
     public TileTankPart()
     {
@@ -20,6 +28,7 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
     public static void init()
     {
         GameRegistry.registerTileEntity(TileTankPart.class, "tile." + Strings.Blocks.TANK_PART_NAME);
+        NetworkHandler.INSTANCE.registerMessage(TileTankPart.class, ControllerTank.MessageTankUpdate.class, NetworkHandler.getDiscriminator(), Side.CLIENT);
     }
 
     @Override
@@ -218,5 +227,28 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
             // This shouldn't happen.
             this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankPart.FRAME_METADATA_BASE, 2);
         }
+    }
+
+    @Override
+    public IMessage onMessage(ControllerTank.MessageTankUpdate message, MessageContext ctx)
+    {
+        TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
+
+        if (tileEntity instanceof TileTankPart)
+        {
+            TileTankPart tile = (TileTankPart) tileEntity;
+            ControllerTank controller = tile.getTankController();
+            if (controller == null)
+            {
+                tile.cachedMultiblockMessage = message;
+                LogHelper.info("Caching message for tank part tile: " + tile.xCoord + ", " + tile.yCoord + ", " + tile.zCoord);
+            } else
+            {
+                controller.decodeMessage(message);
+                LogHelper.info("Decoding message for controller: " + tile.xCoord + ", " + tile.yCoord + ", " + tile.zCoord);
+            }
+        }
+
+        return null;
     }
 }

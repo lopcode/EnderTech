@@ -11,6 +11,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class CommonProxy implements IGuiHandler
 {
+    public static int connectedTexturesRenderID = 0;
+
     public void registerTickerHandlers()
     {
         FMLCommonHandler.instance().bus().register(new WorldEventHandler());

@@ -3,11 +3,14 @@ package io.endertech.multiblock.controller;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
+import io.endertech.multiblock.MultiblockTileEntityBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.multiblock.rectangular.RectangularMultiblockControllerBase;
 import io.endertech.multiblock.tile.TileTankPart;
+import io.endertech.network.message.MessageTileUpdate;
 import io.endertech.util.LogHelper;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
@@ -17,20 +20,38 @@ public class ControllerTank extends RectangularMultiblockControllerBase
 {
     protected boolean active;
     private Set<TileTankPart> attachedControllers;
-    public int random_number;
+    private int random_number = 0;
 
     public ControllerTank(World world)
     {
         super(world);
         active = false;
         attachedControllers = new HashSet<TileTankPart>();
-        random_number = new Random().nextInt(1000000000);
+    }
+
+    public void setRandomNumber(int newRandomNumber)
+    {
+        LogHelper.info("Setting random number from " + this.random_number + " to " + newRandomNumber);
+        this.random_number = newRandomNumber;
+    }
+
+    public int getRandomNumber()
+    {
+        return this.random_number;
     }
 
     @Override
-    public void onAttachedPartWithMultiblockData(IMultiblockPart part, NBTTagCompound data)
+    public void onAttachedPartWithMultiblockNBT(IMultiblockPart part, NBTTagCompound nbt)
     {
-        this.readFromNBT(data);
+        this.readFromNBT(nbt);
+    }
+
+    @Override
+    public void onAttachedPartWithMultiblockMessage(IMultiblockPart part, IMessage message)
+    {
+        LogHelper.info("My random number before: " + this.random_number);
+        this.decodeMessage(message);
+        LogHelper.info("My random number after:" + this.random_number);
     }
 
     @Override
@@ -73,7 +94,8 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     @Override
     protected void onMachineAssembled()
     {
-        LogHelper.info("Tank assembled!");
+        if (this.getRandomNumber() == 0) setRandomNumber(new Random().nextInt(1000000));
+        LogHelper.info("Tank assembled with R: " + this.random_number + "!");
     }
 
     @Override
@@ -132,7 +154,15 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     {
         if (assimilated instanceof ControllerTank)
         {
-            this.random_number = ((ControllerTank) assimilated).random_number;
+            ControllerTank controller = (ControllerTank) assimilated;
+            if (controller.getRandomNumber() != 0)
+            {
+                LogHelper.info("Setting new random number from assimilated controller");
+                setRandomNumber(((ControllerTank) assimilated).getRandomNumber());
+            } else
+            {
+                LogHelper.info("Not setting random number as new assimilated tank had 0");
+            }
         }
     }
 
@@ -156,6 +186,13 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     {
         data.setBoolean("tankActive", this.isActive());
         data.setInteger("randomNumber", this.random_number);
+
+        LogHelper.info("Writing tank to NBT: " + this.toString());
+    }
+
+    public String toString()
+    {
+        return "R: " + this.getRandomNumber();
     }
 
     @Override
@@ -168,20 +205,58 @@ public class ControllerTank extends RectangularMultiblockControllerBase
 
         if (data.hasKey("randomNumber"))
         {
-            this.random_number = data.getInteger("randomNumber");
+            this.setRandomNumber(data.getInteger("randomNumber"));
+            LogHelper.info("Read random number from NBT: " + this.random_number);
+        }
+    }
+
+    public static class MessageTankUpdate extends MessageTileUpdate
+    {
+        public int random_number;
+
+        public MessageTankUpdate() { }
+
+        public MessageTankUpdate(TileTankPart tileSaveDelegate)
+        {
+            super(tileSaveDelegate);
+            this.random_number = tileSaveDelegate.getTankController().random_number;
+            LogHelper.info("Packed random number in to message: " + this.random_number);
+        }
+
+        @Override
+        public void fromBytes(ByteBuf buf)
+        {
+            super.fromBytes(buf);
+            this.random_number = buf.readInt();
+        }
+
+        @Override
+        public void toBytes(ByteBuf buf)
+        {
+            super.toBytes(buf);
+            buf.writeInt(this.random_number);
         }
     }
 
     @Override
-    public IMessage formatMessage()
+    public IMessage encodeMessage(MultiblockTileEntityBase saveDelegate)
     {
+        if (saveDelegate instanceof TileTankPart)
+        {
+            return new MessageTankUpdate((TileTankPart) saveDelegate);
+        }
+
         return null;
     }
 
     @Override
     public void decodeMessage(IMessage message)
     {
-
+        if (message instanceof MessageTankUpdate)
+        {
+            this.random_number = ((MessageTankUpdate) message).random_number;
+            LogHelper.info("Reading tank from message: " + this.toString());
+        }
     }
 
     @Override

@@ -97,7 +97,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
                         {
                             ControllerTank tankController = (ControllerTank) controller;
                             active = tankController.isActive();
-                            randomNumber = tankController.random_number;
+                            randomNumber = tankController.getRandomNumber();
 
                         }
 

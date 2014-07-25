@@ -101,7 +101,9 @@ public abstract class MultiblockControllerBase
      *
      * @param part The NBT tag containing this controller's data.
      */
-    public abstract void onAttachedPartWithMultiblockData(IMultiblockPart part, NBTTagCompound data);
+    public abstract void onAttachedPartWithMultiblockNBT(IMultiblockPart part, NBTTagCompound nbt);
+
+    public abstract void onAttachedPartWithMultiblockMessage(IMultiblockPart part, IMessage message);
 
     /**
      * Check if a block is being tracked by this machine.
@@ -132,10 +134,15 @@ public abstract class MultiblockControllerBase
         part.onAttached(this);
         this.onBlockAdded(part);
 
-        if (part.hasMultiblockSaveData())
+        if (part.hasMultiblockNBTCache())
         {
-            NBTTagCompound savedData = part.getMultiblockSaveData();
-            onAttachedPartWithMultiblockData(part, savedData);
+            LogHelper.info("Setting multiblock data from cached NBT");
+            onAttachedPartWithMultiblockNBT(part, part.getMultiblockNBTCache());
+            part.onMultiblockDataAssimilated();
+        } else if (part.hasMultiblockMessageCache())
+        {
+            LogHelper.info("Setting multiblock data from cached Message");
+            onAttachedPartWithMultiblockMessage(part, part.getMultiblockMessageCache());
             part.onMultiblockDataAssimilated();
         }
 
@@ -691,7 +698,7 @@ public abstract class MultiblockControllerBase
     /*
     * Called when the save delegate's tile entity is being asked for its description packet
     */
-    public abstract IMessage formatMessage();
+    public abstract IMessage encodeMessage(MultiblockTileEntityBase saveDelegate);
 
     /**
      * Called when the save delegate's tile entity receiving a description packet

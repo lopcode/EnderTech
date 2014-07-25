@@ -1,10 +1,12 @@
 package io.endertech.multiblock.block;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
 import io.endertech.multiblock.texture.ConnectedTextureIcon;
 import io.endertech.multiblock.tile.TileTankGlass;
 import io.endertech.multiblock.tile.TileTankPartBase;
-import io.endertech.proxy.ClientProxy;
+import io.endertech.proxy.CommonProxy;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
@@ -62,6 +64,7 @@ public class BlockMultiblockGlass extends BlockContainer implements IOutlineDraw
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister)
     {
         for (int side = 0; side < 6; side++)
@@ -83,6 +86,7 @@ public class BlockMultiblockGlass extends BlockContainer implements IOutlineDraw
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int i = 0; i < subBlocks.length; i++)
@@ -112,7 +116,7 @@ public class BlockMultiblockGlass extends BlockContainer implements IOutlineDraw
     @Override
     public int getRenderType()
     {
-        return ClientProxy.connectedTexturesRenderID;
+        return CommonProxy.connectedTexturesRenderID;
     }
 
     @Override

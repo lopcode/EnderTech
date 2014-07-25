@@ -2,7 +2,7 @@ package io.endertech.multiblock.renderer;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import io.endertech.multiblock.texture.ConnectedTextureIcon;
-import io.endertech.proxy.ClientProxy;
+import io.endertech.proxy.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -96,6 +96,6 @@ public class ConnectedTextureRenderer implements ISimpleBlockRenderingHandler
     @Override
     public int getRenderId()
     {
-        return ClientProxy.connectedTexturesRenderID;
+        return CommonProxy.connectedTexturesRenderID;
     }
 }

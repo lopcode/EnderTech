@@ -13,7 +13,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxy extends CommonProxy
 {
-    public static int connectedTexturesRenderID = 0;
 
     @Override
     public void registerTickerHandlers()

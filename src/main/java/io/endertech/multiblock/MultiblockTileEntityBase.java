@@ -23,7 +23,8 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     private boolean visited;
 
     private boolean saveMultiblockData;
-    private NBTTagCompound cachedMultiblockData;
+    protected IMessage cachedMultiblockMessage;
+    protected NBTTagCompound cachedMultiblockNBT;
     private boolean paused;
 
     public MultiblockTileEntityBase()
@@ -33,7 +34,8 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
         visited = false;
         saveMultiblockData = false;
         paused = false;
-        cachedMultiblockData = null;
+        cachedMultiblockMessage = null;
+        cachedMultiblockNBT = null;
     }
 
     ///// Multiblock Connection Base Logic
@@ -101,7 +103,8 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
         // we receive a validate() call, which creates the controller and hands off the cached data.
         if (data.hasKey("multiblockData"))
         {
-            this.cachedMultiblockData = data.getCompoundTag("multiblockData");
+            this.cachedMultiblockNBT = data.getCompoundTag("multiblockData");
+            LogHelper.info("Reading from NBT and caching multiblock NBT");
         }
     }
 
@@ -115,6 +118,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
             NBTTagCompound multiblockData = new NBTTagCompound();
             this.controller.writeToNBT(multiblockData);
             data.setTag("multiblockData", multiblockData);
+            LogHelper.info("Writing multiblock to NBT");
         }
     }
 
@@ -175,8 +179,6 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
 
     // Network Communication
 
-    // Subclasses should implement IMessageHandler<<UpdateMessage>, IMessage>
-
     @Override
     public Packet getDescriptionPacket()
     {
@@ -194,7 +196,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     {
         if (this.isMultiblockSaveDelegate() && isConnected())
         {
-            return getMultiblockController().formatMessage();
+            return getMultiblockController().encodeMessage(this);
         }
 
         return null;
@@ -213,21 +215,35 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     }
 
     @Override
-    public boolean hasMultiblockSaveData()
+    public boolean hasMultiblockNBTCache()
     {
-        return this.cachedMultiblockData != null;
+        return this.cachedMultiblockNBT != null;
     }
 
     @Override
-    public NBTTagCompound getMultiblockSaveData()
+    public boolean hasMultiblockMessageCache()
     {
-        return this.cachedMultiblockData;
+        return this.cachedMultiblockMessage != null;
     }
+
+    @Override
+    public NBTTagCompound getMultiblockNBTCache()
+    {
+        return this.cachedMultiblockNBT;
+    }
+
+    @Override
+    public IMessage getMultiblockMessageCache()
+    {
+        return this.cachedMultiblockMessage;
+    }
+
 
     @Override
     public void onMultiblockDataAssimilated()
     {
-        this.cachedMultiblockData = null;
+        this.cachedMultiblockNBT = null;
+        this.cachedMultiblockMessage = null;
     }
 
     ///// Game logic callbacks (IMultiblockPart)
