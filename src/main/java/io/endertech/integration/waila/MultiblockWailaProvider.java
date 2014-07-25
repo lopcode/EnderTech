@@ -64,7 +64,7 @@ public class MultiblockWailaProvider implements IWailaDataProvider
 
             if (controller != null)
             {
-                List<String> body = controller.getWailaBody(itemStack, currenttip, accessor, config);
+                List<String> body = controller.getWailaBody();
                 if (body != null) currenttip.addAll(body);
             }
         }

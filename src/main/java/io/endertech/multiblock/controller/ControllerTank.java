@@ -8,9 +8,6 @@ import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.multiblock.rectangular.RectangularMultiblockControllerBase;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.util.LogHelper;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
@@ -218,19 +215,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     }
 
     @Override
-    public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
-        return null;
-    }
-
-    @Override
-    public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
-        return null;
-    }
-
-    @Override
-    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
+    public List<String> getWailaBody()
     {
         String activeStatus = "Active: ";
         if (this.isActive())
@@ -244,11 +229,5 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         List<String> additions = new ArrayList<String>();
         additions.add(activeStatus);
         return additions;
-    }
-
-    @Override
-    public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
-        return null;
     }
 }
