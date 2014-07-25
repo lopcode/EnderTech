@@ -5,10 +5,7 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.block.ETBlocks;
 import io.endertech.client.handler.GUIEventHandler;
@@ -107,13 +104,13 @@ public class EnderTech
         // Pulsar loading
         ModuleHelper.pulsar.init(event);
 
-        //LogHelper.debug("DIRT BLOCK >> " + Block.dirt.getUnlocalizedName());
-        //LogHelper.info("Sin 360: " + MathHelper.sin(2 * MathHelper.pi));
-
         // Renderers
         proxy.registerTESRs();
 
         proxy.registerRenderers();
+
+        // Waila
+        FMLInterModComms.sendMessage("Waila", "register", "io.endertech.integration.waila.MultiblockWailaProvider.callbackRegister");
 
         LogHelper.debug("init complete");
 

@@ -8,11 +8,13 @@ import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.multiblock.rectangular.RectangularMultiblockControllerBase;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.util.LogHelper;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class ControllerTank extends RectangularMultiblockControllerBase
 {
@@ -185,6 +187,13 @@ public class ControllerTank extends RectangularMultiblockControllerBase
 
     }
 
+    @Override
+    public String getName()
+    {
+        // TODO: localise
+        return "Ender Tank";
+    }
+
     public boolean isActive()
     {
         return this.active;
@@ -206,5 +215,40 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     {
         if (world.isAirBlock(x, y, z)) { return; } // Air is OK
         else throw new MultiblockValidationException("Interior must be air");
+    }
+
+    @Override
+    public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        return null;
+    }
+
+    @Override
+    public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        return null;
+    }
+
+    @Override
+    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        String activeStatus = "Active: ";
+        if (this.isActive())
+        {
+            activeStatus += EnumChatFormatting.GREEN + "yes" + EnumChatFormatting.RESET;
+        } else
+        {
+            activeStatus += EnumChatFormatting.RED + "no" + EnumChatFormatting.RESET;
+        }
+
+        List<String> additions = new ArrayList<String>();
+        additions.add(activeStatus);
+        return additions;
+    }
+
+    @Override
+    public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        return null;
     }
 }

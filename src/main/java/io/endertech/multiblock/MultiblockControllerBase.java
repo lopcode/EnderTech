@@ -3,6 +3,7 @@ package io.endertech.multiblock;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.LogHelper;
+import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -18,7 +19,7 @@ import java.util.Set;
  * <p/>
  * Subordinate TileEntities implement the IMultiblockPart class and, generally, should not have an update() loop.
  */
-public abstract class MultiblockControllerBase
+public abstract class MultiblockControllerBase implements IWailaDataProvider
 {
     public static final short DIMENSION_UNBOUNDED = -1;
 
@@ -985,4 +986,5 @@ public abstract class MultiblockControllerBase
         }
     }
 
+    public abstract String getName();
 }

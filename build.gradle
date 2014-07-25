@@ -29,20 +29,15 @@ repositories {
         url "http://arca.drakon.io/"
     }
 
-    //ivy {
-    //    name 'CB FS'
-    //    artifactPattern "http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.6.4/[module]-dev%20[revision].[ext]"
-    //}
+    maven { // The repo from which to get waila
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
+    }
 
-    //maven { // The repo from which to get waila
-    //    name "Mobius Repo"
-    //    url "http://mobiusstrip.eu/maven"
-    //}
-
-    //maven { // the repo from which to get NEI and stuff
-    //    name 'CB Repo'
-    //    url "http://chickenbones.net/maven/"
-    //}
+    maven { // the repo from which to get NEI and stuff
+        name 'CB Repo'
+        url "http://chickenbones.net/maven/"
+    }
 }
 
 apply plugin: 'forge'
@@ -93,7 +88,7 @@ dependencies {
     //compile name: 'ForgeMultipart', version: "${config.minecraft_version}-${config.FMP_version}", ext: 'jar'
     //compile name: 'CodeChickenLib', version: "${config.minecraft_version}-${config.CCLIB_version}", ext: 'jar'
     //compile name: 'NotEnoughItems', version: "${config.NEI_version}", type: 'jar'
-    //compile "mcp.mobius.waila:Waila:1.5.2a"
+    compile "mcp.mobius.waila:Waila:1.5.3_1.7.10"
 }
 
 group = "io.endertech"
