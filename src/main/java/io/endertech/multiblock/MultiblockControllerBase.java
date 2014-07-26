@@ -1,6 +1,8 @@
 package io.endertech.multiblock;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import io.endertech.network.NetworkHandler;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
@@ -541,8 +543,20 @@ public abstract class MultiblockControllerBase
                     }
                 }
             }
+
+            this.sendUpdatePacketToClosePlayers();
         }
         // Else: Server, but no need to save data.
+    }
+
+    public void sendUpdatePacketToClosePlayers()
+    {
+        BlockCoord referenceCoord = this.getReferenceCoord();
+        TileEntity tileEntity = this.worldObj.getTileEntity(referenceCoord.x, referenceCoord.y, referenceCoord.z);
+        if (tileEntity != null && tileEntity instanceof MultiblockTileEntityBase)
+        {
+            NetworkHandler.INSTANCE.sendToAllAround(((MultiblockTileEntityBase) tileEntity).encodeMessage(), new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, referenceCoord.x, referenceCoord.y, referenceCoord.z, 256.0D));
+        }
     }
 
     /**

@@ -1,5 +1,6 @@
 package io.endertech.multiblock.controller;
 
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
@@ -8,25 +9,35 @@ import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.multiblock.rectangular.RectangularMultiblockControllerBase;
 import io.endertech.multiblock.tile.TileTankPart;
+import io.endertech.multiblock.tile.TileTankValve;
 import io.endertech.network.message.MessageTileUpdate;
 import io.endertech.util.LogHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import java.util.*;
 
 public class ControllerTank extends RectangularMultiblockControllerBase
 {
     protected boolean active;
     private Set<TileTankPart> attachedControllers;
+    private Set<TileTankValve> attachedValves;
     private int random_number = 0;
+    public FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 32);
+    private int ticksSinceUpdate = 0;
+    private static final String TANK_NAME = "MainTank";
 
     public ControllerTank(World world)
     {
         super(world);
         active = false;
         attachedControllers = new HashSet<TileTankPart>();
+        attachedValves = new HashSet<TileTankValve>();
     }
 
     public void setRandomNumber(int newRandomNumber)
@@ -65,6 +76,11 @@ public class ControllerTank extends RectangularMultiblockControllerBase
                 attachedControllers.add(tankPart);
             }
         }
+
+        if (newPart instanceof TileTankValve)
+        {
+            attachedValves.add((TileTankValve) newPart);
+        }
     }
 
     @Override
@@ -78,6 +94,11 @@ public class ControllerTank extends RectangularMultiblockControllerBase
                 attachedControllers.remove(tankPart);
             }
         }
+
+        if (oldPart instanceof TileTankValve)
+        {
+            attachedValves.remove((TileTankValve) oldPart);
+        }
     }
 
     @Override
@@ -86,6 +107,11 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         if (attachedControllers.size() != 1)
         {
             throw new MultiblockValidationException("You must have 1 controller in the tank structure (currently " + attachedControllers.size() + ")");
+        }
+
+        if (attachedValves.size() < 1)
+        {
+            throw new MultiblockValidationException("You must have at least 1 valve in the tank structure (currently " + attachedValves.size() + ")");
         }
 
         super.isMachineWhole();
@@ -175,6 +201,14 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     @Override
     protected boolean updateServer()
     {
+        if (ticksSinceUpdate > 20)
+        {
+            ticksSinceUpdate = 0;
+            this.tank.fill(new FluidStack(FluidRegistry.WATER, 1), true);
+            return true;
+        }
+
+        ticksSinceUpdate++;
         return false;
     }
 
@@ -186,13 +220,16 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     {
         data.setBoolean("tankActive", this.isActive());
         data.setInteger("randomNumber", this.random_number);
+        NBTTagCompound tankNBT = new NBTTagCompound();
+        tank.writeToNBT(tankNBT);
+        data.setTag(TANK_NAME, tankNBT);
 
         LogHelper.info("Writing tank to NBT: " + this.toString());
     }
 
     public String toString()
     {
-        return "R: " + this.getRandomNumber();
+        return "R: " + this.getRandomNumber() + " F: " + this.tank.getFluid().getFluid().getLocalizedName() + " " + this.tank.getFluidAmount() + "/" + this.tank.getCapacity();
     }
 
     @Override
@@ -208,19 +245,30 @@ public class ControllerTank extends RectangularMultiblockControllerBase
             this.setRandomNumber(data.getInteger("randomNumber"));
             LogHelper.info("Read random number from NBT: " + this.random_number);
         }
+
+        if (data.hasKey(TANK_NAME))
+        {
+            this.tank.readFromNBT(data.getCompoundTag(TANK_NAME));
+        }
     }
 
     public static class MessageTankUpdate extends MessageTileUpdate
     {
         public int random_number;
+        public NBTTagCompound tank;
 
         public MessageTankUpdate() { }
 
         public MessageTankUpdate(TileTankPart tileSaveDelegate)
         {
             super(tileSaveDelegate);
-            this.random_number = tileSaveDelegate.getTankController().random_number;
+            ControllerTank controller = tileSaveDelegate.getTankController();
+            this.random_number = controller.random_number;
             LogHelper.info("Packed random number in to message: " + this.random_number);
+
+            NBTTagCompound tank_tag = new NBTTagCompound();
+            controller.tank.writeToNBT(tank_tag);
+            this.tank = tank_tag;
         }
 
         @Override
@@ -228,6 +276,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         {
             super.fromBytes(buf);
             this.random_number = buf.readInt();
+            this.tank = ByteBufUtils.readTag(buf);
         }
 
         @Override
@@ -235,6 +284,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         {
             super.toBytes(buf);
             buf.writeInt(this.random_number);
+            ByteBufUtils.writeTag(buf, this.tank);
         }
     }
 
@@ -255,6 +305,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         if (message instanceof MessageTankUpdate)
         {
             this.random_number = ((MessageTankUpdate) message).random_number;
+            this.tank.readFromNBT(((MessageTankUpdate) message).tank);
             LogHelper.info("Reading tank from message: " + this.toString());
         }
     }
@@ -301,8 +352,35 @@ public class ControllerTank extends RectangularMultiblockControllerBase
             activeStatus += EnumChatFormatting.RED + "no" + EnumChatFormatting.RESET;
         }
 
+        String tankStatus = "Tank: ";
+
+        if (this.tank.getFluidAmount() > 0)
+        {
+            tankStatus += this.tank.getFluidAmount() + "/" + this.tank.getCapacity();
+        } else
+        {
+            tankStatus += " empty";
+        }
+
         List<String> additions = new ArrayList<String>();
         additions.add(activeStatus);
+        additions.add(tankStatus);
         return additions;
+    }
+
+    @Override
+    public boolean shouldConsume(MultiblockControllerBase otherController)
+    {
+        boolean shouldConsume = super.shouldConsume(otherController);
+        if (shouldConsume)
+        {
+            ControllerTank otherTank = (ControllerTank) otherController;
+            if (this.getRandomNumber() != 0 && otherTank.getRandomNumber() != 0)
+            {
+                LogHelper.warn("Warning: two tank structures with information in both were joined.");
+            }
+        }
+
+        return shouldConsume;
     }
 }

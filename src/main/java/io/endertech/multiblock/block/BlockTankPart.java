@@ -6,6 +6,7 @@ import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.multiblock.tile.TileTankPartBase;
+import io.endertech.multiblock.tile.TileTankValve;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
@@ -37,8 +38,14 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
     public static final int CONTROLLER_IDLE = 7;
     public static final int CONTROLLER_ACTIVE = 8;
 
+    public static final int VALVE_BASE = 9;
+    public static final int VALVE_IDLE = 10;
+    public static final int VALVE_ACTIVE = 11;
+
+
     public static ItemStack itemBlockTankFrame;
     public static ItemStack itemBlockTankController;
+    public static ItemStack itemBlockTankValve;
 
     public BlockTankPart()
     {
@@ -50,19 +57,24 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
     public void init()
     {
         TileTankPart.init();
+        TileTankValve.init();
 
         itemBlockTankFrame = new ItemStack(this, 1, FRAME_METADATA_BASE);
         itemBlockTankController = new ItemStack(this, 1, CONTROLLER_METADATA_BASE);
+        itemBlockTankValve = new ItemStack(this, 1, VALVE_BASE);
     }
 
     public static boolean isFrame(int metadata) { return metadata >= FRAME_METADATA_BASE && metadata < CONTROLLER_METADATA_BASE; }
 
-    public static boolean isController(int metadata) { return metadata >= CONTROLLER_METADATA_BASE && metadata < CONTROLLER_ACTIVE + 1; }
+    public static boolean isController(int metadata) { return metadata >= CONTROLLER_METADATA_BASE && metadata <= CONTROLLER_ACTIVE; }
+
+    public static boolean isValve(int metadata) { return metadata >= VALVE_BASE && metadata <= VALVE_ACTIVE; }
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
-        return new TileTankPart();
+        if (metadata >= VALVE_BASE && metadata <= VALVE_ACTIVE) return new TileTankValve();
+        else return new TileTankPart();
     }
 
     @Override
@@ -148,11 +160,14 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
         return new ItemStack(this, 1, CONTROLLER_METADATA_BASE);
     }
 
+    public ItemStack getTankValveItemStack() { return new ItemStack(this, 1, VALVE_BASE); }
+
     @Override
     public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List par3List)
     {
         par3List.add(getTankFrameItemStack());
         par3List.add(getTankControllerItemStack());
+        par3List.add(getTankValveItemStack());
     }
 
     @Override
@@ -181,6 +196,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
     {
         if (isFrame(meta)) return FRAME_METADATA_BASE;
         else if (isController(meta)) return CONTROLLER_METADATA_BASE;
+        else if (isValve(meta)) return VALVE_BASE;
 
         return FRAME_METADATA_BASE;
     }
