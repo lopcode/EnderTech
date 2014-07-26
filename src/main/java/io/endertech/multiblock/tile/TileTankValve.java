@@ -22,31 +22,31 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
     @Override
     public void isGoodForFrame() throws MultiblockValidationException
     {
-        throw new MultiblockValidationException("Tank valves cannot be used for tank frame (only the top, bottom and sides).");
+
     }
 
     @Override
     public void isGoodForSides() throws MultiblockValidationException
     {
-
+        throw new MultiblockValidationException("Tank valves cannot be used for tank sides (only the frame).");
     }
 
     @Override
     public void isGoodForTop() throws MultiblockValidationException
     {
-
+        throw new MultiblockValidationException("Tank valves cannot be used for tank top (only the frame).");
     }
 
     @Override
     public void isGoodForBottom() throws MultiblockValidationException
     {
-
+        throw new MultiblockValidationException("Tank valves cannot be used for tank bottom (only the frame).");
     }
 
     @Override
     public void isGoodForInterior() throws MultiblockValidationException
     {
-        throw new MultiblockValidationException("Tank valves cannot be used for tank interior (only the top, bottom and sides).");
+        throw new MultiblockValidationException("Tank valves cannot be used for tank interior.");
     }
 
     private boolean canInteractFromDirection(ForgeDirection from)
@@ -100,8 +100,7 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
     @Override
     public boolean canDrain(ForgeDirection from, Fluid fluid)
     {
-        if (!canInteractFromDirection(from)) { return false; }
-        return this.getTankController().tank.getFluidAmount() > 0;
+        return canInteractFromDirection(from);
     }
 
     @Override
