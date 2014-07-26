@@ -1,8 +1,13 @@
 package io.endertech.multiblock.tile;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.multiblock.MultiblockValidationException;
+import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.reference.Strings;
+import io.endertech.util.BlockCoord;
+import net.minecraft.util.AxisAlignedBB;
 
 public class TileTankController extends TileTankPart
 {
@@ -51,5 +56,20 @@ public class TileTankController extends TileTankPart
     public void onMachineDeactivated()
     {
 
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox()
+    {
+        if (!this.isConnected()) return super.getRenderBoundingBox();
+        else
+        {
+            ControllerTank controller = this.getTankController();
+            BlockCoord min = controller.getMinimumCoord();
+            BlockCoord max = controller.getMaximumCoord();
+
+            return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+        }
     }
 }
