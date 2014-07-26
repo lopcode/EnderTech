@@ -16,10 +16,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.*;
 import java.util.*;
 
 public class ControllerTank extends RectangularMultiblockControllerBase
@@ -229,7 +226,20 @@ public class ControllerTank extends RectangularMultiblockControllerBase
 
     public String toString()
     {
-        return "R: " + this.getRandomNumber() + " F: " + this.tank.getFluid().getFluid().getLocalizedName() + " " + this.tank.getFluidAmount() + "/" + this.tank.getCapacity();
+        return "R: " + this.getRandomNumber() + " F: " + getFluidStringOrNone(this.tank.getFluid()) + " " + this.tank.getFluidAmount() + "/" + this.tank.getCapacity();
+    }
+
+    private String getFluidStringOrNone(FluidStack fluid)
+    {
+        if (fluid == null) return "none";
+        else return getFluidStringOrNone(fluid.getFluid());
+    }
+
+
+    private String getFluidStringOrNone(Fluid fluid)
+    {
+        if (fluid == null) return "none";
+        else return fluid.getLocalizedName();
     }
 
     @Override
