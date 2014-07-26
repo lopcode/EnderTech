@@ -9,6 +9,7 @@ import cpw.mods.fml.relauncher.Side;
 import io.endertech.block.ETBlocks;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockValidationException;
+import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.network.NetworkHandler;
@@ -16,6 +17,7 @@ import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.LogHelper;
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IMessageHandler<ControllerTank.MessageTankUpdate, IMessage>
@@ -75,12 +77,12 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IM
     {
         if (this.worldObj.isRemote) { return; }
 
-        if (getBlockType() == ETBlocks.blockTankPart)
+        if (getBlockType() == ETBlocks.blockTankController)
         {
             int metadata = this.getBlockMetadata();
-            if (BlockTankPart.isController(metadata))
+            if (BlockTankController.isController(metadata))
             {
-                this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankPart.CONTROLLER_ACTIVE, 2);
+                this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankController.CONTROLLER_ACTIVE, 2);
             }
         }
     }
@@ -93,9 +95,9 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IM
         if (getBlockType() == ETBlocks.blockTankPart)
         {
             int metadata = this.getBlockMetadata();
-            if (BlockTankPart.isController(metadata))
+            if (BlockTankController.isController(metadata))
             {
-                this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankPart.CONTROLLER_IDLE, 2);
+                this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankController.CONTROLLER_IDLE, 2);
             }
         }
     }
@@ -117,21 +119,25 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IM
             this.onAttached(multiblockController);
         }
 
-        if (getBlockType() == ETBlocks.blockTankPart)
+        int metadata = this.getBlockMetadata();
+        Block blockType = this.getBlockType();
+        if (blockType == ETBlocks.blockTankPart)
         {
-            int metadata = this.getBlockMetadata();
             if (BlockTankPart.isFrame(metadata))
             {
                 this.setCasingMetadataBasedOnWorldPosition();
-            } else if (BlockTankPart.isController(metadata))
+            }
+        } else if (blockType == ETBlocks.blockTankController)
+        {
+            if (BlockTankController.isController(metadata))
             {
                 // This is called during world loading as well, so controllers can start active.
                 if (!this.getTankController().isActive())
                 {
-                    this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankPart.CONTROLLER_IDLE, 2);
+                    this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankController.CONTROLLER_IDLE, 2);
                 } else
                 {
-                    this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankPart.CONTROLLER_ACTIVE, 2);
+                    this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankController.CONTROLLER_ACTIVE, 2);
                 }
             }
         }
@@ -150,9 +156,12 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IM
             if (BlockTankPart.isFrame(metadata))
             {
                 this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankPart.FRAME_METADATA_BASE, 2);
-            } else if (BlockTankPart.isController(metadata))
+            } else if (blockType == ETBlocks.blockTankController)
             {
-                this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankPart.CONTROLLER_METADATA_BASE, 2);
+                if (BlockTankController.isController(metadata))
+                {
+                    this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankController.CONTROLLER_METADATA_BASE, 2);
+                }
             }
         }
     }

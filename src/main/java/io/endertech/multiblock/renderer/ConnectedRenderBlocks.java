@@ -107,6 +107,7 @@ public class ConnectedRenderBlocks extends RenderBlocks
         {
             renderSideFace(icon, ConnectedTextureIcon.RIGHT, x, y, z, side);
         }
+
         // Potential for corners:
         //  eg connected top+left = render top left corner
 

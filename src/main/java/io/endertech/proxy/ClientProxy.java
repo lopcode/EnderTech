@@ -8,6 +8,8 @@ import io.endertech.client.handler.KeyBindingHandler;
 import io.endertech.client.renderer.SpinningCubeRenderer;
 import io.endertech.multiblock.handler.MultiblockClientTickHandler;
 import io.endertech.multiblock.renderer.ConnectedTextureRenderer;
+import io.endertech.multiblock.renderer.TankControllerRenderer;
+import io.endertech.multiblock.tile.TileTankController;
 import io.endertech.tile.TileSpinningCube;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -28,6 +30,7 @@ public class ClientProxy extends CommonProxy
     public void registerTESRs()
     {
         ClientRegistry.bindTileEntitySpecialRenderer(TileSpinningCube.class, new SpinningCubeRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileTankController.class, new TankControllerRenderer());
     }
 
     @Override

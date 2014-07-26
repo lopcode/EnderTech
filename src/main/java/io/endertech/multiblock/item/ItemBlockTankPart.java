@@ -27,8 +27,7 @@ public class ItemBlockTankPart extends ItemBlockBasic
         int damage = itemstack.getItemDamage();
 
         if (BlockTankPart.isFrame(damage)) meta = 0;
-        else if (BlockTankPart.isController(damage)) meta = 1;
-        else if (BlockTankPart.isValve(damage)) meta = 2;
+        else if (BlockTankPart.isValve(damage)) meta = 1;
 
         return ETBlocks.blockTankPart.getUnlocalizedName() + "." + meta;
     }

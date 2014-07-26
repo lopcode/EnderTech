@@ -2,6 +2,7 @@ package io.endertech.block;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.multiblock.block.BlockMultiblockGlass;
+import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.multiblock.item.ItemBlockTankPart;
 import io.endertech.reference.Strings;
@@ -13,6 +14,7 @@ public class ETBlocks
     public static Block blockSpinningCube;
     public static Block blockChargedPlane;
     public static Block blockTankPart;
+    public static Block blockTankController;
     public static Block blockMultiblockGlass;
 
     public static void init()
@@ -22,17 +24,20 @@ public class ETBlocks
         blockChargedPlane = new BlockChargedPlane();
         blockTankPart = new BlockTankPart();
         blockMultiblockGlass = new BlockMultiblockGlass();
+        blockTankController = new BlockTankController();
 
         GameRegistry.registerBlock(blockTank, ItemBlockBasic.class, Strings.TANK_NAME);
         GameRegistry.registerBlock(blockSpinningCube, ItemBlockBasic.class, Strings.Blocks.SPINNING_CUBE_NAME);
         GameRegistry.registerBlock(blockChargedPlane, ItemBlockBasic.class, Strings.Blocks.CHARGED_PLANE_NAME);
         GameRegistry.registerBlock(blockTankPart, ItemBlockTankPart.class, Strings.Blocks.TANK_PART_NAME);
         GameRegistry.registerBlock(blockMultiblockGlass, ItemBlockBasic.class, Strings.Blocks.MULTIBLOCK_GLASS_NAME);
+        GameRegistry.registerBlock(blockTankController, ItemBlockBasic.class, Strings.Blocks.TANK_CONTROLLER_NAME);
 
         ((BlockTank) blockTank).init();
         ((BlockSpinningCube) blockSpinningCube).init();
         ((BlockChargedPlane) blockChargedPlane).init();
         ((BlockTankPart) blockTankPart).init();
         ((BlockMultiblockGlass) blockMultiblockGlass).init();
+        ((BlockTankController) blockTankController).init();
     }
 }

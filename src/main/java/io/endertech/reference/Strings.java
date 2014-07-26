@@ -23,5 +23,6 @@ public class Strings
         public static final String TANK_PART_NAME = "endertech.enderTankPart";
         public static final String MULTIBLOCK_GLASS_NAME = "endertech.multiblockGlass";
         public static final String TANK_VALVE_NAME = "endertech.enderTankValve";
+        public static final String TANK_CONTROLLER_NAME = "endertech.enderTankController";
     }
 }

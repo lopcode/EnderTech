@@ -6,8 +6,9 @@ import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockTileEntityBase;
 import io.endertech.multiblock.MultiblockValidationException;
-import io.endertech.multiblock.block.BlockTankPart;
+import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.rectangular.RectangularMultiblockControllerBase;
+import io.endertech.multiblock.tile.TileTankController;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.multiblock.tile.TileTankValve;
 import io.endertech.network.message.MessageTileUpdate;
@@ -65,10 +66,10 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     @Override
     protected void onBlockAdded(IMultiblockPart newPart)
     {
-        if (newPart instanceof TileTankPart)
+        if (newPart instanceof TileTankController)
         {
             TileTankPart tankPart = (TileTankPart) newPart;
-            if (BlockTankPart.isController(tankPart.getBlockMetadata()))
+            if (BlockTankController.isController(tankPart.getBlockMetadata()))
             {
                 attachedControllers.add(tankPart);
             }
@@ -83,10 +84,10 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     @Override
     protected void onBlockRemoved(IMultiblockPart oldPart)
     {
-        if (oldPart instanceof TileTankPart)
+        if (oldPart instanceof TileTankController)
         {
             TileTankPart tankPart = (TileTankPart) oldPart;
-            if (BlockTankPart.isController(tankPart.getBlockMetadata()))
+            if (BlockTankController.isController(tankPart.getBlockMetadata()))
             {
                 attachedControllers.remove(tankPart);
             }
@@ -226,7 +227,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
 
     public String toString()
     {
-        return "R: " + this.getRandomNumber() + " F: " + getFluidStringOrNone(this.tank.getFluid()) + " " + this.tank.getFluidAmount() + "/" + this.tank.getCapacity();
+        return "R: " + this.getRandomNumber() + " A: " + this.active + " F: " + getFluidStringOrNone(this.tank.getFluid()) + " " + this.tank.getFluidAmount() + "/" + this.tank.getCapacity() + " Cs: " + this.attachedControllers.size() + " Vs: " + this.attachedValves.size();
     }
 
     private String getFluidStringOrNone(FluidStack fluid)
