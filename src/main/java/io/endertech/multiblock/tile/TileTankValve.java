@@ -1,6 +1,8 @@
 package io.endertech.multiblock.tile;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import io.endertech.block.ETBlocks;
+import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.reference.Strings;
@@ -49,7 +51,7 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
 
     private boolean canInteractFromDirection(ForgeDirection from)
     {
-        return (isConnected() && from != getOutwardsDir());
+        return (isConnected() && this.getTankController().isAssembled() && from == getOutwardsDir());
     }
 
     @Override
@@ -107,5 +109,23 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
     {
         if (!canInteractFromDirection(from)) { return null; }
         return new FluidTankInfo[] {this.getTankController().tank.getInfo()};
+    }
+
+    @Override
+    public void onMachineAssembled(MultiblockControllerBase controllerBase)
+    {
+        super.onMachineAssembled(controllerBase);
+
+        ForgeDirection out = this.getOutwardsDir();
+        worldObj.notifyBlockOfNeighborChange(xCoord + out.offsetX, yCoord + out.offsetY, zCoord + out.offsetZ, ETBlocks.blockTankPart);
+    }
+
+    @Override
+    public void onMachineBroken()
+    {
+        super.onMachineBroken();
+
+        ForgeDirection out = this.getOutwardsDir();
+        worldObj.notifyBlockOfNeighborChange(xCoord + out.offsetX, yCoord + out.offsetY, zCoord + out.offsetZ, ETBlocks.blockTankPart);
     }
 }
