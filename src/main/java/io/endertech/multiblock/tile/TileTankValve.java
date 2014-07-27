@@ -11,6 +11,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import java.util.Set;
 
 public class TileTankValve extends TileTankPart implements IFluidHandler
 {
@@ -51,7 +52,7 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
 
     private boolean canInteractFromDirection(ForgeDirection from)
     {
-        return (isConnected() && this.getTankController().isAssembled() && from == getOutwardsDir());
+        return (isConnected() && this.getTankController().isAssembled() && getOutwardsDir().contains(from));
     }
 
     @Override
@@ -115,8 +116,9 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
     {
         super.onMachineAssembled(controllerBase);
 
-        ForgeDirection out = this.getOutwardsDir();
-        worldObj.notifyBlockOfNeighborChange(xCoord + out.offsetX, yCoord + out.offsetY, zCoord + out.offsetZ, ETBlocks.blockTankPart);
+        Set<ForgeDirection> outs = this.getOutwardsDir();
+        for (ForgeDirection out : outs)
+            worldObj.notifyBlockOfNeighborChange(xCoord + out.offsetX, yCoord + out.offsetY, zCoord + out.offsetZ, ETBlocks.blockTankPart);
     }
 
     @Override
@@ -124,7 +126,8 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
     {
         super.onMachineBroken();
 
-        ForgeDirection out = this.getOutwardsDir();
-        worldObj.notifyBlockOfNeighborChange(xCoord + out.offsetX, yCoord + out.offsetY, zCoord + out.offsetZ, ETBlocks.blockTankPart);
+        Set<ForgeDirection> outs = this.getOutwardsDir();
+        for (ForgeDirection out : outs)
+            worldObj.notifyBlockOfNeighborChange(xCoord + out.offsetX, yCoord + out.offsetY, zCoord + out.offsetZ, ETBlocks.blockTankPart);
     }
 }

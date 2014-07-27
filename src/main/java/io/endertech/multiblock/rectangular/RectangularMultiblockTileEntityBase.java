@@ -5,22 +5,24 @@ import io.endertech.multiblock.MultiblockTileEntityBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.util.BlockCoord;
 import net.minecraftforge.common.util.ForgeDirection;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class RectangularMultiblockTileEntityBase extends MultiblockTileEntityBase
 {
     PartPosition position;
-    ForgeDirection outwards;
+    Set<ForgeDirection> outwards;
 
     public RectangularMultiblockTileEntityBase()
     {
         super();
 
         position = PartPosition.Unknown;
-        outwards = ForgeDirection.UNKNOWN;
+        outwards = new HashSet<ForgeDirection>();
     }
 
     // Positional Data
-    public ForgeDirection getOutwardsDir()
+    public Set<ForgeDirection> getOutwardsDir()
     {
         return outwards;
     }
@@ -53,52 +55,95 @@ public abstract class RectangularMultiblockTileEntityBase extends MultiblockTile
     public void onMachineBroken()
     {
         position = PartPosition.Unknown;
-        outwards = ForgeDirection.UNKNOWN;
+        outwards = new HashSet<ForgeDirection>();
+    }
+
+    private boolean isOnBottomFace(BlockCoord minCoord, BlockCoord coord)
+    {
+        return minCoord.y == coord.y;
+    }
+
+    private boolean isOnTopFace(BlockCoord maxCoord, BlockCoord coord)
+    {
+        return maxCoord.y == coord.y;
+    }
+
+    private boolean isOnWestFace(BlockCoord minCoord, BlockCoord coord)
+    {
+        return minCoord.x == coord.x;
+    }
+
+    private boolean isOnEastFace(BlockCoord maxCoord, BlockCoord coord)
+    {
+        return maxCoord.x == coord.x;
+    }
+
+    private boolean isOnFrontFace(BlockCoord minCoord, BlockCoord coord)
+    {
+        return minCoord.z == coord.z;
+    }
+
+    private boolean isOnBackFace(BlockCoord maxCoord, BlockCoord coord)
+    {
+        return maxCoord.z == coord.z;
     }
 
     // Positional helpers
     public void recalculateOutwardsDirection(BlockCoord minCoord, BlockCoord maxCoord)
     {
-        outwards = ForgeDirection.UNKNOWN;
         position = PartPosition.Unknown;
 
-        int facesMatching = 0;
-        if (maxCoord.x == this.xCoord || minCoord.x == this.xCoord) { facesMatching++; }
-        if (maxCoord.y == this.yCoord || minCoord.y == this.yCoord) { facesMatching++; }
-        if (maxCoord.z == this.zCoord || minCoord.z == this.zCoord) { facesMatching++; }
+        BlockCoord coord = new BlockCoord(this.xCoord, this.yCoord, this.zCoord);
 
-        if (facesMatching <= 0) { position = PartPosition.Interior; } else if (facesMatching >= 3)
+        int facesMatching = 0;
+        if (maxCoord.x == coord.x || minCoord.x == coord.x) { facesMatching++; }
+        if (maxCoord.y == coord.y || minCoord.y == coord.y) { facesMatching++; }
+        if (maxCoord.z == coord.z || minCoord.z == coord.z) { facesMatching++; }
+
+        if (facesMatching <= 0)
+        {
+            position = PartPosition.Interior;
+        } else if (facesMatching >= 3)
         {
             position = PartPosition.FrameCorner;
-        } else if (facesMatching == 2) { position = PartPosition.Frame; } else
+        } else if (facesMatching == 2)
+        {
+            position = PartPosition.Frame;
+        } else
         {
             // 1 face matches
             if (maxCoord.x == this.xCoord)
             {
                 position = PartPosition.EastFace;
-                outwards = ForgeDirection.EAST;
             } else if (minCoord.x == this.xCoord)
             {
                 position = PartPosition.WestFace;
-                outwards = ForgeDirection.WEST;
             } else if (maxCoord.z == this.zCoord)
             {
                 position = PartPosition.SouthFace;
-                outwards = ForgeDirection.SOUTH;
             } else if (minCoord.z == this.zCoord)
             {
                 position = PartPosition.NorthFace;
-                outwards = ForgeDirection.NORTH;
             } else if (maxCoord.y == this.yCoord)
             {
                 position = PartPosition.TopFace;
-                outwards = ForgeDirection.UP;
             } else
             {
                 position = PartPosition.BottomFace;
-                outwards = ForgeDirection.DOWN;
             }
         }
+
+        if (isOnTopFace(maxCoord, coord)) outwards.add(ForgeDirection.UP);
+
+        if (isOnBottomFace(minCoord, coord)) outwards.add(ForgeDirection.DOWN);
+
+        if (isOnEastFace(maxCoord, coord)) outwards.add(ForgeDirection.EAST);
+
+        if (isOnWestFace(minCoord, coord)) outwards.add(ForgeDirection.WEST);
+
+        if (isOnFrontFace(maxCoord, coord)) outwards.add(ForgeDirection.SOUTH);
+
+        if (isOnBackFace(minCoord, coord)) outwards.add(ForgeDirection.NORTH);
     }
 
     ///// Validation Helpers (IMultiblockPart)
