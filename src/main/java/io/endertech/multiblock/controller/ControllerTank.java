@@ -30,6 +30,8 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     private Set<TileTankValve> attachedValves;
     private int random_number = 0;
     public FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 32);
+    public FluidTank lastTank = null;
+    public int renderAddition = 0;
     private int ticksSinceUpdate = 0;
     private static final String TANK_NAME = "MainTank";
 
@@ -318,6 +320,8 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         if (message instanceof MessageTankUpdate)
         {
             this.random_number = ((MessageTankUpdate) message).random_number;
+            this.lastTank = new FluidTank(this.tank.getFluid(), this.tank.getCapacity());
+            this.renderAddition = 0;
             this.tank.readFromNBT(((MessageTankUpdate) message).tank);
             LogHelper.info("Reading tank from message: " + this.toString());
         }
