@@ -17,7 +17,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import java.util.*;
 
 public class ControllerTank extends RectangularMultiblockControllerBase
@@ -202,7 +205,6 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         if (ticksSinceUpdate > 20)
         {
             ticksSinceUpdate = 0;
-            this.tank.fill(new FluidStack(FluidRegistry.WATER, 1), true);
             return true;
         }
 
@@ -365,12 +367,12 @@ public class ControllerTank extends RectangularMultiblockControllerBase
 
         String tankStatus = "Tank: ";
 
-        if (this.tank.getFluidAmount() > 0)
+        if (this.tank.getFluid() != null && this.tank.getFluidAmount() > 0)
         {
             tankStatus += this.tank.getFluidAmount() + "/" + this.tank.getCapacity();
         } else
         {
-            tankStatus += " empty";
+            tankStatus += "empty";
         }
 
         List<String> additions = new ArrayList<String>();
