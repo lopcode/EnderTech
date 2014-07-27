@@ -2,6 +2,7 @@ package io.endertech.multiblock.controller;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import io.endertech.config.GeneralConfig;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockTileEntityBase;
@@ -12,6 +13,7 @@ import io.endertech.multiblock.tile.TileTankController;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.multiblock.tile.TileTankValve;
 import io.endertech.network.message.MessageTileUpdate;
+import io.endertech.util.BlockCoord;
 import io.endertech.util.LogHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,8 +31,8 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     private Set<TileTankPart> attachedControllers;
     private Set<TileTankValve> attachedValves;
     private int random_number = 0;
-    public FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 32);
-    public FluidTank lastTank = null;
+    public FluidTank tank;
+    public FluidTank lastTank;
     public int renderAddition = 0;
     private int ticksSinceUpdate = 0;
     private static final String TANK_NAME = "MainTank";
@@ -41,6 +43,8 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         active = false;
         attachedControllers = new HashSet<TileTankPart>();
         attachedValves = new HashSet<TileTankValve>();
+        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * GeneralConfig.tankStorageMultiplier);
+        lastTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * GeneralConfig.tankStorageMultiplier);
     }
 
     public void setRandomNumber(int newRandomNumber)
@@ -125,6 +129,16 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     {
         if (this.getRandomNumber() == 0) setRandomNumber(new Random().nextInt(1000000));
         LogHelper.info("Tank assembled with R: " + this.random_number + "!");
+
+        BlockCoord minCoord = this.getMinimumCoord();
+        BlockCoord maxCoord = this.getMaximumCoord();
+        BlockCoord dimensionCoord = new BlockCoord(maxCoord.x - minCoord.x - 1, maxCoord.y - minCoord.y - 1, maxCoord.z - minCoord.z - 1);
+
+        int interiorSize = dimensionCoord.x * dimensionCoord.y * dimensionCoord.z;
+        int tankCapacity = interiorSize * FluidContainerRegistry.BUCKET_VOLUME * GeneralConfig.tankStorageMultiplier;
+        this.tank.setCapacity(tankCapacity);
+
+        if (this.lastTank != null) this.lastTank.setCapacity(tankCapacity);
     }
 
     @Override
