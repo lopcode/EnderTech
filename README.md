@@ -1,13 +1,23 @@
 #EnderTech
 
 ##Introduction
-This is my first foray in to Minecraft modding. It's intended to be a tech themed mod, starting at around Thermal Expansion's end-game, and as such will contain tech (and likely Ender) themed things that make my own personal game more fun. At the time of writing there's a fully functional item called the 'Exchanger' - for swapping blocks from your inventory with blocks in the world, inspired by Thaumcraft's ``Wand of Equal Trade'', but using a decent amount of RF and with a lot of modified behaviour.
+This is my first foray in to Minecraft modding. It's intended to be a tech and Ender themed mod, starting at around Thermal Expansion's end-game. It will contain powerful, relatively expensive mechanics, with some configurability. The defaults will maintain a balance that makes my own game more fun.
 
-I don't promise to finish it, or keep it stable, and I'm not interested in formal feature requests, but feel free to suggest things to me in #MultiMC on Esper anyway. I've opened the repository up because other open source projects are proving extremely helpful in learning my way around Forge. If it did become popular, or get included in a larger modpack, I'll commit to something more formal to make things better for users and modpack makers.
+It's in development so only use it in a world you don't care about. If it becomes popular, or gets included in a larger modpack, I'll commit to some more formal processes to make things better for users and modpack makers.
 
-There are no textures (or I've used debug textures) whilst I figure out what sort of aesthetic I want, get a design document sorted, and bribe a texture artist with false claims of fame and fortune.
+Go to #EnderTech on Esper if you have any questions, concerns, or just want to shout at me for doing something wrong. 
 
-If you spot that I'm doing something particularly heinous, it's because I don't know any better. Tell me on IRC (Esper/#MultiMC)!
+## Progress
+Things that are mostly done:
+* Exchanger,
+* Tank infrastructure.
+
+Things that are in progress:
+* Tank energy usage,
+* Ender/Charged Ender creation and management,
+* Teleportation infrastructure,
+* Textures,
+* Recipes.
 
 ##License and terms
 Things I want you to do:
