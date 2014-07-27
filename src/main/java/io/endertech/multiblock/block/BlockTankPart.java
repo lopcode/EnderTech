@@ -1,5 +1,7 @@
 package io.endertech.multiblock.block;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
@@ -11,12 +13,14 @@ import io.endertech.reference.Strings;
 import io.endertech.util.*;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -33,20 +37,25 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
     public static final int FRAME_EASTWEST = 4;
     public static final int FRAME_NORTHSOUTH = 5;
 
-    public static final int VALVE_BASE = 9;
-    public static final int VALVE_IDLE = 10;
-    public static final int VALVE_ACTIVE = 11;
+    public static final int VALVE_BASE = 6;
+    public static final int VALVE_IDLE = 7;
+    public static final int VALVE_ACTIVE = 8;
 
+    private static final String TEXTURE_BASE = "endertech:enderTankPart";
 
     public static ItemStack itemBlockTankFrame;
-
     public static ItemStack itemBlockTankValve;
+
+    private static String[] _subBlocks = new String[] {"frameDefault", "frameCorner", "frameCenter", "frameVertical", "frameEastWest", "frameNorthSouth", "valve"};
+
+    private IIcon[] _icons = new IIcon[_subBlocks.length];
 
     public BlockTankPart()
     {
         super(Material.iron);
         this.setCreativeTab(EnderTech.tabET);
         this.setBlockName(Strings.Blocks.TANK_PART_NAME);
+        this.setBlockTextureName(TEXTURE_BASE);
     }
 
     public void init()
@@ -199,5 +208,74 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
         }
 
         return true;
+    }
+
+    @Override
+    public IIcon getIcon(int side, int metadata)
+    {
+        // Casing block
+        switch (metadata)
+        {
+            case FRAME_METADATA_BASE:
+            case FRAME_CORNER:
+            case FRAME_CENTER:
+                return _icons[metadata];
+
+            case FRAME_VERTICAL:
+                // Vertical block
+                if (side == 0 || side == 1)
+                {
+                    return _icons[FRAME_METADATA_BASE];
+                } else
+                {
+                    return _icons[metadata];
+                }
+            case FRAME_EASTWEST:
+                // X-aligned block (e/w)
+                if (side == 4 || side == 5)
+                {
+                    return _icons[FRAME_METADATA_BASE];
+                } else
+                {
+                    return _icons[metadata];
+                }
+            case FRAME_NORTHSOUTH:
+                // Z-aligned block (n/s)
+                if (side == 2 || side == 3)
+                {
+                    return _icons[FRAME_METADATA_BASE];
+                } else if (side == 4 || side == 5)
+                {
+                    // I hate everything
+                    return _icons[FRAME_EASTWEST];
+                } else
+                {
+                    return _icons[metadata];
+                }
+            case VALVE_BASE:
+                return _icons[VALVE_BASE];
+
+            default:
+                if (side == 0 || side == 1)
+                {
+                    return _icons[FRAME_METADATA_BASE];
+                } else
+                {
+                    metadata = Math.max(0, Math.min(5, metadata));
+                    return _icons[metadata];
+                }
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister iconRegister)
+    {
+        this.blockIcon = iconRegister.registerIcon(TEXTURE_BASE);
+
+        for (int i = 0; i < _subBlocks.length; ++i)
+        {
+            _icons[i] = iconRegister.registerIcon(TEXTURE_BASE + "." + _subBlocks[i]);
+        }
     }
 }
