@@ -154,7 +154,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     @Override
     protected int getMaximumXSize()
     {
-        return 5;
+        return 8;
     }
 
     @Override
@@ -163,7 +163,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     @Override
     protected int getMaximumZSize()
     {
-        return 5;
+        return 8;
     }
 
     @Override
