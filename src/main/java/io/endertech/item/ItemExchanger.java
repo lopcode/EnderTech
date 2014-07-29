@@ -3,8 +3,10 @@ package io.endertech.item;
 import io.endertech.config.ItemConfig;
 import io.endertech.handler.WorldEventHandler;
 import io.endertech.util.*;
+import io.endertech.util.teleport.TeleportHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
@@ -150,6 +152,7 @@ public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler,
         if ((pb != null) && (player.worldObj.getTileEntity(x, y, z) == null) && !player.worldObj.isRemote)
         {
             WorldEventHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), this.getTargetRadius(itemstack), player.worldObj.getBlock(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb, player, player.inventory.currentItem);
+            TeleportHelper.teleportPlayerToDimensionWithCoords((EntityPlayerMP) player, player.dimension, player.posX, player.posY + 10, player.posZ);
         }
 
         return true;

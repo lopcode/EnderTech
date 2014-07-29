@@ -82,6 +82,8 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer
         TileTankController tank = (TileTankController) tile;
 
         ControllerTank controller = tank.getTankController();
+        if (controller == null) return;
+
         BlockCoord min = controller.getMinimumCoord();
         BlockCoord max = controller.getMaximumCoord();
 
