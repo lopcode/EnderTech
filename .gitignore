@@ -17,3 +17,6 @@ keystore/*
 
 # Decomp
 decomp/*
+
+libs/*.jar
+*~

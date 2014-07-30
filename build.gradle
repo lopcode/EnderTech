@@ -89,6 +89,14 @@ dependencies {
     //compile name: 'CodeChickenLib', version: "${config.minecraft_version}-${config.CCLIB_version}", ext: 'jar'
     //compile name: 'NotEnoughItems', version: "${config.NEI_version}", type: 'jar'
     compile "mcp.mobius.waila:Waila:1.5.3_1.7.10"
+
+    // Dependencies that do not provide an easy way to grab them with Gradle must be included manually
+    // List of shame:
+    //  CoFHLib
+    //  CoFHCore
+    //  Thermal Foundation
+    //  Thermal Expansion
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 group = "io.endertech"

@@ -28,7 +28,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import java.io.File;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, certificateFingerprint = Reference.FINGERPRINT, dependencies = "after:ThermalExpansion@[3.0.0.2,)")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, certificateFingerprint = Reference.FINGERPRINT, dependencies = "after:ThermalExpansion@[1.7.10R4.0.0B1,)")
 public class EnderTech
 {
     @SuppressWarnings("unused")

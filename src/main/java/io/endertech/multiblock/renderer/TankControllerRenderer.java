@@ -89,8 +89,6 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer
 
         if (controller != null && controller.isAssembled() && min != null && controller.tank.getFluid() != null)
         {
-            GL11.glPushMatrix();
-
             BlockCoord rMin = new BlockCoord(tile.xCoord - min.x, tile.yCoord - min.y, tile.zCoord - min.z);
             GL11.glTranslated(x + 0.5 - rMin.x + 1, y + 0.5 - rMin.y + 1, z + 0.5 - rMin.z + 1);
 
@@ -129,13 +127,18 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer
                 levelAmounts[level] = levelAmount;
             }
 
+            final Fluid fluid = controller.tank.getFluid().getFluid();
+            final IIcon texture = fluid.getStillIcon();
+            if (texture == null)
+                return;
+
+            GL11.glPushMatrix();
+
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GL11.glColor3f(1, 1, 1);
 
-            final Fluid fluid = controller.tank.getFluid().getFluid();
-            final IIcon texture = fluid.getStillIcon();
             final int colour = fluid.getColor(new FluidStack(fluid, 1));
 
             bindTexture(getFluidSheet(fluid));
