@@ -90,7 +90,6 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer
         if (controller != null && controller.isAssembled() && min != null && controller.tank.getFluid() != null)
         {
             BlockCoord rMin = new BlockCoord(tile.xCoord - min.x, tile.yCoord - min.y, tile.zCoord - min.z);
-            GL11.glTranslated(x + 0.5 - rMin.x + 1, y + 0.5 - rMin.y + 1, z + 0.5 - rMin.z + 1);
 
             double diff = controller.tank.getFluidAmount() - controller.lastTank.getFluidAmount();
             double ratio = (diff - controller.renderAddition) / diff;
@@ -133,6 +132,8 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer
                 return;
 
             GL11.glPushMatrix();
+
+            GL11.glTranslated(x + 0.5 - rMin.x + 1, y + 0.5 - rMin.y + 1, z + 0.5 - rMin.z + 1);
 
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glEnable(GL11.GL_BLEND);
