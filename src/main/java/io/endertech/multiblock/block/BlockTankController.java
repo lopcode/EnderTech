@@ -33,6 +33,8 @@ public class BlockTankController extends BlockContainer implements IOutlineDrawe
     public BlockTankController()
     {
         super(Material.iron);
+        setHardness(10.0f);
+        setResistance(20.0f);
         this.setCreativeTab(EnderTech.tabET);
         this.setBlockName(Strings.Blocks.TANK_CONTROLLER_NAME);
     }

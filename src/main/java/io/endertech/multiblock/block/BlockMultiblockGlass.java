@@ -36,7 +36,8 @@ public class BlockMultiblockGlass extends BlockContainer implements IOutlineDraw
         super(Material.glass);
 
         setStepSound(soundTypeGlass);
-        setHardness(2.0f);
+        setHardness(10.0f);
+        setResistance(20.0f);
         setBlockName("multiblockGlass");
         this.setBlockTextureName(TEXTURE_BASE);
         setCreativeTab(EnderTech.tabET);

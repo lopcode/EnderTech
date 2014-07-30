@@ -53,6 +53,8 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
     public BlockTankPart()
     {
         super(Material.iron);
+        setHardness(10.0f);
+        setResistance(20.0f);
         this.setCreativeTab(EnderTech.tabET);
         this.setBlockName(Strings.Blocks.TANK_PART_NAME);
         this.setBlockTextureName(TEXTURE_BASE);
