@@ -1,5 +1,7 @@
 package io.endertech.multiblock.block;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
 import io.endertech.multiblock.tile.TileTankController;
 import io.endertech.multiblock.tile.TileTankPartBase;
@@ -10,6 +12,7 @@ import io.endertech.util.RGBA;
 import io.endertech.util.RenderHelper;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,7 +20,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.fluids.FluidRegistry;
 import java.util.List;
 
 public class BlockTankController extends BlockContainer implements IOutlineDrawer
@@ -27,6 +29,12 @@ public class BlockTankController extends BlockContainer implements IOutlineDrawe
     public static final int CONTROLLER_ACTIVE = 2;
 
     public static ItemStack itemBlockTankController;
+
+    private static final String TEXTURE_BASE = "endertech:enderTankController";
+
+    private static String[] _subBlocks = new String[] {"controllerBase", "controllerIdle", "controllerActive"};
+
+    private IIcon[] _icons = new IIcon[_subBlocks.length];
 
     public static boolean isController(int metadata) { return metadata >= CONTROLLER_METADATA_BASE && metadata <= CONTROLLER_ACTIVE; }
 
@@ -105,8 +113,20 @@ public class BlockTankController extends BlockContainer implements IOutlineDrawe
     }
 
     @Override
-    public IIcon getIcon(int side, int meta)
+    public IIcon getIcon(int side, int metadata)
     {
-        return FluidRegistry.LAVA.getStillIcon();
+        return _icons[metadata];
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister iconRegister)
+    {
+        this.blockIcon = iconRegister.registerIcon(TEXTURE_BASE);
+
+        for (int i = 0; i < _subBlocks.length; ++i)
+        {
+            _icons[i] = iconRegister.registerIcon(TEXTURE_BASE + "." + _subBlocks[i]);
+        }
     }
 }

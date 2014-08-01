@@ -1,10 +1,10 @@
 package io.endertech.multiblock.renderer;
 
+import cofh.render.RenderHelper;
 import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.multiblock.tile.TileTankController;
 import io.endertech.util.BlockCoord;
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -20,43 +20,12 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer
 {
     RenderBlocks renderer = new RenderBlocks();
 
-    public static ResourceLocation getFluidSheet(FluidStack liquid)
-    {
-        if (liquid == null) return TextureMap.locationBlocksTexture;
-        return getFluidSheet(liquid.getFluid());
-    }
-
     /**
      * @param liquid
      */
     public static ResourceLocation getFluidSheet(Fluid liquid)
     {
         return TextureMap.locationBlocksTexture;
-    }
-
-    public void renderSideFace(RenderBlocks renderer, Block block, IIcon icon, double x, double y, double z, int side)
-    {
-        switch (side)
-        {
-            case 0:
-                renderer.renderFaceYNeg(block, x, y, z, icon);
-                break;
-            case 1:
-                renderer.renderFaceYPos(block, x, y, z, icon);
-                break;
-            case 2:
-                renderer.renderFaceZNeg(block, x, y, z, icon);
-                break;
-            case 3:
-                renderer.renderFaceZPos(block, x, y, z, icon);
-                break;
-            case 4:
-                renderer.renderFaceXNeg(block, x, y, z, icon);
-                break;
-            case 5:
-                renderer.renderFaceXPos(block, x, y, z, icon);
-        }
-
     }
 
     @Override
@@ -67,17 +36,14 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer
         BlockTankController block = (BlockTankController) tile.getBlockType();
         int meta = tile.getBlockMetadata();
 
+        this.bindTexture(TextureMap.locationBlocksTexture);
+
+        GL11.glPushMatrix();
+
         renderer.blockAccess = tile.getWorldObj();
-        renderer.setRenderBounds(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
-        renderer.renderAllFaces = true;
-        renderer.renderStandardBlock(block, tile.xCoord, tile.yCoord, tile.zCoord);
+        RenderHelper.renderTextureAsBlock(renderer, block.getIcon(0, meta), x, y, z);
 
-
-        for (int i = 0; i < 6; i++)
-        {
-            IIcon sideIcon = block.getIcon(i, meta);
-            this.renderSideFace(renderer, block, sideIcon, (double) tile.xCoord, (double) tile.yCoord, (double) tile.zCoord, i);
-        }
+        GL11.glPopMatrix();
 
         TileTankController tank = (TileTankController) tile;
 
@@ -128,8 +94,7 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer
 
             final Fluid fluid = controller.tank.getFluid().getFluid();
             final IIcon texture = fluid.getStillIcon();
-            if (texture == null)
-                return;
+            if (texture == null) return;
 
             GL11.glPushMatrix();
 

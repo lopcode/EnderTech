@@ -62,7 +62,7 @@ public class TileTankController extends TileTankPart
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox()
     {
-        if (!this.isConnected()) return super.getRenderBoundingBox();
+        if (!this.isConnected()) return INFINITE_EXTENT_AABB;
         else
         {
             ControllerTank controller = this.getTankController();
