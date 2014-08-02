@@ -1,5 +1,6 @@
 package io.endertech.multiblock.block;
 
+import cofh.api.block.IDismantleable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
@@ -13,6 +14,8 @@ import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.LogHelper;
+import io.endertech.util.WorldHelper;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -26,11 +29,12 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class BlockTankPart extends BlockContainer implements IOutlineDrawer
+public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDismantleable
 {
     public static final int FRAME_METADATA_BASE = 0; // Frame metadata
     public static final int FRAME_CORNER = 1;
@@ -186,6 +190,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
     {
         if (isFrame(meta)) return FRAME_METADATA_BASE;
         else if (isValve(meta)) return VALVE_BASE;
+        else if (isEnergyInput(meta)) return ENERGY_INPUT_BASE;
 
         return FRAME_METADATA_BASE;
     }
@@ -292,5 +297,36 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
         {
             _icons[i] = iconRegister.registerIcon(TEXTURE_BASE + "." + _subBlocks[i]);
         }
+    }
+
+    @Override
+    public ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops)
+    {
+        return dismantleBlockInWorld(player, world, x, y, z, returnDrops);
+    }
+
+    public static ArrayList<ItemStack> dismantleBlockInWorld(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops)
+    {
+        Block block = world.getBlock(x, y, z);
+        int meta = world.getBlockMetadata(x, y, z);
+
+        ItemStack drop = new ItemStack(block, 1, block.damageDropped(meta));
+        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+
+        drops.add(drop);
+        world.setBlockToAir(x, y, z);
+
+        if (!returnDrops)
+        {
+            WorldHelper.spawnItemInWorldWithRandomness(drop, world, 0.3F, x, y, z, 5);
+        }
+
+        return drops;
+    }
+
+    @Override
+    public boolean canDismantle(EntityPlayer player, World world, int x, int y, int z)
+    {
+        return true;
     }
 }
