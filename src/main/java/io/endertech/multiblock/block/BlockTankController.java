@@ -13,11 +13,13 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import java.util.ArrayList;
@@ -140,5 +142,10 @@ public class BlockTankController extends BlockContainer implements IOutlineDrawe
     public boolean canDismantle(EntityPlayer player, World world, int x, int y, int z)
     {
         return true;
+    }
+
+    public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z)
+    {
+        return false;
     }
 }
