@@ -111,7 +111,7 @@ public class TileTank extends TileET implements IFluidHandler
             info.add(" Fluid: none");
         } else
         {
-            info.add(" Fluid: " + StringHelper.getFluidString(tank.getFluid().getFluid()));
+            info.add(" Fluid: " + StringHelper.getFluidName(tank.getFluid()));
             info.add(" Contents: " + tank.getFluidAmount() + " / " + tank.getCapacity() + " mB");
         }
     }

@@ -16,9 +16,9 @@ import io.endertech.multiblock.tile.TileTankValve;
 import io.endertech.network.message.MessageTileUpdate;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.LogHelper;
+import io.endertech.util.StringHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -418,28 +418,20 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     @Override
     public List<String> getWailaBody()
     {
-        String activeStatus = "Active: ";
-        if (this.isActive())
-        {
-            activeStatus += EnumChatFormatting.GREEN + "yes" + EnumChatFormatting.RESET;
-        } else
-        {
-            activeStatus += EnumChatFormatting.RED + "no" + EnumChatFormatting.RESET;
-        }
-
-        String tankStatus = "Tank: ";
+        List<String> additions = new ArrayList<String>();
 
         if (this.tank.getFluid() != null && this.tank.getFluidAmount() > 0)
         {
-            tankStatus += this.tank.getFluidAmount() + "/" + this.tank.getCapacity();
+            additions.add(StringHelper.getFluidName(this.tank.getFluid()));
+            additions.add(this.tank.getFluidAmount() + "/" + this.tank.getCapacity() + " mB");
         } else
         {
-            tankStatus += "empty";
+            additions.add("Empty");
         }
 
-        List<String> additions = new ArrayList<String>();
-        additions.add(activeStatus);
-        additions.add(tankStatus);
+        additions.add(StringHelper.getEnergyString(this.storedEnergy) + "/" + StringHelper.getEnergyString(MAX_ENERGY_STORAGE) + " RF");
+
+
         return additions;
     }
 

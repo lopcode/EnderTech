@@ -54,18 +54,14 @@ public class MultiblockWailaProvider implements IWailaDataProvider
 
             if (!assembled)
             {
-                assembledStatus += EnumChatFormatting.RED + "no" + EnumChatFormatting.RESET;
+                currenttip.add(EnumChatFormatting.RED + "Not assembled" + EnumChatFormatting.RESET);
             } else
             {
-                assembledStatus += EnumChatFormatting.GREEN + "yes" + EnumChatFormatting.RESET;
-            }
-
-            currenttip.add(assembledStatus);
-
-            if (controller != null)
-            {
-                List<String> body = controller.getWailaBody();
-                if (body != null) currenttip.addAll(body);
+                if (controller != null)
+                {
+                    List<String> body = controller.getWailaBody();
+                    if (body != null) currenttip.addAll(body);
+                }
             }
         }
         return currenttip;
