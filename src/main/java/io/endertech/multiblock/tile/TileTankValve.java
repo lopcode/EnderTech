@@ -1,7 +1,6 @@
 package io.endertech.multiblock.tile;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import io.endertech.block.ETBlocks;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.controller.ControllerTank;
@@ -11,7 +10,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import java.util.Set;
 
 public class TileTankValve extends TileTankPart implements IFluidHandler
 {
@@ -114,13 +112,11 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
     }
 
     @Override
-    public void onMachineAssembled(MultiblockControllerBase controllerBase)
+    public void onMachineAssembled(MultiblockControllerBase controller)
     {
-        super.onMachineAssembled(controllerBase);
+        super.onMachineAssembled(controller);
 
-        Set<ForgeDirection> outs = this.getOutwardsDir();
-        for (ForgeDirection out : outs)
-            worldObj.notifyBlockOfNeighborChange(xCoord + out.offsetX, yCoord + out.offsetY, zCoord + out.offsetZ, ETBlocks.blockTankPart);
+        updateOutwardNeighbours();
     }
 
     @Override
@@ -128,8 +124,6 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
     {
         super.onMachineBroken();
 
-        Set<ForgeDirection> outs = this.getOutwardsDir();
-        for (ForgeDirection out : outs)
-            worldObj.notifyBlockOfNeighborChange(xCoord + out.offsetX, yCoord + out.offsetY, zCoord + out.offsetZ, ETBlocks.blockTankPart);
+        updateOutwardNeighbours();
     }
 }

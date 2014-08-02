@@ -260,4 +260,9 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IM
     {
         return (isConnected() && this.getTankController().isAssembled() && getOutwardsDir().contains(from));
     }
+
+    protected void updateOutwardNeighbours()
+    {
+        worldObj.notifyBlockChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
+    }
 }

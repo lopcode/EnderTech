@@ -2,13 +2,11 @@ package io.endertech.multiblock.tile;
 
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
-import io.endertech.block.ETBlocks;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.reference.Strings;
 import net.minecraftforge.common.util.ForgeDirection;
-import java.util.Set;
 
 public class TileTankEnergyInput extends TileTankPart implements IEnergyHandler
 {
@@ -53,7 +51,10 @@ public class TileTankEnergyInput extends TileTankPart implements IEnergyHandler
     @Override
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
     {
-        if (!canInteractFromDirection(from) || !isConnected()) return 0;
+        if (!canInteractFromDirection(from) || !isConnected())
+        {
+            return 0;
+        }
 
         ControllerTank controller = this.getTankController();
         return controller.receiveEnergy(from, maxReceive, simulate);
@@ -89,13 +90,11 @@ public class TileTankEnergyInput extends TileTankPart implements IEnergyHandler
     }
 
     @Override
-    public void onMachineAssembled(MultiblockControllerBase controllerBase)
+    public void onMachineAssembled(MultiblockControllerBase controller)
     {
-        super.onMachineAssembled(controllerBase);
+        super.onMachineAssembled(controller);
 
-        Set<ForgeDirection> outs = this.getOutwardsDir();
-        for (ForgeDirection out : outs)
-            worldObj.notifyBlockOfNeighborChange(xCoord + out.offsetX, yCoord + out.offsetY, zCoord + out.offsetZ, ETBlocks.blockTankPart);
+        updateOutwardNeighbours();
     }
 
     @Override
@@ -103,8 +102,6 @@ public class TileTankEnergyInput extends TileTankPart implements IEnergyHandler
     {
         super.onMachineBroken();
 
-        Set<ForgeDirection> outs = this.getOutwardsDir();
-        for (ForgeDirection out : outs)
-            worldObj.notifyBlockOfNeighborChange(xCoord + out.offsetX, yCoord + out.offsetY, zCoord + out.offsetZ, ETBlocks.blockTankPart);
+        updateOutwardNeighbours();
     }
 }
