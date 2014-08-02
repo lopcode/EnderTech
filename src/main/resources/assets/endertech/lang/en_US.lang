@@ -13,5 +13,6 @@ tile.endertech.enderTank.name=Ender Tank
 tile.endertech.chargedPlane.name=Charged Plane
 tile.endertech.enderTankPart.0.name=Ender Tank Frame
 tile.endertech.enderTankPart.1.name=Ender Tank Valve
+tile.endertech.enderTankPart.2.name=Ender Tank Energy Input
 tile.endertech.enderTankController.0.name=Ender Tank Controller
 tile.multiblockGlass.0.name=Ender Tank Glass

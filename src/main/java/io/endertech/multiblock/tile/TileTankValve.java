@@ -15,6 +15,8 @@ import java.util.Set;
 
 public class TileTankValve extends TileTankPart implements IFluidHandler
 {
+    public static final int ENERGY_PER_UNIT = 1;
+
     public static void init()
     {
         GameRegistry.registerTileEntity(TileTankValve.class, "tile." + Strings.Blocks.TANK_VALVE_NAME);
@@ -50,46 +52,46 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
         throw new MultiblockValidationException("Tank valves cannot be used for tank interior.");
     }
 
-    private boolean canInteractFromDirection(ForgeDirection from)
-    {
-        return (isConnected() && this.getTankController().isAssembled() && getOutwardsDir().contains(from));
-    }
-
     @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill)
     {
-        if (!canInteractFromDirection(from)) { return 0; }
+        if (!canInteractFromDirection(from) || !isConnected()) { return 0; }
 
         ControllerTank controller = this.getTankController();
-        return controller.tank.fill(resource, doFill);
+        int energyRequired = resource.amount * ENERGY_PER_UNIT;
+        int maxEnergyLimiter = controller.extractEnergy(from, energyRequired, true);
+        int energyLimitedFill = (int) Math.floor((maxEnergyLimiter * 1.0) / ENERGY_PER_UNIT);
+
+        FluidStack resourceCopy = resource.copy();
+        resourceCopy.amount = energyLimitedFill;
+        int fillAmount = controller.tank.fill(resourceCopy, doFill);
+        if (fillAmount > 0) controller.extractEnergy(from, fillAmount * ENERGY_PER_UNIT, false);
+
+        return fillAmount;
     }
 
     @Override
     public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain)
     {
-        if (!canInteractFromDirection(from)) { return null; }
+        if (!canInteractFromDirection(from) || !this.canDrain(from, null)) { return null; }
 
-        if (this.canDrain(from, null))
-        {
-            return this.drain(from, resource.amount, doDrain);
-        } else
-        {
-            return null;
-        }
+        return this.drain(from, resource.amount, doDrain);
     }
 
     @Override
     public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain)
     {
-        if (!canInteractFromDirection(from)) { return null; }
+        if (!canInteractFromDirection(from) || !this.canDrain(from, null)) { return null; }
 
-        if (this.canDrain(from, null))
-        {
-            return this.getTankController().tank.drain(maxDrain, doDrain);
-        } else
-        {
-            return null;
-        }
+        ControllerTank controller = this.getTankController();
+        int energyRequired = maxDrain * ENERGY_PER_UNIT;
+        int maxEnergyLimiter = controller.extractEnergy(from, energyRequired, true);
+        int energyLimitedDrain = (int) Math.floor((maxEnergyLimiter * 1.0) / ENERGY_PER_UNIT);
+
+        FluidStack drained = controller.tank.drain(energyLimitedDrain, doDrain);
+        if (drained.amount > 0) controller.extractEnergy(from, drained.amount * ENERGY_PER_UNIT, false);
+
+        return drained;
     }
 
     @Override

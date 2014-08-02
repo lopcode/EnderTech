@@ -19,6 +19,7 @@ import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IMessageHandler<ControllerTank.MessageTankUpdate, IMessage>
 {
@@ -259,5 +260,10 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IM
         }
 
         return null;
+    }
+
+    protected boolean canInteractFromDirection(ForgeDirection from)
+    {
+        return (isConnected() && this.getTankController().isAssembled() && getOutwardsDir().contains(from));
     }
 }

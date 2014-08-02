@@ -6,6 +6,7 @@ import io.endertech.EnderTech;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.controller.ControllerTank;
+import io.endertech.multiblock.tile.TileTankEnergyInput;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.multiblock.tile.TileTankPartBase;
 import io.endertech.multiblock.tile.TileTankValve;
@@ -38,15 +39,16 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
     public static final int FRAME_NORTHSOUTH = 5;
 
     public static final int VALVE_BASE = 6;
-    public static final int VALVE_IDLE = 7;
-    public static final int VALVE_ACTIVE = 8;
+
+    public static final int ENERGY_INPUT_BASE = 7;
 
     private static final String TEXTURE_BASE = "endertech:enderTankPart";
 
     public static ItemStack itemBlockTankFrame;
     public static ItemStack itemBlockTankValve;
+    public static ItemStack itemBlockTankEnergyInput;
 
-    private static String[] _subBlocks = new String[] {"frameDefault", "frameCorner", "frameCenter", "frameVertical", "frameEastWest", "frameNorthSouth", "valve"};
+    private static String[] _subBlocks = new String[] {"frameDefault", "frameCorner", "frameCenter", "frameVertical", "frameEastWest", "frameNorthSouth", "valve", "energyInput"};
 
     private IIcon[] _icons = new IIcon[_subBlocks.length];
 
@@ -64,20 +66,25 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
     {
         TileTankPart.init();
         TileTankValve.init();
+        TileTankEnergyInput.init();
 
         itemBlockTankFrame = new ItemStack(this, 1, FRAME_METADATA_BASE);
         itemBlockTankValve = new ItemStack(this, 1, VALVE_BASE);
+        itemBlockTankEnergyInput = new ItemStack(this, 1, ENERGY_INPUT_BASE);
     }
 
     public static boolean isFrame(int metadata) { return metadata >= FRAME_METADATA_BASE && metadata <= FRAME_NORTHSOUTH; }
 
-    public static boolean isValve(int metadata) { return metadata >= VALVE_BASE && metadata <= VALVE_ACTIVE; }
+    public static boolean isValve(int metadata) { return metadata == VALVE_BASE; }
+
+    public static boolean isEnergyInput(int metadata) { return metadata == ENERGY_INPUT_BASE; }
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
         if (metadata >= FRAME_METADATA_BASE && metadata <= FRAME_NORTHSOUTH) return new TileTankPart();
-        if (metadata >= VALVE_BASE && metadata <= VALVE_ACTIVE) return new TileTankValve();
+        if (metadata == VALVE_BASE) return new TileTankValve();
+        if (metadata == ENERGY_INPUT_BASE) return new TileTankEnergyInput();
 
         throw new IllegalArgumentException("Unrecognized metadata");
     }
@@ -143,11 +150,14 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
 
     public ItemStack getTankValveItemStack() { return new ItemStack(this, 1, VALVE_BASE); }
 
+    public ItemStack getTankEnergyInputItemStack() { return new ItemStack(this, 1, ENERGY_INPUT_BASE); }
+
     @Override
     public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List par3List)
     {
         par3List.add(getTankFrameItemStack());
         par3List.add(getTankValveItemStack());
+        par3List.add(getTankEnergyInputItemStack());
     }
 
     @Override
@@ -256,6 +266,9 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
                 }
             case VALVE_BASE:
                 return _icons[VALVE_BASE];
+
+            case ENERGY_INPUT_BASE:
+                return _icons[ENERGY_INPUT_BASE];
 
             default:
                 if (side == 0 || side == 1)

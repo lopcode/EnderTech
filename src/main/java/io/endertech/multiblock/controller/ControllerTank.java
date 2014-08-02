@@ -10,6 +10,7 @@ import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.rectangular.RectangularMultiblockControllerBase;
 import io.endertech.multiblock.tile.TileTankController;
+import io.endertech.multiblock.tile.TileTankEnergyInput;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.multiblock.tile.TileTankValve;
 import io.endertech.network.message.MessageTileUpdate;
@@ -19,6 +20,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -30,12 +32,15 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     protected boolean active;
     private Set<TileTankPart> attachedControllers;
     private Set<TileTankValve> attachedValves;
+    private Set<TileTankEnergyInput> attachedEnergyInputs;
+    private int storedEnergy = 0;
     private int random_number = 0;
     public FluidTank tank;
     public FluidTank lastTank;
     public int renderAddition = 0;
     private int ticksSinceUpdate = 0;
     private static final String TANK_NAME = "MainTank";
+    public static final int MAX_ENERGY_STORAGE = 10 * 1000000;
 
     public ControllerTank(World world)
     {
@@ -43,6 +48,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         active = false;
         attachedControllers = new HashSet<TileTankPart>();
         attachedValves = new HashSet<TileTankValve>();
+        attachedEnergyInputs = new HashSet<TileTankEnergyInput>();
         tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * GeneralConfig.tankStorageMultiplier);
         lastTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * GeneralConfig.tankStorageMultiplier);
     }
@@ -56,6 +62,16 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     public int getRandomNumber()
     {
         return this.random_number;
+    }
+
+    public void setStoredEnergy(int energyStored)
+    {
+        this.storedEnergy = energyStored;
+    }
+
+    public int getStoredEnergy()
+    {
+        return this.storedEnergy;
     }
 
     @Override
@@ -88,6 +104,11 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         {
             attachedValves.add((TileTankValve) newPart);
         }
+
+        if (newPart instanceof TileTankEnergyInput)
+        {
+            attachedEnergyInputs.add((TileTankEnergyInput) newPart);
+        }
     }
 
     @Override
@@ -106,6 +127,11 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         {
             attachedValves.remove((TileTankValve) oldPart);
         }
+
+        if (oldPart instanceof TileTankEnergyInput)
+        {
+            attachedEnergyInputs.remove((TileTankEnergyInput) oldPart);
+        }
     }
 
     @Override
@@ -119,6 +145,11 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         if (attachedValves.size() < 1)
         {
             throw new MultiblockValidationException("You must have at least 1 valve in the tank structure (currently " + attachedValves.size() + ")");
+        }
+
+        if (attachedEnergyInputs.size() < 1)
+        {
+            throw new MultiblockValidationException("You must have at least 1 energy input in the tank structure (currently " + attachedEnergyInputs.size() + ")");
         }
 
         super.isMachineWhole();
@@ -236,6 +267,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     {
         data.setBoolean("tankActive", this.isActive());
         data.setInteger("randomNumber", this.random_number);
+        data.setInteger("storedEnergy", this.storedEnergy);
         NBTTagCompound tankNBT = new NBTTagCompound();
         tank.writeToNBT(tankNBT);
         data.setTag(TANK_NAME, tankNBT);
@@ -245,7 +277,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
 
     public String toString()
     {
-        return "R: " + this.getRandomNumber() + " A: " + this.active + " F: " + getFluidStringOrNone(this.tank.getFluid()) + " " + this.tank.getFluidAmount() + "/" + this.tank.getCapacity() + " Cs: " + this.attachedControllers.size() + " Vs: " + this.attachedValves.size();
+        return "R: " + this.getRandomNumber() + " A: " + this.active + " F: " + getFluidStringOrNone(this.tank.getFluid()) + " " + this.tank.getFluidAmount() + "/" + this.tank.getCapacity() + " Cs: " + this.attachedControllers.size() + " Vs: " + this.attachedValves.size() + " E: " + this.storedEnergy + "/" + MAX_ENERGY_STORAGE;
     }
 
     private String getFluidStringOrNone(FluidStack fluid)
@@ -279,12 +311,18 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         {
             this.tank.readFromNBT(data.getCompoundTag(TANK_NAME));
         }
+
+        if (data.hasKey("storedEnergy"))
+        {
+            this.storedEnergy = data.getInteger("storedEnergy");
+        }
     }
 
     public static class MessageTankUpdate extends MessageTileUpdate
     {
         public int random_number;
         public NBTTagCompound tank;
+        public int storedEnergy;
 
         public MessageTankUpdate() { }
 
@@ -298,6 +336,8 @@ public class ControllerTank extends RectangularMultiblockControllerBase
             NBTTagCompound tank_tag = new NBTTagCompound();
             controller.tank.writeToNBT(tank_tag);
             this.tank = tank_tag;
+
+            this.storedEnergy = controller.storedEnergy;
         }
 
         @Override
@@ -306,6 +346,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
             super.fromBytes(buf);
             this.random_number = buf.readInt();
             this.tank = ByteBufUtils.readTag(buf);
+            this.storedEnergy = buf.readInt();
         }
 
         @Override
@@ -314,6 +355,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
             super.toBytes(buf);
             buf.writeInt(this.random_number);
             ByteBufUtils.writeTag(buf, this.tank);
+            buf.writeInt(this.storedEnergy);
         }
     }
 
@@ -333,10 +375,12 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     {
         if (message instanceof MessageTankUpdate)
         {
-            this.random_number = ((MessageTankUpdate) message).random_number;
+            MessageTankUpdate tankUpdate = (MessageTankUpdate) message;
+            this.random_number = tankUpdate.random_number;
             this.lastTank = new FluidTank(this.tank.getFluid(), this.tank.getCapacity());
             this.renderAddition = 0;
-            this.tank.readFromNBT(((MessageTankUpdate) message).tank);
+            this.tank.readFromNBT(tankUpdate.tank);
+            this.storedEnergy = tankUpdate.storedEnergy;
             LogHelper.info("Reading tank from message: " + this.toString());
         }
     }
@@ -413,5 +457,33 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         }
 
         return shouldConsume;
+    }
+
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
+    {
+        int energy = this.getStoredEnergy();
+        int energyReceived = Math.min(ControllerTank.MAX_ENERGY_STORAGE - energy, Math.min(TileTankEnergyInput.MAX_INPUT_RATE, maxReceive));
+
+        if (!simulate)
+        {
+            energy += energyReceived;
+            this.setStoredEnergy(energy);
+        }
+
+        return energyReceived;
+    }
+
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
+    {
+        int energy = this.getStoredEnergy();
+        int energyExtracted = Math.min(energy, Math.min(10 * 1000000, maxExtract));
+
+        if (!simulate)
+        {
+            energy -= energyExtracted;
+            this.setStoredEnergy(energy);
+        }
+
+        return energyExtracted;
     }
 }
