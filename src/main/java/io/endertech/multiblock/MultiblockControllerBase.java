@@ -391,12 +391,13 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer
      */
     private void assembleMachine(AssemblyState oldState)
     {
+        this.assemblyState = AssemblyState.Assembled;
+
         for (IMultiblockPart part : connectedParts)
         {
             part.onMachineAssembled(this);
         }
 
-        this.assemblyState = AssemblyState.Assembled;
         if (oldState == assemblyState.Paused)
         {
             onMachineRestored();
@@ -414,12 +415,13 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer
      */
     private void disassembleMachine()
     {
+        this.assemblyState = AssemblyState.Disassembled;
+
         for (IMultiblockPart part : connectedParts)
         {
             part.onMachineBroken();
         }
 
-        this.assemblyState = AssemblyState.Disassembled;
         onMachineDisassembled();
     }
 

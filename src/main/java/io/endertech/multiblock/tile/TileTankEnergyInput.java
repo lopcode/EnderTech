@@ -100,8 +100,8 @@ public class TileTankEnergyInput extends TileTankPart implements IEnergyHandler
     @Override
     public void onMachineBroken()
     {
-        super.onMachineBroken();
-
         updateOutwardNeighbours();
+
+        super.onMachineBroken();
     }
 }

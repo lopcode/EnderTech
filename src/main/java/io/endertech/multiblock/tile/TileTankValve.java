@@ -122,8 +122,8 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
     @Override
     public void onMachineBroken()
     {
-        super.onMachineBroken();
-
         updateOutwardNeighbours();
+
+        super.onMachineBroken();
     }
 }
