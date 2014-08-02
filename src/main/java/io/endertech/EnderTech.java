@@ -113,6 +113,8 @@ public class EnderTech
 
         proxy.registerRenderers();
 
+        proxy.registerItemRenderers();
+
         // Waila
         FMLInterModComms.sendMessage("Waila", "register", "io.endertech.integration.waila.MultiblockWailaProvider.callbackRegister");
 

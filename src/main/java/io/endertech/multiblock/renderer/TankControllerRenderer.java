@@ -1,6 +1,7 @@
 package io.endertech.multiblock.renderer;
 
 import cofh.render.RenderHelper;
+import io.endertech.block.ETBlocks;
 import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.multiblock.tile.TileTankController;
@@ -9,14 +10,16 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
-public class TankControllerRenderer extends TileEntitySpecialRenderer
+public class TankControllerRenderer extends TileEntitySpecialRenderer implements IItemRenderer
 {
     RenderBlocks renderer = new RenderBlocks();
 
@@ -228,5 +231,69 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer
             }
 
         }
+    }
+
+    @Override
+    public boolean handleRenderType(ItemStack item, ItemRenderType type)
+    {
+        return true;
+    }
+
+    @Override
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
+    {
+        return true;
+    }
+
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data)
+    {
+        float x = 0F, y = 0F, z = 0F;
+
+        switch (type)
+        {
+            case ENTITY:
+            {
+                x = -0.5F;
+                y = -0.25F;
+                z = -0.5F;
+
+                break;
+            }
+            case EQUIPPED:
+            {
+                x = 0F;
+                y = 0F;
+                z = 0F;
+
+                break;
+            }
+            case EQUIPPED_FIRST_PERSON:
+            {
+                x = 0F;
+                y = 0F;
+                z = 0F;
+
+                break;
+            }
+            case INVENTORY:
+            {
+                x = 0F;
+                y = -0.1F;
+                z = 0F;
+
+                break;
+            }
+            default:
+                return;
+        }
+
+        GL11.glPushMatrix();
+        GL11.glTranslatef(x, y, z);
+        renderer.setRenderBoundsFromBlock(ETBlocks.blockTankController);
+        renderer.blockAccess = RenderBlocks.getInstance().blockAccess;
+        RenderHelper.renderTextureAsBlock(renderer, ETBlocks.blockTankController.getIcon(0, 0), 0, 0, 0);
+
+        GL11.glPopMatrix();
     }
 }

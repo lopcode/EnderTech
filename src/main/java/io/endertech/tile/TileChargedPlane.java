@@ -9,7 +9,6 @@ import cpw.mods.fml.relauncher.Side;
 import io.endertech.network.NetworkHandler;
 import io.endertech.network.message.MessageTileUpdate;
 import io.endertech.reference.Strings;
-import io.endertech.util.LogHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
@@ -28,7 +27,7 @@ public class TileChargedPlane extends TileET implements IMessageHandler<TileChar
     {
         super.readFromNBT(nbtTagCompound);
 
-//        LogHelper.info("Reading charged plane NBT: " + this.toString());
+        //        LogHelper.info("Reading charged plane NBT: " + this.toString());
     }
 
     @Override
@@ -36,7 +35,7 @@ public class TileChargedPlane extends TileET implements IMessageHandler<TileChar
     {
         super.writeToNBT(nbtTagCompound);
 
-//        LogHelper.info("Writing charged plane NBT: " + this.toString());
+        //        LogHelper.info("Writing charged plane NBT: " + this.toString());
     }
 
     @Override
@@ -58,7 +57,7 @@ public class TileChargedPlane extends TileET implements IMessageHandler<TileChar
 
         if (tileEntity instanceof TileChargedPlane)
         {
-//            LogHelper.info("Setting charged plane data from message: " + tileEntity.toString());
+            //            LogHelper.info("Setting charged plane data from message: " + tileEntity.toString());
         }
 
         return null;
