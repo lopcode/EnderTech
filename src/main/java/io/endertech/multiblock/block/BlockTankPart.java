@@ -211,7 +211,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
 
                         if (randomNumbers.size() > 1)
                         {
-                            LogHelper.info("Someone tried to connect two previously formed tanks - stopping them.");
+                            LogHelper.info("Someone tried to connect two previously formed tanks at " + new BlockCoord(x, y, z).toString() + " - stopping them.");
                             return false;
                         }
                     }

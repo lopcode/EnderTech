@@ -55,7 +55,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
 
     public void setRandomNumber(int newRandomNumber)
     {
-        LogHelper.info("Setting random number from " + this.random_number + " to " + newRandomNumber);
+//        LogHelper.info("Setting random number from " + this.random_number + " to " + newRandomNumber);
         this.random_number = newRandomNumber;
     }
 
@@ -83,9 +83,9 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     @Override
     public void onAttachedPartWithMultiblockMessage(IMultiblockPart part, IMessage message)
     {
-        LogHelper.info("My random number before: " + this.random_number);
+//        LogHelper.info("My random number before: " + this.random_number);
         this.decodeMessage(message);
-        LogHelper.info("My random number after:" + this.random_number);
+//        LogHelper.info("My random number after:" + this.random_number);
     }
 
     @Override
@@ -159,7 +159,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
     protected void onMachineAssembled()
     {
         if (this.getRandomNumber() == 0) setRandomNumber(new Random().nextInt(1000000));
-        LogHelper.info("Tank assembled with R: " + this.random_number + "!");
+//        LogHelper.info("Tank assembled with R: " + this.random_number + "!");
 
         BlockCoord minCoord = this.getMinimumCoord();
         BlockCoord maxCoord = this.getMaximumCoord();
@@ -170,24 +170,27 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         this.tank.setCapacity(tankCapacity);
 
         if (this.lastTank != null) this.lastTank.setCapacity(tankCapacity);
+
+        this.setActive(true);
     }
 
     @Override
     protected void onMachineRestored()
     {
-        LogHelper.info("Tank restored");
+//        LogHelper.info("Tank restored");
     }
 
     @Override
     protected void onMachinePaused()
     {
-        LogHelper.info("Tank paused");
+//        LogHelper.info("Tank paused");
     }
 
     @Override
     protected void onMachineDisassembled()
     {
-        LogHelper.info("Tank disassembled");
+        this.setActive(false);
+//        LogHelper.info("Tank disassembled");
     }
 
     @Override
@@ -231,11 +234,11 @@ public class ControllerTank extends RectangularMultiblockControllerBase
             ControllerTank controller = (ControllerTank) assimilated;
             if (controller.getRandomNumber() != 0)
             {
-                LogHelper.info("Setting new random number from assimilated controller");
+//                LogHelper.info("Setting new random number from assimilated controller");
                 setRandomNumber(((ControllerTank) assimilated).getRandomNumber());
             } else
             {
-                LogHelper.info("Not setting random number as new assimilated tank had 0");
+//                LogHelper.info("Not setting random number as new assimilated tank had 0");
             }
         }
     }
@@ -272,7 +275,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         tank.writeToNBT(tankNBT);
         data.setTag(TANK_NAME, tankNBT);
 
-        LogHelper.info("Writing tank to NBT: " + this.toString());
+//        LogHelper.info("Writing tank to NBT: " + this.toString());
     }
 
     public String toString()
@@ -304,7 +307,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         if (data.hasKey("randomNumber"))
         {
             this.setRandomNumber(data.getInteger("randomNumber"));
-            LogHelper.info("Read random number from NBT: " + this.random_number);
+//            LogHelper.info("Read random number from NBT: " + this.random_number);
         }
 
         if (data.hasKey(TANK_NAME))
@@ -331,7 +334,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
             super(tileSaveDelegate);
             ControllerTank controller = tileSaveDelegate.getTankController();
             this.random_number = controller.random_number;
-            LogHelper.info("Packed random number in to message: " + this.random_number);
+//            LogHelper.info("Packed random number in to message: " + this.random_number);
 
             NBTTagCompound tank_tag = new NBTTagCompound();
             controller.tank.writeToNBT(tank_tag);
@@ -381,7 +384,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase
             this.renderAddition = 0;
             this.tank.readFromNBT(tankUpdate.tank);
             this.storedEnergy = tankUpdate.storedEnergy;
-            LogHelper.info("Reading tank from message: " + this.toString());
+//            LogHelper.info("Reading tank from message: " + this.toString());
         }
     }
 

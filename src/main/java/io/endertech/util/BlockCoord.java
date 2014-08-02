@@ -75,4 +75,8 @@ public class BlockCoord implements Comparable
         this.z = other.z;
     }
 
+    public String toString()
+    {
+        return this.x + " " + this.y + " " + this.z;
+    }
 }

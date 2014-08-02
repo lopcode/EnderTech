@@ -3,7 +3,10 @@ package io.endertech.multiblock.tile;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.endertech.block.ETBlocks;
 import io.endertech.multiblock.MultiblockValidationException;
+import io.endertech.multiblock.block.BlockTankController;
+import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
@@ -47,18 +50,6 @@ public class TileTankController extends TileTankPart
     }
 
     @Override
-    public void onMachineActivated()
-    {
-
-    }
-
-    @Override
-    public void onMachineDeactivated()
-    {
-
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox()
     {
@@ -70,6 +61,24 @@ public class TileTankController extends TileTankPart
             BlockCoord max = controller.getMaximumCoord();
 
             return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+        }
+    }
+
+    @Override
+    public void onMachineBroken()
+    {
+        super.onMachineBroken();
+
+        if (this.worldObj.isRemote) { return; }
+
+        if (blockType == ETBlocks.blockTankController)
+        {
+            int metadata = this.getBlockMetadata();
+
+            if (BlockTankController.isController(metadata))
+            {
+                this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankController.CONTROLLER_METADATA_BASE, 2);
+            }
         }
     }
 }

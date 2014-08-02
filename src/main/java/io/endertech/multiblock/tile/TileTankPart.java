@@ -157,12 +157,6 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IM
             if (BlockTankPart.isFrame(metadata))
             {
                 this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankPart.FRAME_METADATA_BASE, 2);
-            } else if (blockType == ETBlocks.blockTankController)
-            {
-                if (BlockTankController.isController(metadata))
-                {
-                    this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, BlockTankController.CONTROLLER_METADATA_BASE, 2);
-                }
             }
         }
     }
