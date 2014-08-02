@@ -87,7 +87,10 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
         int energyLimitedDrain = (int) Math.floor((maxEnergyLimiter * 1.0) / ENERGY_PER_UNIT);
 
         FluidStack drained = controller.tank.drain(energyLimitedDrain, doDrain);
-        if (drained.amount > 0) controller.extractEnergy(from, drained.amount * ENERGY_PER_UNIT, false);
+        if (drained != null && drained.amount > 0)
+        {
+            controller.extractEnergy(from, drained.amount * ENERGY_PER_UNIT, false);
+        }
 
         return drained;
     }
