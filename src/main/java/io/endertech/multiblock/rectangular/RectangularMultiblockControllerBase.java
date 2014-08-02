@@ -20,10 +20,10 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
      */
     protected void isMachineWhole() throws MultiblockValidationException
     {
-        LogHelper.info(connectedParts.size() + " blocks connected to multiblock");
+//        LogHelper.info(connectedParts.size() + " blocks connected to multiblock");
         if (connectedParts.size() < getMinimumNumberOfBlocksForAssembledMachine())
         {
-            LogHelper.info("Machine too small");
+//            LogHelper.info("Machine too small");
             throw new MultiblockValidationException("Machine is too small.");
         }
 

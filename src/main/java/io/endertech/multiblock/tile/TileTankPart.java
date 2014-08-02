@@ -245,11 +245,11 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IM
             if (controller == null)
             {
                 tile.cachedMultiblockMessage = message;
-                LogHelper.info("Caching message for tank part tile: " + tile.xCoord + ", " + tile.yCoord + ", " + tile.zCoord);
+//                LogHelper.info("Caching message for tank part tile: " + tile.xCoord + ", " + tile.yCoord + ", " + tile.zCoord);
             } else
             {
                 controller.decodeMessage(message);
-                LogHelper.info("Decoding message for controller: " + tile.xCoord + ", " + tile.yCoord + ", " + tile.zCoord);
+//                LogHelper.info("Decoding message for controller: " + tile.xCoord + ", " + tile.yCoord + ", " + tile.zCoord);
             }
         }
 

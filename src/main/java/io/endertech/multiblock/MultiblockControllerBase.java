@@ -138,12 +138,12 @@ public abstract class MultiblockControllerBase
 
         if (part.hasMultiblockNBTCache())
         {
-//            LogHelper.info("Setting multiblock data from cached NBT");
+            //            LogHelper.info("Setting multiblock data from cached NBT");
             onAttachedPartWithMultiblockNBT(part, part.getMultiblockNBTCache());
             part.onMultiblockDataAssimilated();
         } else if (part.hasMultiblockMessageCache())
         {
-//            LogHelper.info("Setting multiblock data from cached Message");
+            //            LogHelper.info("Setting multiblock data from cached Message");
             onAttachedPartWithMultiblockMessage(part, part.getMultiblockMessageCache());
             part.onMultiblockDataAssimilated();
         }

@@ -104,7 +104,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
         if (data.hasKey("multiblockData"))
         {
             this.cachedMultiblockNBT = data.getCompoundTag("multiblockData");
-//            LogHelper.info("Reading from NBT and caching multiblock NBT");
+            //            LogHelper.info("Reading from NBT and caching multiblock NBT");
         }
     }
 
@@ -118,7 +118,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
             NBTTagCompound multiblockData = new NBTTagCompound();
             this.controller.writeToNBT(multiblockData);
             data.setTag("multiblockData", multiblockData);
-//            LogHelper.info("Writing multiblock to NBT");
+            //            LogHelper.info("Writing multiblock to NBT");
         }
     }
 

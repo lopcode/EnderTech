@@ -6,7 +6,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.block.ETBlocks;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.block.BlockTankController;
-import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
