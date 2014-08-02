@@ -236,9 +236,13 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
         switch (metadata)
         {
             case FRAME_METADATA_BASE:
+                return _icons[FRAME_METADATA_BASE];
+
             case FRAME_CORNER:
+                return _icons[FRAME_CORNER];
+
             case FRAME_CENTER:
-                return _icons[metadata];
+                return _icons[FRAME_CENTER];
 
             case FRAME_VERTICAL:
                 // Vertical block
@@ -283,7 +287,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
                     return _icons[FRAME_METADATA_BASE];
                 } else
                 {
-                    metadata = Math.max(0, Math.min(5, metadata));
+                    metadata = Math.max(0, Math.min(6, metadata));
                     return _icons[metadata];
                 }
         }

@@ -93,7 +93,7 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IM
     {
         if (this.worldObj.isRemote) { return; }
 
-        if (getBlockType() == ETBlocks.blockTankPart)
+        if (getBlockType() == ETBlocks.blockTankController)
         {
             int metadata = this.getBlockMetadata();
             if (BlockTankController.isController(metadata))
