@@ -9,6 +9,7 @@ public class GeneralConfig
     private static Configuration generalConfig;
 
     public static int tankStorageMultiplier;
+    public static boolean debugRender;
 
     protected static void init(File configFile)
     {
@@ -26,6 +27,8 @@ public class GeneralConfig
             {
                 tankStorageMultiplier = 128;
             }
+
+            debugRender = generalConfig.get("rendering", "Rendering.Debug", false).getBoolean(false);
         } catch (Exception e)
         {
             LogHelper.error("Failed to load general config");

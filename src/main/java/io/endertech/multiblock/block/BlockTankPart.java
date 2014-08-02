@@ -8,10 +8,11 @@ import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.multiblock.tile.TileTankEnergyInput;
 import io.endertech.multiblock.tile.TileTankPart;
-import io.endertech.multiblock.tile.TileTankPartBase;
 import io.endertech.multiblock.tile.TileTankValve;
 import io.endertech.reference.Strings;
-import io.endertech.util.*;
+import io.endertech.util.BlockCoord;
+import io.endertech.util.IOutlineDrawer;
+import io.endertech.util.LogHelper;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -169,13 +170,12 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer
         TileEntity tile = world.getTileEntity(target.x, target.y, target.z);
         if (tile == null)
         {
-            RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Blue.setAlpha(0.6f), 2.0f, event.partialTicks);
-            return true;
+            return false;
         }
 
-        if (tile instanceof TileTankPartBase)
+        if (tile instanceof TileTankPart)
         {
-            return ((TileTankPartBase) tile).drawOutline(event);
+            return ((TileTankPart) tile).drawOutline(event);
         }
 
         return false;

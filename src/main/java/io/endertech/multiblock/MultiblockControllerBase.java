@@ -4,12 +4,14 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.endertech.network.NetworkHandler;
 import io.endertech.util.BlockCoord;
+import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.Set;
  * <p/>
  * Subordinate TileEntities implement the IMultiblockPart class and, generally, should not have an update() loop.
  */
-public abstract class MultiblockControllerBase
+public abstract class MultiblockControllerBase implements IOutlineDrawer
 {
     public static final short DIMENSION_UNBOUNDED = -1;
 
@@ -1010,4 +1012,9 @@ public abstract class MultiblockControllerBase
     public abstract String getName();
 
     public abstract List<String> getWailaBody();
+
+    public boolean drawOutline(DrawBlockHighlightEvent event)
+    {
+        return false;
+    }
 }

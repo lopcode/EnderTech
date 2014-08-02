@@ -5,12 +5,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
 import io.endertech.multiblock.texture.ConnectedTextureIcon;
 import io.endertech.multiblock.tile.TileTankGlass;
-import io.endertech.multiblock.tile.TileTankPartBase;
+import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.proxy.CommonProxy;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
-import io.endertech.util.RGBA;
-import io.endertech.util.RenderHelper;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -129,13 +127,12 @@ public class BlockMultiblockGlass extends BlockContainer implements IOutlineDraw
         TileEntity tile = world.getTileEntity(target.x, target.y, target.z);
         if (tile == null)
         {
-            RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Blue.setAlpha(0.6f), 2.0f, event.partialTicks);
-            return true;
+            return false;
         }
 
-        if (tile instanceof TileTankPartBase)
+        if (tile instanceof TileTankPart)
         {
-            return ((TileTankPartBase) tile).drawOutline(event);
+            return ((TileTankPart) tile).drawOutline(event);
         }
 
         return false;

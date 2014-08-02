@@ -14,12 +14,13 @@ import io.endertech.multiblock.tile.TileTankEnergyInput;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.multiblock.tile.TileTankValve;
 import io.endertech.network.message.MessageTileUpdate;
-import io.endertech.util.BlockCoord;
-import io.endertech.util.LogHelper;
-import io.endertech.util.StringHelper;
+import io.endertech.util.*;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -27,7 +28,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import java.util.*;
 
-public class ControllerTank extends RectangularMultiblockControllerBase
+public class ControllerTank extends RectangularMultiblockControllerBase implements IOutlineDrawer
 {
     protected boolean active;
     private Set<TileTankPart> attachedControllers;
@@ -480,5 +481,53 @@ public class ControllerTank extends RectangularMultiblockControllerBase
         }
 
         return energyExtracted;
+    }
+
+    @Override
+    public boolean drawOutline(DrawBlockHighlightEvent event)
+    {
+        BlockCoord target = new BlockCoord(event.target.blockX, event.target.blockY, event.target.blockZ);
+        World world = event.player.worldObj;
+
+        if (GeneralConfig.debugRender)
+        {
+            Set<IMultiblockPart> connectedParts = this.getConnectedParts();
+            if (connectedParts.isEmpty())
+            {
+                RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.White.setAlpha(0.6f), 2.0f, event.partialTicks);
+            }
+
+            RGBA colour = RGBA.Blue.setAlpha(0.6f);
+            if (this.isAssembled())
+            {
+                colour = RGBA.Green.setAlpha(0.6f);
+            }
+
+            for (IMultiblockPart part : connectedParts)
+            {
+                BlockCoord partCoord = part.getWorldLocation();
+                Block blockPart = world.getBlock(partCoord.x, partCoord.y, partCoord.z);
+                if (blockPart instanceof BlockTankController)
+                {
+                    if (BlockTankController.isController(world.getBlockMetadata(partCoord.x, partCoord.y, partCoord.z)))
+                        RenderHelper.renderBlockOutline(event.context, event.player, partCoord, RGBA.White.setAlpha(0.6f), 10.0f, event.partialTicks);
+
+                } else
+                {
+                    RenderHelper.renderBlockOutline(event.context, event.player, partCoord, colour, 2.0f, event.partialTicks);
+                }
+
+                if (part.isMultiblockSaveDelegate())
+                    RenderHelper.renderBlockOutline(event.context, event.player, partCoord, RGBA.Red, 10.0f, event.partialTicks);
+            }
+        } else
+        {
+            BlockCoord minCoord = this.getMinimumCoord();
+            BlockCoord maxCoord = this.getMaximumCoord();
+            AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(minCoord.x, minCoord.y, minCoord.z, maxCoord.x + 1, maxCoord.y + 1, maxCoord.z + 1);
+            RenderHelper.renderAABBOutline(event.context, event.player, aabb, RGBA.Black, 1.0f, event.partialTicks);
+        }
+
+        return true;
     }
 }
