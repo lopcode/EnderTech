@@ -1,9 +1,9 @@
 package io.endertech.multiblock;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import io.endertech.network.PacketETBase;
+import io.endertech.tile.TileET;
 import io.endertech.util.BlockCoord;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import java.util.Set;
 
 /**
@@ -14,7 +14,7 @@ import java.util.Set;
  * <p/>
  * {@link io.endertech.multiblock.MultiblockTileEntityBase}
  */
-public abstract class IMultiblockPart extends TileEntity
+public abstract class IMultiblockPart extends TileET
 {
     public static final int INVALID_DISTANCE = Integer.MAX_VALUE;
 
@@ -199,7 +199,7 @@ public abstract class IMultiblockPart extends TileEntity
      */
     public abstract NBTTagCompound getMultiblockNBTCache();
 
-    public abstract IMessage getMultiblockMessageCache();
+    public abstract PacketETBase getMultiblockPacketCache();
 
     /**
      * Called after a block is added and the controller has incorporated the part's saved

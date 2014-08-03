@@ -96,7 +96,8 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
                 levelAmounts[level] = levelAmount;
             }
 
-            float opacity = 0;
+            boolean setOpacity = false;
+            float opacity = 1;
 
             final Fluid fluid = controller.tank.getFluid().getFluid();
             final IIcon texture = fluid.getStillIcon();
@@ -125,6 +126,7 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
                     for (int i = 0; i < unitHeights; i++)
                         levelAmounts[i] = capacityPerUnitHeight;
 
+                    setOpacity = true;
                     stopLevel = unitHeights;
                     opacity = (float) ((controller.lastTank.getFluidAmount() + controller.renderAddition) / capacity);
                     if (opacity < 0.05F) opacity = 0.05F;
@@ -140,7 +142,7 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
                         double height = levelAmounts[level] / capacityPerUnitHeight;
                         if (height > 0 && height < 0.02) height = 0.02;
 
-                        renderFluidBlocks(height, colour, texture, (max.x - min.x - 1), level, stopLevel, (max.z - min.z - 1), opacity);
+                        renderFluidBlocks(height, colour, texture, (max.x - min.x - 1), level, stopLevel, (max.z - min.z - 1), setOpacity, opacity);
                     }
                 }
             }
@@ -152,7 +154,7 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
         }
     }
 
-    public void renderFluidBlocks(double height, int colour, IIcon texture, int repx, int yoffset, int maxyoffset, int repz, float opacity)
+    public void renderFluidBlocks(double height, int colour, IIcon texture, int repx, int yoffset, int maxyoffset, int repz, boolean setOpacity, float opacity)
     {
         Tessellator t = Tessellator.instance;
 
@@ -178,7 +180,7 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
             for (int rz = 0; rz < repz; rz++)
             {
                 t.startDrawingQuads();
-                if (opacity == 1.0f) t.setColorOpaque_F(r, g, b);
+                if (!setOpacity) t.setColorOpaque_F(r, g, b);
                 else t.setColorRGBA_F(r, g, b, opacity);
 
                 // north side

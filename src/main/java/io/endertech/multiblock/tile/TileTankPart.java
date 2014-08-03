@@ -1,27 +1,21 @@
 package io.endertech.multiblock.tile;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
 import io.endertech.block.ETBlocks;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.multiblock.controller.ControllerTank;
-import io.endertech.network.NetworkHandler;
+import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.LogHelper;
 import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IMessageHandler<ControllerTank.MessageTankUpdate, IMessage>
+public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
 {
     public TileTankPart()
     {
@@ -31,7 +25,6 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IM
     public static void init()
     {
         GameRegistry.registerTileEntity(TileTankPart.class, "tile." + Strings.Blocks.TANK_PART_NAME);
-        NetworkHandler.INSTANCE.registerMessage(TileTankPart.class, ControllerTank.MessageTankUpdate.class, NetworkHandler.getDiscriminator(), Side.CLIENT);
     }
 
     @Override
@@ -234,26 +227,46 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer, IM
     }
 
     @Override
-    public IMessage onMessage(ControllerTank.MessageTankUpdate message, MessageContext ctx)
+    public PacketETBase getPacket()
     {
-        TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
+        PacketETBase tileBasePacket = super.getPacket();
+        boolean isConnectedAndSaveDelegate = isConnected() && isMultiblockSaveDelegate();
+        tileBasePacket.addBool(isConnectedAndSaveDelegate);
 
-        if (tileEntity instanceof TileTankPart)
+        if (isConnectedAndSaveDelegate)
         {
-            TileTankPart tile = (TileTankPart) tileEntity;
-            ControllerTank controller = tile.getTankController();
+            return this.getTankController().getPacket(tileBasePacket);
+        } else
+        {
+            return tileBasePacket;
+        }
+    }
+
+    @Override
+    public void handleTilePacket(PacketETBase packetETBase, boolean isServer)
+    {
+        super.handleTilePacket(packetETBase, isServer);
+        boolean tileWasConnectedAndWasDelegate = packetETBase.getBool();
+
+        if (!isServer)
+        {
+            if (!tileWasConnectedAndWasDelegate)
+            {
+                //                LogHelper.info("Tile sent a packet despite not being connected and the save delegate.");
+                return;
+            }
+
+            ControllerTank controller = this.getTankController();
             if (controller == null)
             {
-                tile.cachedMultiblockMessage = message;
-                //                LogHelper.info("Caching message for tank part tile: " + tile.xCoord + ", " + tile.yCoord + ", " + tile.zCoord);
+                this.cachedMultiblockPacket = packetETBase;
+                //                                LogHelper.info("Caching message for tank part tile: " + this.xCoord + ", " + this.yCoord + ", " + this.zCoord);
             } else
             {
-                controller.decodeMessage(message);
+                controller.handleTilePacket(packetETBase, isServer);
                 //                LogHelper.info("Decoding message for controller: " + tile.xCoord + ", " + tile.yCoord + ", " + tile.zCoord);
             }
         }
-
-        return null;
     }
 
     protected boolean canInteractFromDirection(ForgeDirection from)

@@ -5,8 +5,7 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import io.endertech.item.IKeyHandler;
-import io.endertech.network.NetworkHandler;
-import io.endertech.network.message.MessageKeyPressed;
+import io.endertech.network.PacketKeyPressed;
 import io.endertech.reference.Strings;
 import io.endertech.util.Key;
 import io.endertech.util.LogHelper;
@@ -93,7 +92,7 @@ public class KeyBindingHandler
                     if (player.worldObj.isRemote)
                     {
                         LogHelper.debug("Remote, sent " + keyCode.toString() + " to server");
-                        NetworkHandler.INSTANCE.sendToServer(new MessageKeyPressed(keyCode));
+                        new PacketKeyPressed().sendKeyPressedPacket(keyCode);
                     } else
                     {
                         LogHelper.debug("Client, handling key press: " + keyCode.toString());

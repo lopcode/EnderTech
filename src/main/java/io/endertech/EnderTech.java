@@ -17,7 +17,9 @@ import io.endertech.item.ETItems;
 import io.endertech.multiblock.block.BlockMultiblockGlass;
 import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.block.BlockTankPart;
-import io.endertech.network.NetworkHandler;
+import io.endertech.network.PacketHandler;
+import io.endertech.network.PacketKeyPressed;
+import io.endertech.network.PacketTile;
 import io.endertech.proxy.CommonProxy;
 import io.endertech.reference.Reference;
 import io.endertech.util.BlockHelper;
@@ -73,8 +75,8 @@ public class EnderTech
         ModuleHelper.setupModules();
         ModuleHelper.pulsar.preInit(event);
 
-        // Network handler
-        NetworkHandler.init();
+        // Packet handler
+        PacketHandler.instance.init();
 
         // Version checker
 
@@ -105,6 +107,10 @@ public class EnderTech
     @SuppressWarnings("unused")
     public void init(FMLInitializationEvent event)
     {
+        // Packets
+        PacketTile.init();
+        PacketKeyPressed.init();
+
         // Pulsar loading
         ModuleHelper.pulsar.init(event);
 
@@ -129,6 +135,9 @@ public class EnderTech
     {
         // Pulsar loading
         ModuleHelper.pulsar.postInit(event);
+
+        // Packet postInit
+        PacketHandler.instance.postInit();
 
         if (FMLCommonHandler.instance().getSide().isClient())
         {

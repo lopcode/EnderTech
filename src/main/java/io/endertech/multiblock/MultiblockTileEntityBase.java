@@ -1,11 +1,9 @@
 package io.endertech.multiblock;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import io.endertech.network.NetworkHandler;
+import io.endertech.network.PacketETBase;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.chunk.IChunkProvider;
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     private boolean visited;
 
     private boolean saveMultiblockData;
-    protected IMessage cachedMultiblockMessage;
+    protected PacketETBase cachedMultiblockPacket;
     protected NBTTagCompound cachedMultiblockNBT;
     private boolean paused;
 
@@ -34,7 +32,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
         visited = false;
         saveMultiblockData = false;
         paused = false;
-        cachedMultiblockMessage = null;
+        cachedMultiblockPacket = null;
         cachedMultiblockNBT = null;
     }
 
@@ -177,43 +175,6 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
         MultiblockRegistry.onPartAdded(this.worldObj, this);
     }
 
-    // Network Communication
-
-    @Override
-    public Packet getDescriptionPacket()
-    {
-        IMessage message = this.encodeMessage();
-        return NetworkHandler.INSTANCE.getPacketFrom(message);
-    }
-
-    ///// Things to override in most implementations (IMultiblockPart)
-
-    /**
-     * Override this to easily modify the description packet's data without having
-     * to worry about sending the packet itself.
-     */
-    protected IMessage encodeMessage()
-    {
-        if (this.isMultiblockSaveDelegate() && isConnected())
-        {
-            return getMultiblockController().encodeMessage(this);
-        }
-
-        return null;
-    }
-
-    /**
-     * Override this to easily read in data from a TileEntity's description packet.
-     * Encoded in encodeMessage.
-     */
-    protected void decodeMessage(IMessage message)
-    {
-        if (isConnected())
-        {
-            getMultiblockController().decodeMessage(message);
-        }
-    }
-
     @Override
     public boolean hasMultiblockNBTCache()
     {
@@ -223,7 +184,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     @Override
     public boolean hasMultiblockMessageCache()
     {
-        return this.cachedMultiblockMessage != null;
+        return this.cachedMultiblockPacket != null;
     }
 
     @Override
@@ -233,9 +194,9 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     }
 
     @Override
-    public IMessage getMultiblockMessageCache()
+    public PacketETBase getMultiblockPacketCache()
     {
-        return this.cachedMultiblockMessage;
+        return this.cachedMultiblockPacket;
     }
 
 
@@ -243,7 +204,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     public void onMultiblockDataAssimilated()
     {
         this.cachedMultiblockNBT = null;
-        this.cachedMultiblockMessage = null;
+        this.cachedMultiblockPacket = null;
     }
 
     ///// Game logic callbacks (IMultiblockPart)

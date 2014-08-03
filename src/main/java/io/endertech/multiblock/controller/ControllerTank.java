@@ -1,11 +1,8 @@
 package io.endertech.multiblock.controller;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.endertech.config.GeneralConfig;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
-import io.endertech.multiblock.MultiblockTileEntityBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.rectangular.RectangularMultiblockControllerBase;
@@ -13,9 +10,9 @@ import io.endertech.multiblock.tile.TileTankController;
 import io.endertech.multiblock.tile.TileTankEnergyInput;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.multiblock.tile.TileTankValve;
-import io.endertech.network.message.MessageTileUpdate;
+import io.endertech.network.ITilePacketHandler;
+import io.endertech.network.PacketETBase;
 import io.endertech.util.*;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -28,7 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import java.util.*;
 
-public class ControllerTank extends RectangularMultiblockControllerBase implements IOutlineDrawer
+public class ControllerTank extends RectangularMultiblockControllerBase implements IOutlineDrawer, ITilePacketHandler
 {
     protected boolean active;
     private Set<TileTankPart> attachedControllers;
@@ -82,10 +79,10 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     }
 
     @Override
-    public void onAttachedPartWithMultiblockMessage(IMultiblockPart part, IMessage message)
+    public void onAttachedPartWithMultiblockPacket(IMultiblockPart part, PacketETBase packetETBase)
     {
         //        LogHelper.info("My random number before: " + this.random_number);
-        this.decodeMessage(message);
+        this.handleTilePacket(packetETBase, true);
         //        LogHelper.info("My random number after:" + this.random_number);
     }
 
@@ -322,70 +319,30 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         }
     }
 
-    public static class MessageTankUpdate extends MessageTileUpdate
+    @Override
+    public PacketETBase getPacket(PacketETBase packetSaveDelegateBase)
     {
-        public int random_number;
-        public NBTTagCompound tank;
-        public int storedEnergy;
+        packetSaveDelegateBase.addInt(this.random_number);
+        packetSaveDelegateBase.addFluidStack(this.tank.getFluid());
+        packetSaveDelegateBase.addInt(this.storedEnergy);
 
-        public MessageTankUpdate() { }
-
-        public MessageTankUpdate(TileTankPart tileSaveDelegate)
-        {
-            super(tileSaveDelegate);
-            ControllerTank controller = tileSaveDelegate.getTankController();
-            this.random_number = controller.random_number;
-            //            LogHelper.info("Packed random number in to message: " + this.random_number);
-
-            NBTTagCompound tank_tag = new NBTTagCompound();
-            controller.tank.writeToNBT(tank_tag);
-            this.tank = tank_tag;
-
-            this.storedEnergy = controller.storedEnergy;
-        }
-
-        @Override
-        public void fromBytes(ByteBuf buf)
-        {
-            super.fromBytes(buf);
-            this.random_number = buf.readInt();
-            this.tank = ByteBufUtils.readTag(buf);
-            this.storedEnergy = buf.readInt();
-        }
-
-        @Override
-        public void toBytes(ByteBuf buf)
-        {
-            super.toBytes(buf);
-            buf.writeInt(this.random_number);
-            ByteBufUtils.writeTag(buf, this.tank);
-            buf.writeInt(this.storedEnergy);
-        }
+        return packetSaveDelegateBase;
     }
 
     @Override
-    public IMessage encodeMessage(MultiblockTileEntityBase saveDelegate)
+    public void handleTilePacket(PacketETBase packetETBase, boolean isServer)
     {
-        if (saveDelegate instanceof TileTankPart)
-        {
-            return new MessageTankUpdate((TileTankPart) saveDelegate);
-        }
+        int random_number = packetETBase.getInt();
+        FluidStack fluidStack = packetETBase.getFluidStack();
+        int storedEnergy = packetETBase.getInt();
 
-        return null;
-    }
-
-    @Override
-    public void decodeMessage(IMessage message)
-    {
-        if (message instanceof MessageTankUpdate)
+        if (!isServer)
         {
-            MessageTankUpdate tankUpdate = (MessageTankUpdate) message;
-            this.random_number = tankUpdate.random_number;
+            this.random_number = random_number;
             this.lastTank = new FluidTank(this.tank.getFluid(), this.tank.getCapacity());
             this.renderAddition = 0;
-            this.tank.readFromNBT(tankUpdate.tank);
-            this.storedEnergy = tankUpdate.storedEnergy;
-            //            LogHelper.info("Reading tank from message: " + this.toString());
+            this.tank.setFluid(fluidStack);
+            this.storedEnergy = storedEnergy;
         }
     }
 

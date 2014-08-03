@@ -1,8 +1,8 @@
 package io.endertech.multiblock;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import io.endertech.network.NetworkHandler;
+import io.endertech.network.ITilePacketHandler;
+import io.endertech.network.PacketETBase;
+import io.endertech.network.PacketHandler;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.LogHelper;
@@ -23,7 +23,7 @@ import java.util.Set;
  * <p/>
  * Subordinate TileEntities implement the IMultiblockPart class and, generally, should not have an update() loop.
  */
-public abstract class MultiblockControllerBase implements IOutlineDrawer
+public abstract class MultiblockControllerBase implements IOutlineDrawer, ITilePacketHandler
 {
     public static final short DIMENSION_UNBOUNDED = -1;
 
@@ -107,7 +107,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer
      */
     public abstract void onAttachedPartWithMultiblockNBT(IMultiblockPart part, NBTTagCompound nbt);
 
-    public abstract void onAttachedPartWithMultiblockMessage(IMultiblockPart part, IMessage message);
+    public abstract void onAttachedPartWithMultiblockPacket(IMultiblockPart part, PacketETBase packetETBase);
 
     /**
      * Check if a block is being tracked by this machine.
@@ -145,8 +145,8 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer
             part.onMultiblockDataAssimilated();
         } else if (part.hasMultiblockMessageCache())
         {
-            //            LogHelper.info("Setting multiblock data from cached Message");
-            onAttachedPartWithMultiblockMessage(part, part.getMultiblockMessageCache());
+            //                        LogHelper.info("Setting multiblock data from cached Message");
+            onAttachedPartWithMultiblockPacket(part, part.getMultiblockPacketCache());
             part.onMultiblockDataAssimilated();
         }
 
@@ -559,7 +559,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer
         TileEntity tileEntity = this.worldObj.getTileEntity(referenceCoord.x, referenceCoord.y, referenceCoord.z);
         if (tileEntity != null && tileEntity instanceof MultiblockTileEntityBase)
         {
-            NetworkHandler.INSTANCE.sendToAllAround(((MultiblockTileEntityBase) tileEntity).encodeMessage(), new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, referenceCoord.x, referenceCoord.y, referenceCoord.z, 256.0D));
+            PacketHandler.sendToAllAround(((MultiblockTileEntityBase) tileEntity).getPacket(), tileEntity);
         }
     }
 
@@ -716,12 +716,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer
     /*
     * Called when the save delegate's tile entity is being asked for its description packet
     */
-    public abstract IMessage encodeMessage(MultiblockTileEntityBase saveDelegate);
-
-    /**
-     * Called when the save delegate's tile entity receiving a description packet
-     */
-    public abstract void decodeMessage(IMessage message);
+    public abstract PacketETBase getPacket(PacketETBase packetSaveDelegateBase);
 
     /**
      * @return True if this controller has no associated blocks, false otherwise

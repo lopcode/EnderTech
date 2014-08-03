@@ -1,8 +1,7 @@
 package io.endertech.block;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
 import io.endertech.EnderTech;
-import io.endertech.network.NetworkHandler;
+import io.endertech.network.PacketHandler;
 import io.endertech.reference.Strings;
 import io.endertech.tile.TileSpinningCube;
 import net.minecraft.block.BlockContainer;
@@ -60,8 +59,7 @@ public class BlockSpinningCube extends BlockContainer
                 if (player.isSneaking()) tile.applySpeedUp();
                 else tile.createRandomAddition();
 
-
-                NetworkHandler.INSTANCE.sendToAllAround(new TileSpinningCube.MessageTileSpinningCubeUpdate(tile), new NetworkRegistry.TargetPoint(player.dimension, x, y, z, 4096));
+                PacketHandler.sendToAllAround(tile.getPacket(), tile);
             }
         }
 
