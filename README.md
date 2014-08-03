@@ -10,10 +10,9 @@ Go to #EnderTech on Esper if you have any questions, concerns, or just want to s
 ## Progress
 Things that are mostly done:
 * Exchanger,
-* Tank infrastructure.
+* Tanks.
 
 Things that are in progress:
-* Tank energy usage,
 * Ender/Charged Ender creation and management,
 * Teleportation infrastructure,
 * Textures,
