@@ -170,6 +170,8 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         if (this.lastTank != null) this.lastTank.setCapacity(tankCapacity);
 
         this.setActive(true);
+
+        this.sendUpdatePacketToClosePlayers();
     }
 
     @Override
