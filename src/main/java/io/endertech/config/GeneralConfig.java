@@ -10,6 +10,7 @@ public class GeneralConfig
 
     public static int tankStorageMultiplier;
     public static boolean debugRender;
+    public static boolean gasTopToBottom;
 
     protected static void init(File configFile)
     {
@@ -29,6 +30,7 @@ public class GeneralConfig
             }
 
             debugRender = generalConfig.get("rendering", "Rendering.Debug", false).getBoolean(false);
+            gasTopToBottom = generalConfig.get("rendering", "Rendering.Tank.GaseousTopToBottom", false).getBoolean(false);
         } catch (Exception e)
         {
             LogHelper.error("Failed to load general config");

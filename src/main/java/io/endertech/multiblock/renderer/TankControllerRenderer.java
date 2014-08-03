@@ -2,6 +2,7 @@ package io.endertech.multiblock.renderer;
 
 import cofh.render.RenderHelper;
 import io.endertech.block.ETBlocks;
+import io.endertech.config.GeneralConfig;
 import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.multiblock.tile.TileTankController;
@@ -95,6 +96,8 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
                 levelAmounts[level] = levelAmount;
             }
 
+            float opacity = 0;
+
             final Fluid fluid = controller.tank.getFluid().getFluid();
             final IIcon texture = fluid.getStillIcon();
             if (texture == null) return;
@@ -106,11 +109,27 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glColor3f(1, 1, 1);
+
 
             final int colour = fluid.getColor(new FluidStack(fluid, 1));
-
             bindTexture(getFluidSheet(fluid));
+
+            if (fluid.getDensity() < 0)
+            {
+                if (GeneralConfig.gasTopToBottom)
+                {
+                    GL11.glTranslatef(0f, 1f, 0f);
+                    GL11.glRotatef(180, 1.0f, 0.0f, 1.0f);
+                } else
+                {
+                    for (int i = 0; i < unitHeights; i++)
+                        levelAmounts[i] = capacityPerUnitHeight;
+
+                    stopLevel = unitHeights;
+                    opacity = (float) ((controller.lastTank.getFluidAmount() + controller.renderAddition) / capacity);
+                    if (opacity < 0.05F) opacity = 0.05F;
+                }
+            }
 
             if (stopLevel != 0)
             {
@@ -121,7 +140,7 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
                         double height = levelAmounts[level] / capacityPerUnitHeight;
                         if (height > 0 && height < 0.02) height = 0.02;
 
-                        renderFluidBlocks(height, colour, texture, (max.x - min.x - 1), level, stopLevel, (max.z - min.z - 1));
+                        renderFluidBlocks(height, colour, texture, (max.x - min.x - 1), level, stopLevel, (max.z - min.z - 1), opacity);
                     }
                 }
             }
@@ -133,7 +152,7 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
         }
     }
 
-    public void renderFluidBlocks(double height, int colour, IIcon texture, int repx, int yoffset, int maxyoffset, int repz)
+    public void renderFluidBlocks(double height, int colour, IIcon texture, int repx, int yoffset, int maxyoffset, int repz, float opacity)
     {
         Tessellator t = Tessellator.instance;
 
@@ -158,9 +177,9 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
             int ry = yoffset;
             for (int rz = 0; rz < repz; rz++)
             {
-
                 t.startDrawingQuads();
-                t.setColorOpaque_F(r, g, b);
+                if (opacity == 1.0f) t.setColorOpaque_F(r, g, b);
+                else t.setColorRGBA_F(r, g, b, opacity);
 
                 // north side
                 if (rz == 0)
