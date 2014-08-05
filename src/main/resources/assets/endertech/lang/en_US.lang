@@ -1,4 +1,4 @@
-# Note: these are GB spellings because Forge defaults to expecting en_US and refuses to accept en_GB stupidly
+# Note: these are GB spellings by default
 
 # Item localisations
 item.endertech.exchanger.exchangerRedstone.name=Redstone Exchanger
@@ -16,3 +16,5 @@ tile.endertech.enderTankPart.1.name=Ender Tank Valve
 tile.endertech.enderTankPart.2.name=Ender Tank Energy Input
 tile.endertech.enderTankController.0.name=Ender Tank Controller
 tile.multiblockGlass.0.name=Ender Tank Glass
+
+tile.endertech.chargedPlane.name=Charged Plane
