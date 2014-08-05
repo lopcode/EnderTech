@@ -10,28 +10,28 @@ import net.minecraft.block.Block;
 
 public class ETBlocks
 {
-//    public static Block blockSpinningCube;
-//    public static Block blockChargedPlane;
+    //    public static Block blockSpinningCube;
+    //    public static Block blockChargedPlane;
     public static Block blockTankPart;
     public static Block blockTankController;
     public static Block blockMultiblockGlass;
 
     public static void init()
     {
-//        blockSpinningCube = new BlockSpinningCube();
-//        blockChargedPlane = new BlockChargedPlane();
+        //        blockSpinningCube = new BlockSpinningCube();
+        //        blockChargedPlane = new BlockChargedPlane();
         blockTankPart = new BlockTankPart();
         blockMultiblockGlass = new BlockMultiblockGlass();
         blockTankController = new BlockTankController();
 
-//        GameRegistry.registerBlock(blockSpinningCube, ItemBlockBasic.class, Strings.Blocks.SPINNING_CUBE_NAME);
-//        GameRegistry.registerBlock(blockChargedPlane, ItemBlockBasic.class, Strings.Blocks.CHARGED_PLANE_NAME);
+        //        GameRegistry.registerBlock(blockSpinningCube, ItemBlockBasic.class, Strings.Blocks.SPINNING_CUBE_NAME);
+        //        GameRegistry.registerBlock(blockChargedPlane, ItemBlockBasic.class, Strings.Blocks.CHARGED_PLANE_NAME);
         GameRegistry.registerBlock(blockTankPart, ItemBlockTankPart.class, Strings.Blocks.TANK_PART_NAME);
         GameRegistry.registerBlock(blockMultiblockGlass, ItemBlockBasic.class, Strings.Blocks.MULTIBLOCK_GLASS_NAME);
         GameRegistry.registerBlock(blockTankController, ItemBlockBasic.class, Strings.Blocks.TANK_CONTROLLER_NAME);
 
-//        ((BlockSpinningCube) blockSpinningCube).init();
-//        ((BlockChargedPlane) blockChargedPlane).init();
+        //        ((BlockSpinningCube) blockSpinningCube).init();
+        //        ((BlockChargedPlane) blockChargedPlane).init();
         ((BlockTankPart) blockTankPart).init();
         ((BlockMultiblockGlass) blockMultiblockGlass).init();
         ((BlockTankController) blockTankController).init();
