@@ -1,5 +1,6 @@
 package io.endertech.creativetab;
 
+import io.endertech.item.ETItems;
 import io.endertech.reference.Strings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -15,6 +16,6 @@ public class CreativeTabET extends CreativeTabs
     @Override
     public Item getTabIconItem()
     {
-        return Items.ender_pearl;
+        return ETItems.itemExchanger;
     }
 }
