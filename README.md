@@ -67,4 +67,5 @@ If you run in to odd Gradle issues, doing `gradlew clean` usually fixes it.
 * Team CoFH ([Thermal Expansion](http://teamcofh.com/)),
 * Azanor ([Thaumcraft](http://www.minecraftforum.net/topic/2011841-thaumcraft-41114-updated-2052014/)),
 * ErogenousBeef (huge help with multiblocks, connected textures, [BigReactors / BeefCore](https://github.com/erogenousbeef)),
-* [Arkan](https://github.com/emberwalker) (Build server).
+* [Arkan](https://github.com/emberwalker) (Build server),
+* [RWTema](http://www.patreon.com/rwtema) (Textures).
