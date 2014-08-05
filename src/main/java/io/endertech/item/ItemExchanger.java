@@ -17,7 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ItemExchanger extends ItemETEnergyContainer implements IKeyHandler, IOutlineDrawer, IItemBlockAffector
+public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOutlineDrawer, IItemBlockAffector
 {
     private static Set<Key.KeyCode> handledKeys;
 
