@@ -19,21 +19,18 @@ public class ETBlocks
 
     public static void init()
     {
-        blockTank = new BlockTank();
         blockSpinningCube = new BlockSpinningCube();
         blockChargedPlane = new BlockChargedPlane();
         blockTankPart = new BlockTankPart();
         blockMultiblockGlass = new BlockMultiblockGlass();
         blockTankController = new BlockTankController();
 
-        GameRegistry.registerBlock(blockTank, ItemBlockBasic.class, Strings.TANK_NAME);
         GameRegistry.registerBlock(blockSpinningCube, ItemBlockBasic.class, Strings.Blocks.SPINNING_CUBE_NAME);
         GameRegistry.registerBlock(blockChargedPlane, ItemBlockBasic.class, Strings.Blocks.CHARGED_PLANE_NAME);
         GameRegistry.registerBlock(blockTankPart, ItemBlockTankPart.class, Strings.Blocks.TANK_PART_NAME);
         GameRegistry.registerBlock(blockMultiblockGlass, ItemBlockBasic.class, Strings.Blocks.MULTIBLOCK_GLASS_NAME);
         GameRegistry.registerBlock(blockTankController, ItemBlockBasic.class, Strings.Blocks.TANK_CONTROLLER_NAME);
 
-        ((BlockTank) blockTank).init();
         ((BlockSpinningCube) blockSpinningCube).init();
         ((BlockChargedPlane) blockChargedPlane).init();
         ((BlockTankPart) blockTankPart).init();
