@@ -3,9 +3,9 @@
 ##Introduction
 This is my first foray in to Minecraft modding. It's intended to be a tech and Ender themed mod, starting at around Thermal Expansion's end-game. It will contain powerful, relatively expensive mechanics, with some configurability. The defaults will maintain a balance that makes my own game more fun.
 
-It's in development so only use it in a world you don't care about. If it becomes popular, or gets included in a larger modpack, I'll commit to some more formal processes to make things better for users and modpack makers.
+Some features are often in development, so try to use Promoted builds in your world. It's still no guarantee that a recipe or cost won't change, but I'll try to make sure things carry over where possible.
 
-Go to #EnderTech on Esper if you have any questions, concerns, or just want to shout at me for doing something wrong. 
+Go to #EnderTech on Esper if you have any questions or concerns (especially if you're considering including it in a larger modpack), or just want to shout at me for doing something wrong. 
 
 ## Progress
 Things that are mostly done:
@@ -13,17 +13,16 @@ Things that are mostly done:
 * Tanks.
 
 Things that are in progress:
+* Recipes,
 * Ender/Charged Ender creation and management,
-* Teleportation infrastructure,
-* Textures,
-* Recipes.
+* Teleportation infrastructure.
 
 ##License and terms
 Things I want you to do:
 * Learn from the source,
   * Include a thank-you, or put me in your credits (as "Drayshak"),
 * If you're feeling generous:
-  * Tell me you enjoy using the mod in IRC (Esper/#MultiMC) or on Twitter ([@Drayshak](https://twitter.com/drayshak)),
+  * Tell me you enjoy using the mod in IRC (Esper/#EnderTech) or on Twitter ([@Drayshak](https://twitter.com/drayshak)),
 * Enjoy the mod.
 
 Things I don't want you to do:
