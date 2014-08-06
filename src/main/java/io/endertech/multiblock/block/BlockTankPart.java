@@ -116,7 +116,10 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
                     MultiblockControllerBase controller = ((IMultiblockPart) te).getMultiblockController();
                     if (controller != null)
                     {
-                        player.addChatComponentMessage(new ChatComponentText(controller.toString()));
+                        player.addChatComponentMessage(new ChatComponentText("Ender Tank"));
+                        List<String> tooltipLines = controller.getWailaBody();
+                        for (String line : tooltipLines)
+                            player.addChatComponentMessage(new ChatComponentText(" " + line));
 
                         Exception e = controller.getLastValidationException();
                         if (e != null)
@@ -126,7 +129,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
                         }
                     } else
                     {
-                        player.addChatComponentMessage(new ChatComponentText("Block is not connected to a reactor. This could be due to lag, or a bug. If the problem persists, try breaking and re-placing the block."));
+                        player.addChatComponentMessage(new ChatComponentText("Block is not connected to a tank. This could be due to lag, or a bug. If the problem persists, try breaking and re-placing the block."));
                         return true;
                     }
                 }
