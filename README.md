@@ -21,6 +21,7 @@ Things that are in progress:
 Things I want you to do:
 * Learn from the source,
   * Include a thank-you, or put me in your credits (as "Drayshak"),
+* Include it in a modpack (public or private),
 * If you're feeling generous:
   * Tell me you enjoy using the mod in IRC (Esper/#EnderTech) or on Twitter ([@Drayshak](https://twitter.com/drayshak)),
 * Enjoy the mod.
