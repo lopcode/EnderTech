@@ -142,14 +142,12 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
     @Override
     public boolean isOpaqueCube()
     {
-
         return true;
     }
 
     @Override
     public boolean renderAsNormalBlock()
     {
-
         return true;
     }
 

@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class Exchange
 {
@@ -17,8 +18,9 @@ public class Exchange
     public ItemStack target;
     public int hotbar_id = 0;
     public EntityPlayer player = null;
+    public ForgeDirection orientation = null;
 
-    public Exchange(BlockCoord origin, int radius, Block source, int sourceMeta, ItemStack target, EntityPlayer p, int hotbar_id)
+    public Exchange(BlockCoord origin, int radius, Block source, int sourceMeta, ItemStack target, EntityPlayer p, int hotbar_id, ForgeDirection orientation)
     {
         this.origin = origin;
         this.radius = radius;
@@ -27,6 +29,7 @@ public class Exchange
         this.target = target;
         this.player = p;
         this.hotbar_id = hotbar_id;
+        this.orientation = orientation;
     }
 
     public static boolean blockSuitableForExchange(BlockCoord blockCoord, World world, Block source, int sourceMeta, ItemStack target)

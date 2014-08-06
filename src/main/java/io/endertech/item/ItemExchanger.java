@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.common.util.ForgeDirection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -122,7 +123,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
     }
 
     @Override
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float xFloat, float yFloat, float zFloat)
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float xFloat, float yFloat, float zFloat)
     {
         LogHelper.debug("Exchanger use on " + x + " " + y + " " + z);
 
@@ -149,7 +150,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
         if ((pb != null) && (player.worldObj.getTileEntity(x, y, z) == null) && !player.worldObj.isRemote)
         {
-            WorldEventHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), this.getTargetRadius(itemstack), player.worldObj.getBlock(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb, player, player.inventory.currentItem);
+            WorldEventHandler.queueExchangeRequest(player.worldObj, new BlockCoord(x, y, z), this.getTargetRadius(itemstack), player.worldObj.getBlock(x, y, z), player.worldObj.getBlockMetadata(x, y, z), pb, player, player.inventory.currentItem, ForgeDirection.getOrientation(side));
             //TeleportHelper.teleportPlayerToDimensionWithCoords((EntityPlayerMP) player, player.dimension, player.posX, player.posY + 10, player.posZ);
         }
 
@@ -307,7 +308,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
         if (this.getSourceItemStack(event.currentItem) == null) return false;
 
-        Set<BlockCoord> blocks = this.blocksAffected(event.currentItem, world, target);
+        Set<BlockCoord> blocks = this.blocksAffected(event.currentItem, world, target, ForgeDirection.getOrientation(event.target.sideHit));
         if (blocks == null || blocks.size() == 0) return false;
 
         for (BlockCoord blockCoord : blocks)
@@ -319,7 +320,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
     }
 
     @Override
-    public Set<BlockCoord> blocksAffected(ItemStack item, World world, BlockCoord origin)
+    public Set<BlockCoord> blocksAffected(ItemStack item, World world, BlockCoord origin, ForgeDirection side)
     {
         if (!(item.getItem() instanceof ItemExchanger)) return null;
 
@@ -331,7 +332,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
         for (int radius = 0; radius <= exchangerRadius; radius++)
         {
-            Set<BlockCoord> squareSet = Geometry.squareSet(radius, new BlockCoord(origin.x, origin.y, origin.z));
+            Set<BlockCoord> squareSet = Geometry.squareSet(radius, new BlockCoord(origin.x, origin.y, origin.z), side);
             for (BlockCoord blockCoord : squareSet)
             {
                 if (Exchange.blockSuitableForExchange(blockCoord, world, targetBlock, targetMeta, this.getSourceItemStack(item)))

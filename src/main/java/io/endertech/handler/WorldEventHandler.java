@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
 public class WorldEventHandler
@@ -30,7 +31,7 @@ public class WorldEventHandler
         SUCCESS
     }
 
-    public static void queueExchangeRequest(World world, BlockCoord origin, int radius, Block source, int sourceMeta, ItemStack target, EntityPlayer player, int hotbar_id)
+    public static void queueExchangeRequest(World world, BlockCoord origin, int radius, Block source, int sourceMeta, ItemStack target, EntityPlayer player, int hotbar_id, ForgeDirection orientation)
     {
         if (target.isItemEqual(new ItemStack(source, 1, sourceMeta)))
         {
@@ -46,7 +47,7 @@ public class WorldEventHandler
             queue = exchanges.get(dimensionId);
         }
 
-        queue.add(new Exchange(origin, radius, source, sourceMeta, target, player, hotbar_id));
+        queue.add(new Exchange(origin, radius, source, sourceMeta, target, player, hotbar_id, orientation));
         world.playSoundAtEntity(player, "mob.endermen.portal", 1.0F, 1.0F);
         exchanges.put(dimensionId, queue);
     }
@@ -87,12 +88,12 @@ public class WorldEventHandler
             exchange.currentRadiusTicks--;
             if (exchange.currentRadiusTicks > 0) continue;
 
-            Set<BlockCoord> blocks = Geometry.squareSet(exchange.currentRadius - 1, exchange.origin);
+            Set<BlockCoord> blocks = Geometry.squareSet(exchange.currentRadius - 1, exchange.origin, exchange.orientation);
             boolean stop = false;
             for (BlockCoord blockCoord : blocks)
             {
                 if (stop) break;
-                ExchangeResult result = checkAndPerformExchange(exchange, exchanger, exchangerStack, world, new BlockCoord(blockCoord.x, exchange.origin.y, blockCoord.z));
+                ExchangeResult result = checkAndPerformExchange(exchange, exchanger, exchangerStack, world, new BlockCoord(blockCoord.x, blockCoord.y, blockCoord.z));
                 switch (result)
                 {
                     case FAIL_ENERGY:

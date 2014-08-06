@@ -1,6 +1,7 @@
 package io.endertech.util;
 
 import net.minecraft.util.Vec3;
+import net.minecraftforge.common.util.ForgeDirection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -44,7 +45,7 @@ public class Geometry
         cubeFaces[LEFT_FACE] = new Vec3[] {cubeVertices[RIGHT_BOTTOM_BACK], cubeVertices[RIGHT_BOTTOM_FRONT], cubeVertices[LEFT_BOTTOM_FRONT], cubeVertices[LEFT_TOP_FRONT]};
     }
 
-    public static Set<BlockCoord> squareSet(int radius, BlockCoord origin)
+    public static Set<BlockCoord> squareSet(int radius, BlockCoord origin, ForgeDirection side)
     {
         Set<BlockCoord> ret = new LinkedHashSet<BlockCoord>();
         if (radius <= 0)
@@ -53,32 +54,99 @@ public class Geometry
             return ret;
         }
 
-        // Top edge
-        for (int x = -radius; x < radius; x++)
+        if (side == ForgeDirection.UP || side == ForgeDirection.DOWN)
         {
-            int z = radius;
-            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
-        }
+            // x-z plane with constant y
 
-        // Right edge
-        for (int z = radius; z > -radius; z--)
-        {
-            int x = radius;
-            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
-        }
+            // Top edge
+            for (int x = -radius; x < radius; x++)
+            {
+                int z = radius;
+                ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+            }
 
-        // Bottom edge
-        for (int x = radius; x > -radius; x--)
-        {
-            int z = -radius;
-            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
-        }
+            // Right edge
+            for (int z = radius; z > -radius; z--)
+            {
+                int x = radius;
+                ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+            }
 
-        // Left edge
-        for (int z = -radius; z < radius; z++)
+            // Bottom edge
+            for (int x = radius; x > -radius; x--)
+            {
+                int z = -radius;
+                ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+            }
+
+            // Left edge
+            for (int z = -radius; z < radius; z++)
+            {
+                int x = -radius;
+                ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+            }
+        } else if (side == ForgeDirection.NORTH || side == ForgeDirection.SOUTH)
         {
-            int x = -radius;
-            ret.add(new BlockCoord(origin.x + x, origin.y, origin.z + z));
+            // x-y plane with constant z
+
+            // Top edge
+            for (int x = -radius; x < radius; x++)
+            {
+                int y = radius;
+                ret.add(new BlockCoord(origin.x + x, origin.y + y, origin.z));
+            }
+
+            // Right edge
+            for (int y = radius; y > -radius; y--)
+            {
+                int x = radius;
+                ret.add(new BlockCoord(origin.x + x, origin.y + y, origin.z));
+            }
+
+            // Bottom edge
+            for (int x = radius; x > -radius; x--)
+            {
+                int y = -radius;
+                ret.add(new BlockCoord(origin.x + x, origin.y + y, origin.z));
+            }
+
+            // Left edge
+            for (int y = -radius; y < radius; y++)
+            {
+                int x = -radius;
+                ret.add(new BlockCoord(origin.x + x, origin.y + y, origin.z));
+            }
+        } else if (side == ForgeDirection.EAST || side == ForgeDirection.WEST)
+        {
+            // y-z plane with constant x
+
+            // Top edge
+            for (int z = -radius; z < radius; z++)
+            {
+                int y = radius;
+                ret.add(new BlockCoord(origin.x, origin.y + y, origin.z + z));
+            }
+
+            // Right edge
+            for (int y = radius; y > -radius; y--)
+            {
+                int z = radius;
+                ret.add(new BlockCoord(origin.x, origin.y + y, origin.z + z));
+            }
+
+            // Bottom edge
+            for (int z = radius; z > -radius; z--)
+            {
+                int y = -radius;
+                ret.add(new BlockCoord(origin.x, origin.y + y, origin.z + z));
+            }
+
+            // Left edge
+            for (int y = -radius; y < radius; y++)
+            {
+                int z = -radius;
+                ret.add(new BlockCoord(origin.x, origin.y + y, origin.z + z));
+            }
         }
 
         return ret;
