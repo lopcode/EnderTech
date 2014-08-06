@@ -8,15 +8,18 @@ import io.endertech.network.PacketHandler;
 import io.endertech.network.PacketTile;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileET extends TileEntity implements ITilePacketHandler
 {
     protected String tileName;
+    protected ForgeDirection orientation;
     // Network Communication
 
     public TileET()
     {
         this.tileName = "";
+        this.orientation = ForgeDirection.SOUTH;
     }
 
     @Override
@@ -29,6 +32,7 @@ public class TileET extends TileEntity implements ITilePacketHandler
     {
         PacketETBase packet = new PacketTile(this);
         packet.addString(this.tileName);
+        packet.addByte(this.orientation.ordinal());
         return packet;
     }
 
@@ -55,11 +59,28 @@ public class TileET extends TileEntity implements ITilePacketHandler
     public void handleTilePacket(PacketETBase tilePacket, boolean isServer)
     {
         String tileName = tilePacket.getString();
+        byte orientation = tilePacket.getByte();
         if (ServerHelper.isClientWorld(this.worldObj))
         {
             this.tileName = tileName;
+            this.orientation = ForgeDirection.getOrientation(orientation);
         }
 
         this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+    }
+
+    public void setOrientation(int orientation)
+    {
+        this.orientation = ForgeDirection.getOrientation(orientation);
+    }
+
+    public ForgeDirection getOrientation()
+    {
+        return orientation;
+    }
+
+    public void setOrientation(ForgeDirection orientation)
+    {
+        this.orientation = orientation;
     }
 }

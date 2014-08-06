@@ -4,12 +4,13 @@ import cofh.api.block.IDismantleable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
+import io.endertech.block.BlockET;
 import io.endertech.multiblock.tile.TileTankController;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -25,7 +26,7 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockTankController extends BlockContainer implements IOutlineDrawer, IDismantleable
+public class BlockTankController extends BlockET implements ITileEntityProvider, IOutlineDrawer, IDismantleable
 {
     public static final int CONTROLLER_METADATA_BASE = 0; // Disabled, Idle, Active
     public static final int CONTROLLER_IDLE = 1;
@@ -38,6 +39,9 @@ public class BlockTankController extends BlockContainer implements IOutlineDrawe
     private static String[] _subBlocks = new String[] {"controllerBase", "controllerIdle", "controllerActive"};
 
     private IIcon[] _icons = new IIcon[_subBlocks.length];
+    public IIcon sideIcon;
+    public IIcon topIcon;
+    public IIcon bottomIcon;
 
     public static boolean isController(int metadata) { return metadata >= CONTROLLER_METADATA_BASE && metadata <= CONTROLLER_ACTIVE; }
 
@@ -49,7 +53,6 @@ public class BlockTankController extends BlockContainer implements IOutlineDrawe
         this.setCreativeTab(EnderTech.tabET);
         this.setBlockName(Strings.Blocks.TANK_CONTROLLER_NAME);
     }
-
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)
@@ -115,21 +118,23 @@ public class BlockTankController extends BlockContainer implements IOutlineDrawe
     }
 
     @Override
-    public IIcon getIcon(int side, int metadata)
+    public IIcon getIcon(int side, int meta)
     {
-        return _icons[metadata];
+        return _icons[meta];
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister)
     {
-        this.blockIcon = iconRegister.registerIcon(TEXTURE_BASE);
-
         for (int i = 0; i < _subBlocks.length; ++i)
         {
             _icons[i] = iconRegister.registerIcon(TEXTURE_BASE + "." + _subBlocks[i]);
         }
+
+        this.sideIcon = iconRegister.registerIcon(TEXTURE_BASE + ".controllerSide");
+        this.topIcon = iconRegister.registerIcon(TEXTURE_BASE + ".controllerTop");
+        this.bottomIcon = iconRegister.registerIcon(TEXTURE_BASE + ".controllerBottom");
     }
 
     @Override

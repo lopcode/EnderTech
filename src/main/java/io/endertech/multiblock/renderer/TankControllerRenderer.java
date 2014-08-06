@@ -1,6 +1,5 @@
 package io.endertech.multiblock.renderer;
 
-import cofh.render.RenderHelper;
 import io.endertech.block.ETBlocks;
 import io.endertech.config.GeneralConfig;
 import io.endertech.multiblock.block.BlockTankController;
@@ -16,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
@@ -32,11 +32,53 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
         return TextureMap.locationBlocksTexture;
     }
 
+    public void renderControllerBlock(RenderBlocks renderer, BlockTankController block, int meta, ForgeDirection front, double translateX, double translateY, double translateZ)
+    {
+        Tessellator tessellator = Tessellator.instance;
+
+        renderer.setRenderBoundsFromBlock(block);
+        GL11.glTranslated(translateX, translateY, translateZ);
+        tessellator.startDrawingQuads();
+
+        IIcon texture = block.bottomIcon;
+        tessellator.setNormal(0.0F, -1.0F, 0.0F);
+        renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, texture);
+
+        texture = block.topIcon;
+        tessellator.setNormal(0.0F, 1.0F, 0.0F);
+        renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, texture);
+
+        texture = block.sideIcon;
+        tessellator.setNormal(0.0F, 0.0F, -1.0F);
+        if (front == ForgeDirection.NORTH)
+            renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, block.getIcon(ForgeDirection.NORTH.ordinal(), meta));
+        else renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, texture);
+
+        tessellator.setNormal(0.0F, 0.0F, 1.0F);
+        if (front == ForgeDirection.SOUTH)
+            renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, block.getIcon(ForgeDirection.SOUTH.ordinal(), meta));
+        else renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, texture);
+
+        tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+        if (front == ForgeDirection.WEST)
+            renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, block.getIcon(ForgeDirection.WEST.ordinal(), meta));
+        else renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, texture);
+
+        tessellator.setNormal(1.0F, 0.0F, 0.0F);
+        if (front == ForgeDirection.EAST)
+            renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, block.getIcon(ForgeDirection.EAST.ordinal(), meta));
+        else renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, texture);
+
+        tessellator.draw();
+    }
+
+
     @Override
     public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f)
     {
         if (!(tile instanceof TileTankController)) return;
 
+        TileTankController tank = (TileTankController) tile;
         BlockTankController block = (BlockTankController) tile.getBlockType();
         int meta = tile.getBlockMetadata();
 
@@ -45,11 +87,10 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
         GL11.glPushMatrix();
 
         renderer.blockAccess = tile.getWorldObj();
-        RenderHelper.renderTextureAsBlock(renderer, block.getIcon(0, meta), x, y, z);
+        this.renderControllerBlock(renderer, block, meta, tank.getOrientation(), x, y, z);
 
         GL11.glPopMatrix();
 
-        TileTankController tank = (TileTankController) tile;
 
         ControllerTank controller = tank.getTankController();
         if (controller == null) return;
@@ -313,7 +354,7 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
         GL11.glTranslatef(x, y, z);
         renderer.setRenderBoundsFromBlock(ETBlocks.blockTankController);
         renderer.blockAccess = RenderBlocks.getInstance().blockAccess;
-        RenderHelper.renderTextureAsBlock(renderer, ETBlocks.blockTankController.getIcon(0, 0), 0, 0, 0);
+        this.renderControllerBlock(renderer, (BlockTankController) ETBlocks.blockTankController, 0, ForgeDirection.EAST, 0, 0, 0);
 
         GL11.glPopMatrix();
     }

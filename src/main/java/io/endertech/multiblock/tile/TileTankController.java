@@ -4,12 +4,15 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.block.ETBlocks;
+import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.ForgeDirection;
+import java.util.Set;
 
 public class TileTankController extends TileTankPart
 {
@@ -60,6 +63,35 @@ public class TileTankController extends TileTankPart
             BlockCoord max = controller.getMaximumCoord();
 
             return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+        }
+    }
+
+    @Override
+    public double getMaxRenderDistanceSquared()
+    {
+        return 16384D;
+    }
+
+    @Override
+    public void onMachineAssembled(MultiblockControllerBase controller)
+    {
+        super.onMachineAssembled(controller);
+
+        Set<ForgeDirection> out = this.getOutwardsDir();
+        if (out.isEmpty())
+        {
+            this.setOrientation(ForgeDirection.SOUTH);
+        } else if (!out.contains(this.getOrientation()))
+        {
+            for (int i = 2; i < 6; i++)
+            {
+                ForgeDirection orientation = ForgeDirection.getOrientation(i);
+                if (out.contains(orientation))
+                {
+                    this.setOrientation(orientation);
+                    return;
+                }
+            }
         }
     }
 
