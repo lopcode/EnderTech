@@ -9,16 +9,6 @@ Unless we talk about it first and I agree, I'm very unlikely to accept pull requ
 
 Go to #EnderTech on Esper if you have any questions or concerns (especially if you're considering including it in a larger modpack), or just want to shout at me for doing something wrong. 
 
-## Progress
-Things that are mostly done:
-* Exchanger,
-* Tanks.
-
-Things that are in progress:
-* Recipes,
-* Ender/Charged Ender creation and management,
-* Teleportation infrastructure.
-
 ##License and terms
 Things I want you to do:
 * Learn from the source,
