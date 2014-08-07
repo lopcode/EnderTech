@@ -5,6 +5,8 @@ This is my first foray in to Minecraft modding. It's intended to be a tech and E
 
 Some features are often in development, so try to use Promoted builds in your world. It's still no guarantee that a recipe or cost won't change, but I'll try to make sure things carry over where possible.
 
+Unless we talk about it first and I agree, I'm very unlikely to accept pull requests. GitHub is used to show the source and manage issues alone.
+
 Go to #EnderTech on Esper if you have any questions or concerns (especially if you're considering including it in a larger modpack), or just want to shout at me for doing something wrong. 
 
 ## Progress
