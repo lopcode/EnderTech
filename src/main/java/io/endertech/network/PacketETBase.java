@@ -1,7 +1,7 @@
 package io.endertech.network;
 
-import cofh.util.FluidHelper;
-import cofh.util.ItemHelper;
+import cofh.lib.util.helpers.FluidHelper;
+import cofh.lib.util.helpers.ItemHelper;
 import io.endertech.util.BlockCoord;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

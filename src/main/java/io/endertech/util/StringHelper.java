@@ -25,6 +25,6 @@ public class StringHelper
 
     public static String getFluidName(FluidStack fluidStack)
     {
-        return cofh.util.StringHelper.getFluidName(fluidStack);
+        return cofh.lib.util.helpers.StringHelper.getFluidName(fluidStack);
     }
 }

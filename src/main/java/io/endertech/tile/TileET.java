@@ -1,6 +1,6 @@
 package io.endertech.tile;
 
-import cofh.util.ServerHelper;
+import cofh.lib.util.helpers.ServerHelper;
 import cpw.mods.fml.relauncher.Side;
 import io.endertech.network.ITilePacketHandler;
 import io.endertech.network.PacketETBase;
