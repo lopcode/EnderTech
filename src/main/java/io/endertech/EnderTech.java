@@ -27,7 +27,6 @@ import io.endertech.util.LogHelper;
 import io.endertech.util.ModuleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -152,27 +151,28 @@ public class EnderTech
             ItemStack capacitorReinforced = GameRegistry.findItemStack("ThermalExpansion", "capacitorReinforced", 1);
             ItemStack capacitorResonant = GameRegistry.findItemStack("ThermalExpansion", "capacitorResonant", 1);
             ItemStack tesseract = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Tesseract"));
+            ItemStack enderiumIngot = GameRegistry.findItemStack("ThermalFoundation", "ingotEnderium", 1);
+            ItemStack electrumIngot = GameRegistry.findItemStack("ThermalFoundation", "ingotElectrum", 1);
+            ItemStack machineResonant = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Frame"), 1, 3);
+            ItemStack hardenedGlass = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Glass"));
+            ItemStack tankResonant = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Tank"), 1, 4);
 
             ItemStack enderEyeStack = new ItemStack(Items.ender_eye);
 
-            GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerRedstone, new Object[] {"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorReinforced, 'T', tesseract}));
-            GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerResonant, new Object[] {"XEX", "CTC", "XCX", 'E', enderEyeStack, 'C', capacitorResonant, 'T', tesseract}));
+            GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerRedstone, new Object[] {"XEX", "ITI", "XCX", 'E', enderEyeStack, 'I', electrumIngot, 'C', capacitorReinforced, 'T', tesseract}));
+            GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerResonant, new Object[] {"XEX", "ITI", "XCX", 'E', enderEyeStack, 'I', enderiumIngot, 'C', capacitorResonant, 'T', tesseract}));
 
-            ItemStack ironBlock = new ItemStack(Blocks.iron_block);
-            ItemStack glassBlock = new ItemStack(Blocks.glass);
-            ItemStack bucket = new ItemStack(Items.bucket);
-
-            ItemStack enderTankFrame = new ItemStack(BlockTankPart.itemBlockTankFrame.getItem(), 16, BlockTankPart.itemBlockTankFrame.getItemDamage());
-            ItemStack enderTankEnergyInput = new ItemStack(BlockTankPart.itemBlockTankEnergyInput.getItem(), 16, BlockTankPart.itemBlockTankEnergyInput.getItemDamage());
-            ItemStack enderTankValve = new ItemStack(BlockTankPart.itemBlockTankValve.getItem(), 16, BlockTankPart.itemBlockTankValve.getItemDamage());
+            ItemStack enderTankFrame = new ItemStack(BlockTankPart.itemBlockTankFrame.getItem(), 8, BlockTankPart.itemBlockTankFrame.getItemDamage());
+            ItemStack enderTankEnergyInput = new ItemStack(BlockTankPart.itemBlockTankEnergyInput.getItem(), 8, BlockTankPart.itemBlockTankEnergyInput.getItemDamage());
+            ItemStack enderTankValve = new ItemStack(BlockTankPart.itemBlockTankValve.getItem(), 8, BlockTankPart.itemBlockTankValve.getItemDamage());
             ItemStack enderTankGlass = new ItemStack(BlockMultiblockGlass.itemBlockMultiblockGlass.getItem(), 16, BlockMultiblockGlass.itemBlockMultiblockGlass.getItemDamage());
             ItemStack enderTankController = BlockTankController.itemBlockTankController;
 
-            GameRegistry.addRecipe(enderTankFrame, new Object[] {"III", "ITI", "IEI", 'I', ironBlock, 'T', tesseract, 'E', enderEyeStack});
-            GameRegistry.addRecipe(enderTankEnergyInput, new Object[] {"ICI", "ITI", "IEI", 'I', ironBlock, 'C', capacitorResonant, 'T', tesseract, 'E', enderEyeStack});
-            GameRegistry.addRecipe(enderTankValve, new Object[] {"IBI", "ITI", "IEI", 'I', ironBlock, 'B', bucket, 'T', tesseract, 'E', enderEyeStack});
-            GameRegistry.addRecipe(enderTankController, new Object[] {"IEI", "ETE", "IEI", 'I', ironBlock, 'T', tesseract, 'E', enderEyeStack});
-            GameRegistry.addRecipe(enderTankGlass, new Object[] {"GGG", "GTG", "GEG", 'I', ironBlock, 'G', glassBlock, 'T', tesseract, 'E', enderEyeStack});
+            GameRegistry.addRecipe(enderTankFrame, new Object[] {"IEI", "EFE", "IEI", 'I', enderiumIngot, 'F', machineResonant, 'E', enderEyeStack});
+            GameRegistry.addRecipe(enderTankEnergyInput, new Object[] {"ICI", "EFE", "ITI", 'I', enderiumIngot, 'F', machineResonant, 'C', capacitorResonant, 'T', tesseract, 'E', enderEyeStack});
+            GameRegistry.addRecipe(enderTankValve, new Object[] {"IAI", "EFE", "ITI", 'I', enderiumIngot, 'A', tankResonant, 'F', machineResonant, 'T', tesseract, 'E', enderEyeStack});
+            GameRegistry.addRecipe(enderTankController, new Object[] {"IEI", "EFE", "ITI", 'I', enderiumIngot, 'F', machineResonant, 'T', tesseract, 'E', enderEyeStack});
+            GameRegistry.addRecipe(enderTankGlass, new Object[] {"GIG", "EFE", "GIG", 'I', enderiumIngot, 'G', hardenedGlass, 'F', machineResonant, 'E', enderEyeStack});
         }
     }
 }
