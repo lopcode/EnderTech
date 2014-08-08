@@ -12,7 +12,6 @@ import io.endertech.client.handler.GUIEventHandler;
 import io.endertech.client.handler.KeyBindingHandler;
 import io.endertech.config.ConfigHandler;
 import io.endertech.creativetab.CreativeTabET;
-import io.endertech.fluid.ETFluids;
 import io.endertech.item.ETItems;
 import io.endertech.multiblock.block.BlockMultiblockGlass;
 import io.endertech.multiblock.block.BlockTankController;
@@ -97,7 +96,6 @@ public class EnderTech
         ETItems.init();
 
         // Fluids
-        ETFluids.init();
 
         LogHelper.debug("preInit complete");
     }

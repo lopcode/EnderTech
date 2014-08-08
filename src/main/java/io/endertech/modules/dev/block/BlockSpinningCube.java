@@ -1,4 +1,4 @@
-package io.endertech.block;
+package io.endertech.modules.dev.block;
 
 import io.endertech.EnderTech;
 import io.endertech.network.PacketHandler;

@@ -10,16 +10,13 @@ import net.minecraft.block.Block;
 
 public class ETBlocks
 {
-    //    public static Block blockSpinningCube;
-    //    public static Block blockChargedPlane;
+
     public static Block blockTankPart;
     public static Block blockTankController;
     public static Block blockMultiblockGlass;
 
     public static void init()
     {
-        //        blockSpinningCube = new BlockSpinningCube();
-        //        blockChargedPlane = new BlockChargedPlane();
         blockTankPart = new BlockTankPart();
         blockMultiblockGlass = new BlockMultiblockGlass();
         blockTankController = new BlockTankController();

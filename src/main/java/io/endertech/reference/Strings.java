@@ -25,5 +25,6 @@ public class Strings
         public static final String TANK_VALVE_NAME = "endertech.enderTankValve";
         public static final String TANK_CONTROLLER_NAME = "endertech.enderTankController";
         public static final String TANK_ENERGY_INPUT_NAME = "endertech.enderTankEnergyInput";
+        public static final String FLUID_CHARGED_ENDER_NAME = "endertech.fluid.chargedEnder";
     }
 }

@@ -1,4 +1,4 @@
-package io.endertech.fluid;
+package io.endertech.modules.dev.fluid;
 
 import net.minecraft.block.material.Material;
 import net.minecraftforge.fluids.BlockFluidClassic;

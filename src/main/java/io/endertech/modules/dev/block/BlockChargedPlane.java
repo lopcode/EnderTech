@@ -1,4 +1,4 @@
-package io.endertech.block;
+package io.endertech.modules.dev.block;
 
 import io.endertech.EnderTech;
 import io.endertech.reference.Strings;
@@ -32,4 +32,6 @@ public class BlockChargedPlane extends BlockContainer
     {
         return new TileChargedPlane();
     }
+
+
 }

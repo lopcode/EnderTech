@@ -18,3 +18,6 @@ tile.endertech.enderTankController.0.name=Ender Tank Controller
 tile.multiblockGlass.0.name=Ender Tank Glass
 
 tile.endertech.chargedPlane.name=Charged Plane
+
+# Fluids
+tile.endertech.fluid.chargedEnder.name=Charged Ender
