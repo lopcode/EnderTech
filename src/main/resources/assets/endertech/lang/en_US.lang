@@ -10,7 +10,7 @@ itemGroup.EnderTechAll=EnderTech: All
 
 # Blocks
 tile.endertech.enderTank.name=Ender Tank
-tile.endertech.chargedPlane.name=Charged Plane
+tile.endertech.chargedPlane.0.name=Charged Plane
 tile.endertech.enderTankPart.0.name=Ender Tank Frame
 tile.endertech.enderTankPart.1.name=Ender Tank Valve
 tile.endertech.enderTankPart.2.name=Ender Tank Energy Input

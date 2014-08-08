@@ -1,8 +1,8 @@
 package io.endertech.modules.dev.block;
 
 import io.endertech.EnderTech;
+import io.endertech.modules.dev.tile.TileChargedPlane;
 import io.endertech.reference.Strings;
-import io.endertech.tile.TileChargedPlane;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
