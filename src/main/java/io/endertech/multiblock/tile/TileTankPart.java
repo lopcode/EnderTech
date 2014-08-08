@@ -11,7 +11,7 @@ import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
-import io.endertech.util.LogHelper;
+import io.endertech.util.helper.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
 

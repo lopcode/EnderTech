@@ -7,7 +7,7 @@ import io.endertech.multiblock.rectangular.RectangularMultiblockTileEntityBase;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
-import io.endertech.util.RenderHelper;
+import io.endertech.util.helper.RenderHelper;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 
 public abstract class TileTankPartBase extends RectangularMultiblockTileEntityBase implements IOutlineDrawer

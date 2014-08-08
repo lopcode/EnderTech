@@ -1,4 +1,4 @@
-package io.endertech.util;
+package io.endertech.util.helper;
 
 import org.lwjgl.input.Keyboard;
 

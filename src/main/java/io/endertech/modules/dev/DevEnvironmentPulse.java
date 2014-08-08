@@ -7,7 +7,7 @@ import io.drakon.pulsar.pulse.Handler;
 import io.drakon.pulsar.pulse.Pulse;
 import io.endertech.modules.dev.block.DevBlocks;
 import io.endertech.modules.dev.fluid.DevETFluids;
-import io.endertech.util.LogHelper;
+import io.endertech.util.helper.LogHelper;
 
 @Pulse(id = "DevEnvironmentPulse", description = "Loads in-dev content", forced = true)
 public class DevEnvironmentPulse

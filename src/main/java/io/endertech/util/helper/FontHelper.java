@@ -1,4 +1,4 @@
-package io.endertech.util;
+package io.endertech.util.helper;
 
 import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.opengl.GL11;

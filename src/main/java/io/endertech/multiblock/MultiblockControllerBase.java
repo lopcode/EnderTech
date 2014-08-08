@@ -5,7 +5,7 @@ import io.endertech.network.PacketETBase;
 import io.endertech.network.PacketHandler;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
-import io.endertech.util.LogHelper;
+import io.endertech.util.helper.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

@@ -1,5 +1,7 @@
-package io.endertech.util;
+package io.endertech.util.helper;
 
+import io.endertech.util.BlockCoord;
+import io.endertech.util.RGBA;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderGlobal;

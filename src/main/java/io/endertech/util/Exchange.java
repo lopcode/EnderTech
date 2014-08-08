@@ -1,5 +1,6 @@
 package io.endertech.util;
 
+import io.endertech.util.helper.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

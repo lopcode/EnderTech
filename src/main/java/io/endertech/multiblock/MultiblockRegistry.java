@@ -1,6 +1,6 @@
 package io.endertech.multiblock;
 
-import io.endertech.util.LogHelper;
+import io.endertech.util.helper.LogHelper;
 import net.minecraft.world.World;
 import java.util.HashMap;
 

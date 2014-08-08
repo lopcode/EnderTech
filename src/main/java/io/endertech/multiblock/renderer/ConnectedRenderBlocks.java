@@ -1,7 +1,7 @@
 package io.endertech.multiblock.renderer;
 
 import io.endertech.multiblock.texture.ConnectedTextureIcon;
-import io.endertech.util.BlockHelper;
+import io.endertech.util.helper.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.IIcon;

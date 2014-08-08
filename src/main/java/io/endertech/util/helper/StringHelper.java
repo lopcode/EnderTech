@@ -1,4 +1,4 @@
-package io.endertech.util;
+package io.endertech.util.helper;
 
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fluids.FluidStack;

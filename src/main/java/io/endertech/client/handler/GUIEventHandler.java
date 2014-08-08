@@ -2,7 +2,7 @@ package io.endertech.client.handler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import io.endertech.item.ItemExchanger;
-import io.endertech.util.FontHelper;
+import io.endertech.util.helper.FontHelper;
 import io.endertech.util.inventory.InventoryHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;

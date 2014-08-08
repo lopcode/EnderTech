@@ -1,5 +1,6 @@
-package io.endertech.util;
+package io.endertech.util.helper;
 
+import io.endertech.util.BlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.init.Blocks;

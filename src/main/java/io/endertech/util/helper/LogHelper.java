@@ -1,4 +1,4 @@
-package io.endertech.util;
+package io.endertech.util.helper;
 
 import io.endertech.reference.Reference;
 import org.apache.logging.log4j.Level;

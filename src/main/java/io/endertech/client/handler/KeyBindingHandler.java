@@ -8,7 +8,7 @@ import io.endertech.item.IKeyHandler;
 import io.endertech.network.PacketKeyPressed;
 import io.endertech.reference.Strings;
 import io.endertech.util.Key;
-import io.endertech.util.LogHelper;
+import io.endertech.util.helper.LogHelper;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
