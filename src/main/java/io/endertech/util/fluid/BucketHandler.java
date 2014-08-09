@@ -113,13 +113,12 @@ public class BucketHandler
 
     public static boolean registerBucket(Block block, int bMeta, ItemStack bucket)
     {
-
         if (block == null || bMeta < 0 || bucket == null || buckets.containsKey(new BlockWrapper(block, bMeta)))
         {
             return false;
         }
 
-        LogHelper.info("Adding mapping from " + block.getUnlocalizedName() + " to " + bucket.getUnlocalizedName() + " " + bucket.getItemDamage());
+        //LogHelper.info("Adding mapping from " + block.getUnlocalizedName() + " to " + bucket.getUnlocalizedName() + " " + bucket.getItemDamage());
 
         buckets.put(new BlockWrapper(block, bMeta), new ItemWrapper(bucket));
         return true;
@@ -178,7 +177,6 @@ public class BucketHandler
 
     public static boolean emptyBucket(World world, int x, int y, int z, ItemStack bucket)
     {
-
         boolean r = false;
 
         Map<ItemWrapper, BlockWrapper> inverseMap = buckets.inverse();

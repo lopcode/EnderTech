@@ -14,7 +14,6 @@ public final class BlockWrapper {
 	public int metadata;
 
 	public BlockWrapper(Block block, int metadata) {
-
 		this.block = block;
 		this.metadata = metadata;
 	}

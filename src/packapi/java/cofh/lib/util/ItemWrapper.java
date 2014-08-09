@@ -61,8 +61,7 @@ public final class ItemWrapper {
 
 	@Override
 	public int hashCode() {
-
-		return metadata | Item.getIdFromItem(item) << 16;
+		return metadata | item.getUnlocalizedName().hashCode() << 16;
 	}
 
 }
