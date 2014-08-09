@@ -20,5 +20,5 @@ tile.multiblockGlass.0.name=Ender Tank Glass
 tile.endertech.chargedPlane.name=Charged Plane
 
 # Fluids
-tile.endertech.fluid.chargedEnder.name=Charged Ender
+tile.fluid.chargedEnder.name=Charged Ender
 item.endertech.bucket.bucketChargedEnder.name=Charged Ender Bucket
