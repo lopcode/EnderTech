@@ -1,17 +1,20 @@
 package io.endertech.modules.dev.tile;
 
+import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.lib.util.helpers.ServerHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.tile.TileET;
-import io.endertech.util.helper.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import java.util.Random;
 
-public class TileChargedPlane extends TileET
+public class TileChargedPlane extends TileET implements IReconfigurableFacing
 {
     public short ticksSinceLastChargeEvent = -1;
-    public static final short TICKS_PER_CHARGE_MINIMUM = 20 * 30;
+    public static final short TICKS_PER_CHARGE_MINIMUM = 20 * 3;
+    public boolean isActive = false;
 
     public static void init()
     {
@@ -48,6 +51,7 @@ public class TileChargedPlane extends TileET
     {
         PacketETBase packet = super.getPacket();
         packet.addShort(this.ticksSinceLastChargeEvent);
+        packet.addBool(this.isActive);
 
         return packet;
     }
@@ -59,9 +63,11 @@ public class TileChargedPlane extends TileET
         super.handleTilePacket(tilePacket, isServer);
 
         short ticksSinceLastChargeEvent = tilePacket.getShort();
+        boolean isActive = tilePacket.getBool();
         if (!isServer)
         {
             this.ticksSinceLastChargeEvent = ticksSinceLastChargeEvent;
+            this.isActive = isActive;
         }
     }
 
@@ -72,14 +78,49 @@ public class TileChargedPlane extends TileET
         {
             if (this.ticksSinceLastChargeEvent == TICKS_PER_CHARGE_MINIMUM)
             {
-                LogHelper.info("Minimum met for " + this.toString());
+                //LogHelper.info("Minimum met for " + this.toString());
                 this.ticksSinceLastChargeEvent = 0;
+                this.isActive = new Random().nextBoolean();
                 this.sendDescriptionPacket();
             }
 
             this.ticksSinceLastChargeEvent++;
             if (this.ticksSinceLastChargeEvent > TICKS_PER_CHARGE_MINIMUM)
                 this.ticksSinceLastChargeEvent = TICKS_PER_CHARGE_MINIMUM;
+        }
+    }
+
+    @Override
+    public int getFacing()
+    {
+        return this.getOrientation().ordinal();
+    }
+
+    @Override
+    public boolean allowYAxisFacing()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean rotateBlock()
+    {
+        int orientation = this.getFacing();
+        orientation++;
+        if (orientation >= ForgeDirection.VALID_DIRECTIONS.length) orientation = 0;
+
+        return this.setFacing(orientation);
+    }
+
+    @Override
+    public boolean setFacing(int side)
+    {
+        if (side == this.getOrientation().ordinal()) return false;
+        else
+        {
+            this.setOrientation(side);
+            this.sendDescriptionPacket();
+            return true;
         }
     }
 }

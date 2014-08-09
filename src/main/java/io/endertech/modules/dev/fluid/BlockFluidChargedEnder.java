@@ -1,9 +1,7 @@
 package io.endertech.modules.dev.fluid;
 
-import cofh.lib.util.helpers.ServerHelper;
 import io.endertech.reference.Strings;
 import io.endertech.util.teleport.TeleportHelper;
-import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.IIcon;

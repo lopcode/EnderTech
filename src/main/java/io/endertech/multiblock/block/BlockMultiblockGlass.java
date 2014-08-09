@@ -4,6 +4,7 @@ import cofh.api.block.IDismantleable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
+import io.endertech.block.BlockET;
 import io.endertech.multiblock.texture.ConnectedTextureIcon;
 import io.endertech.multiblock.tile.TileTankGlass;
 import io.endertech.multiblock.tile.TileTankPart;
@@ -146,7 +147,7 @@ public class BlockMultiblockGlass extends BlockContainer implements IOutlineDraw
     @Override
     public ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops)
     {
-        return BlockTankPart.dismantleBlockInWorld(player, world, x, y, z, returnDrops);
+        return BlockET.dismantleBlockInWorld(player, world, x, y, z, returnDrops);
     }
 
     @Override

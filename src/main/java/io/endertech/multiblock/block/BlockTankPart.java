@@ -4,6 +4,7 @@ import cofh.api.block.IDismantleable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
+import io.endertech.block.BlockET;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.controller.ControllerTank;
@@ -14,8 +15,6 @@ import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.helper.LogHelper;
-import io.endertech.util.helper.WorldHelper;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -49,7 +48,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
 
     public static final int ENERGY_INPUT_BASE = 7;
 
-    private static final String TEXTURE_BASE = "endertech:enderTankPart";
+    public static final String TEXTURE_BASE = "endertech:enderTankPart";
 
     public static ItemStack itemBlockTankFrame;
     public static ItemStack itemBlockTankValve;
@@ -309,26 +308,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
     @Override
     public ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops)
     {
-        return dismantleBlockInWorld(player, world, x, y, z, returnDrops);
-    }
-
-    public static ArrayList<ItemStack> dismantleBlockInWorld(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops)
-    {
-        Block block = world.getBlock(x, y, z);
-        int meta = world.getBlockMetadata(x, y, z);
-
-        ItemStack drop = new ItemStack(block, 1, block.damageDropped(meta));
-        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-
-        drops.add(drop);
-        world.setBlockToAir(x, y, z);
-
-        if (!returnDrops)
-        {
-            WorldHelper.spawnItemInWorldWithRandomness(drop, world, 0.3F, x, y, z, 5);
-        }
-
-        return drops;
+        return BlockET.dismantleBlockInWorld(player, world, x, y, z, returnDrops);
     }
 
     @Override

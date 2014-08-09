@@ -6,6 +6,7 @@ import io.endertech.network.ITilePacketHandler;
 import io.endertech.network.PacketETBase;
 import io.endertech.network.PacketHandler;
 import io.endertech.network.PacketTile;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -20,6 +21,25 @@ public class TileET extends TileEntity implements ITilePacketHandler
     {
         this.tileName = "";
         this.orientation = ForgeDirection.SOUTH;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbtTagCompound)
+    {
+        super.readFromNBT(nbtTagCompound);
+
+        if (nbtTagCompound.hasKey("orientation"))
+        {
+            this.orientation = ForgeDirection.getOrientation(nbtTagCompound.getByte("orientation"));
+        }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbtTagCompound)
+    {
+        super.writeToNBT(nbtTagCompound);
+
+        nbtTagCompound.setByte("orientation", (byte) this.orientation.ordinal());
     }
 
     @Override

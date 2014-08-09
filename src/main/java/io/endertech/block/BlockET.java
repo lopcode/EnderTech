@@ -2,13 +2,16 @@ package io.endertech.block;
 
 import io.endertech.EnderTech;
 import io.endertech.tile.TileET;
+import io.endertech.util.helper.WorldHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import java.util.ArrayList;
 
 public class BlockET extends Block
 {
@@ -21,6 +24,25 @@ public class BlockET extends Block
     {
         super(material);
         this.setCreativeTab(EnderTech.tabET);
+    }
+
+    public static ArrayList<ItemStack> dismantleBlockInWorld(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops)
+    {
+        Block block = world.getBlock(x, y, z);
+        int meta = world.getBlockMetadata(x, y, z);
+
+        ItemStack drop = new ItemStack(block, 1, block.damageDropped(meta));
+        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+
+        drops.add(drop);
+        world.setBlockToAir(x, y, z);
+
+        if (!returnDrops)
+        {
+            WorldHelper.spawnItemInWorldWithRandomness(drop, world, 0.3F, x, y, z, 5);
+        }
+
+        return drops;
     }
 
     @Override

@@ -34,7 +34,7 @@ public class BlockTankController extends BlockET implements ITileEntityProvider,
 
     public static ItemStack itemBlockTankController;
 
-    private static final String TEXTURE_BASE = "endertech:enderTankController";
+    public static final String TEXTURE_BASE = "endertech:enderTankController";
 
     private static String[] _subBlocks = new String[] {"controllerBase", "controllerIdle", "controllerActive"};
 
@@ -140,7 +140,7 @@ public class BlockTankController extends BlockET implements ITileEntityProvider,
     @Override
     public ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops)
     {
-        return BlockTankPart.dismantleBlockInWorld(player, world, x, y, z, returnDrops);
+        return dismantleBlockInWorld(player, world, x, y, z, returnDrops);
     }
 
     @Override
