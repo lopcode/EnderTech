@@ -1,14 +1,13 @@
 package io.endertech.util.fluid;
 
 import cofh.lib.util.BlockWrapper;
-import cofh.lib.util.ItemWrapper;
 import cofh.lib.util.helpers.ServerHelper;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import io.endertech.util.helper.LogHelper;
+import io.endertech.util.ETItemWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -37,7 +36,7 @@ public class BucketHandler
 
     }
 
-    private static BiMap<BlockWrapper, ItemWrapper> buckets = HashBiMap.create();
+    private static BiMap<BlockWrapper, ETItemWrapper> buckets = HashBiMap.create();
 
     private BucketHandler()
     {
@@ -120,7 +119,7 @@ public class BucketHandler
 
         //LogHelper.info("Adding mapping from " + block.getUnlocalizedName() + " to " + bucket.getUnlocalizedName() + " " + bucket.getItemDamage());
 
-        buckets.put(new BlockWrapper(block, bMeta), new ItemWrapper(bucket));
+        buckets.put(new BlockWrapper(block, bMeta), new ETItemWrapper(bucket));
         return true;
     }
 
@@ -171,7 +170,7 @@ public class BucketHandler
         {
             return null;
         }
-        ItemWrapper result = buckets.get(new BlockWrapper(block, bMeta));
+        ETItemWrapper result = buckets.get(new BlockWrapper(block, bMeta));
         return new ItemStack(result.item, 1, result.metadata);
     }
 
@@ -179,8 +178,8 @@ public class BucketHandler
     {
         boolean r = false;
 
-        Map<ItemWrapper, BlockWrapper> inverseMap = buckets.inverse();
-        if (!inverseMap.containsKey(new ItemWrapper(bucket)))
+        Map<ETItemWrapper, BlockWrapper> inverseMap = buckets.inverse();
+        if (!inverseMap.containsKey(new ETItemWrapper(bucket)))
         {
             if (bucket.getItem() instanceof ItemBucket)
             {
@@ -189,7 +188,7 @@ public class BucketHandler
             }
             return r;
         }
-        BlockWrapper result = buckets.inverse().get(new ItemWrapper(bucket));
+        BlockWrapper result = buckets.inverse().get(new ETItemWrapper(bucket));
 
         Material material = world.getBlock(x, y, z).getMaterial();
         boolean solid = !material.isSolid();
@@ -208,12 +207,12 @@ public class BucketHandler
     public static void refreshMap()
     {
 
-        BiMap<BlockWrapper, ItemWrapper> tempMap = HashBiMap.create(buckets.size());
+        BiMap<BlockWrapper, ETItemWrapper> tempMap = HashBiMap.create(buckets.size());
 
-        for (Entry<BlockWrapper, ItemWrapper> entry : buckets.entrySet())
+        for (Entry<BlockWrapper, ETItemWrapper> entry : buckets.entrySet())
         {
             BlockWrapper tempBlock = new BlockWrapper(entry.getKey().block, entry.getKey().metadata);
-            ItemWrapper tempItem = new ItemWrapper(entry.getValue().item, entry.getValue().metadata);
+            ETItemWrapper tempItem = new ETItemWrapper(entry.getValue().item, entry.getValue().metadata);
             tempMap.put(tempBlock, tempItem);
         }
         buckets.clear();
