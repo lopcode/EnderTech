@@ -1,10 +1,10 @@
 [{
     "modid": "EnderTech",
     "name": "EnderTech",
-    "description": "Unlocking the potential of Ender!",
+    "description": "Ender themed technological expansion.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "http://endertech.io/",
+    "url": "https://github.com/Drayshak/EnderTech",
     "updateUrl": "",
     "authorList": ["Drayshak", "Arkan"],
     "credits": "Drayshak, Arkan",

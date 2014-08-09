@@ -8,8 +8,6 @@ public class Strings
     public static final String EXCHANGER_CREATIVE = "exchangerCreative";
     public static final String CREATIVE_TAB_ET = "EnderTechAll";
 
-    public static final String TANK_NAME = "enderTank";
-
     public static final class Keys
     {
         public static final String keyToolIncreaseDescription = "Tool Increase";
