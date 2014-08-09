@@ -34,7 +34,7 @@ public class TileSpinningCube extends TileET
 
     public static void init()
     {
-        GameRegistry.registerTileEntity(TileSpinningCube.class, "tile." + Strings.Blocks.SPINNING_CUBE_NAME);
+        GameRegistry.registerTileEntity(TileSpinningCube.class, "tile.endertech." + Strings.Blocks.SPINNING_CUBE_NAME);
     }
 
     public void createRandomAddition()

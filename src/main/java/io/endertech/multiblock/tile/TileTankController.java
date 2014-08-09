@@ -18,7 +18,7 @@ public class TileTankController extends TileTankPart
 {
     public static void init()
     {
-        GameRegistry.registerTileEntity(TileTankController.class, "tile." + Strings.Blocks.TANK_CONTROLLER_NAME);
+        GameRegistry.registerTileEntity(TileTankController.class, "tile.endertech." + Strings.Blocks.TANK_CONTROLLER_NAME);
     }
 
     @Override

@@ -10,7 +10,6 @@ import net.minecraft.block.Block;
 
 public class ETBlocks
 {
-
     public static Block blockTankPart;
     public static Block blockTankController;
     public static Block blockMultiblockGlass;
@@ -23,9 +22,9 @@ public class ETBlocks
 
         //        GameRegistry.registerBlock(blockSpinningCube, ItemBlockBasic.class, Strings.Blocks.SPINNING_CUBE_NAME);
         //        GameRegistry.registerBlock(blockChargedPlane, ItemBlockBasic.class, Strings.Blocks.CHARGED_PLANE_NAME);
-        GameRegistry.registerBlock(blockTankPart, ItemBlockTankPart.class, Strings.Blocks.TANK_PART_NAME);
-        GameRegistry.registerBlock(blockMultiblockGlass, ItemBlockBasic.class, Strings.Blocks.MULTIBLOCK_GLASS_NAME);
-        GameRegistry.registerBlock(blockTankController, ItemBlockBasic.class, Strings.Blocks.TANK_CONTROLLER_NAME);
+        GameRegistry.registerBlock(blockTankPart, ItemBlockTankPart.class, "endertech." + Strings.Blocks.TANK_PART_NAME);
+        GameRegistry.registerBlock(blockMultiblockGlass, ItemBlockBasic.class, "endertech." + Strings.Blocks.MULTIBLOCK_GLASS_NAME);
+        GameRegistry.registerBlock(blockTankController, ItemBlockBasic.class, "endertech." + Strings.Blocks.TANK_CONTROLLER_NAME);
 
         //        ((BlockSpinningCube) blockSpinningCube).init();
         //        ((BlockChargedPlane) blockChargedPlane).init();

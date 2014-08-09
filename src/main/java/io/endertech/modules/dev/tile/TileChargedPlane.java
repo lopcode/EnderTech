@@ -15,7 +15,7 @@ public class TileChargedPlane extends TileET
 
     public static void init()
     {
-        GameRegistry.registerTileEntity(TileChargedPlane.class, "tile." + Strings.Blocks.CHARGED_PLANE_NAME);
+        GameRegistry.registerTileEntity(TileChargedPlane.class, "tile.endertech." + Strings.Blocks.CHARGED_PLANE_NAME);
     }
 
     @Override

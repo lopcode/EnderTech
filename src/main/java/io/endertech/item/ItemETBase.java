@@ -7,6 +7,7 @@ import io.endertech.EnderTech;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -22,6 +23,16 @@ public class ItemETBase extends Item
     public ItemETBase()
     {
         super();
+        this.setDefaultProperties();
+    }
+
+    public ItemETBase(String modName)
+    {
+        this.setDefaultProperties();
+    }
+
+    private void setDefaultProperties()
+    {
         this.maxStackSize = 1;
         this.setHasSubtypes(true);
         this.setCreativeTab(EnderTech.tabET);
@@ -30,8 +41,9 @@ public class ItemETBase extends Item
 
     public HashMap<Integer, String> items = new HashMap<Integer, String>();
     public HashMap<String, IIcon> icons = new HashMap<String, IIcon>();
+    public HashMap<Integer, Integer> rarities = new HashMap<Integer, Integer>();
 
-    public ItemStack addItem(int number, String name, boolean shouldRegister)
+    public ItemStack addItem(int number, String name, int rarity, boolean shouldRegister)
     {
         if (this.items.containsKey(number))
         {
@@ -39,6 +51,7 @@ public class ItemETBase extends Item
         }
 
         this.items.put(number, name);
+        this.rarities.put(number, rarity);
 
         ItemStack item = new ItemStack(this, 1, number);
         if (shouldRegister)
@@ -51,7 +64,12 @@ public class ItemETBase extends Item
 
     public ItemStack addItem(int number, String name)
     {
-        return addItem(number, name, true);
+        return addItem(number, name, 0, true);
+    }
+
+    public ItemStack addItem(int number, String name, int rarity)
+    {
+        return addItem(number, name, rarity, true);
     }
 
     @Override
@@ -68,8 +86,8 @@ public class ItemETBase extends Item
             Map.Entry entry = (Map.Entry) it.next();
 
             String name = (String) entry.getValue();
-            String icon_name = "endertech:exchanger/" + name;
-            LogHelper.debug("Registering icon: " + icon_name);
+            String icon_name = "endertech:" + getUnlocalizedName().replace("item.endertech.", "") + "/" + name;
+            LogHelper.info("Registering icon: " + icon_name);
             icons.put(name, iconRegister.registerIcon(icon_name));
         }
     }
@@ -99,6 +117,14 @@ public class ItemETBase extends Item
     }
 
     @Override
+    public Item setUnlocalizedName(String name)
+    {
+        name = "endertech." + name;
+        return super.setUnlocalizedName(name);
+    }
+
+
+    @Override
     public String getUnlocalizedName(ItemStack stack)
     {
         int i = stack.getItemDamage();
@@ -108,5 +134,16 @@ public class ItemETBase extends Item
         }
 
         return getUnlocalizedName() + '.' + this.items.get(i);
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack)
+    {
+        int i = stack.getItemDamage();
+        if (!rarities.containsKey(Integer.valueOf(i)))
+        {
+            return EnumRarity.common;
+        }
+        return EnumRarity.values()[rarities.get(stack.getItemDamage())];
     }
 }

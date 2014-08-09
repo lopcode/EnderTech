@@ -15,7 +15,7 @@ public class ETItems
     {
         itemExchanger = (ItemExchanger) new ItemExchanger().setUnlocalizedName(Strings.EXCHANGER_BASE);
 
-        GameRegistry.registerItem(itemExchanger, Strings.EXCHANGER_BASE);
+        GameRegistry.registerItem(itemExchanger, "endertech." + Strings.EXCHANGER_BASE);
 
         loadItems();
     }

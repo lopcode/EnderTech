@@ -1,6 +1,5 @@
 package io.endertech.modules.dev.fluid;
 
-import io.endertech.EnderTech;
 import io.endertech.reference.Strings;
 import io.endertech.util.teleport.TeleportHelper;
 import net.minecraft.client.particle.EntityFX;
@@ -14,7 +13,7 @@ import net.minecraft.world.World;
 
 public class BlockFluidChargedEnder extends BlockFluidETBase
 {
-    public static final int LEVELS = 4;
+    public static final int LEVELS = 5;
 
     public BlockFluidChargedEnder()
     {
@@ -23,7 +22,7 @@ public class BlockFluidChargedEnder extends BlockFluidETBase
         setTickRate(30);
         setHardness(2000F);
         setLightOpacity(7);
-        setCreativeTab(EnderTech.tabET);
+        //setCreativeTab(EnderTech.tabET);
         setBlockName(Strings.Blocks.FLUID_CHARGED_ENDER_NAME);
     }
 

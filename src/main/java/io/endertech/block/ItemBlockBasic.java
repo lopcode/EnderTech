@@ -20,6 +20,13 @@ public class ItemBlockBasic extends ItemBlock
     }
 
     @Override
+    public ItemBlock setUnlocalizedName(String name)
+    {
+        name = "endertech." + name;
+        return super.setUnlocalizedName(name);
+    }
+
+    @Override
     public String getUnlocalizedName(ItemStack itemStack)
     {
         int metadata = itemStack.getItemDamage();

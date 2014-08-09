@@ -17,7 +17,7 @@ public class TileTankValve extends TileTankPart implements IFluidHandler
 
     public static void init()
     {
-        GameRegistry.registerTileEntity(TileTankValve.class, "tile." + Strings.Blocks.TANK_VALVE_NAME);
+        GameRegistry.registerTileEntity(TileTankValve.class, "tile.endertech." + Strings.Blocks.TANK_VALVE_NAME);
     }
 
     @Override

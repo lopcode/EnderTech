@@ -3,6 +3,7 @@ package io.endertech.proxy;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 import io.endertech.handler.WorldEventHandler;
+import io.endertech.modules.dev.handler.MappingEventHandler;
 import io.endertech.multiblock.handler.MultiblockEventHandler;
 import io.endertech.multiblock.handler.MultiblockServerTickHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +19,8 @@ public class CommonProxy implements IGuiHandler
         FMLCommonHandler.instance().bus().register(new WorldEventHandler());
         FMLCommonHandler.instance().bus().register(new MultiblockServerTickHandler());
         MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
+
+        FMLCommonHandler.instance().bus().register(new MappingEventHandler());
     }
 
     public void registerTESRs() { }

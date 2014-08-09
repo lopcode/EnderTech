@@ -16,7 +16,7 @@ public class DevBlocks
         blockChargedPlane = new BlockChargedPlane();
 
         //        GameRegistry.registerBlock(blockSpinningCube, ItemBlockBasic.class, Strings.Blocks.SPINNING_CUBE_NAME);
-        GameRegistry.registerBlock(blockChargedPlane, ItemBlockBasic.class, Strings.Blocks.CHARGED_PLANE_NAME);
+        GameRegistry.registerBlock(blockChargedPlane, ItemBlockBasic.class, "endertech." + Strings.Blocks.CHARGED_PLANE_NAME);
 
         //        ((BlockSpinningCube) blockSpinningCube).init();
         ((BlockChargedPlane) blockChargedPlane).init();

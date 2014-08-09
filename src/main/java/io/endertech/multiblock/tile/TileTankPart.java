@@ -24,7 +24,7 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
 
     public static void init()
     {
-        GameRegistry.registerTileEntity(TileTankPart.class, "tile." + Strings.Blocks.TANK_PART_NAME);
+        GameRegistry.registerTileEntity(TileTankPart.class, "tile.endertech." + Strings.Blocks.TANK_PART_NAME);
     }
 
     @Override

@@ -8,7 +8,7 @@ public class TileTankGlass extends TileTankPart
 {
     public static void init()
     {
-        GameRegistry.registerTileEntity(TileTankGlass.class, "tile." + Strings.Blocks.MULTIBLOCK_GLASS_NAME);
+        GameRegistry.registerTileEntity(TileTankGlass.class, "tile.endertech." + Strings.Blocks.MULTIBLOCK_GLASS_NAME);
     }
 
     @Override

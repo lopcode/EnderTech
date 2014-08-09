@@ -21,6 +21,7 @@ import io.endertech.network.PacketKeyPressed;
 import io.endertech.network.PacketTile;
 import io.endertech.proxy.CommonProxy;
 import io.endertech.reference.Reference;
+import io.endertech.util.fluid.BucketHandler;
 import io.endertech.util.helper.BlockHelper;
 import io.endertech.util.helper.LogHelper;
 import io.endertech.util.helper.ModuleHelper;
@@ -96,6 +97,7 @@ public class EnderTech
         ETItems.init();
 
         // Fluids
+        BucketHandler.initialize();
 
         LogHelper.debug("preInit complete");
     }

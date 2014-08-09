@@ -1,4 +1,4 @@
-package io.endertech.block;
+package io.endertech.modules.dev.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
