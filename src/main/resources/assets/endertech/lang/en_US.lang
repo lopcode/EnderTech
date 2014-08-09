@@ -21,4 +21,5 @@ tile.endertech.chargedPlane.name=Charged Plane
 
 # Fluids
 tile.fluid.chargedEnder.name=Charged Ender
+fluid.chargedEnder=Charged Ender
 item.endertech.bucket.bucketChargedEnder.name=Charged Ender Bucket

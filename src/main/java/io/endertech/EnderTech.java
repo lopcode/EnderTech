@@ -11,6 +11,7 @@ import io.endertech.block.ETBlocks;
 import io.endertech.client.handler.GUIEventHandler;
 import io.endertech.client.handler.KeyBindingHandler;
 import io.endertech.config.ConfigHandler;
+import io.endertech.config.GeneralConfig;
 import io.endertech.creativetab.CreativeTabET;
 import io.endertech.item.ETItems;
 import io.endertech.multiblock.block.BlockMultiblockGlass;
@@ -29,6 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import java.io.File;
@@ -44,6 +46,7 @@ public class EnderTech
     public static CommonProxy proxy;
 
     public static final CreativeTabs tabET = new CreativeTabET();
+    public static boolean loadDevModeContent = false;
 
     @EventHandler
     @SuppressWarnings("unused")
@@ -69,6 +72,11 @@ public class EnderTech
         ConfigHandler.init(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + Reference.CHANNEL_NAME.toLowerCase() + File.separator);
 
         LogHelper.debug("Loaded config");
+
+        if ((Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment") || GeneralConfig.forceLoadDevContent)
+        {
+            loadDevModeContent = true;
+        }
 
         // Pulsar module loading
         ModuleHelper.setupModules();
@@ -126,6 +134,8 @@ public class EnderTech
         LogHelper.debug("init complete");
 
         // IMC
+
+        MinecraftForge.EVENT_BUS.register(proxy);
     }
 
     @EventHandler

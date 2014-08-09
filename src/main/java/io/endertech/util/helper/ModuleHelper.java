@@ -1,9 +1,8 @@
 package io.endertech.util.helper;
 
 import io.drakon.pulsar.control.PulseManager;
-import io.endertech.config.GeneralConfig;
+import io.endertech.EnderTech;
 import io.endertech.modules.dev.DevEnvironmentPulse;
-import net.minecraft.launchwrapper.Launch;
 import static io.endertech.reference.Reference.MOD_ID;
 
 /**
@@ -22,7 +21,7 @@ public class ModuleHelper
     {
         if (modulesConfigured) throw new RuntimeException("Someone called ModuleHelper.setupModules() again!");
 
-        if ((Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment") || GeneralConfig.forceLoadDevContent)
+        if (EnderTech.loadDevModeContent)
         {
             pulsar.registerPulse(new DevEnvironmentPulse());
         }
