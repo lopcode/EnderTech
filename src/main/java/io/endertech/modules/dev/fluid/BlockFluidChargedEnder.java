@@ -1,5 +1,6 @@
 package io.endertech.modules.dev.fluid;
 
+import cofh.lib.util.helpers.ServerHelper;
 import io.endertech.reference.Strings;
 import io.endertech.util.teleport.TeleportHelper;
 import net.minecraft.client.particle.EntityFX;
@@ -47,8 +48,6 @@ public class BlockFluidChargedEnder extends BlockFluidETBase
                     TeleportHelper.teleportEntityWithinCurrentDimension((EntityLivingBase) entity, x2, y2, z2);
                 } else
                 {
-                    if (entity instanceof EntityFX) return;
-
                     entity.setPosition(x2, y2, z2);
                     entity.worldObj.playSoundEffect(x2, y2, z2, "mob.endermen.portal", 1.0F, 1.0F);
                     entity.playSound("mob.endermen.portal", 1.0F, 1.0F);
