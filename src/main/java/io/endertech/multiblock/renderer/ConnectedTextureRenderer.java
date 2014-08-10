@@ -18,7 +18,7 @@ public class ConnectedTextureRenderer implements ISimpleBlockRenderingHandler
     {
         Tessellator tessellator = Tessellator.instance;
         ConnectedTextureIcon icon = (ConnectedTextureIcon) block.getIcon(side, metadata);
-        for (int i = 0; i < ConnectedTextureIcon.ICON_TYPES.length; i++)
+        for (int i = 0; i < 5; i++)
         {
             icon.setCurrentRenderIcon(i);
             tessellator.startDrawingQuads();

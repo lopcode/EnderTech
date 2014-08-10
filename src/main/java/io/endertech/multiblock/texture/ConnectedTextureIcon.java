@@ -6,12 +6,17 @@ import net.minecraft.util.IIcon;
 public class ConnectedTextureIcon implements IIcon
 {
     public IIcon[] icons;
-    public static final String[] ICON_TYPES = {"central", "top", "bottom", "left", "right"};
+    public static final String[] ICON_TYPES = {"central", "top", "bottom", "left", "right", "anticorner.tl", "anticorner.tr", "anticorner.br", "anticorner.bl"};
     public static final int CENTRAL = 0;
     public static final int TOP = 1;
     public static final int BOTTOM = 2;
     public static final int LEFT = 3;
     public static final int RIGHT = 4;
+    public static final int ANTICORNER_TOP_LEFT = 5;
+    public static final int ANTICORNER_TOP_RIGHT = 6;
+    public static final int ANTICORNER_BOTTOM_RIGHT = 7;
+    public static final int ANTICORNER_BOTTOM_LEFT = 8;
+
     private int renderIndex = 0;
 
     public ConnectedTextureIcon(IIconRegister icon, String textureBase)

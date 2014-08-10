@@ -57,6 +57,42 @@ public class ConnectedRenderBlocks extends RenderBlocks
 
     }
 
+    public int[] calculateConnectednessIndexes(IBlockAccess blockAccess, int x, int y, int z, int face)
+    {
+        int[] iconIdxs = new int[5];
+        ForgeDirection dir;
+        for (int i = 0; i < 4; i++)
+        {
+            dir = neighborsBySide[face][i];
+            // Same blockID and metadata on this side?
+            if (BlockHelper.areBlocksEqual(blockAccess, block, meta, x, y, z, dir))
+            {
+                iconIdxs[i + 1] = calculateConnectednessForSingleBlock(blockAccess, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, face);
+                // Connected!
+                iconIdxs[0] |= 1 << i;
+            }
+        }
+
+        return iconIdxs;
+    }
+
+    public int calculateConnectednessForSingleBlock(IBlockAccess blockAccess, int x, int y, int z, int face)
+    {
+        int iconIdx = 0;
+        ForgeDirection dir;
+        for (int i = 0; i < 4; i++)
+        {
+            dir = neighborsBySide[face][i];
+            // Same blockID and metadata on this side?
+            if (BlockHelper.areBlocksEqual(blockAccess, block, meta, x, y, z, dir))
+            {
+                // Connected!
+                iconIdx |= 1 << i;
+            }
+        }
+
+        return iconIdx;
+    }
 
     public void renderSide(Block tBlock, double x, double y, double z, ConnectedTextureIcon icon, int side)
     {
@@ -76,40 +112,32 @@ public class ConnectedRenderBlocks extends RenderBlocks
 
         // Calculate icon index based on whether the blocks around this block match it
         // 1 = Connected on top, 2 = connected on bottom, 4 = connected on left, 8 = connected on right
-        int iconIdx = 0;
-        for (int i = 0; i < 4; i++)
-        {
-            dir = neighborsBySide[side][i];
-            // Same blockID and metadata on this side?
-            if (BlockHelper.areBlocksEqual(blockAccess, block, meta, ix, iy, iz, dir))
-            {
-                // Connected!
-                iconIdx |= 1 << i;
-            }
-        }
 
-        if (!checkBit(iconIdx, 1))
-        {
-            renderSideFace(icon, ConnectedTextureIcon.TOP, x, y, z, side);
-        }
+        int[] connectednessIndexes = this.calculateConnectednessIndexes(blockAccess, ix, iy, iz, side);
+        boolean connectedTop = checkBit(connectednessIndexes[0], 1);
+        boolean connectedBottom = checkBit(connectednessIndexes[0], 2);
+        boolean connectedLeft = checkBit(connectednessIndexes[0], 4);
+        boolean connectedRight = checkBit(connectednessIndexes[0], 8);
 
-        if (!checkBit(iconIdx, 2))
-        {
-            renderSideFace(icon, ConnectedTextureIcon.BOTTOM, x, y, z, side);
-        }
+        if (!connectedTop) renderSideFace(icon, ConnectedTextureIcon.TOP, x, y, z, side);
 
-        if (!checkBit(iconIdx, 4))
-        {
-            renderSideFace(icon, ConnectedTextureIcon.LEFT, x, y, z, side);
-        }
+        if (!connectedBottom) renderSideFace(icon, ConnectedTextureIcon.BOTTOM, x, y, z, side);
 
-        if (!checkBit(iconIdx, 8))
-        {
-            renderSideFace(icon, ConnectedTextureIcon.RIGHT, x, y, z, side);
-        }
+        if (!connectedLeft) renderSideFace(icon, ConnectedTextureIcon.LEFT, x, y, z, side);
 
-        // Potential for corners:
-        //  eg connected top+left = render top left corner
+        if (!connectedRight) renderSideFace(icon, ConnectedTextureIcon.RIGHT, x, y, z, side);
+
+        if (connectedLeft && connectedTop && !checkBit(connectednessIndexes[1], 4) && !checkBit(connectednessIndexes[3], 1))
+            renderSideFace(icon, ConnectedTextureIcon.ANTICORNER_TOP_LEFT, x, y, z, side);
+
+        if (connectedRight && connectedTop && !checkBit(connectednessIndexes[1], 8) && !checkBit(connectednessIndexes[4], 1))
+            renderSideFace(icon, ConnectedTextureIcon.ANTICORNER_TOP_RIGHT, x, y, z, side);
+
+        if (connectedBottom && connectedLeft && !checkBit(connectednessIndexes[3], 2) && !checkBit(connectednessIndexes[2], 4))
+            renderSideFace(icon, ConnectedTextureIcon.ANTICORNER_BOTTOM_LEFT, x, y, z, side);
+
+        if (connectedBottom && connectedRight && !checkBit(connectednessIndexes[2], 8) && !checkBit(connectednessIndexes[4], 2))
+            renderSideFace(icon, ConnectedTextureIcon.ANTICORNER_BOTTOM_RIGHT, x, y, z, side);
 
         icon.setCurrentRenderIcon(0);
         return;
