@@ -26,19 +26,19 @@ public class TileTankEnergyInput extends TileTankPart implements IEnergyHandler
     @Override
     public void isGoodForSides() throws MultiblockValidationException
     {
-        throw new MultiblockValidationException("Tank energy inputs cannot be used for tank sides (only the frame).");
+
     }
 
     @Override
     public void isGoodForTop() throws MultiblockValidationException
     {
-        throw new MultiblockValidationException("Tank energy inputs cannot be used for tank top (only the frame).");
+
     }
 
     @Override
     public void isGoodForBottom() throws MultiblockValidationException
     {
-        throw new MultiblockValidationException("Tank energy inputs cannot be used for tank bottom (only the frame).");
+
     }
 
     @Override
