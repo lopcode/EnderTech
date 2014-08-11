@@ -1,16 +1,13 @@
 package io.endertech.integration.waila;
 
-import io.endertech.multiblock.IMultiblockPart;
-import io.endertech.multiblock.MultiblockControllerBase;
-import io.endertech.multiblock.MultiblockTileEntityBase;
 import io.endertech.tile.TileET;
+import io.endertech.util.IETWailaProvider;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumChatFormatting;
 import java.util.List;
 
 public class GenericWailaProvider implements IWailaDataProvider
@@ -19,9 +16,9 @@ public class GenericWailaProvider implements IWailaDataProvider
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
         TileEntity tile = accessor.getTileEntity();
-        if (tile instanceof IWailaDataProvider)
+        if (tile instanceof IETWailaProvider)
         {
-            return ((IWailaDataProvider) tile).getWailaStack(accessor, config);
+            return ((IETWailaProvider) tile).getWailaStack();
         }
 
         return null;
@@ -31,9 +28,9 @@ public class GenericWailaProvider implements IWailaDataProvider
     public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
         TileEntity tile = accessor.getTileEntity();
-        if (tile instanceof IWailaDataProvider)
+        if (tile instanceof IETWailaProvider)
         {
-            return ((IWailaDataProvider) tile).getWailaHead(itemStack, currenttip, accessor, config);
+            return ((IETWailaProvider) tile).getWailaHead(itemStack, currenttip);
         }
 
         return currenttip;
@@ -43,9 +40,9 @@ public class GenericWailaProvider implements IWailaDataProvider
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
         TileEntity tile = accessor.getTileEntity();
-        if (tile instanceof IWailaDataProvider)
+        if (tile instanceof IETWailaProvider)
         {
-            return ((IWailaDataProvider) tile).getWailaBody(itemStack, currenttip, accessor, config);
+            return ((IETWailaProvider) tile).getWailaBody(itemStack, currenttip);
         }
 
         return currenttip;
@@ -55,9 +52,9 @@ public class GenericWailaProvider implements IWailaDataProvider
     public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
         TileEntity tile = accessor.getTileEntity();
-        if (tile instanceof IWailaDataProvider)
+        if (tile instanceof IETWailaProvider)
         {
-            return ((IWailaDataProvider) tile).getWailaTail(itemStack, currenttip, accessor, config);
+            return ((IETWailaProvider) tile).getWailaTail(itemStack, currenttip);
         }
 
         return currenttip;
