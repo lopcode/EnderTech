@@ -1,5 +1,6 @@
 package io.endertech.modules.dev.tile;
 
+import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.lib.util.helpers.ServerHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -8,13 +9,15 @@ import io.endertech.reference.Strings;
 import io.endertech.tile.TileET;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
-import java.util.Random;
 
-public class TileChargedPlane extends TileET implements IReconfigurableFacing
+public class TileChargedPlane extends TileET implements IReconfigurableFacing, IEnergyHandler
 {
     public short ticksSinceLastChargeEvent = -1;
     public static final short TICKS_PER_CHARGE_MINIMUM = 20 * 3;
+    public static final short TICKS_PER_UPDATE = 20;
+    public short ticksSinceLastUpdate = 0;
     public boolean isActive = false;
+    public boolean gotEnergyLastTick = false;
 
     public static void init()
     {
@@ -76,17 +79,27 @@ public class TileChargedPlane extends TileET implements IReconfigurableFacing
     {
         if (ServerHelper.isServerWorld(this.worldObj))
         {
+            this.isActive = this.gotEnergyLastTick;
+
             if (this.ticksSinceLastChargeEvent == TICKS_PER_CHARGE_MINIMUM)
             {
-                //LogHelper.info("Minimum met for " + this.toString());
                 this.ticksSinceLastChargeEvent = 0;
-                this.isActive = new Random().nextBoolean();
+            }
+
+            if (this.ticksSinceLastUpdate == TICKS_PER_UPDATE)
+            {
+                this.ticksSinceLastUpdate = 0;
                 this.sendDescriptionPacket();
             }
 
             this.ticksSinceLastChargeEvent++;
             if (this.ticksSinceLastChargeEvent > TICKS_PER_CHARGE_MINIMUM)
                 this.ticksSinceLastChargeEvent = TICKS_PER_CHARGE_MINIMUM;
+
+            this.ticksSinceLastUpdate++;
+            if (this.ticksSinceLastUpdate > TICKS_PER_UPDATE) this.ticksSinceLastUpdate = TICKS_PER_UPDATE;
+
+            this.gotEnergyLastTick = false;
         }
     }
 
@@ -122,5 +135,41 @@ public class TileChargedPlane extends TileET implements IReconfigurableFacing
             this.sendDescriptionPacket();
             return true;
         }
+    }
+
+    @Override
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
+    {
+        boolean canReceive = from != this.getOrientation();
+        if (!simulate)
+        {
+            gotEnergyLastTick = canReceive;
+        }
+        if (canReceive) return 1;
+        else return 0;
+    }
+
+    @Override
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
+    {
+        return 0;
+    }
+
+    @Override
+    public int getEnergyStored(ForgeDirection from)
+    {
+        return 0;
+    }
+
+    @Override
+    public int getMaxEnergyStored(ForgeDirection from)
+    {
+        return 1;
+    }
+
+    @Override
+    public boolean canConnectEnergy(ForgeDirection from)
+    {
+        return from != this.getOrientation();
     }
 }
