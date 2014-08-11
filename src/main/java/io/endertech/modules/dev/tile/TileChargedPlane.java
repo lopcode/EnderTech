@@ -79,6 +79,8 @@ public class TileChargedPlane extends TileET implements IReconfigurableFacing, I
     {
         if (ServerHelper.isServerWorld(this.worldObj))
         {
+            if (this.isActive != this.gotEnergyLastTick) this.ticksSinceLastUpdate = TICKS_PER_UPDATE;
+
             this.isActive = this.gotEnergyLastTick;
 
             if (this.ticksSinceLastChargeEvent == TICKS_PER_CHARGE_MINIMUM)
