@@ -130,6 +130,7 @@ public class EnderTech
 
         // Waila
         FMLInterModComms.sendMessage("Waila", "register", "io.endertech.integration.waila.MultiblockWailaProvider.callbackRegister");
+        FMLInterModComms.sendMessage("Waila", "register", "io.endertech.integration.waila.GenericWailaProvider.callbackRegister");
 
         LogHelper.debug("init complete");
 

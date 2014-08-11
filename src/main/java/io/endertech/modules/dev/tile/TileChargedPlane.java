@@ -7,8 +7,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.tile.TileET;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
+import java.util.List;
 
 public class TileChargedPlane extends TileET implements IReconfigurableFacing, IEnergyHandler
 {
@@ -173,5 +178,18 @@ public class TileChargedPlane extends TileET implements IReconfigurableFacing, I
     public boolean canConnectEnergy(ForgeDirection from)
     {
         return from != this.getOrientation();
+    }
+
+    @Override
+    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        if(this.isActive)
+        {
+            currenttip.add(EnumChatFormatting.GREEN + "Active" + EnumChatFormatting.RESET);
+        } else {
+            currenttip.add(EnumChatFormatting.RED + "Inactive" + EnumChatFormatting.RESET);
+        }
+
+        return currenttip;
     }
 }

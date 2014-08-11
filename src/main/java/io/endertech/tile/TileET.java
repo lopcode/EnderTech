@@ -6,12 +6,17 @@ import io.endertech.network.ITilePacketHandler;
 import io.endertech.network.PacketETBase;
 import io.endertech.network.PacketHandler;
 import io.endertech.network.PacketTile;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.api.IWailaDataProvider;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import java.util.List;
 
-public class TileET extends TileEntity implements ITilePacketHandler
+public class TileET extends TileEntity implements ITilePacketHandler, IWailaDataProvider
 {
     protected String tileName;
     protected ForgeDirection orientation;
@@ -102,5 +107,29 @@ public class TileET extends TileEntity implements ITilePacketHandler
     public void setOrientation(ForgeDirection orientation)
     {
         this.orientation = orientation;
+    }
+
+    @Override
+    public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        return null;
+    }
+
+    @Override
+    public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        return currenttip;
+    }
+
+    @Override
+    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        return currenttip;
+    }
+
+    @Override
+    public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
+    {
+        return currenttip;
     }
 }
