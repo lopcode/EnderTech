@@ -43,6 +43,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 ##Documentation
 Blocks, items and mechanics (including recipes and usage) are documented as they're completed in the [Wiki](https://github.com/Drayshak/EnderTech/wiki).
 
+If you want to see in-development content you must enable it in the 'general.cfg' config file after one run. Be warned: this in-development content will likely disappear or break your world!.
+
 ##Builds
 Signed jars are available on Hydria.
 
