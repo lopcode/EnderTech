@@ -21,7 +21,7 @@ public class ETBlocks
         blockTankController = new BlockTankController();
 
         //        GameRegistry.registerBlock(blockSpinningCube, ItemBlockBasic.class, Strings.Blocks.SPINNING_CUBE_NAME);
-        //        GameRegistry.registerBlock(blockChargedPlane, ItemBlockBasic.class, Strings.Blocks.CHARGED_PLANE_NAME);
+        //        GameRegistry.registerBlock(blockChargedPlane, ItemBlockBasic.class, Strings.Blocks.CHARGE_PAD);
         GameRegistry.registerBlock(blockTankPart, ItemBlockTankPart.class, "endertech." + Strings.Blocks.TANK_PART_NAME);
         GameRegistry.registerBlock(blockMultiblockGlass, ItemBlockBasic.class, "endertech." + Strings.Blocks.MULTIBLOCK_GLASS_NAME);
         GameRegistry.registerBlock(blockTankController, ItemBlockBasic.class, "endertech." + Strings.Blocks.TANK_CONTROLLER_NAME);

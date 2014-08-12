@@ -6,18 +6,19 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
 import io.endertech.block.BlockET;
-import io.endertech.modules.dev.tile.TileChargedPlane;
+import io.endertech.modules.dev.tile.TileChargePad;
 import io.endertech.multiblock.block.BlockTankController;
-import io.endertech.multiblock.block.BlockTankPart;
 import io.endertech.reference.Strings;
 import io.endertech.tile.TileET;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -26,35 +27,41 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
+import java.util.List;
 
-public class BlockChargedPlane extends BlockET implements ITileEntityProvider, IDismantleable
+public class BlockChargePad extends BlockET implements ITileEntityProvider, IDismantleable
 {
-    public static ItemStack itemChargedPlane;
-    public IIcon activeIcon;
-    public IIcon inactiveIcon;
+    public static ItemStack itemChargePadCreative;
+    public static ItemStack itemChargePadResonant;
+    public static ItemStack itemChargePadRedstone;
+
     public IIcon sideIcon;
     public IIcon topIcon;
     public IIcon bottomIcon;
-    public static final String TEXTURE_BASE = "endertech:chargedPlane";
+    public static final String TEXTURE_BASE = "endertech:chargePad/";
+    public IIcon[] activeIcons;
+    public IIcon[] inactiveIcons;
 
-    public BlockChargedPlane()
+    public BlockChargePad()
     {
         super(Material.iron);
         this.setCreativeTab(EnderTech.tabET);
-        this.setBlockName(Strings.Blocks.CHARGED_PLANE_NAME);
+        this.setBlockName(Strings.Blocks.CHARGE_PAD);
     }
 
     public void init()
     {
-        TileChargedPlane.init();
+        TileChargePad.init();
 
-        itemChargedPlane = new ItemStack(this, 1, 0);
+        itemChargePadCreative = new ItemStack(this, 1, 0);
+        itemChargePadResonant = new ItemStack(this, 1, 1);
+        itemChargePadRedstone = new ItemStack(this, 1, 2);
     }
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
     {
-        if (world.getTileEntity(x, y, z) instanceof TileChargedPlane)
+        if (world.getTileEntity(x, y, z) instanceof TileChargePad)
         {
             int direction = -1;
 
@@ -76,20 +83,27 @@ public class BlockChargedPlane extends BlockET implements ITileEntityProvider, I
         }
     }
 
+    public Types metadataToType(int meta)
+    {
+        if (meta < 0 || meta > arrayTypes.length - 1) meta = arrayTypes.length - 1;
+
+        return arrayTypes[meta];
+    }
+
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
-        return new TileChargedPlane();
+        return new TileChargePad();
     }
 
-    public IIcon getPrimaryIcon(TileChargedPlane tile)
+    public IIcon getPrimaryIcon(int meta, TileChargePad tile)
     {
         if (tile.isActive)
         {
-            return this.activeIcon;
+            return this.activeIcons[meta];
         } else
         {
-            return this.inactiveIcon;
+            return this.inactiveIcons[meta];
         }
     }
 
@@ -99,7 +113,7 @@ public class BlockChargedPlane extends BlockET implements ITileEntityProvider, I
         ForgeDirection orientation = ForgeDirection.getOrientation(side);
         if (orientation == ForgeDirection.UP) return this.topIcon;
         else if (orientation == ForgeDirection.DOWN) return this.bottomIcon;
-        else if (orientation == ForgeDirection.SOUTH) return this.inactiveIcon;
+        else if (orientation == ForgeDirection.SOUTH) return this.inactiveIcons[meta];
 
         return this.sideIcon;
     }
@@ -108,13 +122,15 @@ public class BlockChargedPlane extends BlockET implements ITileEntityProvider, I
     public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int iSide)
     {
         TileEntity tileEntity = blockAccess.getTileEntity(x, y, z);
-        if (tileEntity == null || !(tileEntity instanceof TileChargedPlane)) return this.sideIcon;
+        if (tileEntity == null || !(tileEntity instanceof TileChargePad)) return this.sideIcon;
 
-        TileChargedPlane tile = (TileChargedPlane) tileEntity;
+        int meta = blockAccess.getBlockMetadata(x, y, z);
+
+        TileChargePad tile = (TileChargePad) tileEntity;
         ForgeDirection out = tile.getOrientation();
         ForgeDirection side = ForgeDirection.getOrientation(iSide);
 
-        if (out == side) return this.getPrimaryIcon(tile);
+        if (out == side) return this.getPrimaryIcon(meta, tile);
 
         if (side == ForgeDirection.UP) return this.topIcon;
         else if (side == ForgeDirection.DOWN) return this.bottomIcon;
@@ -125,8 +141,15 @@ public class BlockChargedPlane extends BlockET implements ITileEntityProvider, I
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister)
     {
-        this.inactiveIcon = iconRegister.registerIcon(BlockTankPart.TEXTURE_BASE + ".frameCorner");
-        this.activeIcon = iconRegister.registerIcon(TEXTURE_BASE + ".active");
+        this.activeIcons = new IIcon[arrayTypes.length];
+        this.inactiveIcons = new IIcon[arrayTypes.length];
+
+        for (int i = 0; i < stringTypes.length; i++)
+        {
+            this.activeIcons[i] = iconRegister.registerIcon(TEXTURE_BASE + this.getUnlocalizedName().replace("tile.", "") + "." + stringTypes[i] + ".active");
+            this.inactiveIcons[i] = iconRegister.registerIcon(TEXTURE_BASE + this.getUnlocalizedName().replace("tile.", "") + "." + stringTypes[i] + ".inactive");
+        }
+
         this.sideIcon = iconRegister.registerIcon(BlockTankController.TEXTURE_BASE + ".controllerSide");
         this.topIcon = iconRegister.registerIcon(BlockTankController.TEXTURE_BASE + ".controllerTop");
         this.bottomIcon = iconRegister.registerIcon(BlockTankController.TEXTURE_BASE + ".controllerBottom");
@@ -138,10 +161,10 @@ public class BlockChargedPlane extends BlockET implements ITileEntityProvider, I
         if (!ServerHelper.isServerWorld(world)) return false;
 
         TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if (tileEntity == null || !(tileEntity instanceof TileChargedPlane))
+        if (tileEntity == null || !(tileEntity instanceof TileChargePad))
             LogHelper.info("I don't have a tile entity :(");
 
-        TileChargedPlane tile = (TileChargedPlane) tileEntity;
+        TileChargePad tile = (TileChargePad) tileEntity;
         ForgeDirection out = tile.getOrientation();
 
         LogHelper.info("My direction is: " + out.name());
@@ -165,4 +188,59 @@ public class BlockChargedPlane extends BlockET implements ITileEntityProvider, I
     {
         return false;
     }
+
+    @Override
+    public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List par3List)
+    {
+        for (int i = 0; i < arrayTypes.length; i++)
+            par3List.add(new ItemStack(this, 1, i));
+    }
+
+    @Override
+    public int damageDropped(int meta)
+    {
+        return meta;
+    }
+
+    public static int getMaxEnergyStored(int meta)
+    {
+        return CAPACITY[meta];
+    }
+
+    public static int getMaxReceiveRate(int meta)
+    {
+        return RECEIVE[meta];
+    }
+
+    public static int getMaxSendRate(int meta)
+    {
+        return SEND[meta];
+    }
+
+    public static boolean isCreative(int meta)
+    {
+        return meta == 0;
+    }
+
+    public static enum Types
+    {
+        CREATIVE, REDSTONE, RESONANT;
+    }
+
+    public static Types[] arrayTypes;
+    public static String[] stringTypes;
+
+    static
+    {
+        arrayTypes = Types.values();
+        stringTypes = new String[arrayTypes.length];
+        for (int i = 0; i < arrayTypes.length; i++)
+        {
+            stringTypes[i] = arrayTypes[i].name().toLowerCase();
+        }
+    }
+
+    public static final int[] RECEIVE = {0, 1 * 2000, 10 * 2000};
+    public static final int[] SEND = {10 * 1000000, 10 * 1000000, 10 * 1000000};
+    public static final int[] CAPACITY = {Integer.MAX_VALUE, 1 * 2000000, 10 * 1000000};
 }

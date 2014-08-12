@@ -22,6 +22,8 @@ public class TileET extends TileEntity implements ITilePacketHandler, IETWailaPr
 
     public TileET()
     {
+        super();
+
         this.tileName = "";
         this.orientation = ForgeDirection.SOUTH;
     }

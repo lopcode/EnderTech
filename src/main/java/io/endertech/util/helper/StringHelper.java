@@ -11,6 +11,8 @@ public class StringHelper
 
     public static String getEnergyString(int energy)
     {
+        if (energy == Integer.MAX_VALUE) return "Infinite";
+
         if (energy >= 1000000)
         {
             return String.valueOf(twoDP.format(energy / 1000000.0)) + "M";
