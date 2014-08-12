@@ -1,5 +1,6 @@
 package io.endertech.modules.dev.tile;
 
+import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.lib.util.helpers.ServerHelper;
@@ -9,11 +10,16 @@ import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.tile.TileET;
 import io.endertech.util.helper.StringHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TileChargePad extends TileET implements IReconfigurableFacing, IEnergyHandler
 {
@@ -21,6 +27,7 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
     public short ticksSinceLastUpdate = 0;
     public boolean isActive = false;
     public int storedEnergy = 0;
+    public int sentPower = 0;
 
     public static void init()
     {
@@ -55,6 +62,7 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         PacketETBase packet = super.getPacket();
         packet.addBool(this.isActive);
         packet.addInt(this.storedEnergy);
+        packet.addInt(this.sentPower);
 
         return packet;
     }
@@ -66,12 +74,39 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
 
         boolean isActive = tilePacket.getBool();
         int storedEnergy = tilePacket.getInt();
+        int sentPower = tilePacket.getInt();
 
         if (!isServer)
         {
             this.isActive = isActive;
             this.storedEnergy = storedEnergy;
+            this.sentPower = sentPower;
         }
+    }
+
+    public AxisAlignedBB getAABBInFront()
+    {
+        ForgeDirection orientation = this.getOrientation();
+        return this.getRenderBoundingBox().offset(orientation.offsetX, orientation.offsetY, orientation.offsetZ);
+    }
+
+    public Set<ItemStack> chargeableItemsInInventory(ItemStack[] itemStacks)
+    {
+        Set<ItemStack> itemsToCharge = new HashSet<ItemStack>();
+
+        for (ItemStack itemStack : itemStacks)
+        {
+            if (itemStack == null) continue;
+
+            Item item = itemStack.getItem();
+            if (item != null && item instanceof IEnergyContainerItem)
+            {
+                IEnergyContainerItem chargeableItem = (IEnergyContainerItem) item;
+                if (chargeableItem.receiveEnergy(itemStack, 1, true) == 1) itemsToCharge.add(itemStack);
+            }
+        }
+
+        return itemsToCharge;
     }
 
     @Override
@@ -82,6 +117,40 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
             boolean oldActive = this.isActive;
             int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
             this.isActive = this.storedEnergy > 0 || BlockChargePad.isCreative(meta);
+
+            sentPower = 0;
+            double totalChargeSendable = this.extractEnergy(BlockChargePad.getMaxSendRate(meta), meta, true);
+            if (BlockChargePad.isCreative(meta)) totalChargeSendable = BlockChargePad.SEND[0];
+
+            if (totalChargeSendable > 0)
+            {
+                List<EntityPlayer> playersInRange = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.getAABBInFront());
+                if (playersInRange.size() > 0)
+                {
+                    Set<ItemStack> itemsToCharge = new HashSet<ItemStack>();
+                    for (EntityPlayer player : playersInRange)
+                    {
+                        itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.mainInventory));
+                        itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.armorInventory));
+                    }
+
+                    int itemCount = itemsToCharge.size();
+                    if (itemCount > 0)
+                    {
+                        double chargePerItem = Math.floor(totalChargeSendable / itemCount);
+
+                        for (ItemStack itemStack : itemsToCharge)
+                        {
+                            IEnergyContainerItem chargeableItem = (IEnergyContainerItem) itemStack.getItem();
+                            int couldReceive = chargeableItem.receiveEnergy(itemStack, (int) chargePerItem, true);
+                            int toSend = this.extractEnergy(couldReceive, meta, false);
+                            if (BlockChargePad.isCreative(meta)) toSend = couldReceive;
+
+                            sentPower += chargeableItem.receiveEnergy(itemStack, toSend, false);
+                        }
+                    }
+                }
+            }
 
             boolean shouldSendUpdate = false;
             shouldSendUpdate = shouldSendUpdate || (this.isActive != oldActive);
@@ -159,6 +228,18 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         return 0;
     }
 
+    public int extractEnergy(int maxExtract, int meta, boolean simulate)
+    {
+        int energyExtracted = Math.min(this.storedEnergy, Math.min(BlockChargePad.getMaxSendRate(meta), maxExtract));
+
+        if (!simulate)
+        {
+            this.storedEnergy -= energyExtracted;
+        }
+
+        return energyExtracted;
+    }
+
     @Override
     public int getEnergyStored(ForgeDirection from)
     {
@@ -192,7 +273,9 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
         if (BlockChargePad.isCreative(blockMeta)) currenttip.add("Charge: Infinite");
         else
-            currenttip.add("Charge: " + StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(BlockChargePad.getMaxEnergyStored(blockMeta)));
+            currenttip.add("Charge: " + StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(BlockChargePad.getMaxEnergyStored(blockMeta)) + " RF");
+
+        currenttip.add("Sent: " + StringHelper.getEnergyString(this.sentPower) + " RF/t");
 
         return currenttip;
     }
