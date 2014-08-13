@@ -107,20 +107,6 @@ archivesBaseName = "EnderTech"
 sourceSets.main.java.srcDir "src/packapi/java"
 sourceSets.main.resources.srcDir "src/packapi/resources"
 
-minecraft {
-    version = config.minecraft_version + "-" + config.forge_version
-    assetDir = 'run/assets'
-
-    replaceIn "reference/Reference.java"
-
-    if (keystore_config != null)
-        replace "@FINGERPRINT@", keystore_config.key_sha1
-
-    replace "@VERSION@", "${config.minecraft_version}-${config.mod_version}.${project.buildInfo.build_number}"
-
-    srgExtra "PK: io/drakon/pulsar io/endertech/repack/pulsar"
-}
-
 task buildInfo {
     if (env.BUILD_NUMBER != null) {
         ext.build_number = "${env.BUILD_NUMBER}"
@@ -139,6 +125,21 @@ task buildInfo {
             ext.build_number = "unknown"
         }
     }
+}
+
+minecraft {
+    version = config.minecraft_version + "-" + config.forge_version
+    assetDir = 'run/assets'
+
+    replaceIn "reference/Reference.java"
+
+    if (keystore_config != null)
+        replace "@FINGERPRINT@", keystore_config.key_sha1
+
+    listVersion = "${config.minecraft_version}-${config.mod_version}.${project.buildInfo.build_number}"
+    replace "@VERSION@", listversion
+
+    srgExtra "PK: io/drakon/pulsar io/endertech/repack/pulsar"
 }
 
 version = "${config.minecraft_version}-${config.mod_version}.${project.buildInfo.build_number}"
