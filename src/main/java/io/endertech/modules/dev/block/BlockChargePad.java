@@ -10,6 +10,8 @@ import io.endertech.modules.dev.tile.TileChargePad;
 import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.reference.Strings;
 import io.endertech.tile.TileET;
+import io.endertech.util.BlockCoord;
+import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -25,11 +27,12 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockChargePad extends BlockET implements ITileEntityProvider, IDismantleable
+public class BlockChargePad extends BlockET implements ITileEntityProvider, IDismantleable, IOutlineDrawer
 {
     public static ItemStack itemChargePadCreative;
     public static ItemStack itemChargePadResonant;
@@ -220,6 +223,26 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     public static boolean isCreative(int meta)
     {
         return meta == 0;
+    }
+
+    @Override
+    public boolean drawOutline(DrawBlockHighlightEvent event)
+    {
+        BlockCoord target = new BlockCoord(event.target.blockX, event.target.blockY, event.target.blockZ);
+        World world = event.player.worldObj;
+
+        TileEntity tile = world.getTileEntity(target.x, target.y, target.z);
+        if (tile == null)
+        {
+            return false;
+        }
+
+        if (tile instanceof TileChargePad)
+        {
+            return ((TileChargePad) tile).drawOutline(event);
+        }
+
+        return false;
     }
 
     public static enum Types

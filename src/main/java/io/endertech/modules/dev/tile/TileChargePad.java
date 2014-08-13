@@ -8,11 +8,16 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.endertech.config.GeneralConfig;
 import io.endertech.fx.EntityChargePadFX;
 import io.endertech.modules.dev.block.BlockChargePad;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.tile.TileET;
+import io.endertech.util.BlockCoord;
+import io.endertech.util.IOutlineDrawer;
+import io.endertech.util.RGBA;
+import io.endertech.util.helper.RenderHelper;
 import io.endertech.util.helper.StringHelper;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,13 +26,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
-public class TileChargePad extends TileET implements IReconfigurableFacing, IEnergyHandler
+public class TileChargePad extends TileET implements IReconfigurableFacing, IEnergyHandler, IOutlineDrawer
 {
     public static final short TICKS_PER_UPDATE = 20;
     public short ticksSinceLastUpdate = 0;
@@ -90,10 +93,10 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         }
     }
 
-    public AxisAlignedBB getAABBInFront()
+    public AxisAlignedBB getAABBInFront(int distance)
     {
         ForgeDirection orientation = this.getOrientation();
-        return this.getRenderBoundingBox().offset(orientation.offsetX, orientation.offsetY, orientation.offsetZ);
+        return this.getRenderBoundingBox().expand(Math.abs(orientation.offsetX) * (distance - 1), Math.abs(orientation.offsetY) * (distance - 1), Math.abs(orientation.offsetZ) * (distance - 1)).offset(orientation.offsetX, orientation.offsetY, orientation.offsetZ);
     }
 
     public Set<ItemStack> chargeableItemsInInventory(ItemStack[] itemStacks)
@@ -131,29 +134,44 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
 
             if (totalChargeSendable > 0)
             {
-                List<EntityPlayer> playersInRange = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.getAABBInFront());
+                List<EntityPlayer> playersInRange = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.getAABBInFront(2));
                 if (playersInRange.size() > 0)
                 {
-                    Set<ItemStack> itemsToCharge = new HashSet<ItemStack>();
+                    double totalChargeForEntity = totalChargeSendable / playersInRange.size();
+
                     for (EntityPlayer player : playersInRange)
                     {
+                        LinkedList<ItemStack> itemsToCharge = new LinkedList<ItemStack>();
                         itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.mainInventory));
                         itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.armorInventory));
-                    }
 
-                    int itemCount = itemsToCharge.size();
-                    if (itemCount > 0)
-                    {
-                        double chargePerItem = Math.floor(totalChargeSendable / itemCount);
+                        double xDiff = Math.abs(((this.xCoord + 0.5D) - player.posX) * orientation.offsetX);
+                        double yDiff = Math.abs(((this.yCoord + 0.5D) - player.posY) * orientation.offsetY);
+                        double zDiff = Math.abs(((this.zCoord + 0.5D) - player.posZ) * orientation.offsetZ);
+                        double distance = xDiff + yDiff + zDiff - 0.5;
+                        if (orientation == ForgeDirection.DOWN) distance -= 1.5;
 
-                        for (ItemStack itemStack : itemsToCharge)
+                        if (distance < 0.3) distance = 0;
+                        if (distance > 1.5) distance = 1.5;
+                        double efficiency = ((2.0 - distance) / 2.0);
+                        if (distance < 0.9) efficiency += 0.2;
+                        efficiency = Math.max(0.5, efficiency);
+                        efficiency = Math.min(1, efficiency);
+
+                        int itemCount = itemsToCharge.size();
+                        if (itemCount > 0)
                         {
-                            IEnergyContainerItem chargeableItem = (IEnergyContainerItem) itemStack.getItem();
-                            int couldReceive = chargeableItem.receiveEnergy(itemStack, (int) chargePerItem, true);
-                            int toSend = this.extractEnergy(couldReceive, meta, false);
-                            if (BlockChargePad.isCreative(meta)) toSend = couldReceive;
+                            double chargePerItem = Math.floor(totalChargeForEntity / itemCount);
 
-                            sentPower += chargeableItem.receiveEnergy(itemStack, toSend, false);
+                            for (ItemStack itemStack : itemsToCharge)
+                            {
+                                IEnergyContainerItem chargeableItem = (IEnergyContainerItem) itemStack.getItem();
+                                int couldReceive = chargeableItem.receiveEnergy(itemStack, (int) chargePerItem, true);
+                                int toSend = this.extractEnergy(couldReceive, meta, false);
+                                if (BlockChargePad.isCreative(meta)) toSend = couldReceive;
+
+                                sentPower += chargeableItem.receiveEnergy(itemStack, (int) (toSend * efficiency), false);
+                            }
                         }
                     }
                 }
@@ -310,14 +328,14 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
     @SideOnly(Side.CLIENT)
     protected int getParticleMaxAge()
     {
-        return 10;
+        return 16;
     }
 
     @SideOnly(Side.CLIENT)
     protected double[] getParticleVelocity()
     {
         ForgeDirection orientation = this.getOrientation();
-        return new double[] {orientation.offsetX * 0.1D, orientation.offsetY * 0.1D, orientation.offsetZ * 0.1D};
+        return new double[] {orientation.offsetX * 0.15D, orientation.offsetY * 0.15D, orientation.offsetZ * 0.15D};
     }
 
     @SideOnly(Side.CLIENT)
@@ -345,4 +363,17 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         else return 1.0F;
     }
 
+    @Override
+    public boolean drawOutline(DrawBlockHighlightEvent event)
+    {
+        if (GeneralConfig.debugRender)
+        {
+            AxisAlignedBB front = this.getAABBInFront(2);
+            RenderHelper.renderAABBOutline(event.context, event.player, front, RGBA.Red.setAlpha(0.6f), 2.0f, event.partialTicks);
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 }
