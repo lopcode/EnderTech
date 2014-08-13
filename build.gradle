@@ -136,8 +136,7 @@ minecraft {
     if (keystore_config != null)
         replace "@FINGERPRINT@", keystore_config.key_sha1
 
-    listVersion = "${config.minecraft_version}-${config.mod_version}.${project.buildInfo.build_number}"
-    replace "@VERSION@", listversion
+    replace "@VERSION@", "${config.minecraft_version}-${config.mod_version}.${project.buildInfo.build_number}"
 
     srgExtra "PK: io/drakon/pulsar io/endertech/repack/pulsar"
 }
