@@ -116,6 +116,8 @@ minecraft {
     if (keystore_config != null)
         replace "@FINGERPRINT@", keystore_config.key_sha1
 
+    replace "@VERSION@", "${config.minecraft_version}-${config.mod_version}.${project.buildInfo.build_number}"
+
     srgExtra "PK: io/drakon/pulsar io/endertech/repack/pulsar"
 }
 
@@ -145,7 +147,6 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
         include 'version.properties'
-        include 'reference/Reference.java'
 
         expand 'version': project.version, 'build_number': project.buildInfo.build_number, 'mcversion': project.minecraft.version
     }
@@ -153,7 +154,6 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
         exclude 'version.properties'
-        exclude 'reference/Reference.java'
     }
 }
 
