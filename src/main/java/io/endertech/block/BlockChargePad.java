@@ -1,12 +1,11 @@
-package io.endertech.modules.dev.block;
+package io.endertech.block;
 
 import cofh.api.block.IDismantleable;
 import cofh.lib.util.helpers.ServerHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
-import io.endertech.block.BlockET;
-import io.endertech.modules.dev.tile.TileChargePad;
+import io.endertech.tile.TileChargePad;
 import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.reference.Strings;
 import io.endertech.tile.TileET;
@@ -57,8 +56,8 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
         TileChargePad.init();
 
         itemChargePadCreative = new ItemStack(this, 1, 0);
-        itemChargePadResonant = new ItemStack(this, 1, 1);
-        itemChargePadRedstone = new ItemStack(this, 1, 2);
+        itemChargePadResonant = new ItemStack(this, 1, 2);
+        itemChargePadRedstone = new ItemStack(this, 1, 1);
     }
 
     @Override

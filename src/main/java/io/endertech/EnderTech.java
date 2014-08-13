@@ -14,6 +14,7 @@ import io.endertech.config.ConfigHandler;
 import io.endertech.config.GeneralConfig;
 import io.endertech.creativetab.CreativeTabET;
 import io.endertech.item.ETItems;
+import io.endertech.block.BlockChargePad;
 import io.endertech.multiblock.block.BlockMultiblockGlass;
 import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.block.BlockTankPart;
@@ -158,10 +159,12 @@ public class EnderTech
         {
             ItemStack capacitorReinforced = GameRegistry.findItemStack("ThermalExpansion", "capacitorReinforced", 1);
             ItemStack capacitorResonant = GameRegistry.findItemStack("ThermalExpansion", "capacitorResonant", 1);
+            ItemStack powerCoilElectrumStack = GameRegistry.findItemStack("ThermalExpansion", "powerCoilElectrum", 1);
             ItemStack tesseract = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Tesseract"));
             ItemStack enderiumIngot = GameRegistry.findItemStack("ThermalFoundation", "ingotEnderium", 1);
             ItemStack electrumIngot = GameRegistry.findItemStack("ThermalFoundation", "ingotElectrum", 1);
             ItemStack machineResonant = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Frame"), 1, 3);
+            ItemStack machineRedstone = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Frame"), 1, 2);
             ItemStack hardenedGlass = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Glass"));
             ItemStack tankResonant = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Tank"), 1, 4);
 
@@ -181,6 +184,9 @@ public class EnderTech
             GameRegistry.addRecipe(enderTankValve, new Object[] {"IAI", "EFE", "ITI", 'I', enderiumIngot, 'A', tankResonant, 'F', machineResonant, 'T', tesseract, 'E', enderEyeStack});
             GameRegistry.addRecipe(enderTankController, new Object[] {"IEI", "EFE", "ITI", 'I', enderiumIngot, 'F', machineResonant, 'T', tesseract, 'E', enderEyeStack});
             GameRegistry.addRecipe(enderTankGlass, new Object[] {"GIG", "EFE", "GIG", 'I', enderiumIngot, 'G', hardenedGlass, 'F', machineResonant, 'E', enderEyeStack});
+
+            GameRegistry.addRecipe(BlockChargePad.itemChargePadResonant, new Object[] {"IEI", "CFC", "IAI", 'I', enderiumIngot, 'F', machineResonant, 'E', enderEyeStack, 'C', powerCoilElectrumStack, 'T', tesseract, 'A', capacitorResonant});
+            GameRegistry.addRecipe(BlockChargePad.itemChargePadRedstone, new Object[] {"IEI", "CFC", "IAI", 'I', electrumIngot, 'F', machineRedstone, 'E', enderEyeStack, 'C', powerCoilElectrumStack, 'T', tesseract, 'A', capacitorReinforced});
         }
     }
 }

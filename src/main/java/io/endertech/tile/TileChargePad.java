@@ -1,4 +1,4 @@
-package io.endertech.modules.dev.tile;
+package io.endertech.tile;
 
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
@@ -10,11 +10,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.config.GeneralConfig;
 import io.endertech.fx.EntityChargePadFX;
-import io.endertech.modules.dev.block.BlockChargePad;
+import io.endertech.block.BlockChargePad;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
-import io.endertech.tile.TileET;
-import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
 import io.endertech.util.helper.RenderHelper;
