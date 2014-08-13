@@ -1,9 +1,5 @@
 package io.endertech.reference;
 
-import com.google.common.base.Throwables;
-import java.io.InputStream;
-import java.util.Properties;
-
 public class Reference
 {
     public static final String MOD_ID = "EnderTech";

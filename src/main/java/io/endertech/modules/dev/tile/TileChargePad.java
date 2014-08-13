@@ -4,12 +4,17 @@ import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.lib.util.helpers.ServerHelper;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.endertech.fx.EntityChargePadFX;
 import io.endertech.modules.dev.block.BlockChargePad;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.tile.TileET;
 import io.endertech.util.helper.StringHelper;
+import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +24,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 public class TileChargePad extends TileET implements IReconfigurableFacing, IEnergyHandler
@@ -112,10 +118,11 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
     @Override
     public void updateEntity()
     {
+        int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+
         if (ServerHelper.isServerWorld(this.worldObj))
         {
             boolean oldActive = this.isActive;
-            int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
             this.isActive = this.storedEnergy > 0 || BlockChargePad.isCreative(meta);
 
             sentPower = 0;
@@ -168,6 +175,26 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
 
             this.ticksSinceLastUpdate++;
             if (this.ticksSinceLastUpdate > TICKS_PER_UPDATE) this.ticksSinceLastUpdate = TICKS_PER_UPDATE;
+        }
+
+        if (this.sentPower > 0 && ServerHelper.isClientWorld(this.worldObj))
+        {
+            EffectRenderer er = FMLClientHandler.instance().getClient().effectRenderer;
+
+            ForgeDirection orientation = this.getOrientation();
+
+            Random rand = this.worldObj.rand;
+
+            for (int particle = this.getParticleCount(meta); particle > 0; particle--)
+            {
+                double x = this.xCoord + (0.5F * orientation.offsetX) + (rand.nextFloat() * 0.8) + 0.1;
+                double y = this.yCoord + (0.5F * orientation.offsetY) + (rand.nextFloat() * 0.8) + 0.1;
+                double z = this.zCoord + (0.5F * orientation.offsetZ) + (rand.nextFloat() * 0.8) + 0.1;
+                double[] velocity = getParticleVelocity();
+
+                float[] colour = getParticleColour(rand);
+                er.addEffect(new EntityChargePadFX(this.worldObj, x, y, z, getParticleMaxAge(), velocity, colour, this.getParticleSizeModifier(meta)));
+            }
         }
     }
 
@@ -279,4 +306,43 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
 
         return currenttip;
     }
+
+    @SideOnly(Side.CLIENT)
+    protected int getParticleMaxAge()
+    {
+        return 10;
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected double[] getParticleVelocity()
+    {
+        ForgeDirection orientation = this.getOrientation();
+        return new double[] {orientation.offsetX * 0.1D, orientation.offsetY * 0.1D, orientation.offsetZ * 0.1D};
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected float[] getParticleColour(Random rand)
+    {
+        float r = 1.0F;
+        float g = 0F + (rand.nextFloat() * 0.25F);
+        float b = 0F + (rand.nextFloat() * 0.25F);
+        return new float[] {r, g, b};
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected int getParticleCount(int meta)
+    {
+        if (meta == 0) return 12;
+        else if (meta == 2) return 4;
+        else return 2;
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected float getParticleSizeModifier(int meta)
+    {
+        if (meta == 0) return 2.0F;
+        else if (meta == 2) return 1.5F;
+        else return 1.0F;
+    }
+
 }
