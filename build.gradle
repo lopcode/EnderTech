@@ -145,6 +145,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
         include 'version.properties'
+        include 'reference/Reference.java'
 
         expand 'version': project.version, 'build_number': project.buildInfo.build_number, 'mcversion': project.minecraft.version
     }
@@ -152,10 +153,8 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
         exclude 'version.properties'
+        exclude 'reference/Reference.java'
     }
-
-    replaceIn "reference/Reference.java"
-    replace "@VERSION@", project.version
 }
 
 jar {
