@@ -35,7 +35,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import java.io.File;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, certificateFingerprint = Reference.FINGERPRINT, dependencies = "required-after:ThermalExpansion@[1.7.10R4.0.0B1,)")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION_NUMBER, certificateFingerprint = Reference.FINGERPRINT, dependencies = "required-after:ThermalExpansion@[1.7.10R4.0.0B1,)")
 public class EnderTech
 {
     @SuppressWarnings("unused")
@@ -65,9 +65,6 @@ public class EnderTech
     @SuppressWarnings("unused")
     public void preInit(FMLPreInitializationEvent event)
     {
-        // Version number
-        event.getModMetadata().version = Reference.VERSION_NUMBER;
-
         // Configuration
         ConfigHandler.init(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + Reference.CHANNEL_NAME.toLowerCase() + File.separator);
 
