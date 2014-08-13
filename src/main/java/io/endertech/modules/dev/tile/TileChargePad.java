@@ -126,7 +126,7 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         if (ServerHelper.isServerWorld(this.worldObj))
         {
             boolean oldActive = this.isActive;
-            this.isActive = this.storedEnergy > 0 || BlockChargePad.isCreative(meta);
+            this.isActive = this.sentPower > 0;
 
             sentPower = 0;
             double totalChargeSendable = this.extractEnergy(BlockChargePad.getMaxSendRate(meta), meta, true);
