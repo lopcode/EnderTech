@@ -111,7 +111,7 @@ minecraft {
     version = config.minecraft_version + "-" + config.forge_version
     assetDir = 'run/assets'
 
-    replaceIn "lib/Reference.java"
+    replaceIn "reference/Reference.java"
 
     if (keystore_config != null)
         replace "@FINGERPRINT@", keystore_config.key_sha1
@@ -154,7 +154,7 @@ processResources {
         exclude 'version.properties'
     }
 
-    replaceIn "lib/Reference.java"
+    replaceIn "reference/Reference.java"
     replace "@VERSION@", project.version
 }
 
