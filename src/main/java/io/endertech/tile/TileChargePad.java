@@ -178,6 +178,7 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         List<ItemStack> itemsToCharge = this.getItemsToChargeFromEntity(entity);
         double efficiency = this.calculateEfficiencyForEntity(entity);
 
+        int totalSent = 0;
         int itemCount = itemsToCharge.size();
         if (itemCount > 0)
         {
@@ -197,11 +198,11 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
                     if (entityItem.lifespan < Integer.MAX_VALUE) entityItem.lifespan = Integer.MAX_VALUE;
                 }
 
-                return sent;
+                totalSent += sent;
             }
         }
 
-        return 0;
+        return totalSent;
     }
 
     @Override
@@ -223,12 +224,14 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
                 AxisAlignedBB front = this.getAABBInFront(2);
                 List<Entity> ownersInRange = this.getChargeableEntitesInAABB(front);
 
+                double totalChargeForEntity = totalChargeSendable / ownersInRange.size();
                 if (ownersInRange.size() > 0)
                 {
-                    double totalChargeForEntity = totalChargeSendable / ownersInRange.size();
-
                     for (Entity entity : ownersInRange)
-                        sentPower += this.chargeItemsGivenEntity(entity, totalChargeForEntity, meta);
+                    {
+                        int powerSentToEntity = this.chargeItemsGivenEntity(entity, totalChargeForEntity, meta);
+                        sentPower += powerSentToEntity;
+                    }
                 }
             }
 
@@ -406,8 +409,8 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
     @SideOnly(Side.CLIENT)
     protected int getParticleCount(int meta)
     {
-        if (meta == 0) return 12;
-        else if (meta == 2) return 4;
+        if (meta == 0) return 6;
+        else if (meta == 2) return 3;
         else return 2;
     }
 
