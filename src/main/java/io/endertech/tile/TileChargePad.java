@@ -156,7 +156,7 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         return efficiency;
     }
 
-    public int chargeItemsGivenEntity(Entity entity, double maxCharge, int meta)
+    public List<ItemStack> getItemsToChargeFromEntity(Entity entity)
     {
         LinkedList<ItemStack> itemsToCharge = new LinkedList<ItemStack>();
 
@@ -170,7 +170,14 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
             itemsToCharge.add(((EntityItem) entity).getEntityItem());
         }
 
+        return itemsToCharge;
+    }
+
+    public int chargeItemsGivenEntity(Entity entity, double maxCharge, int meta)
+    {
+        List<ItemStack> itemsToCharge = this.getItemsToChargeFromEntity(entity);
         double efficiency = this.calculateEfficiencyForEntity(entity);
+
         int itemCount = itemsToCharge.size();
         if (itemCount > 0)
         {
