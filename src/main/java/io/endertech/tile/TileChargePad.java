@@ -118,6 +118,85 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         return itemsToCharge;
     }
 
+    public List<Entity> getChargeableEntitesInAABB(AxisAlignedBB aabb)
+    {
+        List<Entity> chargeableEntitiesInRange = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+        List<EntityItem> chargeableItemsInRange = this.worldObj.getEntitiesWithinAABB(EntityItem.class, aabb);
+        for (EntityItem entityItem : chargeableItemsInRange)
+        {
+            ItemStack itemStack = entityItem.getEntityItem();
+            if (itemStack != null)
+            {
+                Item item = itemStack.getItem();
+                if (item != null)
+                {
+                    if (item instanceof IEnergyContainerItem) chargeableEntitiesInRange.add(entityItem);
+                }
+            }
+        }
+
+        return chargeableEntitiesInRange;
+    }
+
+    public double calculateEfficiencyForEntity(Entity entity)
+    {
+        double xDiff = Math.abs(((this.xCoord + 0.5D) - entity.posX) * orientation.offsetX);
+        double yDiff = Math.abs(((this.yCoord + 0.5D) - entity.posY) * orientation.offsetY);
+        double zDiff = Math.abs(((this.zCoord + 0.5D) - entity.posZ) * orientation.offsetZ);
+        double distance = xDiff + yDiff + zDiff - 0.5;
+        if (orientation == ForgeDirection.DOWN) distance -= 1.5;
+        if (distance < 0.3) distance = 0;
+        if (distance > 1.5) distance = 1.5;
+
+        double efficiency = ((2.0 - distance) / 2.0);
+        if (distance < 0.9) efficiency += 0.2;
+        efficiency = Math.max(0.5, efficiency);
+        efficiency = Math.min(1, efficiency);
+
+        return efficiency;
+    }
+
+    public int chargeItemsGivenEntity(Entity entity, double maxCharge, int meta)
+    {
+        LinkedList<ItemStack> itemsToCharge = new LinkedList<ItemStack>();
+
+        if (entity instanceof EntityPlayer)
+        {
+            EntityPlayer player = (EntityPlayer) entity;
+            itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.mainInventory));
+            itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.armorInventory));
+        } else if (entity instanceof EntityItem)
+        {
+            itemsToCharge.add(((EntityItem) entity).getEntityItem());
+        }
+
+        double efficiency = this.calculateEfficiencyForEntity(entity);
+        int itemCount = itemsToCharge.size();
+        if (itemCount > 0)
+        {
+            double chargePerItem = Math.floor(maxCharge / itemCount);
+
+            for (ItemStack itemStack : itemsToCharge)
+            {
+                IEnergyContainerItem chargeableItem = (IEnergyContainerItem) itemStack.getItem();
+                int couldReceive = chargeableItem.receiveEnergy(itemStack, (int) chargePerItem, true);
+                int toSend = this.extractEnergy(couldReceive, meta, false);
+                if (BlockChargePad.isCreative(meta)) toSend = couldReceive;
+
+                int sent = chargeableItem.receiveEnergy(itemStack, (int) (toSend * efficiency), false);
+                if (sent > 0 && entity instanceof EntityItem)
+                {
+                    EntityItem entityItem = (EntityItem) entity;
+                    if (entityItem.lifespan < Integer.MAX_VALUE) entityItem.lifespan = Integer.MAX_VALUE;
+                }
+
+                return sent;
+            }
+        }
+
+        return 0;
+    }
+
     @Override
     public void updateEntity()
     {
@@ -135,69 +214,14 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
             if (totalChargeSendable > 0)
             {
                 AxisAlignedBB front = this.getAABBInFront(2);
-                List<Entity> ownersInRange = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, front);
-
-                List<EntityItem> itemsInRange = this.worldObj.getEntitiesWithinAABB(EntityItem.class, front);
-                for (EntityItem entityItem : itemsInRange)
-                {
-                    ItemStack itemStack = entityItem.getEntityItem();
-                    if (itemStack != null)
-                    {
-                        Item item = itemStack.getItem();
-                        if (item != null)
-                        {
-                            if (item instanceof IEnergyContainerItem) ownersInRange.add(entityItem);
-                        }
-                    }
-                }
+                List<Entity> ownersInRange = this.getChargeableEntitesInAABB(front);
 
                 if (ownersInRange.size() > 0)
                 {
                     double totalChargeForEntity = totalChargeSendable / ownersInRange.size();
 
                     for (Entity entity : ownersInRange)
-                    {
-                        LinkedList<ItemStack> itemsToCharge = new LinkedList<ItemStack>();
-
-                        if (entity instanceof EntityPlayer)
-                        {
-                            EntityPlayer player = (EntityPlayer) entity;
-                            itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.mainInventory));
-                            itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.armorInventory));
-                        } else if (entity instanceof EntityItem)
-                        {
-                            itemsToCharge.add(((EntityItem) entity).getEntityItem());
-                        }
-
-                        double xDiff = Math.abs(((this.xCoord + 0.5D) - entity.posX) * orientation.offsetX);
-                        double yDiff = Math.abs(((this.yCoord + 0.5D) - entity.posY) * orientation.offsetY);
-                        double zDiff = Math.abs(((this.zCoord + 0.5D) - entity.posZ) * orientation.offsetZ);
-                        double distance = xDiff + yDiff + zDiff - 0.5;
-                        if (orientation == ForgeDirection.DOWN) distance -= 1.5;
-
-                        if (distance < 0.3) distance = 0;
-                        if (distance > 1.5) distance = 1.5;
-                        double efficiency = ((2.0 - distance) / 2.0);
-                        if (distance < 0.9) efficiency += 0.2;
-                        efficiency = Math.max(0.5, efficiency);
-                        efficiency = Math.min(1, efficiency);
-
-                        int itemCount = itemsToCharge.size();
-                        if (itemCount > 0)
-                        {
-                            double chargePerItem = Math.floor(totalChargeForEntity / itemCount);
-
-                            for (ItemStack itemStack : itemsToCharge)
-                            {
-                                IEnergyContainerItem chargeableItem = (IEnergyContainerItem) itemStack.getItem();
-                                int couldReceive = chargeableItem.receiveEnergy(itemStack, (int) chargePerItem, true);
-                                int toSend = this.extractEnergy(couldReceive, meta, false);
-                                if (BlockChargePad.isCreative(meta)) toSend = couldReceive;
-
-                                sentPower += chargeableItem.receiveEnergy(itemStack, (int) (toSend * efficiency), false);
-                            }
-                        }
-                    }
+                        sentPower += this.chargeItemsGivenEntity(entity, totalChargeForEntity, meta);
                 }
             }
 
@@ -210,33 +234,34 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
                 shouldSendUpdate = true;
             }
 
-            if (shouldSendUpdate)
-            {
-                this.sendDescriptionPacket();
-            }
+            if (shouldSendUpdate) this.sendDescriptionPacket();
 
             this.ticksSinceLastUpdate++;
             if (this.ticksSinceLastUpdate > TICKS_PER_UPDATE) this.ticksSinceLastUpdate = TICKS_PER_UPDATE;
         }
 
-        if (this.sentPower > 0 && ServerHelper.isClientWorld(this.worldObj))
+        if (this.sentPower > 0 && ServerHelper.isClientWorld(this.worldObj)) this.spawnParticles(meta);
+
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void spawnParticles(int meta)
+    {
+        EffectRenderer er = FMLClientHandler.instance().getClient().effectRenderer;
+
+        ForgeDirection orientation = this.getOrientation();
+
+        Random rand = this.worldObj.rand;
+
+        for (int particle = this.getParticleCount(meta); particle > 0; particle--)
         {
-            EffectRenderer er = FMLClientHandler.instance().getClient().effectRenderer;
+            double x = this.xCoord + (0.5F * orientation.offsetX) + (rand.nextFloat() * 0.8) + 0.1;
+            double y = this.yCoord + (0.5F * orientation.offsetY) + (rand.nextFloat() * 0.8) + 0.1;
+            double z = this.zCoord + (0.5F * orientation.offsetZ) + (rand.nextFloat() * 0.8) + 0.1;
+            double[] velocity = getParticleVelocity();
 
-            ForgeDirection orientation = this.getOrientation();
-
-            Random rand = this.worldObj.rand;
-
-            for (int particle = this.getParticleCount(meta); particle > 0; particle--)
-            {
-                double x = this.xCoord + (0.5F * orientation.offsetX) + (rand.nextFloat() * 0.8) + 0.1;
-                double y = this.yCoord + (0.5F * orientation.offsetY) + (rand.nextFloat() * 0.8) + 0.1;
-                double z = this.zCoord + (0.5F * orientation.offsetZ) + (rand.nextFloat() * 0.8) + 0.1;
-                double[] velocity = getParticleVelocity();
-
-                float[] colour = getParticleColour(rand);
-                er.addEffect(new EntityChargePadFX(this.worldObj, x, y, z, getParticleMaxAge(), velocity, colour, this.getParticleSizeModifier(meta)));
-            }
+            float[] colour = getParticleColour(rand);
+            er.addEffect(new EntityChargePadFX(this.worldObj, x, y, z, getParticleMaxAge(), velocity, colour, this.getParticleSizeModifier(meta)));
         }
     }
 
