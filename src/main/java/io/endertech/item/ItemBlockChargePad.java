@@ -1,7 +1,7 @@
 package io.endertech.item;
 
-import io.endertech.block.ItemBlockBasic;
 import io.endertech.block.BlockChargePad;
+import io.endertech.block.ItemBlockBasic;
 import net.minecraft.block.Block;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;

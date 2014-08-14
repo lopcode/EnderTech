@@ -8,9 +8,9 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.endertech.block.BlockChargePad;
 import io.endertech.config.GeneralConfig;
 import io.endertech.fx.EntityChargePadFX;
-import io.endertech.block.BlockChargePad;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.IOutlineDrawer;
@@ -18,6 +18,8 @@ import io.endertech.util.RGBA;
 import io.endertech.util.helper.RenderHelper;
 import io.endertech.util.helper.StringHelper;
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -132,20 +134,44 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
 
             if (totalChargeSendable > 0)
             {
-                List<EntityPlayer> playersInRange = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.getAABBInFront(2));
-                if (playersInRange.size() > 0)
-                {
-                    double totalChargeForEntity = totalChargeSendable / playersInRange.size();
+                AxisAlignedBB front = this.getAABBInFront(2);
+                List<Entity> ownersInRange = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, front);
 
-                    for (EntityPlayer player : playersInRange)
+                List<EntityItem> itemsInRange = this.worldObj.getEntitiesWithinAABB(EntityItem.class, front);
+                for (EntityItem entityItem : itemsInRange)
+                {
+                    ItemStack itemStack = entityItem.getEntityItem();
+                    if (itemStack != null)
+                    {
+                        Item item = itemStack.getItem();
+                        if (item != null)
+                        {
+                            if (item instanceof IEnergyContainerItem) ownersInRange.add(entityItem);
+                        }
+                    }
+                }
+
+                if (ownersInRange.size() > 0)
+                {
+                    double totalChargeForEntity = totalChargeSendable / ownersInRange.size();
+
+                    for (Entity entity : ownersInRange)
                     {
                         LinkedList<ItemStack> itemsToCharge = new LinkedList<ItemStack>();
-                        itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.mainInventory));
-                        itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.armorInventory));
 
-                        double xDiff = Math.abs(((this.xCoord + 0.5D) - player.posX) * orientation.offsetX);
-                        double yDiff = Math.abs(((this.yCoord + 0.5D) - player.posY) * orientation.offsetY);
-                        double zDiff = Math.abs(((this.zCoord + 0.5D) - player.posZ) * orientation.offsetZ);
+                        if (entity instanceof EntityPlayer)
+                        {
+                            EntityPlayer player = (EntityPlayer) entity;
+                            itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.mainInventory));
+                            itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.armorInventory));
+                        } else if (entity instanceof EntityItem)
+                        {
+                            itemsToCharge.add(((EntityItem) entity).getEntityItem());
+                        }
+
+                        double xDiff = Math.abs(((this.xCoord + 0.5D) - entity.posX) * orientation.offsetX);
+                        double yDiff = Math.abs(((this.yCoord + 0.5D) - entity.posY) * orientation.offsetY);
+                        double zDiff = Math.abs(((this.zCoord + 0.5D) - entity.posZ) * orientation.offsetZ);
                         double distance = xDiff + yDiff + zDiff - 0.5;
                         if (orientation == ForgeDirection.DOWN) distance -= 1.5;
 
