@@ -96,7 +96,7 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
     public AxisAlignedBB getAABBInFront(int distance)
     {
         ForgeDirection orientation = this.getOrientation();
-        return this.getRenderBoundingBox().expand(Math.abs(orientation.offsetX) * (distance - 1), Math.abs(orientation.offsetY) * (distance - 1), Math.abs(orientation.offsetZ) * (distance - 1)).offset(orientation.offsetX, orientation.offsetY, orientation.offsetZ);
+        return AxisAlignedBB.getBoundingBox(this.xCoord, this.yCoord, this.zCoord, this.xCoord + 1, this.yCoord + 1, this.zCoord + 1).expand(Math.abs(orientation.offsetX) * (distance - 1), Math.abs(orientation.offsetY) * (distance - 1), Math.abs(orientation.offsetZ) * (distance - 1)).offset(orientation.offsetX, orientation.offsetY, orientation.offsetZ);
     }
 
     public Set<ItemStack> chargeableItemsInInventory(ItemStack[] itemStacks)
