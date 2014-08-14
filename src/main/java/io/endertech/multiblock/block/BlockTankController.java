@@ -8,6 +8,7 @@ import io.endertech.block.BlockET;
 import io.endertech.multiblock.tile.TileTankController;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.reference.Strings;
+import io.endertech.reference.Textures;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import net.minecraft.block.ITileEntityProvider;
@@ -132,9 +133,9 @@ public class BlockTankController extends BlockET implements ITileEntityProvider,
             _icons[i] = iconRegister.registerIcon(TEXTURE_BASE + "." + _subBlocks[i]);
         }
 
-        this.sideIcon = iconRegister.registerIcon(TEXTURE_BASE + ".controllerSide");
-        this.topIcon = iconRegister.registerIcon(TEXTURE_BASE + ".controllerTop");
-        this.bottomIcon = iconRegister.registerIcon(TEXTURE_BASE + ".controllerBottom");
+        this.sideIcon = iconRegister.registerIcon(Textures.ENDER_TEXTURE_BASE + ".controllerSide");
+        this.topIcon = iconRegister.registerIcon(Textures.ENDER_TEXTURE_BASE + ".controllerTop");
+        this.bottomIcon = iconRegister.registerIcon(Textures.ENDER_TEXTURE_BASE + ".controllerBottom");
     }
 
     @Override

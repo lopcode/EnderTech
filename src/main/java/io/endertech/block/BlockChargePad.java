@@ -5,8 +5,8 @@ import cofh.lib.util.helpers.ServerHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
-import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.reference.Strings;
+import io.endertech.reference.Textures;
 import io.endertech.tile.TileChargePad;
 import io.endertech.tile.TileET;
 import io.endertech.util.BlockCoord;
@@ -37,9 +37,9 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     public static ItemStack itemChargePadResonant;
     public static ItemStack itemChargePadRedstone;
 
-    public IIcon sideIcon;
-    public IIcon topIcon;
-    public IIcon bottomIcon;
+    public IIcon[] sideIcon;
+    public IIcon[] topIcon;
+    public IIcon[] bottomIcon;
     public static final String TEXTURE_BASE = "endertech:chargePad/";
     public IIcon[] activeIcons;
     public IIcon[] inactiveIcons;
@@ -113,20 +113,19 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     public IIcon getIcon(int side, int meta)
     {
         ForgeDirection orientation = ForgeDirection.getOrientation(side);
-        if (orientation == ForgeDirection.UP) return this.topIcon;
-        else if (orientation == ForgeDirection.DOWN) return this.bottomIcon;
+        if (orientation == ForgeDirection.UP) return this.topIcon[meta];
+        else if (orientation == ForgeDirection.DOWN) return this.bottomIcon[meta];
         else if (orientation == ForgeDirection.SOUTH) return this.inactiveIcons[meta];
 
-        return this.sideIcon;
+        return this.sideIcon[meta];
     }
 
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int iSide)
     {
         TileEntity tileEntity = blockAccess.getTileEntity(x, y, z);
-        if (tileEntity == null || !(tileEntity instanceof TileChargePad)) return this.sideIcon;
-
         int meta = blockAccess.getBlockMetadata(x, y, z);
+        if (tileEntity == null || !(tileEntity instanceof TileChargePad)) return this.sideIcon[meta];
 
         TileChargePad tile = (TileChargePad) tileEntity;
         ForgeDirection out = tile.getOrientation();
@@ -134,9 +133,9 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
 
         if (out == side) return this.getPrimaryIcon(meta, tile);
 
-        if (side == ForgeDirection.UP) return this.topIcon;
-        else if (side == ForgeDirection.DOWN) return this.bottomIcon;
-        else return this.sideIcon;
+        if (side == ForgeDirection.UP) return this.topIcon[meta];
+        else if (side == ForgeDirection.DOWN) return this.bottomIcon[meta];
+        else return this.sideIcon[meta];
     }
 
     @Override
@@ -145,6 +144,9 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     {
         this.activeIcons = new IIcon[arrayTypes.length];
         this.inactiveIcons = new IIcon[arrayTypes.length];
+        this.sideIcon = new IIcon[arrayTypes.length];
+        this.topIcon = new IIcon[arrayTypes.length];
+        this.bottomIcon = new IIcon[arrayTypes.length];
 
         for (int i = 0; i < stringTypes.length; i++)
         {
@@ -152,9 +154,16 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
             this.inactiveIcons[i] = iconRegister.registerIcon(TEXTURE_BASE + this.getUnlocalizedName().replace("tile.", "") + "." + stringTypes[i] + ".inactive");
         }
 
-        this.sideIcon = iconRegister.registerIcon(BlockTankController.TEXTURE_BASE + ".controllerSide");
-        this.topIcon = iconRegister.registerIcon(BlockTankController.TEXTURE_BASE + ".controllerTop");
-        this.bottomIcon = iconRegister.registerIcon(BlockTankController.TEXTURE_BASE + ".controllerBottom");
+        // TODO: Simplify this
+        this.sideIcon[Types.REDSTONE.ordinal()] = iconRegister.registerIcon(Textures.TE3_TEXTURE_BASE + "Side");
+        this.sideIcon[Types.RESONANT.ordinal()] = iconRegister.registerIcon(Textures.ENDER_TEXTURE_BASE + "Side");
+        this.sideIcon[Types.CREATIVE.ordinal()] = iconRegister.registerIcon(Textures.CREATIVE_TEXTURE_BASE + "Side");
+        this.topIcon[Types.REDSTONE.ordinal()] = iconRegister.registerIcon(Textures.TE3_TEXTURE_BASE + "Top");
+        this.topIcon[Types.RESONANT.ordinal()] = iconRegister.registerIcon(Textures.ENDER_TEXTURE_BASE + "Top");
+        this.topIcon[Types.CREATIVE.ordinal()] = iconRegister.registerIcon(Textures.CREATIVE_TEXTURE_BASE + "Top");
+        this.bottomIcon[Types.REDSTONE.ordinal()] = iconRegister.registerIcon(Textures.TE3_TEXTURE_BASE + "Bottom");
+        this.bottomIcon[Types.RESONANT.ordinal()] = iconRegister.registerIcon(Textures.ENDER_TEXTURE_BASE + "Bottom");
+        this.bottomIcon[Types.CREATIVE.ordinal()] = iconRegister.registerIcon(Textures.CREATIVE_TEXTURE_BASE + "Bottom");
     }
 
     @Override
