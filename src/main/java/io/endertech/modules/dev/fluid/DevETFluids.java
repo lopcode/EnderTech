@@ -9,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -20,6 +21,9 @@ public class DevETFluids
     public static Block blockFluidChargedEnder;
     public static Block blockFluidCoFHEnder;
 
+    public static IIcon fluidChargedEnderStill;
+    public static IIcon fluidChargedEnderFlowing;
+
     public static final Material materialFluidChargedEnder = new MaterialLiquid(MapColor.greenColor);
 
     public static ItemBucket itemBucket;
@@ -28,7 +32,7 @@ public class DevETFluids
     public static void init()
     {
         fluidCoFHEnder = FluidRegistry.getFluid("ender");
-        fluidChargedEnder = new Fluid("chargedEnder").setLuminosity(15).setDensity(fluidCoFHEnder.getDensity() - 10).setViscosity(fluidCoFHEnder.getViscosity() - 10).setTemperature(fluidCoFHEnder.getTemperature() + 100).setRarity(fluidCoFHEnder.getRarity()).setFlowingIcon(fluidCoFHEnder.getFlowingIcon()).setStillIcon(fluidCoFHEnder.getStillIcon());
+        fluidChargedEnder = new Fluid("chargedEnder").setLuminosity(15).setDensity(fluidCoFHEnder.getDensity() - 10).setViscosity(fluidCoFHEnder.getViscosity() - 10).setTemperature(fluidCoFHEnder.getTemperature() + 100).setRarity(fluidCoFHEnder.getRarity());
 
         FluidRegistry.registerFluid(fluidChargedEnder);
 

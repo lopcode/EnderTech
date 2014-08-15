@@ -58,6 +58,14 @@ public class ClientProxy extends CommonProxy
         RenderingRegistry.registerBlockHandler(new ConnectedTextureRenderer());
     }
 
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void registerIcons(TextureStitchEvent.Pre event)
+    {
+        DevETFluids.fluidChargedEnderStill = event.map.registerIcon("endertech:fluids/charged_ender_still");
+        DevETFluids.fluidChargedEnderFlowing = event.map.registerIcon("endertech:fluids/charged_ender_flow");
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
@@ -65,7 +73,7 @@ public class ClientProxy extends CommonProxy
     {
         if (EnderTech.loadDevModeContent)
         {
-            DevETFluids.fluidChargedEnder.setIcons(DevETFluids.fluidCoFHEnder.getStillIcon(), DevETFluids.fluidCoFHEnder.getFlowingIcon());
+            DevETFluids.fluidChargedEnder.setIcons(DevETFluids.fluidChargedEnderStill, DevETFluids.fluidChargedEnderFlowing);
         }
     }
 }

@@ -57,6 +57,6 @@ public class BlockFluidChargedEnder extends BlockFluidETBase
     @Override
     public IIcon getIcon(int side, int meta)
     {
-        return DevETFluids.blockFluidCoFHEnder.getIcon(side, meta);
+        return side <= 1 ? DevETFluids.fluidChargedEnderStill : DevETFluids.fluidChargedEnderFlowing;
     }
 }
