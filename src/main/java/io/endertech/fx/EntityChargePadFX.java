@@ -59,6 +59,8 @@ public class EntityChargePadFX extends EntityFX
         this.motionY *= 0.90D;
         this.motionZ *= 0.90D;
 
+        this.particleAlpha *= 0.99D;
+
         if (this.particleMaxAge-- <= 0)
         {
             setDead();
