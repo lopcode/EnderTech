@@ -8,6 +8,7 @@
     "updateUrl": "",
     "authorList": ["Drayshak", "Arkan"],
     "credits": "Drayshak, Arkan",
+    "logoFile": "/assets/endertech/textures/logo.png",
     "screenshots": [],
     "parent": "",
     "requiredMods": [],
