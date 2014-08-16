@@ -9,6 +9,8 @@ Unless we talk about it first and I agree, I'm very unlikely to accept pull requ
 
 Go to #EnderTech on Esper if you have any questions or concerns (especially if you're considering including it in a larger modpack), or just want to shout at me for doing something wrong. 
 
+Curse link: http://minecraft.curseforge.com/mc-mods/223428-endertech
+
 ##License and terms
 Things I want you to do:
 * Learn from the source,
@@ -46,9 +48,10 @@ Blocks, items and mechanics (including recipes and usage) are documented as they
 If you want to see in-development content you must enable it in the 'general.cfg' config file after one run. Be warned: this in-development content will likely disappear or break your world!.
 
 ##Builds
-Signed jars are available on Hydria.
+Signed jars are available on CurseForge and Hydria. There are two types of build, Promoted and Dev. Promoted builds are on both services, but Dev builds are only available on Jenkins. Use a Promoted build first.
 
-http://hydria.drakon.io/job/EnderTech/
+Promoted: http://minecraft.curseforge.com/mc-mods/223428-endertech
+Dev and Promoted: http://hydria.drakon.io/job/EnderTech/
 
 ##Building
 This mod uses Forge's Gradle wrapper for pretty easy setup and building. There are better guides around the internet for using it, and I don't do anything particularly special.
