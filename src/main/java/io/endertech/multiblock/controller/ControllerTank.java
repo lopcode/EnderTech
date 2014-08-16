@@ -40,6 +40,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     private int random_number = 0;
     public FluidTank tank;
     public FluidTank lastTank;
+    public boolean renderedOnce = false;
     public int renderAddition = 0;
     private int ticksSinceUpdate = 0;
     private static final String TANK_NAME = "MainTank";
