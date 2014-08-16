@@ -1,3 +1,5 @@
+![EnderTech Logo](https://raw.githubusercontent.com/Drayshak/EnderTech/d838d9282bd30014de1fbc4772e0522d1bb30fa8/src/main/resources/assets/endertech/textures/logo.png)
+
 #EnderTech
 
 ##Introduction
