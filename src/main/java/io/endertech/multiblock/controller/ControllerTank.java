@@ -242,12 +242,14 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         if (assimilated instanceof ControllerTank)
         {
             ControllerTank assimilatedController = (ControllerTank) assimilated;
+
+            boolean thisHasContents = (this.tank.getFluidAmount() > 0 || this.storedEnergy > 0);
+            boolean assimilatedHasContents = (assimilatedController.tank.getFluidAmount() > 0 || assimilatedController.storedEnergy > 0);
+
             ControllerTank candidate = null;
-            if (this.getRandomNumber() == 0 && assimilatedController.getRandomNumber() != 0)
-                candidate = assimilatedController;
-            else if (this.getRandomNumber() != 0 && assimilatedController.getRandomNumber() == 0) candidate = this;
-            else if (this.getRandomNumber() == 0 && assimilatedController.getRandomNumber() == 0)
-                candidate = assimilatedController;
+            if (!thisHasContents && assimilatedHasContents) candidate = assimilatedController;
+            else if (thisHasContents && !assimilatedHasContents) candidate = this;
+            else if (!thisHasContents && !assimilatedHasContents) candidate = assimilatedController;
 
             if (candidate == null)
             {
@@ -270,6 +272,9 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         this.attachedControllers.clear();
         this.attachedEnergyInputs.clear();
         this.attachedValves.clear();
+
+        this.storedEnergy = 0;
+        this.tank = new FluidTank(null, 0);
     }
 
     @Override

@@ -208,9 +208,11 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
                 ControllerTank controller = ((TileTankPart) tile).getTankController();
                 if (controller != null)
                 {
-                    int randomNumber = controller.getRandomNumber();
-                    if (randomNumber > 0)
+                    boolean hasContents = controller.tank.getFluidAmount() > 0 || controller.getStoredEnergy() > 0;
+                    if (hasContents)
                     {
+                        int randomNumber = controller.getRandomNumber();
+
                         if (!randomNumbers.contains(randomNumber))
                         {
                             randomNumbers.add(randomNumber);
