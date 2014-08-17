@@ -21,6 +21,8 @@ import java.util.Set;
 
 public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOutlineDrawer, IItemBlockAffector
 {
+    public static Set<Block> creativeOverrideBlocks;
+
     private static Set<Key.KeyCode> handledKeys;
 
     static
@@ -28,6 +30,9 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
         handledKeys = new HashSet<Key.KeyCode>();
         handledKeys.add(Key.KeyCode.TOOL_INCREASE);
         handledKeys.add(Key.KeyCode.TOOL_DECREASE);
+
+        creativeOverrideBlocks = new HashSet<Block>();
+        creativeOverrideBlocks.add(Blocks.bedrock);
     }
 
     public ItemExchanger()
@@ -35,8 +40,11 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
         super();
     }
 
-    public boolean isCreative(ItemStack stack)
+    public static boolean isCreative(ItemStack stack)
     {
+        if (stack == null)
+            return false;
+
         return stack.getItemDamage() == Types.CREATIVE.ordinal();
     }
 
@@ -76,7 +84,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
                 setDefaultTag(stack, 0);
             }
 
-            if (this.isCreative(stack))
+            if (isCreative(stack))
             {
                 list.add("Charge: Infinite");
             } else
@@ -110,7 +118,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
         }
     }
 
-    public static boolean isBlockSuitableForSelection(World world, BlockCoord blockCoord)
+    public static boolean isBlockSuitableForSelection(World world, BlockCoord blockCoord, ItemStack stack)
     {
         if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
 
@@ -119,6 +127,8 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
         Block block = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
 
         if (BlockHelper.softBlocks.contains(block)) return false;
+
+        if (!isCreative(stack) && creativeOverrideBlocks.contains(block)) return false;
 
         return true;
     }
@@ -135,7 +145,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
             Block source = player.worldObj.getBlock(x, y, z);
             int sourceMeta = player.worldObj.getBlockMetadata(x, y, z);
 
-            if (ItemExchanger.isBlockSuitableForSelection(world, new BlockCoord(x, y, z)))
+            if (ItemExchanger.isBlockSuitableForSelection(world, new BlockCoord(x, y, z), itemstack))
             {
                 LogHelper.debug("Setting source block to " + source.getLocalizedName());
                 setSourceBlock(itemstack, new ItemStack(source, 1, sourceMeta));
@@ -161,7 +171,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
     @Override
     public int extractEnergy(ItemStack container, int maxExtract, boolean simulate)
     {
-        if (this.isCreative(container))
+        if (isCreative(container))
         {
             return maxExtract;
         } else
@@ -299,7 +309,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
         if (event.player.isSneaking())
         {
-            if (!ItemExchanger.isBlockSuitableForSelection(world, target))
+            if (!ItemExchanger.isBlockSuitableForSelection(world, target, event.player.getCurrentEquippedItem()))
                 RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Red.setAlpha(0.6f), 2.0f, event.partialTicks);
             else
                 RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Green.setAlpha(0.6f), 2.0f, event.partialTicks);

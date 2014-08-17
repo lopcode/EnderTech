@@ -31,6 +31,8 @@ public class BlockHelper
         softBlocks.add(Blocks.snow);
         softBlocks.add(Blocks.vine);
         softBlocks.add(Blocks.fire);
+        softBlocks.add(Blocks.torch);
+        softBlocks.add(Blocks.redstone_torch);
     }
 
     public static boolean isSoftBlock(World world, int x, int y, int z)
