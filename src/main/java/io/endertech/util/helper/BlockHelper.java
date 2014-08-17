@@ -3,6 +3,7 @@ package io.endertech.util.helper;
 import io.endertech.util.BlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -22,7 +23,7 @@ public class BlockHelper
         {
             Block block = (Block) o;
 
-            if (block instanceof BlockFluidBase || block instanceof BlockLiquid || block instanceof IPlantable)
+            if (block instanceof BlockFluidBase || block instanceof BlockLiquid || block instanceof IPlantable || block instanceof BlockTorch)
             {
                 softBlocks.add(block);
             }
@@ -31,8 +32,6 @@ public class BlockHelper
         softBlocks.add(Blocks.snow);
         softBlocks.add(Blocks.vine);
         softBlocks.add(Blocks.fire);
-        softBlocks.add(Blocks.torch);
-        softBlocks.add(Blocks.redstone_torch);
     }
 
     public static boolean isSoftBlock(World world, int x, int y, int z)
