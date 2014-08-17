@@ -118,7 +118,7 @@ public class WorldEventHandler
     {
         Block block = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
 
-        if (!Exchange.blockSuitableForExchange(blockCoord, world, exchange.source, exchange.sourceMeta, exchange.target))
+        if (!Exchange.blockSuitableForExchange(blockCoord, world, exchange.source, exchange.sourceMeta, exchange.target, exchangerStack))
             return ExchangeResult.FAIL_BLOCK_NOT_REPLACEABLE;
 
         if (exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, true) < ItemConfig.itemExchangerBlockCost)

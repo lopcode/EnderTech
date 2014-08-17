@@ -1,5 +1,6 @@
 package io.endertech.util;
 
+import io.endertech.item.ItemExchanger;
 import io.endertech.util.helper.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,7 +34,7 @@ public class Exchange
         this.orientation = orientation;
     }
 
-    public static boolean blockSuitableForExchange(BlockCoord blockCoord, World world, Block source, int sourceMeta, ItemStack target)
+    public static boolean blockSuitableForExchange(BlockCoord blockCoord, World world, Block source, int sourceMeta, ItemStack target, ItemStack itemStack)
     {
         if (world.getTileEntity(blockCoord.x, blockCoord.y, blockCoord.z) != null) return false;
 
@@ -45,6 +46,8 @@ public class Exchange
 
         if (source != worldBlock || sourceMeta != worldMeta) return false;
         if (target.isItemEqual(new ItemStack(source, 1, sourceMeta))) return false;
+
+        if (!ItemExchanger.isCreative(itemStack) && ItemExchanger.creativeOverrideBlocks.contains(worldBlock)) return false;
 
         return true;
     }
