@@ -1,0 +1,27 @@
+# Note: these are GB spellings by default
+
+# Item localisations
+item.endertech.exchanger.exchangerRedstone.name=레드스톤 교환기
+item.endertech.exchanger.exchangerResonant.name=공진 교환기
+item.endertech.exchanger.exchangerCreative.name=크리에이티브 교환기
+
+# Creative tab
+itemGroup.EnderTechAll=엔더테크 : ALL
+
+# Blocks
+tile.enderTank.name=엔더탱크
+tile.chargedPlane.0.name=Charged Plane
+tile.enderTankPart.0.name=엔더탱크 틀
+tile.enderTankPart.1.name=엔더탱크 밸브
+tile.enderTankPart.2.name=엔더탱크 에너지 입력
+tile.enderTankController.0.name=엔더탱크 제어기
+tile.multiblockGlass.0.name=엔더탱크 유리
+
+tile.chargePad.0.name=크리에이티브 차지패드
+tile.chargePad.1.name=레드스톤 차지패드
+tile.chargePad.2.name=공진 차지패드
+
+# Fluids
+tile.fluid.chargePad.0.name=충전된 엔더
+fluid.chargedEnder=충전된 엔더
+item.endertech.bucket.bucketChargedEnder.name=충전된 엔더 양동이
