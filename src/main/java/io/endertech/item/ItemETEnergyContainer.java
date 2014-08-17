@@ -122,7 +122,7 @@ public class ItemETEnergyContainer extends ItemETBase implements IEnergyContaine
     }
 
     @Override
-    public int getDisplayDamage(ItemStack stack)
+    public int getDamage(ItemStack stack)
     {
         if (stack.stackTagCompound == null)
         {
