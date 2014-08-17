@@ -13,7 +13,6 @@ import io.endertech.multiblock.tile.TileTankValve;
 import io.endertech.network.ITilePacketHandler;
 import io.endertech.network.PacketETBase;
 import io.endertech.util.BlockCoord;
-import io.endertech.util.IETWailaProvider;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
 import io.endertech.util.helper.LogHelper;
@@ -236,24 +235,41 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     @Override
     protected void onAssimilate(MultiblockControllerBase assimilated)
     {
+        LogHelper.debug("Assimilation occurred: ");
+        LogHelper.debug("Me: " + this.toString());
+        LogHelper.debug("Assimilated: " + assimilated.toString());
+
         if (assimilated instanceof ControllerTank)
         {
-            ControllerTank controller = (ControllerTank) assimilated;
-            if (controller.getRandomNumber() != 0)
+            ControllerTank assimilatedController = (ControllerTank) assimilated;
+            ControllerTank candidate = null;
+            if (this.getRandomNumber() == 0 && assimilatedController.getRandomNumber() != 0)
+                candidate = assimilatedController;
+            else if (this.getRandomNumber() != 0 && assimilatedController.getRandomNumber() == 0) candidate = this;
+            else if (this.getRandomNumber() == 0 && assimilatedController.getRandomNumber() == 0)
+                candidate = assimilatedController;
+
+            if (candidate == null)
             {
-                //                LogHelper.info("Setting new random number from assimilated controller");
-                setRandomNumber(((ControllerTank) assimilated).getRandomNumber());
-            } else
-            {
-                //                LogHelper.info("Not setting random number as new assimilated tank had 0");
+                LogHelper.error("WARNING: Two tanks were assimilated that both previously had contents. This should never happen. Please report this to the EnderTech mod author. The tank with the largest contents has been chosen.");
+                if (this.tank.getFluidAmount() >= assimilatedController.tank.getFluidAmount()) candidate = this;
+                else candidate = assimilatedController;
             }
+
+            setRandomNumber(candidate.getRandomNumber());
+            this.tank = new FluidTank(candidate.tank.getFluid(), candidate.tank.getCapacity());
+            this.storedEnergy = candidate.storedEnergy;
         }
+
+        LogHelper.debug("Result: " + this.toString());
     }
 
     @Override
     protected void onAssimilated(MultiblockControllerBase assimilator)
     {
         this.attachedControllers.clear();
+        this.attachedEnergyInputs.clear();
+        this.attachedValves.clear();
     }
 
     @Override

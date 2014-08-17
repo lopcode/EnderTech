@@ -197,7 +197,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
         return FRAME_METADATA_BASE;
     }
 
-    public boolean canPlaceBlockAt(World world, int x, int y, int z)
+    public static boolean canPlaceTankPartAt(World world, int x, int y, int z)
     {
         Set<Integer> randomNumbers = new HashSet<Integer>();
         for (ForgeDirection neighbour : ForgeDirection.VALID_DIRECTIONS)
@@ -227,6 +227,12 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
         }
 
         return true;
+    }
+
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z)
+    {
+        return canPlaceTankPartAt(world, x, y, z);
     }
 
     @Override

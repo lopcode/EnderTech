@@ -160,4 +160,10 @@ public class BlockMultiblockGlass extends BlockContainer implements IOutlineDraw
     {
         return false;
     }
+
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z)
+    {
+        return BlockTankPart.canPlaceTankPartAt(world, x, y, z);
+    }
 }
