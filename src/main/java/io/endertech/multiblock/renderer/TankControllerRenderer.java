@@ -108,8 +108,7 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
             if (ratio <= 0.3) ratio = 0.3;
             if (ratio >= 0.8) ratio = 0.8;
 
-            if (controller.renderedOnce)
-                controller.renderAddition += diff * f * ratio * (1.0 / 10);
+            if (controller.renderedOnce) controller.renderAddition += diff * f * ratio * (1.0 / 10);
             else
             {
                 controller.renderAddition += diff;

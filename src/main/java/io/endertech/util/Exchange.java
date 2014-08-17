@@ -47,7 +47,8 @@ public class Exchange
         if (source != worldBlock || sourceMeta != worldMeta) return false;
         if (target.isItemEqual(new ItemStack(source, 1, sourceMeta))) return false;
 
-        if (!ItemExchanger.isCreative(itemStack) && ItemExchanger.creativeOverrideBlocks.contains(worldBlock)) return false;
+        if (!ItemExchanger.isCreative(itemStack) && ItemExchanger.creativeOverrideBlocks.contains(worldBlock))
+            return false;
 
         return true;
     }

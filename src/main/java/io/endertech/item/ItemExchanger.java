@@ -42,8 +42,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
     public static boolean isCreative(ItemStack stack)
     {
-        if (stack == null)
-            return false;
+        if (stack == null) return false;
 
         return stack.getItemDamage() == Types.CREATIVE.ordinal();
     }
