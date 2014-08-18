@@ -7,6 +7,7 @@ import io.endertech.item.ItemExchanger;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.Exchange;
 import io.endertech.util.Geometry;
+import io.endertech.util.helper.LogHelper;
 import io.endertech.util.inventory.InventoryHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -114,6 +115,24 @@ public class WorldEventHandler
             queue.remove(removal);
     }
 
+    private int calculateExchangeCost(Exchange exchange, Block worldBlock, World world, BlockCoord blockCoord)
+    {
+        int baseCost = ItemConfig.itemExchangerBlockCost;
+        int radiusCost = ItemConfig.itemExchangerRadiusCost;
+        double blockHardness = worldBlock.getBlockHardness(world, blockCoord.x, blockCoord.y, blockCoord.z);
+        if (blockHardness < 1) blockHardness = 1;
+        if (blockHardness > 50) blockHardness = 50;
+
+        int hardnessCost = ((int) blockHardness) * ItemConfig.itemExchangerHardnessCost;
+
+        int exchangeCost = baseCost + radiusCost + hardnessCost;
+        if (exchangeCost < ItemConfig.itemExchangerMinimumCost) exchangeCost = ItemConfig.itemExchangerMinimumCost;
+        if (exchangeCost > ItemConfig.itemExchangerMaximumCost) exchangeCost = ItemConfig.itemExchangerMaximumCost;
+
+        LogHelper.info("Exchange cost: " + exchangeCost);
+        return exchangeCost;
+    }
+
     private ExchangeResult checkAndPerformExchange(Exchange exchange, ItemExchanger exchanger, ItemStack exchangerStack, World world, BlockCoord blockCoord)
     {
         Block block = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
@@ -121,12 +140,16 @@ public class WorldEventHandler
         if (!Exchange.blockSuitableForExchange(blockCoord, world, exchange.source, exchange.sourceMeta, exchange.target, exchangerStack))
             return ExchangeResult.FAIL_BLOCK_NOT_REPLACEABLE;
 
-        if (exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, true) < ItemConfig.itemExchangerBlockCost)
+        int exchangeCost = this.calculateExchangeCost(exchange, block, world, blockCoord);
+        if (exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), exchangeCost, true) < exchangeCost)
             return ExchangeResult.FAIL_ENERGY;
 
         int sourceSlot = InventoryHelper.findFirstItemStack(exchange.player.inventory, exchange.target);
 
-        if (sourceSlot <= 0 && !exchanger.isCreative(exchangerStack)) return ExchangeResult.FAIL_NO_SOURCE_BLOCKS;
+        if (sourceSlot < 0 && !exchanger.isCreative(exchangerStack))
+        {
+            return ExchangeResult.FAIL_NO_SOURCE_BLOCKS;
+        }
 
         if (!exchanger.isCreative(exchangerStack))
         {
@@ -135,17 +158,17 @@ public class WorldEventHandler
             if (didPutItemsInInventory)
             {
                 InventoryHelper.consumeItem(exchange.player.inventory, sourceSlot);
-                performExchange(exchange, blockCoord, exchanger, world);
+                performExchange(exchange, blockCoord, exchanger, world, exchangeCost);
             } else return ExchangeResult.FAIL_INVENTORY_SPACE;
-        } else performExchange(exchange, blockCoord, exchanger, world);
+        } else performExchange(exchange, blockCoord, exchanger, world, exchangeCost);
 
         return ExchangeResult.SUCCESS;
     }
 
-    private void performExchange(Exchange exchange, BlockCoord blockCoord, ItemExchanger exchanger, World world)
+    private void performExchange(Exchange exchange, BlockCoord blockCoord, ItemExchanger exchanger, World world, int exchangeCost)
     {
         world.setBlock(blockCoord.x, blockCoord.y, blockCoord.z, Block.getBlockFromItem(exchange.target.getItem()), exchange.target.getItemDamage(), 3);
-        exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), ItemConfig.itemExchangerBlockCost, false);
+        exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), exchangeCost, false);
         world.playAuxSFX(2001, blockCoord.x, blockCoord.y, blockCoord.z, Block.getIdFromBlock(exchange.source) + (exchange.sourceMeta << 12));
     }
 }

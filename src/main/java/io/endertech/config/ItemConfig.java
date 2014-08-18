@@ -9,7 +9,11 @@ public class ItemConfig
     private static Configuration itemConfig;
 
     public static int itemExchangerBlockCost;
+    public static int itemExchangerRadiusCost;
+    public static int itemExchangerHardnessCost;
     public static int itemExchangerMaxRadius;
+    public static int itemExchangerMinimumCost;
+    public static int itemExchangerMaximumCost;
 
     protected static void init(File configFile)
     {
@@ -17,8 +21,13 @@ public class ItemConfig
         try
         {
             itemConfig.load();
-            itemExchangerBlockCost = itemConfig.get("item.general", "Exchanger.BlockCost", 8192).getInt(8192);
+            itemExchangerBlockCost = itemConfig.get("item.general", "Exchanger.BlockCost", 4096).getInt(4096);
+            itemExchangerRadiusCost = itemConfig.get("item.general", "Exchanger.RadiusCost", 256).getInt(256);
+            itemExchangerHardnessCost = itemConfig.get("item.general", "Exchanger.HardnessCost", 128).getInt(128);
+            itemExchangerMinimumCost = itemConfig.get("item.general", "Exchanger.MinimumCost", 4096).getInt(4096);
+            itemExchangerMaximumCost = itemConfig.get("item.general", "Exchanger.MaximumCost", 16384).getInt(16384);
             itemExchangerMaxRadius = itemConfig.get("item.general", "Exchanger.MaxRadius", 8).getInt(8);
+
             if (itemExchangerMaxRadius < 1)
             {
                 itemExchangerMaxRadius = 1;
