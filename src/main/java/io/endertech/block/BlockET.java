@@ -39,7 +39,7 @@ public class BlockET extends Block
 
         if (!returnDrops)
         {
-            WorldHelper.spawnItemInWorldWithRandomness(drop, world, 0.3F, x, y, z, 5);
+            WorldHelper.spawnItemInWorldWithRandomness(drop, world, 0.3F, x, y, z, 2);
         }
 
         return drops;
