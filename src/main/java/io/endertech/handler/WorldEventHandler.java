@@ -129,7 +129,7 @@ public class WorldEventHandler
         if (exchangeCost < ItemConfig.itemExchangerMinimumCost) exchangeCost = ItemConfig.itemExchangerMinimumCost;
         if (exchangeCost > ItemConfig.itemExchangerMaximumCost) exchangeCost = ItemConfig.itemExchangerMaximumCost;
 
-        LogHelper.info("Exchange cost: " + exchangeCost);
+        //LogHelper.info("Exchange cost: " + exchangeCost);
         return exchangeCost;
     }
 
