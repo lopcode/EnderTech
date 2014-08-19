@@ -8,7 +8,7 @@ public class ItemConfig
 {
     private static Configuration itemConfig;
 
-    public static int itemExchangerBlockCost;
+    public static int itemExchangerBaseCost;
     public static int itemExchangerRadiusCost;
     public static int itemExchangerHardnessCost;
     public static int itemExchangerMaxRadius;
@@ -21,7 +21,7 @@ public class ItemConfig
         try
         {
             itemConfig.load();
-            itemExchangerBlockCost = itemConfig.get("item.general", "Exchanger.BlockCost", 4096).getInt(4096);
+            itemExchangerBaseCost = itemConfig.get("item.general", "Exchanger.BaseCost", 4096).getInt(4096);
             itemExchangerRadiusCost = itemConfig.get("item.general", "Exchanger.RadiusCost", 256).getInt(256);
             itemExchangerHardnessCost = itemConfig.get("item.general", "Exchanger.HardnessCost", 128).getInt(128);
             itemExchangerMinimumCost = itemConfig.get("item.general", "Exchanger.MinimumCost", 4096).getInt(4096);

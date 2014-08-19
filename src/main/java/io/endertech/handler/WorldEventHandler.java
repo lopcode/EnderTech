@@ -117,7 +117,7 @@ public class WorldEventHandler
 
     private int calculateExchangeCost(Exchange exchange, Block worldBlock, World world, BlockCoord blockCoord)
     {
-        int baseCost = ItemConfig.itemExchangerBlockCost;
+        int baseCost = ItemConfig.itemExchangerBaseCost;
         int radiusCost = ItemConfig.itemExchangerRadiusCost;
         double blockHardness = worldBlock.getBlockHardness(world, blockCoord.x, blockCoord.y, blockCoord.z);
         if (blockHardness < 1) blockHardness = 1;
