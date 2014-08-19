@@ -341,7 +341,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
     {
         boolean dismantleWouldBeDestructive = isLastPartWithContents(world, new BlockCoord(x, y, z));
         if (dismantleWouldBeDestructive)
-            player.addChatComponentMessage(new ChatComponentText("Dismantling this tank block will destroy the tanks' contents. You must destroy it with a pickaxe."));
+            player.addChatComponentMessage(new ChatComponentText("Dismantling this tank block will destroy the tanks' contents. You must break it with a pickaxe."));
 
         return !dismantleWouldBeDestructive;
     }
