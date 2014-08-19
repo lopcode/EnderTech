@@ -319,10 +319,37 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
         return BlockET.dismantleBlockInWorld(player, world, x, y, z, returnDrops);
     }
 
+    public static boolean isLastPartWithContents(World world, BlockCoord coord)
+    {
+        TileEntity tile = world.getTileEntity(coord.x, coord.y, coord.z);
+        if (tile == null || !(tile instanceof TileTankPart)) return false;
+
+        ControllerTank controller = ((TileTankPart) tile).getTankController();
+        if (controller == null || (controller.getStoredEnergy() <= 0 && controller.tank.getFluidAmount() <= 0))
+            return false;
+
+        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+        {
+            TileEntity neighbourTile = world.getTileEntity(coord.x + direction.offsetX, coord.y + direction.offsetY, coord.z + direction.offsetZ);
+            if (neighbourTile != null && neighbourTile instanceof TileTankPart) return false;
+        }
+
+        return true;
+    }
+
+    public static boolean canDismantleTankBlock(EntityPlayer player, World world, int x, int y, int z)
+    {
+        boolean dismantleWouldBeDestructive = isLastPartWithContents(world, new BlockCoord(x, y, z));
+        if (dismantleWouldBeDestructive)
+            player.addChatComponentMessage(new ChatComponentText("Dismantling this tank block will destroy the tanks' contents. You must destroy it with a pickaxe."));
+
+        return !dismantleWouldBeDestructive;
+    }
+
     @Override
     public boolean canDismantle(EntityPlayer player, World world, int x, int y, int z)
     {
-        return true;
+        return canDismantleTankBlock(player, world, x, y, z);
     }
 
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z)

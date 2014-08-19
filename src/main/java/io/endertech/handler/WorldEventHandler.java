@@ -7,7 +7,6 @@ import io.endertech.item.ItemExchanger;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.Exchange;
 import io.endertech.util.Geometry;
-import io.endertech.util.helper.LogHelper;
 import io.endertech.util.inventory.InventoryHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

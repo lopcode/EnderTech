@@ -147,7 +147,7 @@ public class BlockTankController extends BlockET implements ITileEntityProvider,
     @Override
     public boolean canDismantle(EntityPlayer player, World world, int x, int y, int z)
     {
-        return true;
+        return BlockTankPart.canDismantleTankBlock(player, world, x, y, z);
     }
 
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z)

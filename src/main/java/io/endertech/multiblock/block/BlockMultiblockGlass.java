@@ -153,7 +153,7 @@ public class BlockMultiblockGlass extends BlockContainer implements IOutlineDraw
     @Override
     public boolean canDismantle(EntityPlayer player, World world, int x, int y, int z)
     {
-        return true;
+        return BlockTankPart.canDismantleTankBlock(player, world, x, y, z);
     }
 
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z)
