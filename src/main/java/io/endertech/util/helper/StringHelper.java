@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 
 public class StringHelper
 {
-    public static final String holdShiftForDetails = EnumChatFormatting.GRAY + LocalisationHelper.localiseString("info.hold_for_details.hold") + " " + EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC + " " + LocalisationHelper.localiseString("info.hold_for_details.shift") + EnumChatFormatting.RESET + " " + EnumChatFormatting.GRAY + LocalisationHelper.localiseString("info.hold_for_details.for_details") + EnumChatFormatting.RESET;
+    public static final String holdShiftForDetails = EnumChatFormatting.GRAY + LocalisationHelper.localiseString("info.hold_for_details.hold") + " " + EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC + LocalisationHelper.localiseString("info.hold_for_details.shift") + EnumChatFormatting.RESET + " " + EnumChatFormatting.GRAY + LocalisationHelper.localiseString("info.hold_for_details.for_details") + EnumChatFormatting.RESET;
     public static DecimalFormat twoDP = new DecimalFormat("#.##");
 
     public static String getEnergyString(int energy)
