@@ -87,7 +87,7 @@ public class ItemETBase extends Item
 
             String name = (String) entry.getValue();
             String icon_name = "endertech:" + getUnlocalizedName().replace("item.endertech.", "") + "/" + name;
-            LogHelper.info("Registering icon: " + icon_name);
+            LogHelper.debug("Registering icon: " + icon_name);
             icons.put(name, iconRegister.registerIcon(icon_name));
         }
     }

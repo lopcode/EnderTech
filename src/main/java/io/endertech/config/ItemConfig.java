@@ -1,5 +1,6 @@
 package io.endertech.config;
 
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import net.minecraftforge.common.config.Configuration;
 import java.io.File;
@@ -38,7 +39,7 @@ public class ItemConfig
             }
         } catch (Exception e)
         {
-            LogHelper.error("Failed to load item config");
+            LogHelper.error(LocalisationHelper.localiseString("error.config.item.load"));
         } finally
         {
             itemConfig.save();

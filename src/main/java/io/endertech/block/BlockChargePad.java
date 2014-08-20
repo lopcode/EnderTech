@@ -11,6 +11,7 @@ import io.endertech.tile.TileChargePad;
 import io.endertech.tile.TileET;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -173,12 +174,12 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
 
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if (tileEntity == null || !(tileEntity instanceof TileChargePad))
-            LogHelper.info("I don't have a tile entity :(");
+            LogHelper.debug(LocalisationHelper.localiseString("warning.no_tile_entity"));
 
         TileChargePad tile = (TileChargePad) tileEntity;
         ForgeDirection out = tile.getOrientation();
 
-        LogHelper.info("My direction is: " + out.name());
+        LogHelper.debug(LocalisationHelper.localiseString("general.direction.pre", out.name()));
 
         return false;
     }

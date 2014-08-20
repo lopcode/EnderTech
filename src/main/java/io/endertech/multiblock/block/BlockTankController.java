@@ -160,4 +160,10 @@ public class BlockTankController extends BlockET implements ITileEntityProvider,
     {
         return BlockTankPart.canPlaceTankPartAt(world, x, y, z);
     }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int faceHit, float par7, float par8, float par9)
+    {
+        return BlockTankPart.onTankBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
+    }
 }

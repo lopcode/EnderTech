@@ -3,6 +3,7 @@ package io.endertech.multiblock.rectangular;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.util.BlockCoord;
+import io.endertech.util.helper.LocalisationHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -43,27 +44,27 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 
         if (maxX > 0 && deltaX > maxX)
         {
-            throw new MultiblockValidationException(String.format("Machine is too large, it may be at most %d blocks in the X dimension", maxX));
+            throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.rectangular.dimensions_wrong", "large", "most", maxX, "X"));
         }
         if (maxY > 0 && deltaY > maxY)
         {
-            throw new MultiblockValidationException(String.format("Machine is too large, it may be at most %d blocks in the Y dimension", maxY));
+            throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.rectangular.dimensions_wrong", "large", "most", maxY, "Y"));
         }
         if (maxZ > 0 && deltaZ > maxZ)
         {
-            throw new MultiblockValidationException(String.format("Machine is too large, it may be at most %d blocks in the Z dimension", maxZ));
+            throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.rectangular.dimensions_wrong", "large", "most", maxZ, "Z"));
         }
         if (deltaX < minX)
         {
-            throw new MultiblockValidationException(String.format("Machine is too small, it must be at least %d blocks in the X dimension", minX));
+            throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.rectangular.dimensions_wrong", "small", "least", minX, "X"));
         }
         if (deltaY < minY)
         {
-            throw new MultiblockValidationException(String.format("Machine is too small, it must be at least %d blocks in the Y dimension", minY));
+            throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.rectangular.dimensions_wrong", "small", "least", minY, "Y"));
         }
         if (deltaZ < minZ)
         {
-            throw new MultiblockValidationException(String.format("Machine is too small, it must be at least %d blocks in the Z dimension", minZ));
+            throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.rectangular.dimensions_wrong", "small", "least", minZ, "Z"));
         }
 
         // Now we run a simple check on each block within that volume.
@@ -88,7 +89,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
                         // Ensure this part should actually be allowed within a cube of this controller's type
                         if (!myClass.equals(part.getMultiblockControllerType()))
                         {
-                            throw new MultiblockValidationException(String.format("Part @ %d, %d, %d is incompatible with machines of type %s", x, y, z, myClass.getSimpleName()));
+                            throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.rectangular.part_not_compatible", x, y, z, myClass.getSimpleName()));
                         }
                     } else
                     {

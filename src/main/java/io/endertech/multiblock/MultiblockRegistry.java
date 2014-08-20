@@ -1,5 +1,6 @@
 package io.endertech.multiblock;
 
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.world.World;
 import java.util.HashMap;
@@ -120,7 +121,7 @@ public class MultiblockRegistry
             registries.get(world).addDeadController(controller);
         } else
         {
-            LogHelper.warn("Controller %d in world %s marked as dead, but that world is not tracked! Controller is being ignored.", controller.hashCode(), world);
+            LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.controller.dead_but_world_not_tracked", controller.hashCode(), world));
         }
     }
 

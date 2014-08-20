@@ -15,6 +15,7 @@ import io.endertech.network.PacketETBase;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import io.endertech.util.helper.RenderHelper;
 import io.endertech.util.helper.StringHelper;
@@ -253,7 +254,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
 
             if (candidate == null)
             {
-                LogHelper.error("WARNING: Two tanks were assimilated that both previously had contents. This should never happen. Please report this to the EnderTech mod author. The tank with the largest contents has been chosen.");
+                LogHelper.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation"));
                 if (this.tank.getFluidAmount() >= assimilatedController.tank.getFluidAmount()) candidate = this;
                 else candidate = assimilatedController;
             }
@@ -414,13 +415,13 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         if (this.tank.getFluid() != null && this.tank.getFluidAmount() > 0)
         {
             additions.add(StringHelper.getFluidName(this.tank.getFluid()));
-            additions.add(this.tank.getFluidAmount() + "/" + this.tank.getCapacity() + " mB");
+            additions.add(this.tank.getFluidAmount() + " / " + this.tank.getCapacity() + " mB");
         } else
         {
             additions.add("Empty");
         }
 
-        additions.add(StringHelper.getEnergyString(this.storedEnergy) + "/" + StringHelper.getEnergyString(MAX_ENERGY_STORAGE) + " RF");
+        additions.add(StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(MAX_ENERGY_STORAGE) + " RF");
 
 
         return additions;
@@ -433,9 +434,9 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         if (shouldConsume)
         {
             ControllerTank otherTank = (ControllerTank) otherController;
-            if (this.getRandomNumber() != 0 && otherTank.getRandomNumber() != 0)
+            if ((this.getStoredEnergy() > 0 || this.tank.getFluidAmount() > 0) && (otherTank.getStoredEnergy() > 0 || otherTank.tank.getFluidAmount() > 0))
             {
-                LogHelper.warn("Warning: two tank structures with information in both were joined.");
+                LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.tank.destructive_assimilation_check"));
             }
         }
 

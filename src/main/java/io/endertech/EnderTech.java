@@ -25,6 +25,7 @@ import io.endertech.proxy.CommonProxy;
 import io.endertech.reference.Reference;
 import io.endertech.util.fluid.BucketHandler;
 import io.endertech.util.helper.BlockHelper;
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import io.endertech.util.helper.ModuleHelper;
 import net.minecraft.client.Minecraft;
@@ -55,10 +56,10 @@ public class EnderTech
     {
         if (Reference.FINGERPRINT.equals("@FINGERPRINT@"))
         {
-            LogHelper.warn("Fingerprint was missing from the jar, this mod could have been tampered with!");
+            LogHelper.warn(LocalisationHelper.localiseString("warning.fingerprint.missing"));
         } else
         {
-            LogHelper.fatal("Fingerprint doesn't match - this mod has been tampered with!");
+            LogHelper.fatal(LocalisationHelper.localiseString("error.fingerprint.tampered"));
         }
     }
 
@@ -154,7 +155,7 @@ public class EnderTech
 
         BlockHelper.initSoftBlocks();
 
-        LogHelper.info("Registering recipes");
+        LogHelper.info(LocalisationHelper.localiseString("info.postinit.recipes"));
         if (Loader.isModLoaded("ThermalExpansion"))
         {
             ItemStack capacitorReinforced = GameRegistry.findItemStack("ThermalExpansion", "capacitorReinforced", 1);

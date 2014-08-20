@@ -3,6 +3,7 @@ package io.endertech.client.handler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import io.endertech.item.ItemExchanger;
 import io.endertech.util.helper.FontHelper;
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.inventory.InventoryHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -77,11 +78,11 @@ public class GUIEventHandler extends Gui
                             String am = Integer.toString(this.lastExchangeSourceCount);
                             if (exchanger.isCreative(exchangerStack))
                             {
-                                am = "Inf"; // infinity
+                                am = LocalisationHelper.localiseString("gui.exchanger.radius.infinite");
                             }
 
                             FontHelper.drawItemQuantity(mc.fontRenderer, 3, 3, am);
-                            FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2, 3, 1.0, "Radius: " + exchanger.getTargetRadius(exchangerStack));
+                            FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2, 3, 1.0, LocalisationHelper.localiseString("gui.exchanger.radius", exchanger.getTargetRadius(exchangerStack)));
 
                             GL11.glPopMatrix();
                             GL11.glPopMatrix();

@@ -14,6 +14,7 @@ import io.endertech.multiblock.tile.TileTankValve;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -95,8 +96,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
         throw new IllegalArgumentException("Unrecognized metadata");
     }
 
-    @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int faceHit, float par7, float par8, float par9)
+    public static boolean onTankBlockActivated(World world, int x, int y, int z, EntityPlayer player, int faceHit, float par7, float par8, float par9)
     {
         if (player.isSneaking())
         {
@@ -123,12 +123,12 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
                         Exception e = controller.getLastValidationException();
                         if (e != null)
                         {
-                            player.addChatComponentMessage(new ChatComponentText("Last reason for not being able to assemble:"));
+                            player.addChatComponentMessage(new ChatComponentText(LocalisationHelper.localiseString("info.multiblock.construction.last_failure_reason.pre")));
                             player.addChatComponentMessage(new ChatComponentText(e.getMessage()));
                         }
                     } else
                     {
-                        player.addChatComponentMessage(new ChatComponentText("Block is not connected to a tank. This could be due to lag, or a bug. If the problem persists, try breaking and re-placing the block."));
+                        player.addChatComponentMessage(new ChatComponentText(LocalisationHelper.localiseString("info.multiblock.construction.no_controller")));
                         return true;
                     }
                 }
@@ -136,6 +136,12 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
         }
 
         return false;
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int faceHit, float par7, float par8, float par9)
+    {
+        return onTankBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
     }
 
     @Override
@@ -220,7 +226,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
 
                         if (randomNumbers.size() > 1)
                         {
-                            LogHelper.info("Someone tried to connect two previously formed tanks at " + new BlockCoord(x, y, z).toString() + " - stopping them.");
+                            LogHelper.info(LocalisationHelper.localiseString("info.multiblock.tank.connecting_destructive", new BlockCoord(x, y, z).toString()));
                             return false;
                         }
                     }
@@ -341,7 +347,7 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
     {
         boolean dismantleWouldBeDestructive = isLastPartWithContents(world, new BlockCoord(x, y, z));
         if (dismantleWouldBeDestructive)
-            player.addChatComponentMessage(new ChatComponentText("Dismantling this tank block will destroy the tanks' contents. You must break it with a pickaxe."));
+            player.addChatComponentMessage(new ChatComponentText(LocalisationHelper.localiseString("warning.tank.dismantle_loss")));
 
         return !dismantleWouldBeDestructive;
     }

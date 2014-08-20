@@ -1,5 +1,6 @@
 package io.endertech.config;
 
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import net.minecraftforge.common.config.Configuration;
 import java.io.File;
@@ -17,7 +18,7 @@ public class BlockConfig
 
         } catch (Exception e)
         {
-            LogHelper.error("Failed to load block config");
+            LogHelper.error(LocalisationHelper.localiseString("error.config.block.load"));
         } finally
         {
             blockConfig.save();

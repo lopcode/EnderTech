@@ -11,6 +11,7 @@ import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -33,7 +34,7 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
         int metadata = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
         if (BlockTankPart.isFrame(metadata)) { return; }
 
-        throw new MultiblockValidationException(String.format("%d, %d, %d - Only frames may be used as part of a tank's frame", xCoord, yCoord, zCoord));
+        throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.tank.part.unsuitable.frame", xCoord, yCoord, zCoord));
     }
 
     @Override
@@ -48,7 +49,7 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
         int metadata = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
         if (BlockTankPart.isFrame(metadata)) { return; }
 
-        throw new MultiblockValidationException(String.format("%d, %d, %d - This part may not be placed on a tank's top face", xCoord, yCoord, zCoord));
+        throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.tank.part.unsuitable.top", xCoord, yCoord, zCoord));
     }
 
     @Override
@@ -57,13 +58,13 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
         int metadata = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
         if (BlockTankPart.isFrame(metadata)) { return; }
 
-        throw new MultiblockValidationException(String.format("%d, %d, %d - This part may not be placed on a tank's bottom face", xCoord, yCoord, zCoord));
+        throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.tank.part.unsuitable.bottom", xCoord, yCoord, zCoord));
     }
 
     @Override
     public void isGoodForInterior() throws MultiblockValidationException
     {
-        throw new MultiblockValidationException(String.format("%d, %d, %d - This part may not be placed in the tank's interior", xCoord, yCoord, zCoord));
+        throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.tank.part.unsuitable.interior", xCoord, yCoord, zCoord));
     }
 
     @Override
@@ -109,7 +110,7 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
 
         if (this.getMultiblockController() == null)
         {
-            LogHelper.warn("Reactor part at (%d, %d, %d) is being assembled without being attached to a reactor. Attempting to auto-heal. Fully destroying and re-building this reactor is recommended if errors persist.", xCoord, yCoord, zCoord);
+            LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.tank.null_controller_assembly", xCoord, yCoord, zCoord));
             this.onAttached(multiblockController);
         }
 

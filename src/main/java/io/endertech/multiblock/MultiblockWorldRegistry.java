@@ -1,6 +1,7 @@
 package io.endertech.multiblock;
 
 import io.endertech.util.BlockCoord;
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
@@ -207,7 +208,7 @@ public class MultiblockWorldRegistry
 
                 if (newMaster == null)
                 {
-                    LogHelper.fatal("Multiblock system checked a merge pool of size %d, found no master candidates. This should never happen.", mergePool.size());
+                    LogHelper.fatal(LocalisationHelper.localiseString("error.multiblock.tickend.merge_pool", mergePool.size()));
                 } else
                 {
                     // Merge all the other machines into the master machine, then unregister them
@@ -267,7 +268,7 @@ public class MultiblockWorldRegistry
                 // Validate that they are empty/dead, then unregister them.
                 if (!controller.isEmpty())
                 {
-                    LogHelper.fatal("Found a non-empty controller. Forcing it to shed its blocks and die. This should never happen!");
+                    LogHelper.fatal(LocalisationHelper.localiseString("error.multiblock.tickend.non_empty_controller"));
                     detachedParts.addAll(controller.detachAllBlocks());
                 }
 

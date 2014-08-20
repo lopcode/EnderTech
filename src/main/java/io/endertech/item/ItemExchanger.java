@@ -85,10 +85,10 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
             if (isCreative(stack))
             {
-                list.add("Charge: Infinite");
+                list.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
             } else
             {
-                list.add("Charge: " + StringHelper.getEnergyString(this.getEnergyStored(stack)) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(stack)) + " RF");
+                list.add(LocalisationHelper.localiseString("info.charge", StringHelper.getEnergyString(this.getEnergyStored(stack)) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(stack)) + " RF"));
             }
 
             //if (this.getMaxExtractRate(stack) > 0)
@@ -96,21 +96,21 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
             if (this.getMaxReceiveRate(stack) > 0)
             {
-                list.add("Receive: " + StringHelper.getEnergyString(this.getMaxReceiveRate(stack)) + " RF/t");
+                list.add(LocalisationHelper.localiseString("info.charge.receive", StringHelper.getEnergyString(this.getMaxReceiveRate(stack)) + " RF/t"));
             }
 
             ItemStack pb = getSourceItemStack(stack);
             if (pb == null)
             {
-                list.add("Source block: None");
+                list.add(LocalisationHelper.localiseString("info.exchanger.source", "None"));
             } else
             {
-                list.add(EnumChatFormatting.GREEN + "Source block: " + pb.getDisplayName());
+                list.add(EnumChatFormatting.GREEN + LocalisationHelper.localiseString("info.exchanger.source", pb.getDisplayName()) + EnumChatFormatting.RESET);
             }
 
-            list.add(EnumChatFormatting.GREEN + "Radius: " + this.getTargetRadius(stack));
+            list.add(EnumChatFormatting.GREEN + LocalisationHelper.localiseString("info.exchanger.radius", this.getTargetRadius(stack)));
 
-            list.add(EnumChatFormatting.AQUA + "" + EnumChatFormatting.ITALIC + "Use while sneaking to choose source." + EnumChatFormatting.RESET);
+            list.add(EnumChatFormatting.AQUA + "" + EnumChatFormatting.ITALIC + LocalisationHelper.localiseString("info.exchanger.shift_to_select_source") + EnumChatFormatting.RESET);
         } else
         {
             list.add(StringHelper.holdShiftForDetails);

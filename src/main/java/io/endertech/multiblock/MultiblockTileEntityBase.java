@@ -2,10 +2,12 @@ package io.endertech.multiblock;
 
 import io.endertech.network.PacketETBase;
 import io.endertech.util.BlockCoord;
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.chunk.IChunkProvider;
+import scala.tools.nsc.backend.icode.Members;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -85,7 +87,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     {
         if (this.controller != null)
         {
-            LogHelper.info("[assert] Part @ (%d, %d, %d) should be detached already, but detected that it was not. This is not a fatal error, and will be repaired, but is unusual.", xCoord, yCoord, zCoord);
+            LogHelper.info(LocalisationHelper.localiseString("assert.multiblock.part.detached", xCoord, yCoord, zCoord));
             this.controller = null;
         }
     }

@@ -3,6 +3,7 @@ package io.endertech.integration.waila;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockTileEntityBase;
+import io.endertech.util.helper.LocalisationHelper;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
@@ -49,12 +50,12 @@ public class MultiblockWailaProvider implements IWailaDataProvider
             IMultiblockPart multiblock = (IMultiblockPart) tile;
             MultiblockControllerBase controller = multiblock.getMultiblockController();
 
-            String assembledStatus = "Assembled: ";
+            String assembledStatus = LocalisationHelper.localiseString("info.multiblock.assembled_status");
             boolean assembled = (controller != null) && (controller.isAssembled());
 
             if (!assembled)
             {
-                currenttip.add(EnumChatFormatting.RED + "Not assembled" + EnumChatFormatting.RESET);
+                currenttip.add(EnumChatFormatting.RED + LocalisationHelper.localiseString("info.multiblock.not_assembled") + EnumChatFormatting.RESET);
             } else
             {
                 if (controller != null)

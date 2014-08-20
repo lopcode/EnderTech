@@ -15,6 +15,7 @@ import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.RenderHelper;
 import io.endertech.util.helper.StringHelper;
 import net.minecraft.client.particle.EffectRenderer;
@@ -368,18 +369,18 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
     {
         if (this.isActive)
         {
-            currenttip.add(EnumChatFormatting.GREEN + "Active" + EnumChatFormatting.RESET);
+            currenttip.add(EnumChatFormatting.GREEN + LocalisationHelper.localiseString("info.active") + EnumChatFormatting.RESET);
         } else
         {
-            currenttip.add(EnumChatFormatting.RED + "Inactive" + EnumChatFormatting.RESET);
+            currenttip.add(EnumChatFormatting.RED + LocalisationHelper.localiseString("info.inactive") + EnumChatFormatting.RESET);
         }
 
         int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        if (BlockChargePad.isCreative(blockMeta)) currenttip.add("Charge: Infinite");
+        if (BlockChargePad.isCreative(blockMeta)) currenttip.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
         else
-            currenttip.add("Charge: " + StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(BlockChargePad.getMaxEnergyStored(blockMeta)) + " RF");
+            currenttip.add(LocalisationHelper.localiseString("info.charge", StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(BlockChargePad.getMaxEnergyStored(blockMeta)) + " RF"));
 
-        currenttip.add("Sent: " + StringHelper.getEnergyString(this.sentPower) + " RF/t");
+        currenttip.add(LocalisationHelper.localiseString("info.sent", StringHelper.getEnergyString(this.sentPower) + " RF/t"));
 
         return currenttip;
     }

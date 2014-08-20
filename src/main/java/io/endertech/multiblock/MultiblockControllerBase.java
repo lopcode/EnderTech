@@ -5,6 +5,7 @@ import io.endertech.network.PacketETBase;
 import io.endertech.network.PacketHandler;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -132,7 +133,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
 
         if (!connectedParts.add(part))
         {
-            LogHelper.warn("[%s] Controller %s is double-adding part %d @ %s. This is unusual. If you encounter odd behavior, please tear down the machine and rebuild it.", (worldObj.isRemote ? "CLIENT" : "SERVER"), hashCode(), part.hashCode(), coord);
+            LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.part.double_adding", (worldObj.isRemote ? "CLIENT" : "SERVER"), hashCode(), part.hashCode(), coord));
         }
 
         part.onAttached(this);
@@ -261,7 +262,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
         onDetachBlock(part);
         if (!connectedParts.remove(part))
         {
-            LogHelper.warn("[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. If you encounter anomalies, please tear down the reactor and rebuild it.", worldObj.isRemote ? "CLIENT" : "SERVER", part.hashCode(), part.xCoord, part.yCoord, part.zCoord);
+            LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.part.double_removing", worldObj.isRemote ? "CLIENT" : "SERVER", part.hashCode(), part.xCoord, part.yCoord, part.zCoord));
         }
 
         if (connectedParts.isEmpty())
@@ -592,7 +593,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
      */
     protected void isBlockGoodForFrame(World world, int x, int y, int z) throws MultiblockValidationException
     {
-        throw new MultiblockValidationException(String.format("%d, %d, %d - Block is not valid for use in the machine's frame", x, y, z));
+        throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.part.unsuitable.frame", x, y, z));
     }
 
     /**
@@ -606,7 +607,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
      */
     protected void isBlockGoodForTop(World world, int x, int y, int z) throws MultiblockValidationException
     {
-        throw new MultiblockValidationException(String.format("%d, %d, %d - Block is not valid for use in the machine's top", x, y, z));
+        throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.part.unsuitable.top", x, y, z));
     }
 
     /**
@@ -620,7 +621,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
      */
     protected void isBlockGoodForBottom(World world, int x, int y, int z) throws MultiblockValidationException
     {
-        throw new MultiblockValidationException(String.format("%d, %d, %d - Block is not valid for use in the machine's interior", x, y, z));
+        throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.part.unsuitable.bottom", x, y, z));
     }
 
     /**
@@ -634,7 +635,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
      */
     protected void isBlockGoodForSides(World world, int x, int y, int z) throws MultiblockValidationException
     {
-        throw new MultiblockValidationException(String.format("%d, %d, %d - Block is not valid for use in the machine's sides", x, y, z));
+        throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.part.unsuitable.sides", x, y, z));
     }
 
     /**
@@ -648,7 +649,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
      */
     protected void isBlockGoodForInterior(World world, int x, int y, int z) throws MultiblockValidationException
     {
-        throw new MultiblockValidationException(String.format("%d, %d, %d - Block is not valid for use in the machine's interior", x, y, z));
+        throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.part.unsuitable.interior", x, y, z));
     }
 
     /**
@@ -738,7 +739,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
     {
         if (!otherController.getClass().equals(getClass()))
         {
-            throw new IllegalArgumentException("Attempting to merge two multiblocks with different master classes - this should never happen!");
+            throw new IllegalArgumentException(LocalisationHelper.localiseString("error.multiblock.consuming.different_classes"));
         }
 
         if (otherController == this) { return false; } // Don't be silly, don't eat yourself.
@@ -747,16 +748,16 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
         if (res < 0) { return true; } else if (res > 0) { return false; } else
         {
             // Strip dead parts from both and retry
-            LogHelper.warn("[%s] Encountered two controllers with the same reference coordinate. Auditing connected parts and retrying.", worldObj.isRemote ? "CLIENT" : "SERVER");
+            LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.consuming.same_reference_coordinate", worldObj.isRemote ? "CLIENT" : "SERVER"));
             auditParts();
             otherController.auditParts();
 
             res = _shouldConsume(otherController);
             if (res < 0) { return true; } else if (res > 0) { return false; } else
             {
-                LogHelper.fatal("My Controller (%d): size (%d), parts: %s", hashCode(), connectedParts.size(), getPartsListString());
-                LogHelper.fatal("Other Controller (%d): size (%d), coords: %s", otherController.hashCode(), otherController.connectedParts.size(), otherController.getPartsListString());
-                throw new IllegalArgumentException("[" + (worldObj.isRemote ? "CLIENT" : "SERVER") + "] Two controllers with the same reference coord that somehow both have valid parts - this should never happen!");
+                LogHelper.fatal(LocalisationHelper.localiseString("error.multiblock.consuming.my_controller", hashCode(), connectedParts.size(), getPartsListString()));
+                LogHelper.fatal(LocalisationHelper.localiseString("error.multiblock.consuming.other_controller", otherController.hashCode(), otherController.connectedParts.size(), otherController.getPartsListString()));
+                throw new IllegalArgumentException(LocalisationHelper.localiseString("error.multiblock.consuming.same_reference_coordinate", (worldObj.isRemote ? "CLIENT" : "SERVER")));
             }
 
         }
@@ -804,7 +805,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
         }
 
         connectedParts.removeAll(deadParts);
-        LogHelper.warn("[%s] Controller found %d dead parts during an audit, %d parts remain attached", worldObj.isRemote ? "CLIENT" : "SERVER", deadParts.size(), connectedParts.size());
+        LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.audit", worldObj.isRemote ? "CLIENT" : "SERVER", deadParts.size(), connectedParts.size()));
     }
 
     /**
