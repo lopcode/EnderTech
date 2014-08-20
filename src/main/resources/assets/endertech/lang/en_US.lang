@@ -26,6 +26,9 @@ tile.fluid.chargePad.0.name=Charged Ender
 fluid.chargedEnder=Charged Ender
 item.endertech.bucket.bucketChargedEnder.name=Charged Ender Bucket
 
+# Keys
+key.endertech.tools=EnderTech Tool Bindings
+
 # General
 general.direction.pre=My direction is: %s
 
