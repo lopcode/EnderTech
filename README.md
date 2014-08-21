@@ -12,6 +12,7 @@ Unless we talk about it first and I agree, I'm very unlikely to accept pull requ
 Go to #EnderTech on Esper if you have any questions or concerns (especially if you're considering including it in a larger modpack), or just want to shout at me for doing something wrong. 
 
 Curse link: http://minecraft.curseforge.com/mc-mods/223428-endertech
+
 Features, further description, progress and more: https://github.com/Drayshak/EnderTech/wiki
 
 ##License and terms
