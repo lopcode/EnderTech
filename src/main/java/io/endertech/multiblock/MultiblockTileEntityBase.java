@@ -7,7 +7,6 @@ import io.endertech.util.helper.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.chunk.IChunkProvider;
-import scala.tools.nsc.backend.icode.Members;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

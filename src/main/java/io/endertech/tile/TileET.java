@@ -2,11 +2,14 @@ package io.endertech.tile;
 
 import cofh.lib.util.helpers.ServerHelper;
 import cpw.mods.fml.relauncher.Side;
+import io.endertech.EnderTech;
 import io.endertech.network.ITilePacketHandler;
 import io.endertech.network.PacketETBase;
 import io.endertech.network.PacketHandler;
 import io.endertech.network.PacketTile;
 import io.endertech.util.IETWailaProvider;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
@@ -131,5 +134,38 @@ public class TileET extends TileEntity implements ITilePacketHandler, IETWailaPr
     public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip)
     {
         return currenttip;
+    }
+
+    public Object getGuiClient(InventoryPlayer inventory)
+    {
+        return null;
+    }
+
+    public Object getGuiServer(InventoryPlayer inventory)
+    {
+        return null;
+    }
+
+    public boolean hasGui()
+    {
+        return false;
+    }
+
+    public boolean openGui(EntityPlayer player)
+    {
+        boolean hasGui = this.hasGui();
+        if (hasGui)
+        {
+            player.openGui(EnderTech.instance, 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        }
+
+        return hasGui;
+    }
+
+    public boolean canInteractWith(EntityPlayer player)
+    {
+        double distance = player.getDistanceSq(this.xCoord, this.yCoord, this.zCoord);
+        TileEntity tile = this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord);
+        return (distance <= 64D && tile == this);
     }
 }

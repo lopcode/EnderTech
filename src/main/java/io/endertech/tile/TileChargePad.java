@@ -376,7 +376,8 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         }
 
         int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        if (BlockChargePad.isCreative(blockMeta)) currenttip.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
+        if (BlockChargePad.isCreative(blockMeta))
+            currenttip.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
         else
             currenttip.add(LocalisationHelper.localiseString("info.charge", StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(BlockChargePad.getMaxEnergyStored(blockMeta)) + " RF"));
 

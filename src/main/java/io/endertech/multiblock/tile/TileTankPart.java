@@ -2,6 +2,8 @@ package io.endertech.multiblock.tile;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.block.ETBlocks;
+import io.endertech.gui.client.GuiTank;
+import io.endertech.gui.container.ContainerTank;
 import io.endertech.multiblock.MultiblockControllerBase;
 import io.endertech.multiblock.MultiblockValidationException;
 import io.endertech.multiblock.block.BlockTankController;
@@ -14,6 +16,7 @@ import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
@@ -279,5 +282,23 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
     {
         worldObj.notifyBlockChange(xCoord, yCoord, zCoord, this.getBlockType());
         worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
+    }
+
+    @Override
+    public Object getGuiClient(InventoryPlayer inventory)
+    {
+        return new GuiTank(inventory, this);
+    }
+
+    @Override
+    public Object getGuiServer(InventoryPlayer inventory)
+    {
+        return new ContainerTank(inventory, this);
+    }
+
+    @Override
+    public boolean hasGui()
+    {
+        return this.isConnected() && this.getMultiblockController().isAssembled();
     }
 }

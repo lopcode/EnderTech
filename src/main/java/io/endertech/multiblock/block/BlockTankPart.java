@@ -16,7 +16,7 @@ import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.LogHelper;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -36,7 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDismantleable
+public class BlockTankPart extends BlockET implements ITileEntityProvider, IOutlineDrawer, IDismantleable
 {
     public static final int FRAME_METADATA_BASE = 0; // Frame metadata
     public static final int FRAME_CORNER = 1;
@@ -141,7 +141,12 @@ public class BlockTankPart extends BlockContainer implements IOutlineDrawer, IDi
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int faceHit, float par7, float par8, float par9)
     {
-        return onTankBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
+        boolean overridden = super.onBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
+
+        if (!overridden)
+            overridden = BlockTankPart.onTankBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
+
+        return overridden;
     }
 
     @Override

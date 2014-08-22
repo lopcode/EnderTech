@@ -1,5 +1,6 @@
 package io.endertech.block;
 
+import cofh.lib.util.helpers.ServerHelper;
 import io.endertech.EnderTech;
 import io.endertech.tile.TileET;
 import io.endertech.util.helper.WorldHelper;
@@ -69,5 +70,24 @@ public class BlockET extends Block
 
             ((TileET) world.getTileEntity(x, y, z)).setOrientation(direction);
         }
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fx, float fy, float fz)
+    {
+        TileET tileET = (TileET) world.getTileEntity(x, y, z);
+        if (tileET == null) return false;
+
+        if (tileET.hasGui())
+        {
+            if (ServerHelper.isServerWorld(world))
+            {
+                tileET.openGui(player);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

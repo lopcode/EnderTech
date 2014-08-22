@@ -6,6 +6,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.block.BlockChargePad;
 import io.endertech.block.ETBlocks;
@@ -14,6 +15,7 @@ import io.endertech.client.handler.KeyBindingHandler;
 import io.endertech.config.ConfigHandler;
 import io.endertech.config.GeneralConfig;
 import io.endertech.creativetab.CreativeTabET;
+import io.endertech.gui.GuiHandler;
 import io.endertech.item.ETItems;
 import io.endertech.multiblock.block.BlockMultiblockGlass;
 import io.endertech.multiblock.block.BlockTankController;
@@ -49,6 +51,8 @@ public class EnderTech
 
     public static final CreativeTabs tabET = new CreativeTabET();
     public static boolean loadDevModeContent = false;
+
+    public static final GuiHandler guiHandler = new GuiHandler();
 
     @EventHandler
     @SuppressWarnings("unused")
@@ -113,6 +117,9 @@ public class EnderTech
     @SuppressWarnings("unused")
     public void init(FMLInitializationEvent event)
     {
+        // GUI
+        NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
+
         // Packets
         PacketTile.init();
         PacketKeyPressed.init();

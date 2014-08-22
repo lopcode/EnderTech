@@ -1,5 +1,6 @@
 package io.endertech.multiblock.controller;
 
+import cofh.api.energy.IEnergyStorage;
 import io.endertech.config.GeneralConfig;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
@@ -31,7 +32,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import java.util.*;
 
-public class ControllerTank extends RectangularMultiblockControllerBase implements IOutlineDrawer, ITilePacketHandler
+public class ControllerTank extends RectangularMultiblockControllerBase implements IOutlineDrawer, ITilePacketHandler, IEnergyStorage
 {
     protected boolean active;
     private Set<TileTankPart> attachedControllers;
@@ -517,5 +518,29 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         }
 
         return true;
+    }
+
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate)
+    {
+        return 0;
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate)
+    {
+        return 0;
+    }
+
+    @Override
+    public int getEnergyStored()
+    {
+        return this.storedEnergy;
+    }
+
+    @Override
+    public int getMaxEnergyStored()
+    {
+        return ControllerTank.MAX_ENERGY_STORAGE;
     }
 }

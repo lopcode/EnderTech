@@ -164,6 +164,11 @@ public class BlockTankController extends BlockET implements ITileEntityProvider,
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int faceHit, float par7, float par8, float par9)
     {
-        return BlockTankPart.onTankBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
+        boolean overridden = super.onBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
+
+        if (!overridden)
+            overridden = BlockTankPart.onTankBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
+
+        return overridden;
     }
 }

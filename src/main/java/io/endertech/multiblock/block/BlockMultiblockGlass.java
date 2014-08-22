@@ -11,7 +11,7 @@ import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.proxy.CommonProxy;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,7 +27,7 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockMultiblockGlass extends BlockContainer implements IOutlineDrawer, IDismantleable
+public class BlockMultiblockGlass extends BlockET implements ITileEntityProvider, IOutlineDrawer, IDismantleable
 {
     public static final int METADATA_TANK = 0;
     private static String[] subBlocks = new String[] {"tank"};
@@ -170,6 +170,11 @@ public class BlockMultiblockGlass extends BlockContainer implements IOutlineDraw
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int faceHit, float par7, float par8, float par9)
     {
-        return BlockTankPart.onTankBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
+        boolean overridden = super.onBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
+
+        if (!overridden)
+            overridden = BlockTankPart.onTankBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
+
+        return overridden;
     }
 }
