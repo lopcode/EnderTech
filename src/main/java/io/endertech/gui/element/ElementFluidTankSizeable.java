@@ -1,6 +1,7 @@
 package io.endertech.gui.element;
 
 import cofh.lib.gui.element.ElementFluidTank;
+import io.endertech.config.GeneralConfig;
 import io.endertech.gui.client.GuiETBase;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -26,7 +27,7 @@ public class ElementFluidTankSizeable extends ElementFluidTank
         Fluid fluid = fluidStack.getFluid();
         if (fluid == null) return;
 
-        if (fluid.isGaseous(fluidStack))
+        if (fluid.isGaseous(fluidStack) && !GeneralConfig.gasTopToBottom)
         {
             float opacity = ((tank.getFluidAmount() / (float) tank.getCapacity()));
             if (opacity < 0.10F) opacity = 0.10F;

@@ -2,6 +2,7 @@ package io.endertech.tile;
 
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyStorage;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.lib.util.helpers.ServerHelper;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -11,6 +12,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.block.BlockChargePad;
 import io.endertech.config.GeneralConfig;
 import io.endertech.fx.EntityChargePadFX;
+import io.endertech.gui.client.GuiChargePad;
+import io.endertech.gui.container.ContainerChargePad;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.IOutlineDrawer;
@@ -18,10 +21,12 @@ import io.endertech.util.RGBA;
 import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.RenderHelper;
 import io.endertech.util.helper.StringHelper;
+import net.minecraft.block.Block;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,7 +36,7 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
-public class TileChargePad extends TileET implements IReconfigurableFacing, IEnergyHandler, IOutlineDrawer
+public class TileChargePad extends TileET implements IReconfigurableFacing, IEnergyHandler, IOutlineDrawer, IEnergyStorage
 {
     public static final short TICKS_PER_UPDATE = 20;
     public short ticksSinceLastUpdate = 0;
@@ -436,5 +441,56 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         {
             return false;
         }
+    }
+
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate)
+    {
+        return 0;
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate)
+    {
+        return 0;
+    }
+
+    @Override
+    public int getEnergyStored()
+    {
+        return this.storedEnergy;
+    }
+
+    @Override
+    public int getMaxEnergyStored()
+    {
+        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        return BlockChargePad.getMaxEnergyStored(blockMeta);
+    }
+
+    public String getName()
+    {
+        Block block = this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord);
+        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+
+        return LocalisationHelper.localiseString(block.getUnlocalizedName() + "." + blockMeta + ".name");
+    }
+
+    @Override
+    public Object getGuiClient(InventoryPlayer inventory)
+    {
+        return new GuiChargePad(inventory, this);
+    }
+
+    @Override
+    public Object getGuiServer(InventoryPlayer inventory)
+    {
+        return new ContainerChargePad(inventory, this);
+    }
+
+    @Override
+    public boolean hasGui()
+    {
+        return true;
     }
 }

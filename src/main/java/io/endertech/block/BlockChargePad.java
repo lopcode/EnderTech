@@ -1,7 +1,6 @@
 package io.endertech.block;
 
 import cofh.api.block.IDismantleable;
-import cofh.lib.util.helpers.ServerHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
@@ -11,8 +10,6 @@ import io.endertech.tile.TileChargePad;
 import io.endertech.tile.TileET;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
-import io.endertech.util.helper.LocalisationHelper;
-import io.endertech.util.helper.LogHelper;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -170,18 +167,7 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int faceHit, float par7, float par8, float par9)
     {
-        if (!ServerHelper.isServerWorld(world)) return false;
-
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if (tileEntity == null || !(tileEntity instanceof TileChargePad))
-            LogHelper.debug(LocalisationHelper.localiseString("warning.no_tile_entity"));
-
-        TileChargePad tile = (TileChargePad) tileEntity;
-        ForgeDirection out = tile.getOrientation();
-
-        LogHelper.debug(LocalisationHelper.localiseString("general.direction.pre", out.name()));
-
-        return false;
+        return super.onBlockActivated(world, x, y, z, player, faceHit, par7, par8, par9);
     }
 
     @Override
