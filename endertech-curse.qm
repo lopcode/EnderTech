@@ -23,7 +23,7 @@
     "versions": [
         {
             "mcCompat": [ "1.7.10" ],
-            "name": "EnderTech-1.7.10-0.2.0.274",
+            "name": "0.2.0.274",
             "installType": "forgeMod",
             "urls": [
                 {
