@@ -1,8 +1,5 @@
 package io.endertech.gui.container;
 
-import cofh.lib.gui.slot.SlotFalseCopy;
-import cofh.lib.util.helpers.AugmentHelper;
-import cofh.lib.util.helpers.ItemHelper;
 import io.endertech.tile.TileET;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
