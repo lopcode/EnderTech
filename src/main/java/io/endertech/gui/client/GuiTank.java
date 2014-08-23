@@ -1,8 +1,8 @@
 package io.endertech.gui.client;
 
-import cofh.lib.gui.element.ElementEnergyStored;
-import cofh.lib.gui.element.ElementFluidTank;
 import io.endertech.gui.container.ContainerTank;
+import io.endertech.gui.element.ElementETEnergyStored;
+import io.endertech.gui.element.ElementFluidTankSizeable;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.tile.TileET;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -19,6 +19,7 @@ public class GuiTank extends GuiETBase
         super(new ContainerTank(inventoryPlayer, tileEntity), TEXTURE, tileEntity);
 
         this.tileTankPart = (TileTankPart) tileEntity;
+        this.name = "Ender Tank";
     }
 
     @Override
@@ -26,11 +27,10 @@ public class GuiTank extends GuiETBase
     {
         super.initGui();
 
-        ElementFluidTank elementFluidTank = new ElementFluidTank(this, 42, 8, this.tileTankPart.getTankController().tank);
-        elementFluidTank.setSize(127, ElementFluidTank.DEFAULT_SCALE);
+        ElementFluidTankSizeable elementFluidTank = new ElementFluidTankSizeable(this, 43, 27, 89, 42, this.tileTankPart.getTankController().tank);
         this.addElement(elementFluidTank);
 
-        ElementEnergyStored elementEnergyStored = new ElementEnergyStored(this, 8, 8, this.tileTankPart.getTankController());
+        ElementETEnergyStored elementEnergyStored = new ElementETEnergyStored(this, 8, 8, this.tileTankPart.getTankController());
         this.addElement(elementEnergyStored);
     }
 }
