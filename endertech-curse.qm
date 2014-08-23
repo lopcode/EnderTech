@@ -1,0 +1,37 @@
+{
+    "formatVersion":1,
+    "uid": "drayshak.EnderTech",
+    "modId": "EnderTech",
+    "name": "EnderTech",
+    "nemName": "EnderTech-Drayshak",
+    "description": "Ender-themed technological expansion.",
+    "urls": {
+        "icon": [ "https://raw.github.com/Drayshak/EnderTech/master/src/main/resources/assets/endertech/textures/logo.png" ],
+        "logo": [ "https://raw.github.com/Drayshak/EnderTech/master/src/main/resources/assets/endertech/textures/logo.png" ],
+        "website": [ "https://github.com/Drayshak/EnderTech/wiki" ],
+        "source": [ "https://github.com/Drayshak/EnderTech" ]
+    ],
+    "license": "All rights reserved",
+    "updateUrl": "github://Drayshak@EnderTech/endertech-curse.qm",
+    "tags": [ "ThermalExpansion", "Technology", "Ender", "Energy" ],
+    "categories": [ "ThermalExpansion", "Technology", "Ender" ],
+    "authors": {
+        "Founder": [ "Drayshak" ],
+        "Author": [ "Drayshak", "Arkan" ],
+        "Credits": [ "RWTema" ]
+    },
+    "versions": [
+        {
+            "mcCompat": [ "1.7.10" ],
+            "name": "EnderTech-1.7.10-0.2.0.274",
+            "installType": "forgeMod",
+            "urls": [
+                {
+                    "url": "http://minecraft.curseforge.com/mc-mods/223428-endertech/files/2212177/download",
+                    "downloadType": "sequential"
+                }
+            ]
+        }
+    ]
+}
+
