@@ -360,7 +360,7 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
         GL11.glPushMatrix();
         GL11.glTranslatef(x, y, z);
         renderer.setRenderBoundsFromBlock(ETBlocks.blockTankController);
-        renderer.blockAccess = RenderBlocks.getInstance().blockAccess;
+        //renderer.blockAccess = RenderBlocks.getInstance().blockAccess;
         this.renderControllerBlock(renderer, (BlockTankController) ETBlocks.blockTankController, 0, ForgeDirection.EAST, 0, 0, 0);
 
         GL11.glPopMatrix();
