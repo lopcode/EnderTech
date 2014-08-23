@@ -1,12 +1,14 @@
 package io.endertech.gui.element;
 
-import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.ElementFluidTank;
+import io.endertech.gui.client.GuiETBase;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 public class ElementFluidTankSizeable extends ElementFluidTank
 {
-    public ElementFluidTankSizeable(GuiBase gui, int posX, int posY, int sizeX, int sizeY, IFluidTank tank)
+    public ElementFluidTankSizeable(GuiETBase gui, int posX, int posY, int sizeX, int sizeY, IFluidTank tank)
     {
         super(gui, posX, posY, tank);
         this.sizeX = sizeX;
@@ -16,12 +18,24 @@ public class ElementFluidTankSizeable extends ElementFluidTank
     @Override
     public void drawBackground(int mouseX, int mouseY, float gameTicks)
     {
-
         int amount = this.getScaled();
 
-        gui.drawFluid(posX, posY + sizeY - amount, tank.getFluid(), sizeX, amount);
-        //RenderHelper.bindTexture(texture);
-        //drawTexturedModalRect(posX, posY, 32 + gaugeType * 16, 1, sizeX, sizeY);
+        FluidStack fluidStack = tank.getFluid();
+        if (fluidStack == null) return;
+
+        Fluid fluid = fluidStack.getFluid();
+        if (fluid == null) return;
+
+        if (fluid.isGaseous(fluidStack))
+        {
+            float opacity = ((tank.getFluidAmount() / (float) tank.getCapacity()));
+            if (opacity < 0.10F) opacity = 0.10F;
+
+            ((GuiETBase) gui).drawFluidWithOpacity(posX, posY, tank.getFluid(), sizeX, sizeY, opacity);
+        } else
+        {
+            gui.drawFluid(posX, posY + sizeY - amount, tank.getFluid(), sizeX, amount);
+        }
     }
 
     int getScaled()
