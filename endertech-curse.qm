@@ -10,7 +10,7 @@
         "logo": [ "https://raw.github.com/Drayshak/EnderTech/master/src/main/resources/assets/endertech/textures/logo.png" ],
         "website": [ "https://github.com/Drayshak/EnderTech/wiki" ],
         "source": [ "https://github.com/Drayshak/EnderTech" ]
-    ],
+    },
     "license": "All rights reserved",
     "updateUrl": "github://Drayshak@EnderTech/endertech-curse.qm",
     "tags": [ "ThermalExpansion", "Technology", "Ender", "Energy" ],
