@@ -1,10 +1,14 @@
 package io.endertech.gui.container;
 
+import cofh.lib.gui.slot.SlotFalseCopy;
+import cofh.lib.util.helpers.AugmentHelper;
+import cofh.lib.util.helpers.ItemHelper;
 import io.endertech.tile.TileET;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 public class ContainerETBase extends Container
@@ -38,5 +42,11 @@ public class ContainerETBase extends Container
         }
         for (int i = 0; i < 9; i++)
             this.addSlotToContainer(new Slot(paramInventoryPlayer, i, 8 + i * 18, 142));
+    }
+
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
+    {
+        return null;
     }
 }
