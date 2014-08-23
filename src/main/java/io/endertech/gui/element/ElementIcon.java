@@ -27,7 +27,6 @@ public class ElementIcon extends ElementBase
     @Override
     public void drawForeground(int mouseX, int mouseY)
     {
-        if (this.iconToDraw != null)
-            gui.drawIcon(this.iconToDraw, this.posX, this.posY, 0);
+        if (this.iconToDraw != null) gui.drawIcon(this.iconToDraw, this.posX, this.posY, 0);
     }
 }

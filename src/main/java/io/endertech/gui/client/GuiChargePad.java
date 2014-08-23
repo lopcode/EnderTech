@@ -1,6 +1,5 @@
 package io.endertech.gui.client;
 
-import io.endertech.block.BlockChargePad;
 import io.endertech.gui.container.ContainerChargePad;
 import io.endertech.gui.element.ElementETEnergyStored;
 import io.endertech.gui.element.ElementIcon;

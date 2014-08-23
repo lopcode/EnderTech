@@ -499,15 +499,12 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
     {
         Block block = this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord);
 
-        if (!(block instanceof BlockChargePad))
-            return null;
+        if (!(block instanceof BlockChargePad)) return null;
 
         int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
         BlockChargePad blockChargePad = (BlockChargePad) block;
 
-        if (this.isActive)
-            return blockChargePad.activeIcons[blockMeta];
-        else
-            return blockChargePad.inactiveIcons[blockMeta];
+        if (this.isActive) return blockChargePad.activeIcons[blockMeta];
+        else return blockChargePad.inactiveIcons[blockMeta];
     }
 }
