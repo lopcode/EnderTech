@@ -32,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
@@ -492,5 +493,21 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
     public boolean hasGui()
     {
         return true;
+    }
+
+    public IIcon getFrontIcon()
+    {
+        Block block = this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord);
+
+        if (!(block instanceof BlockChargePad))
+            return null;
+
+        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        BlockChargePad blockChargePad = (BlockChargePad) block;
+
+        if (this.isActive)
+            return blockChargePad.activeIcons[blockMeta];
+        else
+            return blockChargePad.inactiveIcons[blockMeta];
     }
 }

@@ -1,7 +1,9 @@
 package io.endertech.gui.client;
 
+import io.endertech.block.BlockChargePad;
 import io.endertech.gui.container.ContainerChargePad;
 import io.endertech.gui.element.ElementETEnergyStored;
+import io.endertech.gui.element.ElementIcon;
 import io.endertech.tile.TileChargePad;
 import io.endertech.tile.TileET;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -12,6 +14,7 @@ public class GuiChargePad extends GuiETBase
     public static final String TEXTURE_PATH = "endertech:textures/gui/ChargePad.png";
     public static final ResourceLocation TEXTURE = new ResourceLocation(TEXTURE_PATH);
     public TileChargePad tileChargePad;
+    private ElementIcon elementChargingIcon;
 
     public GuiChargePad(InventoryPlayer inventoryPlayer, TileET tileEntity)
     {
@@ -28,5 +31,14 @@ public class GuiChargePad extends GuiETBase
 
         ElementETEnergyStored elementEnergyStored = new ElementETEnergyStored(this, 8, 8, this.tileChargePad);
         this.addElement(elementEnergyStored);
+
+        elementChargingIcon = new ElementIcon(this, 80, 30);
+        this.addElement(elementChargingIcon);
+    }
+
+    @Override
+    protected void updateElementInformation()
+    {
+        elementChargingIcon.setIconToDraw(tileChargePad.getFrontIcon());
     }
 }
