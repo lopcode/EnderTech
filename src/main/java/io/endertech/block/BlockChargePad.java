@@ -47,6 +47,8 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
         super(Material.iron);
         this.setCreativeTab(EnderTech.tabET);
         this.setBlockName(Strings.Blocks.CHARGE_PAD);
+        setHardness(10.0f);
+        setResistance(20.0f);
     }
 
     public void init()
