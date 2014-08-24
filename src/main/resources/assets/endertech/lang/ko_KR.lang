@@ -1,4 +1,5 @@
 # Note: these are GB spellings by default
+# author TeamMMKP(@puyo061)
 
 # Item localisations
 item.endertech.exchanger.exchangerRedstone.name=레드스톤 교환기
@@ -6,7 +7,7 @@ item.endertech.exchanger.exchangerResonant.name=공진 교환기
 item.endertech.exchanger.exchangerCreative.name=크리에이티브 교환기
 
 # Creative tab
-itemGroup.EnderTechAll=엔더테크 : ALL
+itemGroup.EnderTechAll=엔더테크 : 전체
 
 # Blocks
 tile.enderTank.name=엔더탱크
@@ -25,3 +26,72 @@ tile.chargePad.2.name=공진 차지패드
 tile.fluid.chargePad.0.name=충전된 엔더
 fluid.chargedEnder=충전된 엔더
 item.endertech.bucket.bucketChargedEnder.name=충전된 엔더 양동이
+
+# Keys
+key.endertech.tools=엔더테크 도구 바인딩
+
+# General
+general.direction.pre=방향: %s
+
+# Warnings
+warning.fingerprint.missing=Fingerprint was missing from the jar, this mod could have been tampered with!
+warning.no_tile_entity=I don't have a tile entity :(
+warning.tank.dismantle_loss=Dismantling this tank block will destroy the tanks' contents. You must break it with a pickaxe.
+warning.multiblock.tank.destructive_assimilation_check=WARNING: A check occurred which is usually the precursor to two tanks with contents being joined. Don't try to join two tanks with contents in them!
+warning.multiblock.part.double_adding=[%s] Controller %s is double-adding part %d @ %s. This is unusual. If you encounter odd behavior, please tear down the machine and rebuild it.
+warning.multiblock.part.double_removing=[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. If you encounter anomalies, please tear down the reactor and rebuild it.
+warning.multiblock.consuming.same_reference_coordinate=[%s] Encountered two controllers with the same reference coordinate. Auditing connected parts and retrying.
+warning.multiblock.audit=[%s] Controller found %d dead parts during an audit, %d parts remain attached
+warning.multiblock.controller.dead_but_world_not_tracked=Controller %d in world %s marked as dead, but that world is not tracked! Controller is being ignored.
+warning.multiblock.tank.null_controller_assembly=Tank part at (%d, %d, %d) is being assembled without being attached to a tank. Attempting to auto-heal. Fully destroying and re-building this tank is recommended if errors persist.
+
+# Asserts
+assert.multiblock.part.detached=[assert] Part @ (%d, %d, %d) should be detached already, but detected that it was not. This is not a fatal error, and will be repaired, but is unusual.
+
+# Errors
+error.fingerprint.tampered=Fingerprint doesn't match - this mod has been tampered with!
+error.config.general.load=Failed to load general config
+error.config.block.load=블럭 설정 로딩에 실패했습니다.
+error.config.item.load=아이템 설정 로딩에 실패했습니다.
+error.multiblock.tank.destructive_assimilation=주의: Two tanks were assimilated that both previously had contents. This should never happen. Please report this to the EnderTech mod author. The tank with the largest contents has been chosen.
+error.multiblock.consuming.different_classes=Attempting to merge two multiblocks with different master classes - this should never happen!
+error.multiblock.consuming.my_controller=My Controller (%d): size (%d), parts: %s
+error.multiblock.consuming.other_controller=Other Controller (%d): size (%d), coords: %s
+error.multiblock.consuming.same_reference_coordinate=[%s] Two controllers with the same reference coord that somehow both have valid parts - this should never happen!
+error.multiblock.tickend.merge_pool=Multiblock system checked a merge pool of size %d, found no master candidates. This should never happen.
+error.multiblock.tickend.non_empty_controller=Found a non-empty controller. Forcing it to shed its blocks and die. This should never happen!
+
+# Info
+info.postinit.recipes=Registering recipes
+info.multiblock.construction.last_failure_reason.pre=Last reason for not being able to assemble:
+info.multiblock.construction.no_controller=Block is not connected to a tank. This could be due to lag, or a bug. If the problem persists, try breaking and re-placing the block.
+info.multiblock.tank.connecting_destructive=Someone tried to connect two previously formed tanks at %s - stopping them.
+info.charge=충전량: %s
+info.charge.receive=수신량: %s
+info.sent=발신량: %s
+info.exchanger.source=소스블럭: %s
+info.exchanger.shift_to_select_source=Use while sneaking to choose source.
+info.exchanger.radius=반지름: %s
+info.multiblock.part.unsuitable.frame=%d, %d, %d - Block is not valid for use in the machine's frame
+info.multiblock.part.unsuitable.top=%d, %d, %d - Block is not valid for use in the machine's top
+info.multiblock.part.unsuitable.bottom=%d, %d, %d - Block is not valid for use in the machine's bottom
+info.multiblock.part.unsuitable.sides=%d, %d, %d - Block is not valid for use in the machine's sides
+info.multiblock.part.unsuitable.interior=%d, %d, %d - Block is not valid for use in the machine's interior
+info.multiblock.assembled_status=Assembled:
+info.multiblock.not_assembled=Not assembled
+info.multiblock.rectangular.dimensions_wrong=Machine is too %s, it may be at %s %d blocks in the %s dimension
+info.multiblock.rectangular.part_not_compatible=Part @ %d, %d, %d is incompatible with machines of type %s
+info.hold_for_details.hold=홀드
+info.hold_for_details.shift=Shift
+info.hold_for_details.for_details=더 자세한 정보
+info.infinite=무한
+info.active=활성화
+info.inactive=비활성화
+info.multiblock.tank.part.unsuitable.frame=%d, %d, %d - Only frames may be used as part of a tank's frame
+info.multiblock.tank.part.unsuitable.top=%d, %d, %d - This part is not suitable for the tank's top face
+info.multiblock.tank.part.unsuitable.bottom=%d, %d, %d - This part is not suitable for the tank's bottom face
+info.multiblock.tank.part.unsuitable.interior=%d, %d, %d - The interior of the tank must be hollow
+
+# GUI
+gui.exchanger.radius=반지름: %s
+gui.exchanger.radius.infinite=무한
