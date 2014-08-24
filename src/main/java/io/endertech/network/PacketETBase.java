@@ -160,6 +160,21 @@ public abstract class PacketETBase extends PacketBase
         return this;
     }
 
+    public PacketETBase addInventory(ItemStack[] itemStacks)
+    {
+        try
+        {
+            for (ItemStack itemStack : itemStacks)
+            {
+                writeItemStack(itemStack);
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
     public PacketETBase addFluidStack(FluidStack theStack)
     {
         try
@@ -307,6 +322,24 @@ public abstract class PacketETBase extends PacketBase
             e.printStackTrace();
             return null;
         }
+    }
+
+    public ItemStack[] getInventory(int count)
+    {
+        ItemStack[] itemStacks = new ItemStack[count];
+        try
+        {
+            for (int i = 0; i < count; i++)
+            {
+                itemStacks[i] = readItemStack();
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return itemStacks;
     }
 
     public FluidStack getFluidStack()

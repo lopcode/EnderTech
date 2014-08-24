@@ -3,12 +3,15 @@ package io.endertech.block;
 import cofh.lib.util.helpers.ServerHelper;
 import io.endertech.EnderTech;
 import io.endertech.tile.TileET;
+import io.endertech.tile.TileInventory;
 import io.endertech.util.helper.WorldHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -34,13 +37,28 @@ public class BlockET extends Block
 
         ItemStack drop = new ItemStack(block, 1, block.damageDropped(meta));
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-
         drops.add(drop);
+
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile != null && tile instanceof TileInventory)
+        {
+            TileInventory tileInventory = (TileInventory)tile;
+
+            for (ItemStack itemStack : tileInventory.inventory)
+            {
+                if (itemStack != null)
+                    drops.add(itemStack);
+            }
+        }
+
         world.setBlockToAir(x, y, z);
 
         if (!returnDrops)
         {
-            WorldHelper.spawnItemInWorldWithRandomness(drop, world, 0.3F, x, y, z, 2);
+            for (ItemStack itemStack : drops)
+            {
+                WorldHelper.spawnItemInWorldWithRandomness(itemStack, world, 0.3F, x, y, z, 2);
+            }
         }
 
         return drops;

@@ -4,6 +4,7 @@ import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyStorage;
 import cofh.api.tileentity.IReconfigurableFacing;
+import cofh.lib.util.helpers.EnergyHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -19,6 +20,7 @@ import io.endertech.reference.Strings;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
 import io.endertech.util.helper.LocalisationHelper;
+import io.endertech.util.helper.NBTHelper;
 import io.endertech.util.helper.RenderHelper;
 import io.endertech.util.helper.StringHelper;
 import net.minecraft.block.Block;
@@ -27,6 +29,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,13 +40,21 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
-public class TileChargePad extends TileET implements IReconfigurableFacing, IEnergyHandler, IOutlineDrawer, IEnergyStorage
+public class TileChargePad extends TileInventory implements IReconfigurableFacing, IEnergyHandler, IOutlineDrawer, IChargeableFromSlot
 {
     public static final short TICKS_PER_UPDATE = 20;
     public short ticksSinceLastUpdate = 0;
     public boolean isActive = false;
     public int storedEnergy = 0;
     public int sentPower = 0;
+
+    public TileChargePad()
+    {
+        super();
+
+        this.tileName = "Charge Pad";
+        this.inventory = new ItemStack[1];
+    }
 
     public static void init()
     {
@@ -56,6 +67,11 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         super.readFromNBT(nbtTagCompound);
 
         if (nbtTagCompound.hasKey("Energy")) this.storedEnergy = nbtTagCompound.getInteger("Energy");
+
+        if (nbtTagCompound.hasKey("Inventory"))
+        {
+            this.inventory = NBTHelper.readInventoryFromNBT(nbtTagCompound, 1);
+        }
     }
 
     @Override
@@ -64,6 +80,7 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         super.writeToNBT(nbtTagCompound);
 
         nbtTagCompound.setInteger("Energy", this.storedEnergy);
+        NBTHelper.writeInventoryToNBT(nbtTagCompound, this.inventory);
     }
 
     @Override
@@ -79,6 +96,7 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         packet.addBool(this.isActive);
         packet.addInt(this.storedEnergy);
         packet.addInt(this.sentPower);
+        packet.addInventory(this.inventory);
 
         return packet;
     }
@@ -91,12 +109,14 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         boolean isActive = tilePacket.getBool();
         int storedEnergy = tilePacket.getInt();
         int sentPower = tilePacket.getInt();
+        ItemStack[] inventory = tilePacket.getInventory(1);
 
         if (!isServer)
         {
             this.isActive = isActive;
             this.storedEnergy = storedEnergy;
             this.sentPower = sentPower;
+            this.inventory = inventory;
         }
     }
 
@@ -242,6 +262,8 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
                 }
             }
 
+            this.chargeFromGUISlot();
+
             boolean shouldSendUpdate = false;
             shouldSendUpdate = shouldSendUpdate || (this.isActive != oldActive);
 
@@ -322,15 +344,7 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
         boolean canReceive = from != this.getOrientation();
         if (!canReceive) return 0;
 
-        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        int energyReceived = Math.min(BlockChargePad.getMaxEnergyStored(blockMeta) - this.storedEnergy, Math.min(BlockChargePad.getMaxReceiveRate(blockMeta), maxReceive));
-
-        if (!simulate)
-        {
-            this.storedEnergy += energyReceived;
-        }
-
-        return energyReceived;
+        return this.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
@@ -447,7 +461,15 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate)
     {
-        return 0;
+        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        int energyReceived = Math.min(BlockChargePad.getMaxEnergyStored(blockMeta) - this.storedEnergy, Math.min(BlockChargePad.getMaxReceiveRate(blockMeta), maxReceive));
+
+        if (!simulate)
+        {
+            this.storedEnergy += energyReceived;
+        }
+
+        return energyReceived;
     }
 
     @Override
@@ -506,5 +528,33 @@ public class TileChargePad extends TileET implements IReconfigurableFacing, IEne
 
         if (this.isActive) return blockChargePad.activeIcons[blockMeta];
         else return blockChargePad.inactiveIcons[blockMeta];
+    }
+
+    public int getChargeSlot()
+    {
+        return this.inventory.length - 1;
+    }
+
+    public boolean hasChargeSlot() { return true; }
+
+    public void chargeFromGUISlot()
+    {
+        int chargeSlot = getChargeSlot();
+        ItemStack chargeItemStack = this.inventory[chargeSlot];
+        if (!this.hasChargeSlot() || !EnergyHelper.isEnergyContainerItem(chargeItemStack))
+            return;
+
+        int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        int chargeAmount = Math.min(BlockChargePad.getMaxReceiveRate(meta), BlockChargePad.getMaxEnergyStored(meta) - this.getEnergyStored());
+
+        IEnergyContainerItem energyContainerItem = (IEnergyContainerItem) chargeItemStack.getItem();
+        if (energyContainerItem == null)
+            return;
+
+        int extractedAmount = energyContainerItem.extractEnergy(chargeItemStack, chargeAmount, false);
+        this.receiveEnergy(extractedAmount, false);
+
+        if (chargeItemStack.stackSize <= 0)
+            this.inventory[chargeSlot] = null;
     }
 }

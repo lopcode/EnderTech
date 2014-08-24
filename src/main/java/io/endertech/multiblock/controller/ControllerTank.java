@@ -1,6 +1,10 @@
 package io.endertech.multiblock.controller;
 
+import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyStorage;
+import cofh.lib.util.helpers.EnergyHelper;
+import cofh.lib.util.helpers.ServerHelper;
+import io.endertech.block.BlockET;
 import io.endertech.config.GeneralConfig;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
@@ -13,14 +17,15 @@ import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.multiblock.tile.TileTankValve;
 import io.endertech.network.ITilePacketHandler;
 import io.endertech.network.PacketETBase;
+import io.endertech.tile.IChargeableFromSlot;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
-import io.endertech.util.helper.LocalisationHelper;
-import io.endertech.util.helper.LogHelper;
-import io.endertech.util.helper.RenderHelper;
-import io.endertech.util.helper.StringHelper;
+import io.endertech.util.helper.*;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -32,10 +37,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import java.util.*;
 
-public class ControllerTank extends RectangularMultiblockControllerBase implements IOutlineDrawer, ITilePacketHandler, IEnergyStorage
+public class ControllerTank extends RectangularMultiblockControllerBase implements IOutlineDrawer, ITilePacketHandler, IEnergyStorage, IChargeableFromSlot, IInventory
 {
     protected boolean active;
-    private Set<TileTankPart> attachedControllers;
+    private Set<TileTankController> attachedControllers;
     private Set<TileTankValve> attachedValves;
     private Set<TileTankEnergyInput> attachedEnergyInputs;
     private int storedEnergy = 0;
@@ -52,11 +57,13 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     {
         super(world);
         active = false;
-        attachedControllers = new HashSet<TileTankPart>();
+        attachedControllers = new HashSet<TileTankController>();
         attachedValves = new HashSet<TileTankValve>();
         attachedEnergyInputs = new HashSet<TileTankEnergyInput>();
         tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * GeneralConfig.tankStorageMultiplier);
         lastTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * GeneralConfig.tankStorageMultiplier);
+
+        this.inventory = new ItemStack[1];
     }
 
     public void setRandomNumber(int newRandomNumber)
@@ -102,7 +109,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
             TileTankPart tankPart = (TileTankPart) newPart;
             if (BlockTankController.isController(tankPart.getBlockMetadata()))
             {
-                attachedControllers.add(tankPart);
+                attachedControllers.add((TileTankController) tankPart);
             }
         }
 
@@ -197,6 +204,26 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     @Override
     protected void onMachineDisassembled()
     {
+        if(ServerHelper.isServerWorld(this.worldObj))
+        {
+            TileTankController tankController = this.attachedControllers.iterator().next();
+            if (tankController != null)
+            {
+                ForgeDirection out = tankController.getFirstOutwardsDir();
+                if (out == null) out = tankController.getOrientation();
+
+                for (ItemStack itemStack : this.inventory)
+                {
+                    if (itemStack != null)
+                    {
+                        WorldHelper.spawnItemInWorldWithRandomness(itemStack, tankController.getWorldObj(), 0.3F, tankController.xCoord + out.offsetX, tankController.yCoord + out.offsetY, tankController.zCoord + out.offsetZ, 2);
+                    }
+                }
+
+                this.inventory = new ItemStack[this.inventory.length];
+            }
+        }
+
         this.setActive(false);
         //        LogHelper.info("Tank disassembled");
     }
@@ -288,6 +315,8 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
             return true;
         }
 
+        this.chargeFromGUISlot();
+
         ticksSinceUpdate++;
         return false;
     }
@@ -304,6 +333,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         NBTTagCompound tankNBT = new NBTTagCompound();
         tank.writeToNBT(tankNBT);
         data.setTag(TANK_NAME, tankNBT);
+        NBTHelper.writeInventoryToNBT(data, this.inventory);
 
         //        LogHelper.info("Writing tank to NBT: " + this.toString());
     }
@@ -349,6 +379,11 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         {
             this.storedEnergy = data.getInteger("storedEnergy");
         }
+
+        if (data.hasKey("Inventory"))
+        {
+            this.inventory = NBTHelper.readInventoryFromNBT(data, 1);
+        }
     }
 
     @Override
@@ -357,6 +392,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         packetSaveDelegateBase.addInt(this.random_number);
         packetSaveDelegateBase.addFluidStack(this.tank.getFluid());
         packetSaveDelegateBase.addInt(this.storedEnergy);
+        packetSaveDelegateBase.addInventory(this.inventory);
 
         return packetSaveDelegateBase;
     }
@@ -367,6 +403,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         int random_number = packetETBase.getInt();
         FluidStack fluidStack = packetETBase.getFluidStack();
         int storedEnergy = packetETBase.getInt();
+        ItemStack[] inventory = packetETBase.getInventory(1);
 
         if (!isServer)
         {
@@ -375,6 +412,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
             this.renderAddition = 0;
             this.tank.setFluid(fluidStack);
             this.storedEnergy = storedEnergy;
+            this.inventory = inventory;
         }
     }
 
@@ -446,16 +484,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
 
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
     {
-        int energy = this.getStoredEnergy();
-        int energyReceived = Math.min(ControllerTank.MAX_ENERGY_STORAGE - energy, Math.min(TileTankEnergyInput.MAX_INPUT_RATE, maxReceive));
-
-        if (!simulate)
-        {
-            energy += energyReceived;
-            this.setStoredEnergy(energy);
-        }
-
-        return energyReceived;
+        return this.receiveEnergy(maxReceive, simulate);
     }
 
     public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
@@ -523,7 +552,16 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate)
     {
-        return 0;
+        int energy = this.getStoredEnergy();
+        int energyReceived = Math.min(ControllerTank.MAX_ENERGY_STORAGE - energy, Math.min(TileTankEnergyInput.MAX_INPUT_RATE, maxReceive));
+
+        if (!simulate)
+        {
+            energy += energyReceived;
+            this.setStoredEnergy(energy);
+        }
+
+        return energyReceived;
     }
 
     @Override
@@ -542,5 +580,143 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     public int getMaxEnergyStored()
     {
         return ControllerTank.MAX_ENERGY_STORAGE;
+    }
+
+    // INVENTORY
+
+    public ItemStack[] inventory;
+
+    @Override
+    public int getSizeInventory()
+    {
+        return this.inventory.length;
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int slot)
+    {
+        return this.inventory[slot];
+    }
+
+    @Override
+    public ItemStack decrStackSize(int slot, int amount)
+    {
+        if (this.inventory[slot] == null)
+            return null;
+
+        if (this.inventory[slot].stackSize <= amount)
+            amount = this.inventory[slot].stackSize;
+
+        ItemStack itemStack = this.inventory[slot].splitStack(amount);
+
+        if (this.inventory[slot].stackSize <= 0)
+            this.inventory[slot] = null;
+
+        return itemStack;
+    }
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int slot)
+    {
+        if (this.inventory[slot] == null)
+            return null;
+
+        ItemStack itemStack = this.inventory[slot];
+        this.inventory[slot] = null;
+
+        return itemStack;
+    }
+
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack itemStack)
+    {
+        this.inventory[slot] = itemStack;
+
+        int inventoryStackLimit = this.getInventoryStackLimit();
+        if (itemStack != null && itemStack.stackSize > inventoryStackLimit)
+            itemStack.stackSize = inventoryStackLimit;
+
+        // TODO: Mark save delegate chunk as dirty
+    }
+
+    @Override
+    public String getInventoryName()
+    {
+        return this.getName();
+    }
+
+    @Override
+    public boolean hasCustomInventoryName()
+    {
+        return !this.getName().isEmpty();
+    }
+
+    @Override
+    public int getInventoryStackLimit()
+    {
+        return 64;
+    }
+
+    @Override
+    public void markDirty()
+    {
+
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player)
+    {
+        return true;
+    }
+
+    @Override
+    public void openInventory()
+    {
+
+    }
+
+    @Override
+    public void closeInventory()
+    {
+
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack itemStack)
+    {
+        return true;
+    }
+
+    @Override
+    public int getChargeSlot()
+    {
+        return this.inventory.length - 1;
+    }
+
+    @Override
+    public boolean hasChargeSlot()
+    {
+        return true;
+    }
+
+    @Override
+    public void chargeFromGUISlot()
+    {
+        int chargeSlot = getChargeSlot();
+        ItemStack chargeItemStack = this.inventory[chargeSlot];
+        if (!this.hasChargeSlot() || !EnergyHelper.isEnergyContainerItem(chargeItemStack))
+            return;
+
+        int chargeAmount = Math.min(TileTankEnergyInput.MAX_INPUT_RATE, ControllerTank.MAX_ENERGY_STORAGE - this.getEnergyStored());
+
+        IEnergyContainerItem energyContainerItem = (IEnergyContainerItem) chargeItemStack.getItem();
+        if (energyContainerItem == null)
+            return;
+
+        int extractedAmount = energyContainerItem.extractEnergy(chargeItemStack, chargeAmount, false);
+        this.receiveEnergy(extractedAmount, false);
+
+        if (chargeItemStack.stackSize <= 0)
+            this.inventory[chargeSlot] = null;
     }
 }
