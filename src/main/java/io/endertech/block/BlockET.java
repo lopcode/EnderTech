@@ -9,7 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -42,12 +41,11 @@ public class BlockET extends Block
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile != null && tile instanceof TileInventory)
         {
-            TileInventory tileInventory = (TileInventory)tile;
+            TileInventory tileInventory = (TileInventory) tile;
 
             for (ItemStack itemStack : tileInventory.inventory)
             {
-                if (itemStack != null)
-                    drops.add(itemStack);
+                if (itemStack != null) drops.add(itemStack);
             }
         }
 

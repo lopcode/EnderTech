@@ -1,10 +1,12 @@
 package io.endertech.multiblock.block;
 
 import cofh.api.block.IDismantleable;
+import cofh.lib.util.helpers.ServerHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
 import io.endertech.block.BlockET;
+import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.multiblock.tile.TileTankController;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.reference.Strings;
@@ -141,6 +143,16 @@ public class BlockTankController extends BlockET implements ITileEntityProvider,
     @Override
     public ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops)
     {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile != null && tile instanceof TileTankController && ServerHelper.isServerWorld(world))
+        {
+            TileTankController tileTankController = (TileTankController) tile;
+            ControllerTank controller = tileTankController.getTankController();
+            if (controller != null && controller.isAssembled())
+            {
+                controller.popInventoryContentsOut(world, x, y, z);
+            }
+        }
         return dismantleBlockInWorld(player, world, x, y, z, returnDrops);
     }
 

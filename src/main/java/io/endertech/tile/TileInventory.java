@@ -23,16 +23,13 @@ public class TileInventory extends TileET implements IInventory
     @Override
     public ItemStack decrStackSize(int slot, int amount)
     {
-        if (this.inventory[slot] == null)
-            return null;
+        if (this.inventory[slot] == null) return null;
 
-        if (this.inventory[slot].stackSize <= amount)
-            amount = this.inventory[slot].stackSize;
+        if (this.inventory[slot].stackSize <= amount) amount = this.inventory[slot].stackSize;
 
         ItemStack itemStack = this.inventory[slot].splitStack(amount);
 
-        if (this.inventory[slot].stackSize <= 0)
-            this.inventory[slot] = null;
+        if (this.inventory[slot].stackSize <= 0) this.inventory[slot] = null;
 
         return itemStack;
     }
@@ -40,8 +37,7 @@ public class TileInventory extends TileET implements IInventory
     @Override
     public ItemStack getStackInSlotOnClosing(int slot)
     {
-        if (this.inventory[slot] == null)
-            return null;
+        if (this.inventory[slot] == null) return null;
 
         ItemStack itemStack = this.inventory[slot];
         this.inventory[slot] = null;
@@ -55,8 +51,7 @@ public class TileInventory extends TileET implements IInventory
         this.inventory[slot] = itemStack;
 
         int inventoryStackLimit = this.getInventoryStackLimit();
-        if (itemStack != null && itemStack.stackSize > inventoryStackLimit)
-            itemStack.stackSize = inventoryStackLimit;
+        if (itemStack != null && itemStack.stackSize > inventoryStackLimit) itemStack.stackSize = inventoryStackLimit;
 
         this.worldObj.markTileEntityChunkModified(this.xCoord, this.yCoord, this.zCoord, this);
     }

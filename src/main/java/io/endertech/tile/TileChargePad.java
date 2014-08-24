@@ -2,7 +2,6 @@ package io.endertech.tile;
 
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyStorage;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.lib.util.helpers.EnergyHelper;
 import cofh.lib.util.helpers.ServerHelper;
@@ -29,7 +28,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -541,20 +539,17 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
     {
         int chargeSlot = getChargeSlot();
         ItemStack chargeItemStack = this.inventory[chargeSlot];
-        if (!this.hasChargeSlot() || !EnergyHelper.isEnergyContainerItem(chargeItemStack))
-            return;
+        if (!this.hasChargeSlot() || !EnergyHelper.isEnergyContainerItem(chargeItemStack)) return;
 
         int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
         int chargeAmount = Math.min(BlockChargePad.getMaxReceiveRate(meta), BlockChargePad.getMaxEnergyStored(meta) - this.getEnergyStored());
 
         IEnergyContainerItem energyContainerItem = (IEnergyContainerItem) chargeItemStack.getItem();
-        if (energyContainerItem == null)
-            return;
+        if (energyContainerItem == null) return;
 
         int extractedAmount = energyContainerItem.extractEnergy(chargeItemStack, chargeAmount, false);
         this.receiveEnergy(extractedAmount, false);
 
-        if (chargeItemStack.stackSize <= 0)
-            this.inventory[chargeSlot] = null;
+        if (chargeItemStack.stackSize <= 0) this.inventory[chargeSlot] = null;
     }
 }

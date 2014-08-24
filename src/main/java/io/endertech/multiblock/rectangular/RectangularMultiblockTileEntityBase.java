@@ -29,10 +29,8 @@ public abstract class RectangularMultiblockTileEntityBase extends MultiblockTile
 
     public ForgeDirection getFirstOutwardsDir()
     {
-        if (outwards == null || outwards.isEmpty())
-            return null;
-        else
-            return outwards.iterator().next();
+        if (outwards == null || outwards.isEmpty()) return null;
+        else return outwards.iterator().next();
     }
 
     public PartPosition getPartPosition()

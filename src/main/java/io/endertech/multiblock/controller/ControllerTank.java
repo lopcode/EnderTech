@@ -4,7 +4,6 @@ import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyStorage;
 import cofh.lib.util.helpers.EnergyHelper;
 import cofh.lib.util.helpers.ServerHelper;
-import io.endertech.block.BlockET;
 import io.endertech.config.GeneralConfig;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
@@ -201,26 +200,34 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         //        LogHelper.info("Tank paused");
     }
 
+    public void popInventoryContentsOut(World world, int x, int y, int z)
+    {
+        for (ItemStack itemStack : this.inventory)
+        {
+            if (itemStack != null)
+            {
+                WorldHelper.spawnItemInWorldWithRandomness(itemStack, world, 0.3F, x, y, z, 2);
+            }
+        }
+
+        this.inventory = new ItemStack[this.inventory.length];
+    }
+
     @Override
     protected void onMachineDisassembled()
     {
-        if(ServerHelper.isServerWorld(this.worldObj))
+        if (ServerHelper.isServerWorld(this.worldObj))
         {
-            TileTankController tankController = this.attachedControllers.iterator().next();
-            if (tankController != null)
+            if (this.attachedControllers.size() > 0)
             {
-                ForgeDirection out = tankController.getFirstOutwardsDir();
-                if (out == null) out = tankController.getOrientation();
-
-                for (ItemStack itemStack : this.inventory)
+                TileTankController tankController = this.attachedControllers.iterator().next();
+                if (tankController != null)
                 {
-                    if (itemStack != null)
-                    {
-                        WorldHelper.spawnItemInWorldWithRandomness(itemStack, tankController.getWorldObj(), 0.3F, tankController.xCoord + out.offsetX, tankController.yCoord + out.offsetY, tankController.zCoord + out.offsetZ, 2);
-                    }
-                }
+                    ForgeDirection out = tankController.getFirstOutwardsDir();
+                    if (out == null) out = tankController.getOrientation();
 
-                this.inventory = new ItemStack[this.inventory.length];
+                    this.popInventoryContentsOut(tankController.getWorldObj(), tankController.xCoord + out.offsetX, tankController.yCoord + out.offsetY, tankController.zCoord + out.offsetZ);
+                }
             }
         }
 
@@ -601,16 +608,13 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     @Override
     public ItemStack decrStackSize(int slot, int amount)
     {
-        if (this.inventory[slot] == null)
-            return null;
+        if (this.inventory[slot] == null) return null;
 
-        if (this.inventory[slot].stackSize <= amount)
-            amount = this.inventory[slot].stackSize;
+        if (this.inventory[slot].stackSize <= amount) amount = this.inventory[slot].stackSize;
 
         ItemStack itemStack = this.inventory[slot].splitStack(amount);
 
-        if (this.inventory[slot].stackSize <= 0)
-            this.inventory[slot] = null;
+        if (this.inventory[slot].stackSize <= 0) this.inventory[slot] = null;
 
         return itemStack;
     }
@@ -618,8 +622,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     @Override
     public ItemStack getStackInSlotOnClosing(int slot)
     {
-        if (this.inventory[slot] == null)
-            return null;
+        if (this.inventory[slot] == null) return null;
 
         ItemStack itemStack = this.inventory[slot];
         this.inventory[slot] = null;
@@ -633,8 +636,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         this.inventory[slot] = itemStack;
 
         int inventoryStackLimit = this.getInventoryStackLimit();
-        if (itemStack != null && itemStack.stackSize > inventoryStackLimit)
-            itemStack.stackSize = inventoryStackLimit;
+        if (itemStack != null && itemStack.stackSize > inventoryStackLimit) itemStack.stackSize = inventoryStackLimit;
 
         // TODO: Mark save delegate chunk as dirty
     }
@@ -704,19 +706,16 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     {
         int chargeSlot = getChargeSlot();
         ItemStack chargeItemStack = this.inventory[chargeSlot];
-        if (!this.hasChargeSlot() || !EnergyHelper.isEnergyContainerItem(chargeItemStack))
-            return;
+        if (!this.hasChargeSlot() || !EnergyHelper.isEnergyContainerItem(chargeItemStack)) return;
 
         int chargeAmount = Math.min(TileTankEnergyInput.MAX_INPUT_RATE, ControllerTank.MAX_ENERGY_STORAGE - this.getEnergyStored());
 
         IEnergyContainerItem energyContainerItem = (IEnergyContainerItem) chargeItemStack.getItem();
-        if (energyContainerItem == null)
-            return;
+        if (energyContainerItem == null) return;
 
         int extractedAmount = energyContainerItem.extractEnergy(chargeItemStack, chargeAmount, false);
         this.receiveEnergy(extractedAmount, false);
 
-        if (chargeItemStack.stackSize <= 0)
-            this.inventory[chargeSlot] = null;
+        if (chargeItemStack.stackSize <= 0) this.inventory[chargeSlot] = null;
     }
 }
