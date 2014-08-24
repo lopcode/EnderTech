@@ -21,14 +21,14 @@ public class GeneralConfig
         {
             generalConfig.load();
 
-            tankStorageMultiplier = generalConfig.get("tank", "Tank.StorageMultiplier", 64).getInt(64);
+            tankStorageMultiplier = generalConfig.get("tank", "Tank.StorageMultiplier", 128).getInt(128);
             if (tankStorageMultiplier < 1)
             {
                 tankStorageMultiplier = 1;
             }
-            if (tankStorageMultiplier > 128)
+            if (tankStorageMultiplier > 1024)
             {
-                tankStorageMultiplier = 128;
+                tankStorageMultiplier = 1024;
             }
 
             debugRender = generalConfig.get("rendering", "Rendering.Debug", false).getBoolean(false);
