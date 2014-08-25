@@ -16,6 +16,7 @@ import io.endertech.gui.client.GuiChargePad;
 import io.endertech.gui.container.ContainerChargePad;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
+import io.endertech.util.IChargeableFromSlot;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
 import io.endertech.util.helper.LocalisationHelper;
@@ -292,9 +293,17 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
 
         for (int particle = this.getParticleCount(meta); particle > 0; particle--)
         {
-            double x = this.xCoord + (0.5F * orientation.offsetX) + (rand.nextFloat() * 0.8) + 0.1;
-            double y = this.yCoord + (0.5F * orientation.offsetY) + (rand.nextFloat() * 0.8) + 0.1;
-            double z = this.zCoord + (0.5F * orientation.offsetZ) + (rand.nextFloat() * 0.8) + 0.1;
+            double xSign = (rand.nextBoolean() ? -1 : 1);
+            double ySign = (rand.nextBoolean() ? -1 : 1);
+            double zSign = (rand.nextBoolean() ? -1 : 1);
+
+            double xAddition = xSign * (rand.nextDouble() * 0.3) + (0.05 * xSign);
+            double yAddition = ySign * (rand.nextDouble() * 0.3) + (0.05 * ySign);
+            double zAddition = zSign * (rand.nextDouble() * 0.3) + (0.05 * zSign);
+
+            double x = this.xCoord + (0.5F * orientation.offsetX) + 0.5 + xAddition;// + (rand.nextFloat() * 0.8) + 0.1;
+            double y = this.yCoord + (0.5F * orientation.offsetY) + 0.5 + yAddition;// + (rand.nextFloat() * 0.8) + 0.1;
+            double z = this.zCoord + (0.5F * orientation.offsetZ) + 0.5 + zAddition;// + (rand.nextFloat() * 0.8) + 0.1;
             double[] velocity = getParticleVelocity();
 
             float[] colour = getParticleColour(rand);
@@ -429,17 +438,17 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
     @SideOnly(Side.CLIENT)
     protected int getParticleCount(int meta)
     {
-        if (meta == 0) return 6;
-        else if (meta == 2) return 3;
-        else return 2;
+        if (meta == 0) return 5;
+        else if (meta == 2) return 2;
+        else return 1;
     }
 
     @SideOnly(Side.CLIENT)
     protected float getParticleSizeModifier(int meta)
     {
         if (meta == 0) return 2.0F;
-        else if (meta == 2) return 1.5F;
-        else return 1.0F;
+        else if (meta == 2) return 1.75F;
+        else return 1.5F;
     }
 
     @Override

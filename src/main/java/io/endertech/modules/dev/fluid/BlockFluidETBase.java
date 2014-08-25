@@ -10,7 +10,7 @@ public class BlockFluidETBase extends BlockFluidClassic
 
     public BlockFluidETBase(Fluid fluid, Material material, String name)
     {
-        super(fluid, material);
+        super(fluid, DevETFluids.materialFluidChargedEnder);
 
         this.name = name;
     }

@@ -1,4 +1,4 @@
-package io.endertech.tile;
+package io.endertech.util;
 
 import cofh.api.energy.IEnergyStorage;
 

@@ -27,8 +27,9 @@ public class EntityChargePadFX extends EntityFX
         this.particleGreen = colour[1];
         this.particleBlue = colour[2];
         setParticleTextureIndex(0);
-        setSize(0.02F * sizeModifier, 0.02F * sizeModifier);
-        this.particleScale *= (this.rand.nextFloat() * 0.1F) + 1.0F;
+        setSize(sizeModifier, sizeModifier);
+        this.particleScale = 2F;
+        this.particleScale += (this.rand.nextFloat() * 0.2F);
         this.particleMaxAge = ((int) (maxAge / (Math.random() * 0.8D + 0.2D)));
         this.noClip = true;
     }
