@@ -9,6 +9,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.endertech.EnderTech;
 import io.endertech.block.BlockChargePad;
 import io.endertech.config.GeneralConfig;
 import io.endertech.fx.EntityChargePadFX;
@@ -37,7 +38,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class TileChargePad extends TileInventory implements IReconfigurableFacing, IEnergyHandler, IOutlineDrawer, IChargeableFromSlot
 {
@@ -426,12 +429,49 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
         return new double[] {orientation.offsetX * 0.15D, orientation.offsetY * 0.15D, orientation.offsetZ * 0.15D};
     }
 
+    private boolean isItemInChargeSlotTuberous()
+    {
+        int slot = this.getChargeSlot();
+        ItemStack itemStack = this.inventory[slot];
+        if (itemStack == null) return false;
+
+        Item item = itemStack.getItem();
+        if (item == null) return false;
+
+        if (item == EnderTech.capacitor && itemStack.getItemDamage() == 1) return true;
+
+        return false;
+    }
+
     @SideOnly(Side.CLIENT)
     protected float[] getParticleColour(Random rand)
     {
+        if (this.isItemInChargeSlotTuberous()) return getRainbowParticleColour(rand);
+
         float r = 1.0F;
         float g = 0F + (rand.nextFloat() * 0.25F);
         float b = 0F + (rand.nextFloat() * 0.25F);
+        return new float[] {r, g, b};
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected float[] getRainbowParticleColour(Random rand)
+    {
+        int R = (int) (Math.random() * 256);
+        int G = (int) (Math.random() * 256);
+        int B = (int) (Math.random() * 256);
+        Color color = new Color(R, G, B);
+
+        Random random = new Random();
+        final float hue = random.nextFloat();
+        final float saturation = 0.9f;
+        final float luminance = 1.0f;
+        color = Color.getHSBColor(hue, saturation, luminance);
+
+        float r = color.getRed() / 255.0F;
+        float g = color.getBlue() / 255.0F;
+        float b = color.getGreen() / 255.0F;
+
         return new float[] {r, g, b};
     }
 

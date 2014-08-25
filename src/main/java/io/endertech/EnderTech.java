@@ -33,6 +33,7 @@ import io.endertech.util.helper.ModuleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.MinecraftForge;
@@ -53,6 +54,8 @@ public class EnderTech
     public static boolean loadDevModeContent = false;
 
     public static final GuiHandler guiHandler = new GuiHandler();
+
+    public static Item capacitor;
 
     @EventHandler
     @SuppressWarnings("unused")
@@ -167,6 +170,7 @@ public class EnderTech
         {
             ItemStack capacitorReinforced = GameRegistry.findItemStack("ThermalExpansion", "capacitorReinforced", 1);
             ItemStack capacitorResonant = GameRegistry.findItemStack("ThermalExpansion", "capacitorResonant", 1);
+            capacitor = capacitorResonant.getItem();
             ItemStack powerCoilElectrumStack = GameRegistry.findItemStack("ThermalExpansion", "powerCoilElectrum", 1);
             ItemStack tesseract = new ItemStack(GameRegistry.findBlock("ThermalExpansion", "Tesseract"));
             ItemStack enderiumIngot = GameRegistry.findItemStack("ThermalFoundation", "ingotEnderium", 1);
