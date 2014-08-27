@@ -184,6 +184,7 @@ public class EnderTech
 
             GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerRedstone, new Object[] {"XEX", "ITI", "XCX", 'E', enderEyeStack, 'I', electrumIngot, 'C', capacitorReinforced, 'T', tesseract}));
             GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerResonant, new Object[] {"XEX", "ITI", "XCX", 'E', enderEyeStack, 'I', enderiumIngot, 'C', capacitorResonant, 'T', tesseract}));
+            GameRegistry.addRecipe(new ShapedOreRecipe(ETItems.toolExchangerResonant, new Object[] {"XSX", "IEI", "XCX", 'S', enderEyeStack, 'E', ETItems.toolExchangerRedstone, 'I', enderiumIngot, 'C', capacitorResonant, 'T', tesseract}));
 
             ItemStack enderTankFrame = new ItemStack(BlockTankPart.itemBlockTankFrame.getItem(), 8, BlockTankPart.itemBlockTankFrame.getItemDamage());
             ItemStack enderTankEnergyInput = new ItemStack(BlockTankPart.itemBlockTankEnergyInput.getItem(), 8, BlockTankPart.itemBlockTankEnergyInput.getItemDamage());
