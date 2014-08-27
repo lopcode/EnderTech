@@ -79,7 +79,7 @@
         },
         {
             "mcCompat": [ "1.7.10" ],
-            "name": "0.2.0.301",
+            "name": "0.2.0.304",
             "installType": "forgeMod",
             "urls": [
                 {
