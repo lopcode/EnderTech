@@ -49,6 +49,7 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
     public boolean isActive = false;
     public int storedEnergy = 0;
     public int sentPower = 0;
+    public boolean isCreative = false;
 
     public TileChargePad()
     {
@@ -238,6 +239,7 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
     public void updateEntity()
     {
         int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        this.isCreative = (meta == 0);
 
         if (ServerHelper.isServerWorld(this.worldObj))
         {
@@ -304,9 +306,9 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
             double yAddition = ySign * (rand.nextDouble() * 0.3) + (0.05 * ySign);
             double zAddition = zSign * (rand.nextDouble() * 0.3) + (0.05 * zSign);
 
-            double x = this.xCoord + (0.5F * orientation.offsetX) + 0.5 + xAddition;// + (rand.nextFloat() * 0.8) + 0.1;
-            double y = this.yCoord + (0.5F * orientation.offsetY) + 0.5 + yAddition;// + (rand.nextFloat() * 0.8) + 0.1;
-            double z = this.zCoord + (0.5F * orientation.offsetZ) + 0.5 + zAddition;// + (rand.nextFloat() * 0.8) + 0.1;
+            double x = this.xCoord + (0.5F * orientation.offsetX) + 0.5 + xAddition;
+            double y = this.yCoord + (0.5F * orientation.offsetY) + 0.5 + yAddition;
+            double z = this.zCoord + (0.5F * orientation.offsetZ) + 0.5 + zAddition;
             double[] velocity = getParticleVelocity();
 
             float[] colour = getParticleColour(rand);

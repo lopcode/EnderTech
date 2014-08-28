@@ -28,7 +28,7 @@ public class GuiChargePad extends GuiETBase
     {
         super.initGui();
 
-        ElementETEnergyStored elementEnergyStored = new ElementETEnergyStored(this, 8, 8, this.tileChargePad);
+        ElementETEnergyStored elementEnergyStored = new ElementETEnergyStored(this, 8, 8, this.tileChargePad, tileChargePad.isCreative);
         this.addElement(elementEnergyStored);
 
         elementChargingIcon = new ElementIcon(this, 80, 30);
