@@ -278,5 +278,5 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
 
     public static final int[] RECEIVE = {0, 1 * 2000, 10 * 2000};
     public static final int[] SEND = {10 * 1000000, 1 * 2000, 10 * 2000};
-    public static final int[] CAPACITY = {Integer.MAX_VALUE, 1 * 2000000, 10 * 1000000};
+    public static final int[] CAPACITY = {-1, 1 * 2000000, 10 * 1000000};
 }

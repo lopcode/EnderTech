@@ -1,7 +1,7 @@
 package io.endertech.gui.client;
 
+import cofh.lib.gui.element.ElementEnergyStored;
 import io.endertech.gui.container.ContainerTank;
-import io.endertech.gui.element.ElementETEnergyStored;
 import io.endertech.gui.element.ElementFluidTankSizeable;
 import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.tile.TileET;
@@ -30,7 +30,7 @@ public class GuiTank extends GuiETBase
         ElementFluidTankSizeable elementFluidTank = new ElementFluidTankSizeable(this, 43, 27, 89, 42, this.tileTankPart.getTankController().tank);
         this.addElement(elementFluidTank);
 
-        ElementETEnergyStored elementEnergyStored = new ElementETEnergyStored(this, 8, 8, this.tileTankPart.getTankController(), false);
+        ElementEnergyStored elementEnergyStored = new ElementEnergyStored(this, 8, 8, this.tileTankPart.getTankController());
         this.addElement(elementEnergyStored);
     }
 }

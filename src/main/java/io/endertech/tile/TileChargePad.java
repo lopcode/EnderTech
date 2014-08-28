@@ -510,6 +510,8 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate)
     {
+        if (this.isCreative) return 0;
+
         int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
         int energyReceived = Math.min(BlockChargePad.getMaxEnergyStored(blockMeta) - this.storedEnergy, Math.min(BlockChargePad.getMaxReceiveRate(blockMeta), maxReceive));
 
@@ -588,6 +590,8 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
 
     public void chargeFromGUISlot()
     {
+        if (this.isCreative) return;
+
         int chargeSlot = getChargeSlot();
         ItemStack chargeItemStack = this.inventory[chargeSlot];
         if (!this.hasChargeSlot() || !EnergyHelper.isEnergyContainerItem(chargeItemStack)) return;

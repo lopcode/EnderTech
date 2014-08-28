@@ -1,7 +1,7 @@
 package io.endertech.gui.client;
 
+import cofh.lib.gui.element.ElementEnergyStored;
 import io.endertech.gui.container.ContainerChargePad;
-import io.endertech.gui.element.ElementETEnergyStored;
 import io.endertech.gui.element.ElementIcon;
 import io.endertech.tile.TileChargePad;
 import io.endertech.tile.TileET;
@@ -28,7 +28,7 @@ public class GuiChargePad extends GuiETBase
     {
         super.initGui();
 
-        ElementETEnergyStored elementEnergyStored = new ElementETEnergyStored(this, 8, 8, this.tileChargePad, tileChargePad.isCreative);
+        ElementEnergyStored elementEnergyStored = new ElementEnergyStored(this, 8, 8, this.tileChargePad);
         this.addElement(elementEnergyStored);
 
         elementChargingIcon = new ElementIcon(this, 80, 30);
