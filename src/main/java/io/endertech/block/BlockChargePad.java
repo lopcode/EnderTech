@@ -26,7 +26,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.common.util.RotationHelper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -247,10 +246,9 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis)
     {
         TileEntity tile = worldObj.getTileEntity(x, y, z);
-        if (tile == null || !(tile instanceof TileChargePad))
-            return false;
+        if (tile == null || !(tile instanceof TileChargePad)) return false;
 
-        TileChargePad tileChargePad = (TileChargePad)tile;
+        TileChargePad tileChargePad = (TileChargePad) tile;
         return tileChargePad.setFacing(axis.ordinal());
     }
 

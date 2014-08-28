@@ -30,7 +30,7 @@ public class GuiTank extends GuiETBase
         ElementFluidTankSizeable elementFluidTank = new ElementFluidTankSizeable(this, 43, 27, 89, 42, this.tileTankPart.getTankController().tank);
         this.addElement(elementFluidTank);
 
-        ElementETEnergyStored elementEnergyStored = new ElementETEnergyStored(this, 8, 8, this.tileTankPart.getTankController());
+        ElementETEnergyStored elementEnergyStored = new ElementETEnergyStored(this, 8, 8, this.tileTankPart.getTankController(), false);
         this.addElement(elementEnergyStored);
     }
 }
