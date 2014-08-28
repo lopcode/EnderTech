@@ -4,7 +4,6 @@ import cofh.api.energy.IEnergyStorage;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.ElementEnergyStored;
 import cofh.lib.render.RenderHelper;
-import cofh.lib.util.helpers.MathHelper;
 import io.endertech.util.helper.StringHelper;
 import java.util.List;
 
@@ -34,6 +33,7 @@ public class ElementETEnergyStored extends ElementEnergyStored
 
         super.drawBackground(mouseX, mouseY, gameTicks);
     }
+
     @Override
     public void addTooltip(List<String> list)
     {
