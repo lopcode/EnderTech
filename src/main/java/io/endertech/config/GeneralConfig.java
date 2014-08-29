@@ -7,12 +7,11 @@ import java.io.File;
 
 public class GeneralConfig
 {
-    private static Configuration generalConfig;
-
     public static int tankStorageMultiplier;
     public static boolean debugRender;
     public static boolean gasTopToBottom;
     public static boolean forceLoadDevContent;
+    private static Configuration generalConfig;
 
     protected static void init(File configFile)
     {

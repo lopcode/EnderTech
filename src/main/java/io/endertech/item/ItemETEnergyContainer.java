@@ -32,6 +32,14 @@ public class ItemETEnergyContainer extends ItemETBase implements IEnergyContaine
         this.setMaxDamage(1 + this.capacity);
     }
 
+    public static ItemStack setDefaultTag(ItemStack container, int energy)
+    {
+        container.setTagCompound(new NBTTagCompound());
+        container.stackTagCompound.setInteger("Energy", energy);
+
+        return container;
+    }
+
     public ItemETEnergyContainer setCapacity(int capacity)
     {
         this.capacity = capacity;
@@ -136,13 +144,5 @@ public class ItemETEnergyContainer extends ItemETBase implements IEnergyContaine
     public int getMaxDamage(ItemStack stack)
     {
         return 1 + this.getMaxEnergyStored(stack);
-    }
-
-    public static ItemStack setDefaultTag(ItemStack container, int energy)
-    {
-        container.setTagCompound(new NBTTagCompound());
-        container.stackTagCompound.setInteger("Energy", energy);
-
-        return container;
     }
 }

@@ -12,10 +12,9 @@ import static io.endertech.reference.Reference.MOD_ID;
  */
 public class ModuleHelper
 {
-    private ModuleHelper() {} // No touchy.
-
-    private static boolean modulesConfigured = false;
     public static final PulseManager pulsar = new PulseManager(MOD_ID, MOD_ID + "-Modules");
+    private static boolean modulesConfigured = false;
+    private ModuleHelper() {} // No touchy.
 
     public static void setupModules()
     {

@@ -10,11 +10,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class Exchange
 {
+    public static final int radiusTicksDefault = 10;
     public BlockCoord origin = null;
     public int radius;
     public int currentRadius = 1;
     public int currentRadiusTicks = 0;
-    public static final int radiusTicksDefault = 10;
     public Block source;
     public int sourceMeta;
     public ItemStack target;

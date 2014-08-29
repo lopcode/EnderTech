@@ -30,9 +30,9 @@ import java.util.List;
 public class BlockMultiblockGlass extends BlockET implements ITileEntityProvider, IOutlineDrawer, IDismantleable
 {
     public static final int METADATA_TANK = 0;
-    private static String[] subBlocks = new String[] {"tank"};
-    public static ItemStack itemBlockMultiblockGlass;
     private static final String TEXTURE_BASE = "endertech:multiblockGlass";
+    public static ItemStack itemBlockMultiblockGlass;
+    private static String[] subBlocks = new String[] {"tank"};
     private ConnectedTextureIcon[] icons;
 
     public BlockMultiblockGlass()

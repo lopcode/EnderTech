@@ -20,17 +20,6 @@ public class WorldEventHandler
     // Do exchanges per dimension
     public static Map<Integer, Set<Exchange>> exchanges = new HashMap();
 
-    public static enum ExchangeResult
-    {
-        FAIL_ENERGY,
-        FAIL_MISMATCH,
-        FAIL_NO_SOURCE_BLOCKS,
-        FAIL_INVENTORY_SPACE,
-        FAIL_BLOCK_NOT_REPLACEABLE,
-        FAIL_BLOCK_NOT_EXPOSED,
-        SUCCESS
-    }
-
     public static void queueExchangeRequest(World world, BlockCoord origin, int radius, Block source, int sourceMeta, ItemStack target, EntityPlayer player, int hotbar_id, ForgeDirection orientation)
     {
         if (target.isItemEqual(new ItemStack(source, 1, sourceMeta)))
@@ -169,5 +158,16 @@ public class WorldEventHandler
         world.setBlock(blockCoord.x, blockCoord.y, blockCoord.z, Block.getBlockFromItem(exchange.target.getItem()), exchange.target.getItemDamage(), 3);
         exchanger.extractEnergy(exchange.player.inventory.getStackInSlot(exchange.hotbar_id), exchangeCost, false);
         world.playAuxSFX(2001, blockCoord.x, blockCoord.y, blockCoord.z, Block.getIdFromBlock(exchange.source) + (exchange.sourceMeta << 12));
+    }
+
+    public static enum ExchangeResult
+    {
+        FAIL_ENERGY,
+        FAIL_MISMATCH,
+        FAIL_NO_SOURCE_BLOCKS,
+        FAIL_INVENTORY_SPACE,
+        FAIL_BLOCK_NOT_REPLACEABLE,
+        FAIL_BLOCK_NOT_EXPOSED,
+        SUCCESS
     }
 }

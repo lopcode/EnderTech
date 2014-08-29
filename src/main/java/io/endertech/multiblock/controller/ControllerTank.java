@@ -38,19 +38,20 @@ import java.util.*;
 
 public class ControllerTank extends RectangularMultiblockControllerBase implements IOutlineDrawer, ITilePacketHandler, IEnergyStorage, IChargeableFromSlot, IInventory
 {
+    public static final int MAX_ENERGY_STORAGE = 10 * 1000000;
+    private static final String TANK_NAME = "MainTank";
+    public FluidTank tank;
+    public FluidTank lastTank;
+    public boolean renderedOnce = false;
+    public int renderAddition = 0;
+    public ItemStack[] inventory;
     protected boolean active;
     private Set<TileTankController> attachedControllers;
     private Set<TileTankValve> attachedValves;
     private Set<TileTankEnergyInput> attachedEnergyInputs;
     private int storedEnergy = 0;
     private int random_number = 0;
-    public FluidTank tank;
-    public FluidTank lastTank;
-    public boolean renderedOnce = false;
-    public int renderAddition = 0;
     private int ticksSinceUpdate = 0;
-    private static final String TANK_NAME = "MainTank";
-    public static final int MAX_ENERGY_STORAGE = 10 * 1000000;
 
     public ControllerTank(World world)
     {
@@ -65,25 +66,25 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         this.inventory = new ItemStack[1];
     }
 
+    public int getRandomNumber()
+    {
+        return this.random_number;
+    }
+
     public void setRandomNumber(int newRandomNumber)
     {
         //        LogHelper.info("Setting random number from " + this.random_number + " to " + newRandomNumber);
         this.random_number = newRandomNumber;
     }
 
-    public int getRandomNumber()
+    public int getStoredEnergy()
     {
-        return this.random_number;
+        return this.storedEnergy;
     }
 
     public void setStoredEnergy(int energyStored)
     {
         this.storedEnergy = energyStored;
-    }
-
-    public int getStoredEnergy()
-    {
-        return this.storedEnergy;
     }
 
     @Override
@@ -356,7 +357,6 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         else return getFluidStringOrNone(fluid.getFluid());
     }
 
-
     private String getFluidStringOrNone(Fluid fluid)
     {
         if (fluid == null) return "none";
@@ -586,15 +586,13 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         return this.storedEnergy;
     }
 
+    // INVENTORY
+
     @Override
     public int getMaxEnergyStored()
     {
         return ControllerTank.MAX_ENERGY_STORAGE;
     }
-
-    // INVENTORY
-
-    public ItemStack[] inventory;
 
     @Override
     public int getSizeInventory()

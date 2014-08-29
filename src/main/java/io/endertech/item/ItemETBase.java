@@ -18,6 +18,9 @@ import java.util.Map;
 
 public class ItemETBase extends Item
 {
+    public HashMap<Integer, String> items = new HashMap<Integer, String>();
+    public HashMap<String, IIcon> icons = new HashMap<String, IIcon>();
+    public HashMap<Integer, Integer> rarities = new HashMap<Integer, Integer>();
     private boolean hasTextures = true;
 
     public ItemETBase()
@@ -25,7 +28,6 @@ public class ItemETBase extends Item
         super();
         this.setDefaultProperties();
     }
-
     public ItemETBase(String modName)
     {
         this.setDefaultProperties();
@@ -38,10 +40,6 @@ public class ItemETBase extends Item
         this.setCreativeTab(EnderTech.tabET);
         this.setNoRepair();
     }
-
-    public HashMap<Integer, String> items = new HashMap<Integer, String>();
-    public HashMap<String, IIcon> icons = new HashMap<String, IIcon>();
-    public HashMap<Integer, Integer> rarities = new HashMap<Integer, Integer>();
 
     public ItemStack addItem(int number, String name, int rarity, boolean shouldRegister)
     {

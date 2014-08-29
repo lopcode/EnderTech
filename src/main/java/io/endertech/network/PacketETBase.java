@@ -20,9 +20,9 @@ import java.io.*;
 
 public abstract class PacketETBase extends PacketBase
 {
+    public DataInputStream dataIn;
     private ByteArrayOutputStream arrayOut;
     private DataOutputStream dataOut;
-    public DataInputStream dataIn;
 
     public PacketETBase()
     {

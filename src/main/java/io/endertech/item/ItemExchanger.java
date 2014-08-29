@@ -21,10 +21,11 @@ import java.util.Set;
 
 public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOutlineDrawer, IItemBlockAffector
 {
+    public static final int[] RECEIVE = {0, 1 * 2000, 10 * 2000};
+    public static final int[] SEND = {10 * 1000000, 10 * 1000000, 10 * 1000000};
+    public static final int[] CAPACITY = {0, 1 * 2000000, 10 * 1000000};
     public static Set<Block> creativeOverrideBlocks;
-
     private static Set<Key.KeyCode> handledKeys;
-
     static
     {
         handledKeys = new HashSet<Key.KeyCode>();
@@ -45,6 +46,21 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
         if (stack == null) return false;
 
         return stack.getItemDamage() == Types.CREATIVE.ordinal();
+    }
+
+    public static boolean isBlockSuitableForSelection(World world, BlockCoord blockCoord, ItemStack stack)
+    {
+        if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
+
+        if (world.getTileEntity(blockCoord.x, blockCoord.y, blockCoord.z) != null) return false;
+
+        Block block = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
+
+        if (BlockHelper.softBlocks.contains(block)) return false;
+
+        if (!isCreative(stack) && creativeOverrideBlocks.contains(block)) return false;
+
+        return true;
     }
 
     @Override
@@ -115,21 +131,6 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
         {
             list.add(StringHelper.holdShiftForDetails);
         }
-    }
-
-    public static boolean isBlockSuitableForSelection(World world, BlockCoord blockCoord, ItemStack stack)
-    {
-        if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
-
-        if (world.getTileEntity(blockCoord.x, blockCoord.y, blockCoord.z) != null) return false;
-
-        Block block = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
-
-        if (BlockHelper.softBlocks.contains(block)) return false;
-
-        if (!isCreative(stack) && creativeOverrideBlocks.contains(block)) return false;
-
-        return true;
     }
 
     @Override
@@ -357,13 +358,8 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
         return ret;
     }
-
     public static enum Types
     {
         CREATIVE, REDSTONE, RESONANT;
     }
-
-    public static final int[] RECEIVE = {0, 1 * 2000, 10 * 2000};
-    public static final int[] SEND = {10 * 1000000, 10 * 1000000, 10 * 1000000};
-    public static final int[] CAPACITY = {0, 1 * 2000000, 10 * 1000000};
 }

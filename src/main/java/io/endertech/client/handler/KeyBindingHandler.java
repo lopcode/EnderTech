@@ -19,32 +19,9 @@ import java.util.Set;
 
 public class KeyBindingHandler
 {
-    private static class ETKeyBinding
-    {
-        private KeyBinding keyBinding;
-        private Key.KeyCode keyCode;
-
-        public ETKeyBinding(String description, int keyboardCode, String category, Key.KeyCode keyCode)
-        {
-            this.keyBinding = new KeyBinding(description, keyboardCode, category);
-            this.keyCode = keyCode;
-        }
-
-        public Key.KeyCode getKeyCode()
-        {
-            return this.keyCode;
-        }
-
-        public KeyBinding getMinecraftKeyBinding()
-        {
-            return this.keyBinding;
-        }
-    }
-
     public static ETKeyBinding keyToolIncrease = new ETKeyBinding(Strings.Keys.keyToolIncreaseDescription, Keyboard.KEY_PRIOR, "key.endertech.tools", Key.KeyCode.TOOL_INCREASE);
     public static ETKeyBinding keyToolDecrease = new ETKeyBinding(Strings.Keys.keyToolDecreaseDescription, Keyboard.KEY_NEXT, "key.endertech.tools", Key.KeyCode.TOOL_DECREASE);
     public static ETKeyBinding[] keyBindings = new ETKeyBinding[] {keyToolIncrease, keyToolDecrease};
-
     public static Map<String, Key.KeyCode> keyCodeMap = new HashMap<String, Key.KeyCode>();
 
     public static void init()
@@ -100,6 +77,28 @@ public class KeyBindingHandler
                     }
                 }
             }
+        }
+    }
+
+    private static class ETKeyBinding
+    {
+        private KeyBinding keyBinding;
+        private Key.KeyCode keyCode;
+
+        public ETKeyBinding(String description, int keyboardCode, String category, Key.KeyCode keyCode)
+        {
+            this.keyBinding = new KeyBinding(description, keyboardCode, category);
+            this.keyCode = keyCode;
+        }
+
+        public Key.KeyCode getKeyCode()
+        {
+            return this.keyCode;
+        }
+
+        public KeyBinding getMinecraftKeyBinding()
+        {
+            return this.keyBinding;
         }
     }
 }

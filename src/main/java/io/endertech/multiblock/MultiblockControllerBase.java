@@ -30,18 +30,11 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
 
     // Multiblock stuff - do not mess with
     protected World worldObj;
-
-    // Disassembled -> Assembled; Assembled -> Disassembled OR Paused; Paused -> Assembled
-    protected enum AssemblyState
-    {
-        Disassembled, Assembled, Paused
-    }
-
-    ;
     protected AssemblyState assemblyState;
 
+    ;
     protected HashSet<IMultiblockPart> connectedParts;
-
+    protected boolean debugMode;
     /**
      * This is a deterministically-picked coordinate that identifies this
      * multiblock uniquely in its dimension.
@@ -73,8 +66,6 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
      */
     private MultiblockValidationException lastValidationException;
 
-    protected boolean debugMode;
-
     protected MultiblockControllerBase(World world)
     {
         // Multiblock stuff
@@ -93,12 +84,12 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
         debugMode = false;
     }
 
+    public boolean isDebugMode() { return debugMode; }
+
     public void setDebugMode(boolean active)
     {
         debugMode = active;
     }
-
-    public boolean isDebugMode() { return debugMode; }
 
     /**
      * Call when a block with cached save-delegate data is added to the multiblock.
@@ -337,7 +328,6 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
      */
     protected int getMinimumZSize()
     { return 1; }
-
 
     /**
      * @return An exception representing the last error encountered when trying to assemble this
@@ -580,8 +570,6 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
      */
     protected abstract void updateClient();
 
-    // Validation helpers
-
     /**
      * The "frame" consists of the outer edges of the machine, plus the corners.
      *
@@ -595,6 +583,8 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
     {
         throw new MultiblockValidationException(LocalisationHelper.localiseString("info.multiblock.part.unsuitable.frame", x, y, z));
     }
+
+    // Validation helpers
 
     /**
      * The top consists of the top face, minus the edges.
@@ -1014,5 +1004,11 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
     public boolean drawOutline(DrawBlockHighlightEvent event)
     {
         return false;
+    }
+
+    // Disassembled -> Assembled; Assembled -> Disassembled OR Paused; Paused -> Assembled
+    protected enum AssemblyState
+    {
+        Disassembled, Assembled, Paused
     }
 }

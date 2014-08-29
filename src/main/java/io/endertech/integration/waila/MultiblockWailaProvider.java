@@ -15,6 +15,12 @@ import java.util.List;
 
 public class MultiblockWailaProvider implements IWailaDataProvider
 {
+    public static void callbackRegister(IWailaRegistrar registrar)
+    {
+        registrar.registerHeadProvider(new MultiblockWailaProvider(), MultiblockTileEntityBase.class);
+        registrar.registerBodyProvider(new MultiblockWailaProvider(), MultiblockTileEntityBase.class);
+    }
+
     @Override
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
@@ -72,11 +78,5 @@ public class MultiblockWailaProvider implements IWailaDataProvider
     public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
         return currenttip;
-    }
-
-    public static void callbackRegister(IWailaRegistrar registrar)
-    {
-        registrar.registerHeadProvider(new MultiblockWailaProvider(), MultiblockTileEntityBase.class);
-        registrar.registerBodyProvider(new MultiblockWailaProvider(), MultiblockTileEntityBase.class);
     }
 }

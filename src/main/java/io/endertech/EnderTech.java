@@ -43,18 +43,14 @@ import java.io.File;
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION_NUMBER, certificateFingerprint = Reference.FINGERPRINT, dependencies = "required-after:ThermalExpansion@[1.7.10R4.0.0B1,)")
 public class EnderTech
 {
+    public static final CreativeTabs tabET = new CreativeTabET();
+    public static final GuiHandler guiHandler = new GuiHandler();
     @SuppressWarnings("unused")
     @Mod.Instance(Reference.MOD_ID)
     public static EnderTech instance;
-
     @SidedProxy(clientSide = "io.endertech.proxy.ClientProxy", serverSide = "io.endertech.proxy.CommonProxy")
     public static CommonProxy proxy;
-
-    public static final CreativeTabs tabET = new CreativeTabET();
     public static boolean loadDevModeContent = false;
-
-    public static final GuiHandler guiHandler = new GuiHandler();
-
     public static Item capacitor;
 
     @EventHandler

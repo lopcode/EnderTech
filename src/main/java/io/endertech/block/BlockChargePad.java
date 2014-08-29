@@ -31,14 +31,27 @@ import java.util.List;
 
 public class BlockChargePad extends BlockET implements ITileEntityProvider, IDismantleable, IOutlineDrawer
 {
+    public static final String TEXTURE_BASE = "endertech:chargePad/";
+    public static final int[] RECEIVE = {0, 1 * 2000, 10 * 2000};
+    public static final int[] SEND = {10 * 1000000, 1 * 2000, 10 * 2000};
+    public static final int[] CAPACITY = {-1, 1 * 2000000, 10 * 1000000};
     public static ItemStack itemChargePadCreative;
     public static ItemStack itemChargePadResonant;
     public static ItemStack itemChargePadRedstone;
-
+    public static Types[] arrayTypes;
+    public static String[] stringTypes;
+    static
+    {
+        arrayTypes = Types.values();
+        stringTypes = new String[arrayTypes.length];
+        for (int i = 0; i < arrayTypes.length; i++)
+        {
+            stringTypes[i] = arrayTypes[i].name().toLowerCase();
+        }
+    }
     public IIcon[] sideIcon;
     public IIcon[] topIcon;
     public IIcon[] bottomIcon;
-    public static final String TEXTURE_BASE = "endertech:chargePad/";
     public IIcon[] activeIcons;
     public IIcon[] inactiveIcons;
 
@@ -49,6 +62,26 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
         this.setBlockName(Strings.Blocks.CHARGE_PAD);
         setHardness(10.0f);
         setResistance(20.0f);
+    }
+
+    public static int getMaxEnergyStored(int meta)
+    {
+        return CAPACITY[meta];
+    }
+
+    public static int getMaxReceiveRate(int meta)
+    {
+        return RECEIVE[meta];
+    }
+
+    public static int getMaxSendRate(int meta)
+    {
+        return SEND[meta];
+    }
+
+    public static boolean isCreative(int meta)
+    {
+        return meta == 0;
     }
 
     public void init()
@@ -202,26 +235,6 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
         return meta;
     }
 
-    public static int getMaxEnergyStored(int meta)
-    {
-        return CAPACITY[meta];
-    }
-
-    public static int getMaxReceiveRate(int meta)
-    {
-        return RECEIVE[meta];
-    }
-
-    public static int getMaxSendRate(int meta)
-    {
-        return SEND[meta];
-    }
-
-    public static boolean isCreative(int meta)
-    {
-        return meta == 0;
-    }
-
     @Override
     public boolean drawOutline(DrawBlockHighlightEvent event)
     {
@@ -257,26 +270,8 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     {
         return ForgeDirection.VALID_DIRECTIONS;
     }
-
     public static enum Types
     {
         CREATIVE, REDSTONE, RESONANT;
     }
-
-    public static Types[] arrayTypes;
-    public static String[] stringTypes;
-
-    static
-    {
-        arrayTypes = Types.values();
-        stringTypes = new String[arrayTypes.length];
-        for (int i = 0; i < arrayTypes.length; i++)
-        {
-            stringTypes[i] = arrayTypes[i].name().toLowerCase();
-        }
-    }
-
-    public static final int[] RECEIVE = {0, 1 * 2000, 10 * 2000};
-    public static final int[] SEND = {10 * 1000000, 1 * 2000, 10 * 2000};
-    public static final int[] CAPACITY = {-1, 1 * 2000000, 10 * 1000000};
 }

@@ -10,8 +10,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class ConnectedRenderBlocks extends RenderBlocks
 {
+    public static final ForgeDirection neighborsBySide[][] = new ForgeDirection[][] {{ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST}, {ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.EAST, ForgeDirection.WEST}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.WEST, ForgeDirection.EAST}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.NORTH, ForgeDirection.SOUTH}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.SOUTH, ForgeDirection.NORTH}};
     private Block block;
     private int meta;
+
+    public static boolean checkBit(int a, int b)
+    {
+        return (a & b) == b;
+    }
 
     public void setBlockToCompareTo(Block block, int meta)
     {
@@ -22,13 +28,6 @@ public class ConnectedRenderBlocks extends RenderBlocks
     public void setBlockAccess(IBlockAccess blockAccess)
     {
         this.blockAccess = blockAccess;
-    }
-
-    public static final ForgeDirection neighborsBySide[][] = new ForgeDirection[][] {{ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST}, {ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.EAST, ForgeDirection.WEST}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.WEST, ForgeDirection.EAST}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.NORTH, ForgeDirection.SOUTH}, {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.SOUTH, ForgeDirection.NORTH}};
-
-    public static boolean checkBit(int a, int b)
-    {
-        return (a & b) == b;
     }
 
     public void renderSideFace(ConnectedTextureIcon icon, int index, double x, double y, double z, int side)

@@ -7,14 +7,13 @@ import java.io.File;
 
 public class ItemConfig
 {
-    private static Configuration itemConfig;
-
     public static int itemExchangerBaseCost;
     public static int itemExchangerRadiusCost;
     public static int itemExchangerHardnessCost;
     public static int itemExchangerMaxRadius;
     public static int itemExchangerMinimumCost;
     public static int itemExchangerMaximumCost;
+    private static Configuration itemConfig;
 
     protected static void init(File configFile)
     {

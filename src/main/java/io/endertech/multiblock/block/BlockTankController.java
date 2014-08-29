@@ -34,19 +34,13 @@ public class BlockTankController extends BlockET implements ITileEntityProvider,
     public static final int CONTROLLER_METADATA_BASE = 0; // Disabled, Idle, Active
     public static final int CONTROLLER_IDLE = 1;
     public static final int CONTROLLER_ACTIVE = 2;
-
-    public static ItemStack itemBlockTankController;
-
     public static final String TEXTURE_BASE = "endertech:enderTankController";
-
+    public static ItemStack itemBlockTankController;
     private static String[] _subBlocks = new String[] {"controllerBase", "controllerIdle", "controllerActive"};
-
-    private IIcon[] _icons = new IIcon[_subBlocks.length];
     public IIcon sideIcon;
     public IIcon topIcon;
     public IIcon bottomIcon;
-
-    public static boolean isController(int metadata) { return metadata >= CONTROLLER_METADATA_BASE && metadata <= CONTROLLER_ACTIVE; }
+    private IIcon[] _icons = new IIcon[_subBlocks.length];
 
     public BlockTankController()
     {
@@ -56,6 +50,8 @@ public class BlockTankController extends BlockET implements ITileEntityProvider,
         this.setCreativeTab(EnderTech.tabET);
         this.setBlockName(Strings.Blocks.TANK_CONTROLLER_NAME);
     }
+
+    public static boolean isController(int metadata) { return metadata >= CONTROLLER_METADATA_BASE && metadata <= CONTROLLER_ACTIVE; }
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)

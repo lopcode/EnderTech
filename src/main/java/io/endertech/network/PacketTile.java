@@ -7,11 +7,6 @@ import net.minecraft.tileentity.TileEntity;
 
 public class PacketTile extends PacketETBase
 {
-    public static void init()
-    {
-        PacketHandler.instance.registerPacket(PacketTile.class);
-    }
-
     public PacketTile() { }
 
     public PacketTile(TileEntity theTile)
@@ -19,6 +14,16 @@ public class PacketTile extends PacketETBase
         addInt(theTile.xCoord);
         addInt(theTile.yCoord);
         addInt(theTile.zCoord);
+    }
+
+    public static void init()
+    {
+        PacketHandler.instance.registerPacket(PacketTile.class);
+    }
+
+    public static PacketTile newPacket(TileEntity theTile)
+    {
+        return new PacketTile(theTile);
     }
 
     @Override
@@ -45,11 +50,6 @@ public class PacketTile extends PacketETBase
         {
             // TODO: Throw error, bad packet
         }
-    }
-
-    public static PacketTile newPacket(TileEntity theTile)
-    {
-        return new PacketTile(theTile);
     }
 }
 

@@ -30,12 +30,6 @@ public class BucketHandler
 {
 
     public static BucketHandler instance = new BucketHandler();
-
-    public static void initialize()
-    {
-
-    }
-
     private static BiMap<BlockWrapper, ETItemWrapper> buckets = HashBiMap.create();
 
     private BucketHandler()
@@ -48,66 +42,9 @@ public class BucketHandler
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onBucketFill(FillBucketEvent event)
+    public static void initialize()
     {
 
-        if (ServerHelper.isClientWorld(event.world) | event.result != null || event.getResult() != Result.DEFAULT)
-        {
-            return;
-        }
-        ItemStack current = event.current;
-        if (event.target.typeOfHit != MovingObjectType.BLOCK)
-        {
-            return;
-        }
-        boolean fill = true;
-        int x = event.target.blockX, y = event.target.blockY, z = event.target.blockZ, side = event.target.sideHit;
-
-        l:
-        if (!current.getItem().equals(Items.bucket))
-        {
-            if (FluidContainerRegistry.isBucket(current))
-            {
-                ForgeDirection fside = ForgeDirection.getOrientation(side);
-                Block block = event.world.getBlock(x, y, z);
-                x += fside.offsetX;
-                y += fside.offsetY;
-                z += fside.offsetZ;
-                if (!block.isReplaceable(event.world, x, y, z) && block.getMaterial().isSolid())
-                {
-                    x -= fside.offsetX;
-                    y -= fside.offsetY;
-                    z -= fside.offsetZ;
-                }
-                fill = false;
-                break l;
-            }
-            return;
-        }
-        if (event.entityPlayer != null)
-        {
-            if ((fill && !event.world.canMineBlock(event.entityPlayer, x, y, z)) || !event.entityPlayer.canPlayerEdit(x, y, z, side, current))
-            {
-                event.setCanceled(true);
-                return;
-            }
-        }
-        ItemStack bucket = null;
-
-        if (fill)
-        {
-            bucket = fillBucket(event.world, x, y, z);
-        } else if (emptyBucket(event.world, x, y, z, current))
-        {
-            bucket = new ItemStack(Items.bucket);
-        }
-        if (bucket == null)
-        {
-            return;
-        }
-        event.result = bucket;
-        event.setResult(Result.ALLOW);
     }
 
     public static boolean registerBucket(Block block, int bMeta, ItemStack bucket)
@@ -217,6 +154,68 @@ public class BucketHandler
         }
         buckets.clear();
         buckets = tempMap;
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onBucketFill(FillBucketEvent event)
+    {
+
+        if (ServerHelper.isClientWorld(event.world) | event.result != null || event.getResult() != Result.DEFAULT)
+        {
+            return;
+        }
+        ItemStack current = event.current;
+        if (event.target.typeOfHit != MovingObjectType.BLOCK)
+        {
+            return;
+        }
+        boolean fill = true;
+        int x = event.target.blockX, y = event.target.blockY, z = event.target.blockZ, side = event.target.sideHit;
+
+        l:
+        if (!current.getItem().equals(Items.bucket))
+        {
+            if (FluidContainerRegistry.isBucket(current))
+            {
+                ForgeDirection fside = ForgeDirection.getOrientation(side);
+                Block block = event.world.getBlock(x, y, z);
+                x += fside.offsetX;
+                y += fside.offsetY;
+                z += fside.offsetZ;
+                if (!block.isReplaceable(event.world, x, y, z) && block.getMaterial().isSolid())
+                {
+                    x -= fside.offsetX;
+                    y -= fside.offsetY;
+                    z -= fside.offsetZ;
+                }
+                fill = false;
+                break l;
+            }
+            return;
+        }
+        if (event.entityPlayer != null)
+        {
+            if ((fill && !event.world.canMineBlock(event.entityPlayer, x, y, z)) || !event.entityPlayer.canPlayerEdit(x, y, z, side, current))
+            {
+                event.setCanceled(true);
+                return;
+            }
+        }
+        ItemStack bucket = null;
+
+        if (fill)
+        {
+            bucket = fillBucket(event.world, x, y, z);
+        } else if (emptyBucket(event.world, x, y, z, current))
+        {
+            bucket = new ItemStack(Items.bucket);
+        }
+        if (bucket == null)
+        {
+            return;
+        }
+        event.result = bucket;
+        event.setResult(Result.ALLOW);
     }
 
 }

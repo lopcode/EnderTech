@@ -69,32 +69,11 @@ public class BlockTankPart extends BlockET implements ITileEntityProvider, IOutl
         this.setBlockTextureName(TEXTURE_BASE);
     }
 
-    public void init()
-    {
-        TileTankPart.init();
-        TileTankValve.init();
-        TileTankEnergyInput.init();
-
-        itemBlockTankFrame = new ItemStack(this, 1, FRAME_METADATA_BASE);
-        itemBlockTankValve = new ItemStack(this, 1, VALVE_BASE);
-        itemBlockTankEnergyInput = new ItemStack(this, 1, ENERGY_INPUT_BASE);
-    }
-
     public static boolean isFrame(int metadata) { return metadata >= FRAME_METADATA_BASE && metadata <= FRAME_NORTHSOUTH; }
 
     public static boolean isValve(int metadata) { return metadata == VALVE_BASE; }
 
     public static boolean isEnergyInput(int metadata) { return metadata == ENERGY_INPUT_BASE; }
-
-    @Override
-    public TileEntity createNewTileEntity(World world, int metadata)
-    {
-        if (metadata >= FRAME_METADATA_BASE && metadata <= FRAME_NORTHSOUTH) return new TileTankPart();
-        if (metadata == VALVE_BASE) return new TileTankValve();
-        if (metadata == ENERGY_INPUT_BASE) return new TileTankEnergyInput();
-
-        throw new IllegalArgumentException("Unrecognized metadata");
-    }
 
     public static boolean onTankBlockActivated(World world, int x, int y, int z, EntityPlayer player, int faceHit, float par7, float par8, float par9)
     {
@@ -136,6 +115,88 @@ public class BlockTankPart extends BlockET implements ITileEntityProvider, IOutl
         }
 
         return false;
+    }
+
+    public static boolean canPlaceTankPartAt(World world, int x, int y, int z)
+    {
+        Set<Integer> randomNumbers = new HashSet<Integer>();
+        for (ForgeDirection neighbour : ForgeDirection.VALID_DIRECTIONS)
+        {
+            TileEntity tile = world.getTileEntity(x + neighbour.offsetX, y + neighbour.offsetY, z + neighbour.offsetZ);
+            if (tile != null && tile instanceof TileTankPart)
+            {
+                ControllerTank controller = ((TileTankPart) tile).getTankController();
+                if (controller != null)
+                {
+                    boolean hasContents = controller.tank.getFluidAmount() > 0 || controller.getStoredEnergy() > 0;
+                    if (hasContents)
+                    {
+                        int randomNumber = controller.getRandomNumber();
+
+                        if (!randomNumbers.contains(randomNumber))
+                        {
+                            randomNumbers.add(randomNumber);
+                        }
+
+                        if (randomNumbers.size() > 1)
+                        {
+                            LogHelper.info(LocalisationHelper.localiseString("info.multiblock.tank.connecting_destructive", new BlockCoord(x, y, z).toString()));
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean isLastPartWithContents(World world, BlockCoord coord)
+    {
+        TileEntity tile = world.getTileEntity(coord.x, coord.y, coord.z);
+        if (tile == null || !(tile instanceof TileTankPart)) return false;
+
+        ControllerTank controller = ((TileTankPart) tile).getTankController();
+        if (controller == null || (controller.getStoredEnergy() <= 0 && controller.tank.getFluidAmount() <= 0))
+            return false;
+
+        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+        {
+            TileEntity neighbourTile = world.getTileEntity(coord.x + direction.offsetX, coord.y + direction.offsetY, coord.z + direction.offsetZ);
+            if (neighbourTile != null && neighbourTile instanceof TileTankPart) return false;
+        }
+
+        return true;
+    }
+
+    public static boolean canDismantleTankBlock(EntityPlayer player, World world, int x, int y, int z)
+    {
+        boolean dismantleWouldBeDestructive = isLastPartWithContents(world, new BlockCoord(x, y, z));
+        if (dismantleWouldBeDestructive)
+            player.addChatComponentMessage(new ChatComponentText(LocalisationHelper.localiseString("warning.tank.dismantle_loss")));
+
+        return !dismantleWouldBeDestructive;
+    }
+
+    public void init()
+    {
+        TileTankPart.init();
+        TileTankValve.init();
+        TileTankEnergyInput.init();
+
+        itemBlockTankFrame = new ItemStack(this, 1, FRAME_METADATA_BASE);
+        itemBlockTankValve = new ItemStack(this, 1, VALVE_BASE);
+        itemBlockTankEnergyInput = new ItemStack(this, 1, ENERGY_INPUT_BASE);
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World world, int metadata)
+    {
+        if (metadata >= FRAME_METADATA_BASE && metadata <= FRAME_NORTHSOUTH) return new TileTankPart();
+        if (metadata == VALVE_BASE) return new TileTankValve();
+        if (metadata == ENERGY_INPUT_BASE) return new TileTankEnergyInput();
+
+        throw new IllegalArgumentException("Unrecognized metadata");
     }
 
     @Override
@@ -206,40 +267,6 @@ public class BlockTankPart extends BlockET implements ITileEntityProvider, IOutl
         else if (isEnergyInput(meta)) return ENERGY_INPUT_BASE;
 
         return FRAME_METADATA_BASE;
-    }
-
-    public static boolean canPlaceTankPartAt(World world, int x, int y, int z)
-    {
-        Set<Integer> randomNumbers = new HashSet<Integer>();
-        for (ForgeDirection neighbour : ForgeDirection.VALID_DIRECTIONS)
-        {
-            TileEntity tile = world.getTileEntity(x + neighbour.offsetX, y + neighbour.offsetY, z + neighbour.offsetZ);
-            if (tile != null && tile instanceof TileTankPart)
-            {
-                ControllerTank controller = ((TileTankPart) tile).getTankController();
-                if (controller != null)
-                {
-                    boolean hasContents = controller.tank.getFluidAmount() > 0 || controller.getStoredEnergy() > 0;
-                    if (hasContents)
-                    {
-                        int randomNumber = controller.getRandomNumber();
-
-                        if (!randomNumbers.contains(randomNumber))
-                        {
-                            randomNumbers.add(randomNumber);
-                        }
-
-                        if (randomNumbers.size() > 1)
-                        {
-                            LogHelper.info(LocalisationHelper.localiseString("info.multiblock.tank.connecting_destructive", new BlockCoord(x, y, z).toString()));
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-
-        return true;
     }
 
     @Override
@@ -328,33 +355,6 @@ public class BlockTankPart extends BlockET implements ITileEntityProvider, IOutl
     public ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops)
     {
         return BlockET.dismantleBlockInWorld(player, world, x, y, z, returnDrops);
-    }
-
-    public static boolean isLastPartWithContents(World world, BlockCoord coord)
-    {
-        TileEntity tile = world.getTileEntity(coord.x, coord.y, coord.z);
-        if (tile == null || !(tile instanceof TileTankPart)) return false;
-
-        ControllerTank controller = ((TileTankPart) tile).getTankController();
-        if (controller == null || (controller.getStoredEnergy() <= 0 && controller.tank.getFluidAmount() <= 0))
-            return false;
-
-        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
-        {
-            TileEntity neighbourTile = world.getTileEntity(coord.x + direction.offsetX, coord.y + direction.offsetY, coord.z + direction.offsetZ);
-            if (neighbourTile != null && neighbourTile instanceof TileTankPart) return false;
-        }
-
-        return true;
-    }
-
-    public static boolean canDismantleTankBlock(EntityPlayer player, World world, int x, int y, int z)
-    {
-        boolean dismantleWouldBeDestructive = isLastPartWithContents(world, new BlockCoord(x, y, z));
-        if (dismantleWouldBeDestructive)
-            player.addChatComponentMessage(new ChatComponentText(LocalisationHelper.localiseString("warning.tank.dismantle_loss")));
-
-        return !dismantleWouldBeDestructive;
     }
 
     @Override

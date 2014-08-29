@@ -12,12 +12,6 @@ public final class ETItemWrapper
     public Item item;
     public int metadata;
 
-    public static ETItemWrapper fromItemStack(ItemStack stack)
-    {
-
-        return new ETItemWrapper(stack);
-    }
-
     public ETItemWrapper(Item item, int metadata)
     {
 
@@ -30,6 +24,12 @@ public final class ETItemWrapper
 
         this.item = stack.getItem();
         this.metadata = ItemHelper.getItemDamage(stack);
+    }
+
+    public static ETItemWrapper fromItemStack(ItemStack stack)
+    {
+
+        return new ETItemWrapper(stack);
     }
 
     public ETItemWrapper set(ItemStack stack)

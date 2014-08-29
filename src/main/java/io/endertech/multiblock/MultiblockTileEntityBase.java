@@ -18,12 +18,11 @@ import java.util.Set;
  */
 public abstract class MultiblockTileEntityBase extends IMultiblockPart
 {
-    private MultiblockControllerBase controller;
-    private boolean visited;
-
-    private boolean saveMultiblockData;
     protected PacketETBase cachedMultiblockPacket;
     protected NBTTagCompound cachedMultiblockNBT;
+    private MultiblockControllerBase controller;
+    private boolean visited;
+    private boolean saveMultiblockData;
     private boolean paused;
 
     public MultiblockTileEntityBase()

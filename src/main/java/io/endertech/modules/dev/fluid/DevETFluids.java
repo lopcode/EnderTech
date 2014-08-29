@@ -16,16 +16,13 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 public class DevETFluids
 {
+    public static final Material materialFluidChargedEnder = new MaterialLiquid(MapColor.greenColor);
     public static Fluid fluidChargedEnder;
     public static Fluid fluidCoFHEnder;
     public static Block blockFluidChargedEnder;
     public static Block blockFluidCoFHEnder;
-
     public static IIcon fluidChargedEnderStill;
     public static IIcon fluidChargedEnderFlowing;
-
-    public static final Material materialFluidChargedEnder = new MaterialLiquid(MapColor.greenColor);
-
     public static ItemBucket itemBucket;
     public static ItemStack bucketChargedEnder;
 

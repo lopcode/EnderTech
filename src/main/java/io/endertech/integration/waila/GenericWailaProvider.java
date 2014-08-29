@@ -12,6 +12,12 @@ import java.util.List;
 
 public class GenericWailaProvider implements IWailaDataProvider
 {
+    public static void callbackRegister(IWailaRegistrar registrar)
+    {
+        registrar.registerHeadProvider(new GenericWailaProvider(), TileET.class);
+        registrar.registerBodyProvider(new GenericWailaProvider(), TileET.class);
+    }
+
     @Override
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
@@ -58,11 +64,5 @@ public class GenericWailaProvider implements IWailaDataProvider
         }
 
         return currenttip;
-    }
-
-    public static void callbackRegister(IWailaRegistrar registrar)
-    {
-        registrar.registerHeadProvider(new GenericWailaProvider(), TileET.class);
-        registrar.registerBodyProvider(new GenericWailaProvider(), TileET.class);
     }
 }
