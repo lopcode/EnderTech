@@ -398,6 +398,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     {
         packetSaveDelegateBase.addInt(this.random_number);
         packetSaveDelegateBase.addFluidStack(this.tank.getFluid());
+        packetSaveDelegateBase.addInt(this.tank.getCapacity());
         packetSaveDelegateBase.addInt(this.storedEnergy);
         packetSaveDelegateBase.addInventory(this.inventory);
 
@@ -409,12 +410,14 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     {
         int random_number = packetETBase.getInt();
         FluidStack fluidStack = packetETBase.getFluidStack();
+        int capacity = packetETBase.getInt();
         int storedEnergy = packetETBase.getInt();
         ItemStack[] inventory = packetETBase.getInventory(1);
 
         if (!isServer)
         {
             this.random_number = random_number;
+            this.tank.setCapacity(capacity);
             this.lastTank = new FluidTank(this.tank.getFluid(), this.tank.getCapacity());
             this.renderAddition = 0;
             this.tank.setFluid(fluidStack);
