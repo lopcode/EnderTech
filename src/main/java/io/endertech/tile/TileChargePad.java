@@ -459,16 +459,10 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
     @SideOnly(Side.CLIENT)
     protected float[] getRainbowParticleColour(Random rand)
     {
-        int R = (int) (Math.random() * 256);
-        int G = (int) (Math.random() * 256);
-        int B = (int) (Math.random() * 256);
-        Color color = new Color(R, G, B);
-
-        Random random = new Random();
-        final float hue = random.nextFloat();
+        final float hue = rand.nextFloat();
         final float saturation = 0.9f;
         final float luminance = 1.0f;
-        color = Color.getHSBColor(hue, saturation, luminance);
+        Color color = Color.getHSBColor(hue, saturation, luminance);
 
         float r = color.getRed() / 255.0F;
         float g = color.getBlue() / 255.0F;
