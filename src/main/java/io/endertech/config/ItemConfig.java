@@ -21,7 +21,7 @@ public class ItemConfig
         try
         {
             itemConfig.load();
-            itemExchangerBaseCost = itemConfig.get("item.general", "Exchanger.BaseCost", 4096).getInt(4096);
+            itemExchangerBaseCost = itemConfig.get("item.general", "Exchanger.BaseCost", 4096).getInt();
             itemExchangerRadiusCost = itemConfig.get("item.general", "Exchanger.RadiusCost", 256).getInt(256);
             itemExchangerHardnessCost = itemConfig.get("item.general", "Exchanger.HardnessCost", 128).getInt(128);
             itemExchangerMinimumCost = itemConfig.get("item.general", "Exchanger.MinimumCost", 4096).getInt(4096);

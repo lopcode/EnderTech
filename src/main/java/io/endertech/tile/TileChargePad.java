@@ -45,6 +45,7 @@ import java.util.List;
 public class TileChargePad extends TileInventory implements IReconfigurableFacing, IEnergyHandler, IOutlineDrawer, IChargeableFromSlot
 {
     public static final short TICKS_PER_UPDATE = 20;
+    public static final int INVENTORY_SIZE = 1;
     public short ticksSinceLastUpdate = 0;
     public boolean isActive = false;
     public int storedEnergy = 0;
@@ -56,7 +57,7 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
         super();
 
         this.tileName = "Charge Pad";
-        this.inventory = new ItemStack[1];
+        this.inventory = new ItemStack[INVENTORY_SIZE];
     }
 
     public static void init()
@@ -64,16 +65,34 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
         GameRegistry.registerTileEntity(TileChargePad.class, "tile." + Strings.Blocks.CHARGE_PAD);
     }
 
+    public static void writeDefaultTag(NBTTagCompound nbtTagCompound)
+    {
+        nbtTagCompound.setInteger("Energy", 0);
+        NBTHelper.writeInventoryToNBT(nbtTagCompound, new ItemStack[INVENTORY_SIZE]);
+    }
+
+    @Override
+    public boolean hasItemState()
+    {
+        return true;
+    }
+
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound)
     {
         super.readFromNBT(nbtTagCompound);
 
+        this.readStateFromNBT(nbtTagCompound);
+    }
+
+    @Override
+    public void readStateFromNBT(NBTTagCompound nbtTagCompound)
+    {
         if (nbtTagCompound.hasKey("Energy")) this.storedEnergy = nbtTagCompound.getInteger("Energy");
 
         if (nbtTagCompound.hasKey("Inventory"))
         {
-            this.inventory = NBTHelper.readInventoryFromNBT(nbtTagCompound, 1);
+            this.inventory = NBTHelper.readInventoryFromNBT(nbtTagCompound, INVENTORY_SIZE);
         }
     }
 
@@ -82,6 +101,12 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
     {
         super.writeToNBT(nbtTagCompound);
 
+        this.writeStateToNBT(nbtTagCompound);
+    }
+
+    @Override
+    public void writeStateToNBT(NBTTagCompound nbtTagCompound)
+    {
         nbtTagCompound.setInteger("Energy", this.storedEnergy);
         NBTHelper.writeInventoryToNBT(nbtTagCompound, this.inventory);
     }
@@ -112,7 +137,7 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
         boolean isActive = tilePacket.getBool();
         int storedEnergy = tilePacket.getInt();
         int sentPower = tilePacket.getInt();
-        ItemStack[] inventory = tilePacket.getInventory(1);
+        ItemStack[] inventory = tilePacket.getInventory(INVENTORY_SIZE);
 
         if (!isServer)
         {
@@ -197,13 +222,16 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
             itemsToCharge.addAll(this.chargeableItemsInInventory(player.inventory.armorInventory));
         } else if (entity instanceof EntityItem)
         {
-            itemsToCharge.add(((EntityItem) entity).getEntityItem());
+            EntityItem entityItem = (EntityItem) entity;
+            ItemStack item = entityItem.getEntityItem();
+
+            if (item.stackSize == 1) itemsToCharge.add(item);
         }
 
         return itemsToCharge;
     }
 
-    public int chargeItemsGivenEntity(Entity entity, double maxCharge, int meta)
+    public int chargeItemsGivenEntity(Entity entity, int maxCharge, int meta)
     {
         List<ItemStack> itemsToCharge = this.getItemsToChargeFromEntity(entity);
         double efficiency = this.calculateEfficiencyForEntity(entity);
@@ -212,12 +240,13 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
         int itemCount = itemsToCharge.size();
         if (itemCount > 0)
         {
-            double chargePerItem = Math.floor(maxCharge / itemCount);
+            int chargePerItem = (int) Math.floor(maxCharge / itemCount);
+            if (chargePerItem == 0 && maxCharge > 0) chargePerItem = 1;
 
             for (ItemStack itemStack : itemsToCharge)
             {
                 IEnergyContainerItem chargeableItem = (IEnergyContainerItem) itemStack.getItem();
-                int couldReceive = chargeableItem.receiveEnergy(itemStack, (int) chargePerItem, true);
+                int couldReceive = chargeableItem.receiveEnergy(itemStack, chargePerItem, true);
                 int toSend = this.extractEnergy(couldReceive, meta, false);
                 if (BlockChargePad.isCreative(meta)) toSend = couldReceive;
 
@@ -230,6 +259,8 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
 
                 totalSent += sent;
             }
+
+            if (totalSent >= maxCharge) return maxCharge;
         }
 
         return totalSent;
@@ -247,7 +278,7 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
             this.isActive = this.sentPower > 0;
 
             sentPower = 0;
-            double totalChargeSendable = this.extractEnergy(BlockChargePad.getMaxSendRate(meta), meta, true);
+            int totalChargeSendable = this.extractEnergy(BlockChargePad.getMaxSendRate(meta), meta, true);
             if (BlockChargePad.isCreative(meta)) totalChargeSendable = BlockChargePad.SEND[0];
 
             if (totalChargeSendable > 0)
@@ -255,7 +286,7 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
                 AxisAlignedBB front = this.getAABBInFront(2);
                 List<Entity> ownersInRange = this.getChargeableEntitesInAABB(front);
 
-                double totalChargeForEntity = totalChargeSendable / ownersInRange.size();
+                int totalChargeForEntity = (int) (((double) totalChargeSendable) / ownersInRange.size());
                 if (ownersInRange.size() > 0)
                 {
                     for (Entity entity : ownersInRange)

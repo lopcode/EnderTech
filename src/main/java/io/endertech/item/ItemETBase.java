@@ -28,6 +28,7 @@ public class ItemETBase extends Item
         super();
         this.setDefaultProperties();
     }
+
     public ItemETBase(String modName)
     {
         this.setDefaultProperties();

@@ -67,6 +67,7 @@ info.multiblock.construction.no_controller=Block is not connected to a tank. Thi
 info.multiblock.tank.connecting_destructive=Someone tried to connect two previously formed tanks at %s - stopping them.
 info.charge=Charge: %s
 info.charge.receive=Receive: %s
+info.charge.send=Send: %s
 info.sent=Sent: %s
 info.exchanger.source=Source block: %s
 info.exchanger.shift_to_select_source=Use while sneaking to choose source.

@@ -7,7 +7,6 @@ import io.endertech.EnderTech;
 import io.endertech.reference.Strings;
 import io.endertech.reference.Textures;
 import io.endertech.tile.TileChargePad;
-import io.endertech.tile.TileET;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
 import net.minecraft.block.ITileEntityProvider;
@@ -19,6 +18,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
@@ -40,6 +40,7 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     public static ItemStack itemChargePadRedstone;
     public static Types[] arrayTypes;
     public static String[] stringTypes;
+
     static
     {
         arrayTypes = Types.values();
@@ -49,6 +50,7 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
             stringTypes[i] = arrayTypes[i].name().toLowerCase();
         }
     }
+
     public IIcon[] sideIcon;
     public IIcon[] topIcon;
     public IIcon[] bottomIcon;
@@ -96,7 +98,8 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
     {
-        if (world.getTileEntity(x, y, z) instanceof TileChargePad)
+        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        if (tileEntity != null && tileEntity instanceof TileChargePad)
         {
             int direction = -1;
 
@@ -113,8 +116,14 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
                 }
             }
 
+            TileChargePad tile = (TileChargePad) tileEntity;
             if (direction == -1) super.onBlockPlacedBy(world, x, y, z, entityLiving, itemStack);
-            else ((TileET) world.getTileEntity(x, y, z)).setOrientation(direction);
+            else tile.setOrientation(direction);
+
+            NBTTagCompound nbtTagCompound = itemStack.stackTagCompound;
+            if (nbtTagCompound == null) nbtTagCompound = new NBTTagCompound();
+
+            tile.readStateFromNBT(nbtTagCompound);
         }
     }
 
@@ -270,6 +279,7 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     {
         return ForgeDirection.VALID_DIRECTIONS;
     }
+
     public static enum Types
     {
         CREATIVE, REDSTONE, RESONANT;

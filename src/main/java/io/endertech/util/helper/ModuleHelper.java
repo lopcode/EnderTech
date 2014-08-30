@@ -14,6 +14,7 @@ public class ModuleHelper
 {
     public static final PulseManager pulsar = new PulseManager(MOD_ID, MOD_ID + "-Modules");
     private static boolean modulesConfigured = false;
+
     private ModuleHelper() {} // No touchy.
 
     public static void setupModules()

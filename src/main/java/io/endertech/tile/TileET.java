@@ -168,4 +168,19 @@ public class TileET extends TileEntity implements ITilePacketHandler, IETWailaPr
         TileEntity tile = this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord);
         return (distance <= 64D && tile == this);
     }
+
+    public boolean hasItemState()
+    {
+        return false;
+    }
+
+    public void readStateFromNBT(NBTTagCompound nbtTagCompound)
+    {
+        return;
+    }
+
+    public void writeStateToNBT(NBTTagCompound nbtTagCompound)
+    {
+        return;
+    }
 }

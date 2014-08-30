@@ -23,6 +23,7 @@ public class Geometry
     public static final int LEFT_FACE = 5;
     public static Vec3[] cubeVertices = new Vec3[8];
     public static Vec3[][] cubeFaces = new Vec3[6][4];
+
     static
     {
         cubeVertices[RIGHT_BOTTOM_FRONT] = Vec3.createVectorHelper(+1, -1, -1); // Right bottom front

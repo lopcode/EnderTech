@@ -26,6 +26,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
     public static final int[] CAPACITY = {0, 1 * 2000000, 10 * 1000000};
     public static Set<Block> creativeOverrideBlocks;
     private static Set<Key.KeyCode> handledKeys;
+
     static
     {
         handledKeys = new HashSet<Key.KeyCode>();
@@ -358,6 +359,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
         return ret;
     }
+
     public static enum Types
     {
         CREATIVE, REDSTONE, RESONANT;

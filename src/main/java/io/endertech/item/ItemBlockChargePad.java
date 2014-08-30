@@ -1,16 +1,26 @@
 package io.endertech.item;
 
+import cofh.api.energy.IEnergyContainerItem;
 import io.endertech.block.BlockChargePad;
 import io.endertech.block.ItemBlockBasic;
+import io.endertech.tile.TileChargePad;
+import io.endertech.util.helper.KeyHelper;
+import io.endertech.util.helper.LocalisationHelper;
+import io.endertech.util.helper.StringHelper;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import java.util.List;
 
-public class ItemBlockChargePad extends ItemBlockBasic
+public class ItemBlockChargePad extends ItemBlockBasic implements IEnergyContainerItem
 {
     public ItemBlockChargePad(Block block)
     {
         super(block);
+
+        this.setMaxStackSize(1);
     }
 
     @Override
@@ -33,4 +43,86 @@ public class ItemBlockChargePad extends ItemBlockBasic
         }
     }
 
+    public void checkAndSetDefaultTag(ItemStack stack)
+    {
+        if (stack.stackTagCompound == null)
+        {
+            stack.setTagCompound(new NBTTagCompound());
+            TileChargePad.writeDefaultTag(stack.stackTagCompound);
+        }
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean check)
+    {
+        super.addInformation(stack, player, list, check);
+
+        if (KeyHelper.isShiftDown())
+        {
+            this.checkAndSetDefaultTag(stack);
+
+            if (isCreative(stack))
+            {
+                list.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
+            } else
+            {
+                list.add(LocalisationHelper.localiseString("info.charge", StringHelper.getEnergyString(this.getEnergyStored(stack)) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(stack)) + " RF"));
+            }
+
+            if (!isCreative(stack))
+            {
+                list.add(LocalisationHelper.localiseString("info.charge.receive", StringHelper.getEnergyString(BlockChargePad.getMaxReceiveRate(stack.getItemDamage())) + " RF/t"));
+            }
+
+            list.add(LocalisationHelper.localiseString("info.charge.send", StringHelper.getEnergyString(BlockChargePad.getMaxSendRate(stack.getItemDamage())) + " RF/t"));
+        } else
+        {
+            list.add(StringHelper.holdShiftForDetails);
+        }
+    }
+
+    private boolean isCreative(ItemStack stack)
+    {
+        return stack.getItemDamage() == 0;
+    }
+
+    @Override
+    public int receiveEnergy(ItemStack container, int maxReceive, boolean simulate)
+    {
+        this.checkAndSetDefaultTag(container);
+
+        int energy = container.stackTagCompound.getInteger("Energy");
+        int energyReceived = Math.min(this.getMaxEnergyStored(container) - energy, Math.min(BlockChargePad.getMaxReceiveRate(container.getItemDamage()), maxReceive));
+
+        if (!simulate)
+        {
+            energy += energyReceived;
+            container.stackTagCompound.setInteger("Energy", energy);
+        }
+
+        return energyReceived;
+    }
+
+
+    @Override
+    public int extractEnergy(ItemStack container, int maxExtract, boolean simulate)
+    {
+        return 0;
+    }
+
+    @Override
+    public int getEnergyStored(ItemStack container)
+    {
+        if (container.stackTagCompound == null || !container.stackTagCompound.hasKey("Energy"))
+        {
+            return 0;
+        }
+        return container.stackTagCompound.getInteger("Energy");
+    }
+
+    @Override
+    public int getMaxEnergyStored(ItemStack container)
+    {
+        return BlockChargePad.getMaxEnergyStored(container.getItemDamage());
+    }
 }

@@ -10,6 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -46,6 +47,19 @@ public class BlockET extends Block
             for (ItemStack itemStack : tileInventory.inventory)
             {
                 if (itemStack != null) drops.add(itemStack);
+            }
+
+            tileInventory.inventory = new ItemStack[tileInventory.inventory.length];
+        }
+
+        if (tile instanceof TileET)
+        {
+            TileET tileET = (TileET) tile;
+
+            if (tileET.hasItemState())
+            {
+                drop.setTagCompound(new NBTTagCompound());
+                tileET.writeStateToNBT(drop.stackTagCompound);
             }
         }
 
