@@ -25,6 +25,7 @@ import io.endertech.network.PacketKeyPressed;
 import io.endertech.network.PacketTile;
 import io.endertech.proxy.CommonProxy;
 import io.endertech.reference.Reference;
+import io.endertech.util.Exchange;
 import io.endertech.util.fluid.BucketHandler;
 import io.endertech.util.helper.BlockHelper;
 import io.endertech.util.helper.LocalisationHelper;
@@ -160,6 +161,7 @@ public class EnderTech
         }
 
         BlockHelper.initSoftBlocks();
+        Exchange.initSpecialBlocks();
 
         LogHelper.info(LocalisationHelper.localiseString("info.postinit.recipes"));
         if (Loader.isModLoaded("ThermalExpansion"))

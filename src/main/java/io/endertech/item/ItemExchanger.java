@@ -166,7 +166,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
             Block source = player.worldObj.getBlock(x, y, z);
             int meta = player.worldObj.getBlockMetadata(x, y, z);
 
-            if (Exchange.blockSuitableForExchange(coord, world, source, meta, pb, itemstack))
+            if (Exchange.blockSuitableForExchange(coord, world, source, meta, pb, itemstack, 0))
                 WorldEventHandler.queueExchangeRequest(player.worldObj, coord, this.getTargetRadius(itemstack), source, meta, pb, player, player.inventory.currentItem, ForgeDirection.getOrientation(side));
             //TeleportHelper.teleportPlayerToDimensionWithCoords((EntityPlayerMP) player, player.dimension, player.posX, player.posY + 10, player.posZ);
         }
@@ -352,7 +352,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
             Set<BlockCoord> squareSet = Geometry.squareSet(radius, new BlockCoord(origin.x, origin.y, origin.z), side);
             for (BlockCoord blockCoord : squareSet)
             {
-                if (Exchange.blockSuitableForExchange(blockCoord, world, targetBlock, targetMeta, this.getSourceItemStack(item), item))
+                if (Exchange.blockSuitableForExchange(blockCoord, world, targetBlock, targetMeta, this.getSourceItemStack(item), item, radius))
                     ret.add(blockCoord);
             }
         }

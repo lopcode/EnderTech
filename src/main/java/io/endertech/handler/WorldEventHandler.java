@@ -125,7 +125,7 @@ public class WorldEventHandler
     {
         Block block = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
 
-        if (!Exchange.blockSuitableForExchange(blockCoord, world, exchange.source, exchange.sourceMeta, exchange.target, exchangerStack))
+        if (!Exchange.blockSuitableForExchange(blockCoord, world, exchange.source, exchange.sourceMeta, exchange.target, exchangerStack, exchange.currentRadius - 1))
             return ExchangeResult.FAIL_BLOCK_NOT_REPLACEABLE;
 
         int exchangeCost = this.calculateExchangeCost(exchange, block, world, blockCoord);
