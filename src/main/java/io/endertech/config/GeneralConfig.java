@@ -11,6 +11,8 @@ public class GeneralConfig
     public static boolean debugRender;
     public static boolean gasTopToBottom;
     public static boolean forceLoadDevContent;
+    public static int GUITopLeftYOffset;
+    public static int GUITopLeftXOffset;
     private static Configuration generalConfig;
 
     protected static void init(File configFile)
@@ -33,6 +35,9 @@ public class GeneralConfig
             debugRender = generalConfig.get("rendering", "Rendering.Debug", false).getBoolean(false);
             gasTopToBottom = generalConfig.get("rendering", "Rendering.Tank.GaseousTopToBottom", false).getBoolean(false);
             forceLoadDevContent = generalConfig.get("development", "Development.ForceLoadDevContent", false).getBoolean(false);
+
+            GUITopLeftXOffset = generalConfig.get("rendering", "Rendering.GUITopLeftXOffset", 0).getInt(0);
+            GUITopLeftYOffset = generalConfig.get("rendering", "Rendering.GUITopLeftYOffset", 0).getInt(0);
         } catch (Exception e)
         {
             LogHelper.error(LocalisationHelper.localiseString("error.config.general.load"));

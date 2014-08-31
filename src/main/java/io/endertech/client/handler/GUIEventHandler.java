@@ -1,6 +1,7 @@
 package io.endertech.client.handler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import io.endertech.config.GeneralConfig;
 import io.endertech.item.ItemExchanger;
 import io.endertech.util.helper.FontHelper;
 import io.endertech.util.helper.LocalisationHelper;
@@ -70,7 +71,7 @@ public class GUIEventHandler extends Gui
                             GL11.glEnable(GL11.GL_LIGHTING);
 
                             net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
-                            ri.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, this.lastExchangeSource, 2, 2);
+                            ri.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, this.lastExchangeSource, 2 + GeneralConfig.GUITopLeftXOffset, 2 + GeneralConfig.GUITopLeftYOffset);
 
                             GL11.glDisable(GL11.GL_LIGHTING);
                             GL11.glPushMatrix();
@@ -81,8 +82,8 @@ public class GUIEventHandler extends Gui
                                 am = LocalisationHelper.localiseString("gui.exchanger.radius.infinite");
                             }
 
-                            FontHelper.drawItemQuantity(mc.fontRenderer, 3, 3, am);
-                            FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2, 3, 1.0, LocalisationHelper.localiseString("gui.exchanger.radius", exchanger.getTargetRadius(exchangerStack)));
+                            FontHelper.drawItemQuantity(mc.fontRenderer, 3 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, am);
+                            FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, 1.0, LocalisationHelper.localiseString("gui.exchanger.radius", exchanger.getTargetRadius(exchangerStack)));
 
                             GL11.glPopMatrix();
                             GL11.glPopMatrix();
