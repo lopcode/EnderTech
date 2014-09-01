@@ -50,7 +50,7 @@ assert.multiblock.part.detached=[assert] Part @ (%d, %d, %d) should be detached 
 
 # Errors
 error.fingerprint.tampered=Fingerprint doesn't match - this mod has been tampered with!
-error.config.general.load=Failed to load general config
+error.config.general.load=컨피그 로딩에 실패했습니다.
 error.config.block.load=블럭 설정 로딩에 실패했습니다.
 error.config.item.load=아이템 설정 로딩에 실패했습니다.
 error.multiblock.tank.destructive_assimilation=WARNING: Two tanks were assimilated that both previously had contents. This should never happen. Please report this to the EnderTech mod author. The tank with the largest contents has been chosen.
