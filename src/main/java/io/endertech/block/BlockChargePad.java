@@ -127,13 +127,6 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
         }
     }
 
-    public Types metadataToType(int meta)
-    {
-        if (meta < 0 || meta > arrayTypes.length - 1) meta = arrayTypes.length - 1;
-
-        return arrayTypes[meta];
-    }
-
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
