@@ -13,7 +13,7 @@
         "source": [ "https://github.com/Drayshak/EnderTech" ]
     },
     "license": "All rights reserved",
-    "updateUrl": "github://Drayshak@EnderTech/endertech-curse.qm",
+    "updateUrl": "https://github.com/Drayshak/EnderTech/raw/master/endertech-curse.qm",
     "tags": [ "ThermalExpansion", "Technology", "Ender", "Energy" ],
     "categories": [ "ThermalExpansion", "Technology", "Ender" ],
     "authors": {
