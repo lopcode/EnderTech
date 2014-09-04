@@ -1,4 +1,4 @@
-package io.endertech.client.renderer;
+package io.endertech.modules.dev.renderer;
 
 import io.endertech.tile.TileSpinningCube;
 import net.minecraft.client.renderer.Tessellator;

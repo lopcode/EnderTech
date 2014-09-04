@@ -10,7 +10,7 @@ import io.endertech.EnderTech;
 import io.endertech.block.ETBlocks;
 import io.endertech.client.handler.DrawBlockHighlightEventHandler;
 import io.endertech.client.handler.KeyBindingHandler;
-import io.endertech.client.renderer.SpinningCubeRenderer;
+import io.endertech.modules.dev.renderer.SpinningCubeRenderer;
 import io.endertech.modules.dev.fluid.DevETFluids;
 import io.endertech.multiblock.handler.MultiblockClientTickHandler;
 import io.endertech.multiblock.renderer.ConnectedTextureRenderer;
