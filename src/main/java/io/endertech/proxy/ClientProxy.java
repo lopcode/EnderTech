@@ -16,7 +16,7 @@ import io.endertech.multiblock.handler.MultiblockClientTickHandler;
 import io.endertech.multiblock.renderer.ConnectedTextureRenderer;
 import io.endertech.multiblock.renderer.TankControllerRenderer;
 import io.endertech.multiblock.tile.TileTankController;
-import io.endertech.tile.TileSpinningCube;
+import io.endertech.modules.dev.tile.TileSpinningCube;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;

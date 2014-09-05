@@ -1,6 +1,6 @@
 package io.endertech.modules.dev.renderer;
 
-import io.endertech.tile.TileSpinningCube;
+import io.endertech.modules.dev.tile.TileSpinningCube;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;

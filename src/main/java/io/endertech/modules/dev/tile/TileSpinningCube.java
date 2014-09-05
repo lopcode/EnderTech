@@ -1,8 +1,9 @@
-package io.endertech.tile;
+package io.endertech.modules.dev.tile;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
+import io.endertech.tile.TileET;
 import io.endertech.util.Geometry;
 import io.endertech.util.helper.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;

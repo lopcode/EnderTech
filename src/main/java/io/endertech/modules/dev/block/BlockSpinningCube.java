@@ -3,7 +3,7 @@ package io.endertech.modules.dev.block;
 import io.endertech.EnderTech;
 import io.endertech.network.PacketHandler;
 import io.endertech.reference.Strings;
-import io.endertech.tile.TileSpinningCube;
+import io.endertech.modules.dev.tile.TileSpinningCube;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
