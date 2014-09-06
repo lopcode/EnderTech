@@ -140,7 +140,7 @@ public class BlockTankController extends BlockET implements ITileEntityProvider,
     public ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops)
     {
         TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile != null && tile instanceof TileTankController && ServerHelper.isServerWorld(world))
+        if (tile instanceof TileTankController && ServerHelper.isServerWorld(world))
         {
             TileTankController tileTankController = (TileTankController) tile;
             ControllerTank controller = tileTankController.getTankController();

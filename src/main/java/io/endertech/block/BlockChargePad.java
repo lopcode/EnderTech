@@ -99,7 +99,7 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
     {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if (tileEntity != null && tileEntity instanceof TileChargePad)
+        if (tileEntity instanceof TileChargePad)
         {
             int direction = -1;
 

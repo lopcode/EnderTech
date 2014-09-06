@@ -123,7 +123,7 @@ public class BlockTankPart extends BlockET implements ITileEntityProvider, IOutl
         for (ForgeDirection neighbour : ForgeDirection.VALID_DIRECTIONS)
         {
             TileEntity tile = world.getTileEntity(x + neighbour.offsetX, y + neighbour.offsetY, z + neighbour.offsetZ);
-            if (tile != null && tile instanceof TileTankPart)
+            if (tile instanceof TileTankPart)
             {
                 ControllerTank controller = ((TileTankPart) tile).getTankController();
                 if (controller != null)
@@ -163,7 +163,7 @@ public class BlockTankPart extends BlockET implements ITileEntityProvider, IOutl
         for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
         {
             TileEntity neighbourTile = world.getTileEntity(coord.x + direction.offsetX, coord.y + direction.offsetY, coord.z + direction.offsetZ);
-            if (neighbourTile != null && neighbourTile instanceof TileTankPart) return false;
+            if (neighbourTile instanceof TileTankPart) return false;
         }
 
         return true;

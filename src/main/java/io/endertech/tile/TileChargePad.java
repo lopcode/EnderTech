@@ -163,7 +163,7 @@ public class TileChargePad extends TileInventory implements IReconfigurableFacin
             if (itemStack == null) continue;
 
             Item item = itemStack.getItem();
-            if (item != null && item instanceof IEnergyContainerItem)
+            if (item instanceof IEnergyContainerItem)
             {
                 IEnergyContainerItem chargeableItem = (IEnergyContainerItem) item;
                 if (chargeableItem.receiveEnergy(itemStack, 1, true) == 1) itemsToCharge.add(itemStack);

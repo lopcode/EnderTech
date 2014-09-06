@@ -40,7 +40,7 @@ public class BlockET extends Block
         drops.add(drop);
 
         TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile != null && tile instanceof TileInventory)
+        if (tile instanceof TileInventory)
         {
             TileInventory tileInventory = (TileInventory) tile;
 
