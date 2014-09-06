@@ -10,13 +10,11 @@ import io.endertech.EnderTech;
 import io.endertech.block.ETBlocks;
 import io.endertech.client.handler.DrawBlockHighlightEventHandler;
 import io.endertech.client.handler.KeyBindingHandler;
-import io.endertech.modules.dev.renderer.SpinningCubeRenderer;
 import io.endertech.modules.dev.fluid.DevETFluids;
 import io.endertech.multiblock.handler.MultiblockClientTickHandler;
 import io.endertech.multiblock.renderer.ConnectedTextureRenderer;
 import io.endertech.multiblock.renderer.TankControllerRenderer;
 import io.endertech.multiblock.tile.TileTankController;
-import io.endertech.modules.dev.tile.TileSpinningCube;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -37,11 +35,6 @@ public class ClientProxy extends CommonProxy
     @Override
     public void registerTESRs()
     {
-        if (EnderTech.loadDevModeContent)
-        {
-            ClientRegistry.bindTileEntitySpecialRenderer(TileSpinningCube.class, new SpinningCubeRenderer());
-        }
-
         ClientRegistry.bindTileEntitySpecialRenderer(TileTankController.class, new TankControllerRenderer());
     }
 
