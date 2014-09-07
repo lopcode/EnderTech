@@ -131,11 +131,6 @@ public class BlockMultiblockGlass extends BlockET implements ITileEntityProvider
         World world = event.player.worldObj;
 
         TileEntity tile = world.getTileEntity(target.x, target.y, target.z);
-        if (tile == null)
-        {
-            return false;
-        }
-
         if (tile instanceof TileTankPart)
         {
             return ((TileTankPart) tile).drawOutline(event);

@@ -154,7 +154,7 @@ public class BlockTankPart extends BlockET implements ITileEntityProvider, IOutl
     public static boolean isLastPartWithContents(World world, BlockCoord coord)
     {
         TileEntity tile = world.getTileEntity(coord.x, coord.y, coord.z);
-        if (tile == null || !(tile instanceof TileTankPart)) return false;
+        if (!(tile instanceof TileTankPart)) return false;
 
         ControllerTank controller = ((TileTankPart) tile).getTankController();
         if (controller == null || (controller.getStoredEnergy() <= 0 && controller.tank.getFluidAmount() <= 0))
@@ -246,11 +246,6 @@ public class BlockTankPart extends BlockET implements ITileEntityProvider, IOutl
         World world = event.player.worldObj;
 
         TileEntity tile = world.getTileEntity(target.x, target.y, target.z);
-        if (tile == null)
-        {
-            return false;
-        }
-
         if (tile instanceof TileTankPart)
         {
             return ((TileTankPart) tile).drawOutline(event);

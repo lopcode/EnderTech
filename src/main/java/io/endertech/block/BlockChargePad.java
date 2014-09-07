@@ -160,7 +160,7 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     {
         TileEntity tileEntity = blockAccess.getTileEntity(x, y, z);
         int meta = blockAccess.getBlockMetadata(x, y, z);
-        if (tileEntity == null || !(tileEntity instanceof TileChargePad)) return this.sideIcon[meta];
+        if (!(tileEntity instanceof TileChargePad)) return this.sideIcon[meta];
 
         TileChargePad tile = (TileChargePad) tileEntity;
         ForgeDirection out = tile.getOrientation();
@@ -244,11 +244,6 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
         World world = event.player.worldObj;
 
         TileEntity tile = world.getTileEntity(target.x, target.y, target.z);
-        if (tile == null)
-        {
-            return false;
-        }
-
         if (tile instanceof TileChargePad)
         {
             return ((TileChargePad) tile).drawOutline(event);
@@ -261,7 +256,7 @@ public class BlockChargePad extends BlockET implements ITileEntityProvider, IDis
     public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis)
     {
         TileEntity tile = worldObj.getTileEntity(x, y, z);
-        if (tile == null || !(tile instanceof TileChargePad)) return false;
+        if (!(tile instanceof TileChargePad)) return false;
 
         TileChargePad tileChargePad = (TileChargePad) tile;
         return tileChargePad.setFacing(axis.ordinal());

@@ -22,11 +22,7 @@ import org.lwjgl.opengl.GL11;
 
 public class TankControllerRenderer extends TileEntitySpecialRenderer implements IItemRenderer
 {
-    RenderBlocks renderer = new RenderBlocks();
-
-    /**
-     * @param liquid
-     */
+    private RenderBlocks renderer = new RenderBlocks();
     public static ResourceLocation getFluidSheet(Fluid liquid)
     {
         return TextureMap.locationBlocksTexture;
@@ -71,7 +67,6 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
 
         tessellator.draw();
     }
-
 
     @Override
     public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f)
