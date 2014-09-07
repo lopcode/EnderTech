@@ -13,7 +13,7 @@ Go to #EnderTech on Esper if you have any questions or concerns (especially if y
 
 Curse link: http://minecraft.curseforge.com/mc-mods/223428-endertech
 
-Features, further description, progress and more: https://github.com/Drayshak/EnderTech/wiki
+_FAQs_, progress, modpack permissions / etc: https://github.com/Drayshak/EnderTech/wiki
 
 ##License and terms
 Things I want you to do:
