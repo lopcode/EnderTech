@@ -71,10 +71,10 @@ public class ItemBlockChargePad extends ItemBlockBasic implements IEnergyContain
 
             if (!isCreative(stack))
             {
-                list.add(LocalisationHelper.localiseString("info.charge.receive", StringHelper.getEnergyString(BlockChargePad.getMaxReceiveRate(stack.getItemDamage())) + " RF/t"));
+                list.add(LocalisationHelper.localiseString("info.charge.receive", StringHelper.getEnergyString(TileChargePad.RECEIVE[stack.getItemDamage()]) + " RF/t"));
             }
 
-            list.add(LocalisationHelper.localiseString("info.charge.send", StringHelper.getEnergyString(BlockChargePad.getMaxSendRate(stack.getItemDamage())) + " RF/t"));
+            list.add(LocalisationHelper.localiseString("info.charge.send", StringHelper.getEnergyString(TileChargePad.SEND[stack.getItemDamage()]) + " RF/t"));
         } else
         {
             list.add(StringHelper.holdShiftForDetails);
@@ -92,7 +92,7 @@ public class ItemBlockChargePad extends ItemBlockBasic implements IEnergyContain
         this.checkAndSetDefaultTag(container);
 
         int energy = container.stackTagCompound.getInteger("Energy");
-        int energyReceived = Math.min(this.getMaxEnergyStored(container) - energy, Math.min(BlockChargePad.getMaxReceiveRate(container.getItemDamage()), maxReceive));
+        int energyReceived = Math.min(this.getMaxEnergyStored(container) - energy, Math.min(TileChargePad.RECEIVE[container.getItemDamage()], maxReceive));
 
         if (!simulate)
         {
@@ -123,6 +123,6 @@ public class ItemBlockChargePad extends ItemBlockBasic implements IEnergyContain
     @Override
     public int getMaxEnergyStored(ItemStack container)
     {
-        return BlockChargePad.getMaxEnergyStored(container.getItemDamage());
+        return TileChargePad.CAPACITY[container.getItemDamage()];
     }
 }

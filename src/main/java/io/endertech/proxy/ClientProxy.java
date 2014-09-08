@@ -10,11 +10,13 @@ import io.endertech.EnderTech;
 import io.endertech.block.ETBlocks;
 import io.endertech.client.handler.DrawBlockHighlightEventHandler;
 import io.endertech.client.handler.KeyBindingHandler;
+import io.endertech.client.render.IconRegistry;
 import io.endertech.modules.dev.fluid.DevETFluids;
 import io.endertech.multiblock.handler.MultiblockClientTickHandler;
 import io.endertech.multiblock.renderer.ConnectedTextureRenderer;
 import io.endertech.multiblock.renderer.TankControllerRenderer;
 import io.endertech.multiblock.tile.TileTankController;
+import io.endertech.reference.Textures;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -57,6 +59,17 @@ public class ClientProxy extends CommonProxy
     {
         DevETFluids.fluidChargedEnderStill = event.map.registerIcon("endertech:fluids/charged_ender_still");
         DevETFluids.fluidChargedEnderFlowing = event.map.registerIcon("endertech:fluids/charged_ender_flow");
+
+        if (event.map.getTextureType() == 0)
+        {
+            String[] types = {"Side", "Top", "Bottom"};
+            for (String type : types)
+            {
+                IconRegistry.addAndRegisterIcon("Machine_Redstone_" + type, Textures.TE3_TEXTURE_BASE + type, event.map);
+                IconRegistry.addAndRegisterIcon("Machine_Creative_" + type, Textures.CREATIVE_TEXTURE_BASE + type, event.map);
+                IconRegistry.addAndRegisterIcon("Machine_Resonant_" + type, Textures.ENDER_RESONANT_BASE + type, event.map);
+            }
+        }
     }
 
     @Override

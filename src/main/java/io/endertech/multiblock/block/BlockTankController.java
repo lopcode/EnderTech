@@ -126,9 +126,9 @@ public class BlockTankController extends BlockET implements ITileEntityProvider,
             _icons[i] = iconRegister.registerIcon(TEXTURE_BASE + "." + _subBlocks[i]);
         }
 
-        this.sideIcon = iconRegister.registerIcon(Textures.ENDER_TEXTURE_BASE + "Side");
-        this.topIcon = iconRegister.registerIcon(Textures.ENDER_TEXTURE_BASE + "Top");
-        this.bottomIcon = iconRegister.registerIcon(Textures.ENDER_TEXTURE_BASE + "Bottom");
+        this.sideIcon = iconRegister.registerIcon(Textures.ENDER_RESONANT_BASE + "Side");
+        this.topIcon = iconRegister.registerIcon(Textures.ENDER_RESONANT_BASE + "Top");
+        this.bottomIcon = iconRegister.registerIcon(Textures.ENDER_RESONANT_BASE + "Bottom");
     }
 
     @Override

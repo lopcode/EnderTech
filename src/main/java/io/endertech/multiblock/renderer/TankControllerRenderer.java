@@ -23,6 +23,7 @@ import org.lwjgl.opengl.GL11;
 public class TankControllerRenderer extends TileEntitySpecialRenderer implements IItemRenderer
 {
     private RenderBlocks renderer = new RenderBlocks();
+
     public static ResourceLocation getFluidSheet(Fluid liquid)
     {
         return TextureMap.locationBlocksTexture;
