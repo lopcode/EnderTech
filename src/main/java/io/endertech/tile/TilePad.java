@@ -4,6 +4,9 @@ import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.lib.util.helpers.EnergyHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.endertech.EnderTech;
 import io.endertech.config.GeneralConfig;
 import io.endertech.network.PacketETBase;
 import io.endertech.util.IChargeableFromSlot;
@@ -13,13 +16,16 @@ import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.NBTHelper;
 import io.endertech.util.helper.RenderHelper;
 import io.endertech.util.helper.StringHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
+import java.awt.*;
 import java.util.List;
+import java.util.Random;
 
 public abstract class TilePad extends TileInventory implements IReconfigurableFacing, IEnergyHandler, IOutlineDrawer, IChargeableFromSlot
 {
@@ -28,7 +34,6 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
     public short ticksSinceLastUpdate = 0;
     public boolean isActive = false;
     public int storedEnergy = 0;
-    public int sentPower = 0;
     public boolean isCreative = false;
 
     public TilePad()
@@ -125,28 +130,6 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
     }
 
     @Override
-    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip)
-    {
-        if (this.isActive)
-        {
-            currenttip.add(EnumChatFormatting.GREEN + LocalisationHelper.localiseString("info.active") + EnumChatFormatting.RESET);
-        } else
-        {
-            currenttip.add(EnumChatFormatting.RED + LocalisationHelper.localiseString("info.inactive") + EnumChatFormatting.RESET);
-        }
-
-        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        if (this.isCreative)
-            currenttip.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
-        else
-            currenttip.add(LocalisationHelper.localiseString("info.charge", StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(blockMeta)) + " RF"));
-
-        currenttip.add(LocalisationHelper.localiseString("info.sent", StringHelper.getEnergyString(this.sentPower) + " RF/t"));
-
-        return currenttip;
-    }
-
-    @Override
     public boolean hasItemState()
     {
         return true;
@@ -192,7 +175,6 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
         PacketETBase packet = super.getPacket();
         packet.addBool(this.isActive);
         packet.addInt(this.storedEnergy);
-        packet.addInt(this.sentPower);
         packet.addInventory(this.inventory);
 
         return packet;
@@ -205,14 +187,12 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
 
         boolean isActive = tilePacket.getBool();
         int storedEnergy = tilePacket.getInt();
-        int sentPower = tilePacket.getInt();
         ItemStack[] inventory = tilePacket.getInventory(INVENTORY_SIZE);
 
         if (!isServer)
         {
             this.isActive = isActive;
             this.storedEnergy = storedEnergy;
-            this.sentPower = sentPower;
             this.inventory = inventory;
         }
     }
@@ -282,9 +262,79 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
         return this.storedEnergy;
     }
 
+    @SideOnly(Side.CLIENT)
+    protected float[] getRainbowParticleColour(Random rand)
+    {
+        final float hue = rand.nextFloat();
+        final float saturation = 0.9f;
+        final float luminance = 1.0f;
+        Color color = Color.getHSBColor(hue, saturation, luminance);
+
+        float r = color.getRed() / 255.0F;
+        float g = color.getBlue() / 255.0F;
+        float b = color.getGreen() / 255.0F;
+
+        return new float[] {r, g, b};
+    }
+
+    protected boolean isItemInChargeSlotTuberous()
+    {
+        int slot = this.getChargeSlot();
+        ItemStack itemStack = this.inventory[slot];
+        if (itemStack == null) return false;
+
+        Item item = itemStack.getItem();
+        if (item == null) return false;
+
+        if (item == EnderTech.capacitor && itemStack.getItemDamage() == 1) return true;
+
+        return false;
+    }
+
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate)
+    {
+        if (this.isCreative) return 0;
+
+        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        int energyReceived = Math.min(this.getMaxEnergyStored(blockMeta) - this.storedEnergy, Math.min(this.getMaxReceiveRate(blockMeta), maxReceive));
+
+        if (!simulate)
+        {
+            this.storedEnergy += energyReceived;
+        }
+
+        return energyReceived;
+    }
+
+    @Override
+    public int getMaxEnergyStored()
+    {
+        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        return getMaxEnergyStored(blockMeta);
+    }
+
     public abstract int getMaxEnergyStored(int meta);
 
     public abstract int getMaxReceiveRate(int meta);
 
     public abstract int getMaxSendRate(int meta);
+
+    @SideOnly(Side.CLIENT)
+    public abstract void spawnParticles(int meta);
+
+    @SideOnly(Side.CLIENT)
+    public abstract float[] getParticleColour(Random rand);
+
+    @SideOnly(Side.CLIENT)
+    public abstract int getParticleMaxAge();
+
+    @SideOnly(Side.CLIENT)
+    public abstract double[] getParticleVelocity();
+
+    @SideOnly(Side.CLIENT)
+    public abstract int getParticleCount(int meta);
+
+    @SideOnly(Side.CLIENT)
+    public abstract float getParticleSizeModifier(int meta);
 }

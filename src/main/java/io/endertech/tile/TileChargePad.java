@@ -11,8 +11,10 @@ import io.endertech.block.BlockChargePad;
 import io.endertech.fx.EntityChargePadFX;
 import io.endertech.gui.client.GuiChargePad;
 import io.endertech.gui.container.ContainerChargePad;
+import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.helper.LocalisationHelper;
+import io.endertech.util.helper.StringHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.Entity;
@@ -22,6 +24,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.awt.*;
@@ -33,6 +36,8 @@ public class TileChargePad extends TilePad
     public static final int[] RECEIVE = {0, 1 * 2000, 10 * 2000};
     public static final int[] SEND = {10 * 1000000, 1 * 2000, 10 * 2000};
     public static final int[] CAPACITY = {-1, 1 * 2000000, 10 * 1000000};
+
+    public int sentPower = 0;
 
     public TileChargePad()
     {
@@ -64,7 +69,7 @@ public class TileChargePad extends TilePad
     @Override
     public String toString()
     {
-        return "Charged plane: position " + this.xCoord + ", " + this.yCoord + ", " + this.zCoord;
+        return "Charge Pad: position " + this.xCoord + ", " + this.yCoord + ", " + this.zCoord;
     }
 
     public Set<ItemStack> chargeableItemsInInventory(ItemStack[] itemStacks)
@@ -230,13 +235,54 @@ public class TileChargePad extends TilePad
         if (this.sentPower > 0 && ServerHelper.isClientWorld(this.worldObj)) this.spawnParticles(meta);
     }
 
+    @Override
+    public PacketETBase getPacket()
+    {
+        PacketETBase packet = super.getPacket();
+        packet.addInt(this.sentPower);
+
+        return packet;
+    }
+
+    @Override
+    public void handleTilePacket(PacketETBase tilePacket, boolean isServer)
+    {
+        super.handleTilePacket(tilePacket, isServer);
+
+        int sentPower = tilePacket.getInt();
+
+        if (!isServer)
+        {
+            this.sentPower = sentPower;
+        }
+    }
+
+    @Override
+    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip)
+    {
+        if (this.isActive)
+        {
+            currenttip.add(EnumChatFormatting.GREEN + LocalisationHelper.localiseString("info.active") + EnumChatFormatting.RESET);
+        } else
+        {
+            currenttip.add(EnumChatFormatting.RED + LocalisationHelper.localiseString("info.inactive") + EnumChatFormatting.RESET);
+        }
+
+        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        if (this.isCreative) currenttip.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
+        else
+            currenttip.add(LocalisationHelper.localiseString("info.charge", StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(blockMeta)) + " RF"));
+
+        currenttip.add(LocalisationHelper.localiseString("info.sent", StringHelper.getEnergyString(this.sentPower) + " RF/t"));
+
+        return currenttip;
+    }
+
     @SideOnly(Side.CLIENT)
     public void spawnParticles(int meta)
     {
         EffectRenderer er = FMLClientHandler.instance().getClient().effectRenderer;
-
         ForgeDirection orientation = this.getOrientation();
-
         Random rand = this.worldObj.rand;
 
         for (int particle = this.getParticleCount(meta); particle > 0; particle--)
@@ -252,42 +298,26 @@ public class TileChargePad extends TilePad
             double x = this.xCoord + (0.5F * orientation.offsetX) + 0.5 + xAddition;
             double y = this.yCoord + (0.5F * orientation.offsetY) + 0.5 + yAddition;
             double z = this.zCoord + (0.5F * orientation.offsetZ) + 0.5 + zAddition;
-            double[] velocity = getParticleVelocity();
 
-            float[] colour = getParticleColour(rand);
-            er.addEffect(new EntityChargePadFX(this.worldObj, x, y, z, getParticleMaxAge(), velocity, colour, this.getParticleSizeModifier(meta)));
+            er.addEffect(new EntityChargePadFX(this.worldObj, x, y, z, getParticleMaxAge(), getParticleVelocity(), getParticleColour(rand), this.getParticleSizeModifier(meta)));
         }
     }
 
     @SideOnly(Side.CLIENT)
-    protected int getParticleMaxAge()
+    public int getParticleMaxAge()
     {
         return 16;
     }
 
     @SideOnly(Side.CLIENT)
-    protected double[] getParticleVelocity()
+    public double[] getParticleVelocity()
     {
         ForgeDirection orientation = this.getOrientation();
         return new double[] {orientation.offsetX * 0.15D, orientation.offsetY * 0.15D, orientation.offsetZ * 0.15D};
     }
 
-    private boolean isItemInChargeSlotTuberous()
-    {
-        int slot = this.getChargeSlot();
-        ItemStack itemStack = this.inventory[slot];
-        if (itemStack == null) return false;
-
-        Item item = itemStack.getItem();
-        if (item == null) return false;
-
-        if (item == EnderTech.capacitor && itemStack.getItemDamage() == 1) return true;
-
-        return false;
-    }
-
     @SideOnly(Side.CLIENT)
-    protected float[] getParticleColour(Random rand)
+    public float[] getParticleColour(Random rand)
     {
         if (this.isItemInChargeSlotTuberous()) return getRainbowParticleColour(rand);
 
@@ -298,22 +328,7 @@ public class TileChargePad extends TilePad
     }
 
     @SideOnly(Side.CLIENT)
-    protected float[] getRainbowParticleColour(Random rand)
-    {
-        final float hue = rand.nextFloat();
-        final float saturation = 0.9f;
-        final float luminance = 1.0f;
-        Color color = Color.getHSBColor(hue, saturation, luminance);
-
-        float r = color.getRed() / 255.0F;
-        float g = color.getBlue() / 255.0F;
-        float b = color.getGreen() / 255.0F;
-
-        return new float[] {r, g, b};
-    }
-
-    @SideOnly(Side.CLIENT)
-    protected int getParticleCount(int meta)
+    public int getParticleCount(int meta)
     {
         if (meta == 0) return 5;
         else if (meta == 2) return 2;
@@ -321,34 +336,11 @@ public class TileChargePad extends TilePad
     }
 
     @SideOnly(Side.CLIENT)
-    protected float getParticleSizeModifier(int meta)
+    public float getParticleSizeModifier(int meta)
     {
         if (meta == 0) return 2.0F;
         else if (meta == 2) return 1.75F;
         else return 1.5F;
-    }
-
-    @Override
-    public int receiveEnergy(int maxReceive, boolean simulate)
-    {
-        if (this.isCreative) return 0;
-
-        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        int energyReceived = Math.min(getMaxEnergyStored(blockMeta) - this.storedEnergy, Math.min(getMaxReceiveRate(blockMeta), maxReceive));
-
-        if (!simulate)
-        {
-            this.storedEnergy += energyReceived;
-        }
-
-        return energyReceived;
-    }
-
-    @Override
-    public int getMaxEnergyStored()
-    {
-        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        return getMaxEnergyStored(blockMeta);
     }
 
     public String getName()

@@ -18,6 +18,7 @@ public class Strings
     {
         public static final String SPINNING_CUBE_NAME = "spinningCube";
         public static final String CHARGE_PAD = "chargePad";
+        public static final String HEALTH_PAD = "healthPad";
         public static final String TANK_PART_NAME = "enderTankPart";
         public static final String MULTIBLOCK_GLASS_NAME = "multiblockGlass";
         public static final String TANK_VALVE_NAME = "enderTankValve";

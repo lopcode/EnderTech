@@ -74,7 +74,7 @@ public abstract class BlockPad extends BlockET implements ITileEntityProvider, I
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
     {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if (tileEntity instanceof TileChargePad)
+        if (tileEntity instanceof TilePad)
         {
             int direction = -1;
 
@@ -91,7 +91,7 @@ public abstract class BlockPad extends BlockET implements ITileEntityProvider, I
                 }
             }
 
-            TileChargePad tile = (TileChargePad) tileEntity;
+            TilePad tile = (TilePad) tileEntity;
             if (direction == -1) super.onBlockPlacedBy(world, x, y, z, entityLiving, itemStack);
             else tile.setOrientation(direction);
 
