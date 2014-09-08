@@ -9,11 +9,11 @@ Some features are often in development, so try to use Promoted builds in your wo
 
 Unless we talk about it first and I agree, I'm very unlikely to accept pull requests. GitHub is used to show the source and manage issues alone.
 
-Go to #EnderTech on Esper if you have any questions or concerns (especially if you're considering including it in a larger modpack), or just want to shout at me for doing something wrong. 
-
 Curse link: http://minecraft.curseforge.com/mc-mods/223428-endertech
 
-_FAQs_, progress, modpack permissions / etc: https://github.com/Drayshak/EnderTech/wiki
+__FAQs__, progress, modpack permissions / etc: https://github.com/Drayshak/EnderTech/wiki
+
+If you want to talk about the mod, there's an IRC channel on Esper: #EnderTech
 
 ##License and terms
 Things I want you to do:
