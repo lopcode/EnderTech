@@ -161,7 +161,7 @@ public class TileChargePad extends TilePad
                 IEnergyContainerItem chargeableItem = (IEnergyContainerItem) itemStack.getItem();
                 int couldReceive = chargeableItem.receiveEnergy(itemStack, chargePerItem, true);
                 int toSend = this.extractEnergy(couldReceive, meta, false);
-                if (BlockChargePad.isCreative(meta)) toSend = couldReceive;
+                if (this.isCreative) toSend = couldReceive;
 
                 int sent = chargeableItem.receiveEnergy(itemStack, (int) (toSend * efficiency), false);
                 if (sent > 0 && entity instanceof EntityItem)
@@ -192,7 +192,7 @@ public class TileChargePad extends TilePad
 
             sentPower = 0;
             int totalChargeSendable = this.extractEnergy(getMaxSendRate(meta), meta, true);
-            if (BlockChargePad.isCreative(meta)) totalChargeSendable = SEND[0];
+            if (this.isCreative) totalChargeSendable = SEND[0];
 
             if (totalChargeSendable > 0)
             {
@@ -228,7 +228,6 @@ public class TileChargePad extends TilePad
         }
 
         if (this.sentPower > 0 && ServerHelper.isClientWorld(this.worldObj)) this.spawnParticles(meta);
-
     }
 
     @SideOnly(Side.CLIENT)

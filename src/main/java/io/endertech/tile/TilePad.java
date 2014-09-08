@@ -4,7 +4,6 @@ import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.lib.util.helpers.EnergyHelper;
-import io.endertech.block.BlockChargePad;
 import io.endertech.config.GeneralConfig;
 import io.endertech.network.PacketETBase;
 import io.endertech.util.IChargeableFromSlot;
@@ -137,7 +136,7 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
         }
 
         int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        if (BlockChargePad.isCreative(blockMeta))
+        if (this.isCreative)
             currenttip.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
         else
             currenttip.add(LocalisationHelper.localiseString("info.charge", StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(blockMeta)) + " RF"));

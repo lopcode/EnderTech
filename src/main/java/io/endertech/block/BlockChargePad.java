@@ -29,11 +29,6 @@ public class BlockChargePad extends BlockPad
         this.setBlockName(Strings.Blocks.CHARGE_PAD);
     }
 
-    public static boolean isCreative(int meta)
-    {
-        return meta == 0;
-    }
-
     public void init()
     {
         TileChargePad.init();
