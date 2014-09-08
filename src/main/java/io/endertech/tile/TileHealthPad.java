@@ -5,15 +5,15 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.endertech.client.render.IconRegistry;
 import io.endertech.fx.EntityChargePadFX;
+import io.endertech.fx.EntityHealthPadFX;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.StringHelper;
 import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.List;
@@ -24,6 +24,7 @@ public class TileHealthPad extends TilePad
     public static final int[] RECEIVE = {0, 1 * 2000, 10 * 2000};
     public static final int[] SEND = {10 * 1000000, 1 * 2000, 10 * 2000};
     public static final int[] CAPACITY = {-1, 1 * 2000000, 10 * 1000000};
+    public static byte particleSkip = 0;
 
     public int sentHealth = 0;
 
@@ -90,7 +91,16 @@ public class TileHealthPad extends TilePad
             if (this.ticksSinceLastUpdate > TICKS_PER_UPDATE) this.ticksSinceLastUpdate = TICKS_PER_UPDATE;
         }
 
-        if (this.sentHealth > 0 && ServerHelper.isClientWorld(this.worldObj)) this.spawnParticles(meta);
+        if (this.sentHealth > 0 && ServerHelper.isClientWorld(this.worldObj))
+        {
+            particleSkip++;
+
+            if (particleSkip == 3)
+            {
+                this.spawnParticles(meta);
+                particleSkip = 0;
+            }
+        }
     }
 
     @Override
@@ -157,7 +167,8 @@ public class TileHealthPad extends TilePad
             double y = this.yCoord + (0.5F * orientation.offsetY) + 0.5 + yAddition;
             double z = this.zCoord + (0.5F * orientation.offsetZ) + 0.5 + zAddition;
 
-            er.addEffect(new EntityChargePadFX(this.worldObj, x, y, z, getParticleMaxAge(), getParticleVelocity(), getParticleColour(rand), this.getParticleSizeModifier(meta)));
+            EntityHealthPadFX particleFX = new EntityHealthPadFX(this.worldObj, x, y, z, getParticleMaxAge(), getParticleVelocity(), getParticleColour(rand), this.getParticleSizeModifier(meta));
+            er.addEffect(particleFX);
         }
     }
 
@@ -188,7 +199,7 @@ public class TileHealthPad extends TilePad
     @SideOnly(Side.CLIENT)
     public int getParticleCount(int meta)
     {
-        if (meta == 0) return 5;
+        if (meta == 0) return 2;
         else if (meta == 2) return 2;
         else return 1;
     }
@@ -196,8 +207,8 @@ public class TileHealthPad extends TilePad
     @SideOnly(Side.CLIENT)
     public float getParticleSizeModifier(int meta)
     {
-        if (meta == 0) return 2.0F;
-        else if (meta == 2) return 1.75F;
-        else return 1.5F;
+        if (meta == 0) return 0.9F;
+        else if (meta == 2) return 0.75F;
+        else return 0.5F;
     }
 }

@@ -6,7 +6,6 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import io.endertech.EnderTech;
 import io.endertech.block.BlockChargePad;
 import io.endertech.fx.EntityChargePadFX;
 import io.endertech.gui.client.GuiChargePad;
@@ -27,9 +26,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 public class TileChargePad extends TilePad
 {

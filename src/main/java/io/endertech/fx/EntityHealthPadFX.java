@@ -1,23 +1,19 @@
 package io.endertech.fx;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import io.endertech.client.render.IconRegistry;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-@SideOnly(Side.CLIENT)
-public class EntityChargePadFX extends EntityFX
+public class EntityHealthPadFX extends EntityFX
 {
     protected double vx;
     protected double vy;
     protected double vz;
 
-    public EntityChargePadFX(World world, double x, double y, double z, int maxAge, double[] velocity, float[] colour, float sizeModifier)
+    public EntityHealthPadFX(World world, double x, double y, double z, int maxAge, double[] velocity, float[] colour, float sizeModifier)
     {
         super(world, x, y, z, velocity[0], velocity[1], velocity[2]);
-
         vx = velocity[0];
         vy = velocity[1];
         vz = velocity[2];
@@ -28,13 +24,14 @@ public class EntityChargePadFX extends EntityFX
         this.particleGreen = colour[1];
         this.particleBlue = colour[2];
 
-        setParticleTextureIndex(0);
-
         setSize(sizeModifier, sizeModifier);
-        this.particleScale = 2F;
+        this.particleScale = 1.0F;
+        this.multipleParticleScaleBy(sizeModifier);
         this.particleScale += (this.rand.nextFloat() * 0.2F);
         this.particleMaxAge = ((int) (maxAge / (Math.random() * 0.8D + 0.2D)));
         this.noClip = true;
+
+        this.setParticleIcon(IconRegistry.getIcon("Particle_Health"));
     }
 
     public void customSetup(double vx, double vy, double vz)
@@ -69,5 +66,11 @@ public class EntityChargePadFX extends EntityFX
         {
             setDead();
         }
+    }
+
+    @Override
+    public int getFXLayer()
+    {
+        return 1;
     }
 }

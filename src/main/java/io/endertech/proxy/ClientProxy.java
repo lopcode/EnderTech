@@ -57,19 +57,21 @@ public class ClientProxy extends CommonProxy
     @SubscribeEvent
     public void registerIcons(TextureStitchEvent.Pre event)
     {
+        if (event.map.getTextureType() == 1)
+            return;
+
         DevETFluids.fluidChargedEnderStill = event.map.registerIcon("endertech:fluids/charged_ender_still");
         DevETFluids.fluidChargedEnderFlowing = event.map.registerIcon("endertech:fluids/charged_ender_flow");
 
-        if (event.map.getTextureType() == 0)
+        String[] types = {"Side", "Top", "Bottom"};
+        for (String type : types)
         {
-            String[] types = {"Side", "Top", "Bottom"};
-            for (String type : types)
-            {
-                IconRegistry.addAndRegisterIcon("Machine_Redstone_" + type, Textures.TE3_TEXTURE_BASE + type, event.map);
-                IconRegistry.addAndRegisterIcon("Machine_Creative_" + type, Textures.CREATIVE_TEXTURE_BASE + type, event.map);
-                IconRegistry.addAndRegisterIcon("Machine_Resonant_" + type, Textures.ENDER_RESONANT_BASE + type, event.map);
-            }
+            IconRegistry.addAndRegisterIcon("Machine_Redstone_" + type, Textures.TE3_TEXTURE_BASE + type, event.map);
+            IconRegistry.addAndRegisterIcon("Machine_Creative_" + type, Textures.CREATIVE_TEXTURE_BASE + type, event.map);
+            IconRegistry.addAndRegisterIcon("Machine_Resonant_" + type, Textures.ENDER_RESONANT_BASE + type, event.map);
         }
+
+        IconRegistry.addAndRegisterIcon("Particle_Health", "endertech:particles/health", event.map);
     }
 
     @Override

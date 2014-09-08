@@ -5,7 +5,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
 import io.endertech.client.render.IconRegistry;
-import io.endertech.tile.TileChargePad;
 import io.endertech.tile.TilePad;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;

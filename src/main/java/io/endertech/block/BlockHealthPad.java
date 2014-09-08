@@ -5,7 +5,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.client.render.IconRegistry;
 import io.endertech.reference.Strings;
 import io.endertech.reference.Textures;
-import io.endertech.tile.TileChargePad;
 import io.endertech.tile.TileHealthPad;
 import io.endertech.util.helper.TextureHelper;
 import net.minecraft.client.renderer.texture.IIconRegister;

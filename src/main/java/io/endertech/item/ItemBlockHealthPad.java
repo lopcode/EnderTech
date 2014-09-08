@@ -4,7 +4,6 @@ import cofh.api.energy.IEnergyContainerItem;
 import io.endertech.block.BlockChargePad;
 import io.endertech.block.ItemBlockBasic;
 import io.endertech.tile.TileHealthPad;
-import io.endertech.tile.TileHealthPad;
 import io.endertech.util.helper.KeyHelper;
 import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.StringHelper;

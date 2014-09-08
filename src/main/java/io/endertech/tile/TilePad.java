@@ -12,19 +12,15 @@ import io.endertech.network.PacketETBase;
 import io.endertech.util.IChargeableFromSlot;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
-import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.NBTHelper;
 import io.endertech.util.helper.RenderHelper;
-import io.endertech.util.helper.StringHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.awt.*;
-import java.util.List;
 import java.util.Random;
 
 public abstract class TilePad extends TileInventory implements IReconfigurableFacing, IEnergyHandler, IOutlineDrawer, IChargeableFromSlot
