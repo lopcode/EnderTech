@@ -123,7 +123,8 @@ public class TileHealthPad extends TilePad
                             sentHealth += (healthPerEntity * efficiency);
                         }
                     }
-                } else {
+                } else
+                {
                     this.ticksSinceLastHealthSent = 0;
                 }
             }

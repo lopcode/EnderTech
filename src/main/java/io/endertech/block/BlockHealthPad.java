@@ -59,8 +59,8 @@ public class BlockHealthPad extends BlockPad
         String[] types = {"Creative", "Redstone", "Resonant"};
         for (String type : types)
         {
-            IconRegistry.addAndRegisterIcon("HealthPad_" + type + "_Active", Textures.CHARGE_PAD_BASE + type + "_Active", iconRegister);
-            IconRegistry.addAndRegisterIcon("HealthPad_" + type + "_Inactive", Textures.CHARGE_PAD_BASE + type + "_Inactive", iconRegister);
+            IconRegistry.addAndRegisterIcon("HealthPad_" + type + "_Active", Textures.HEALTH_PAD_BASE + type + "_Active", iconRegister);
+            IconRegistry.addAndRegisterIcon("HealthPad_" + type + "_Inactive", Textures.HEALTH_PAD_BASE + type + "_Inactive", iconRegister);
         }
     }
 
