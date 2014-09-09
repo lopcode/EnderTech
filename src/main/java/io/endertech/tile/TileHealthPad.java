@@ -12,7 +12,6 @@ import io.endertech.gui.container.ContainerHealthPad;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.helper.LocalisationHelper;
-import io.endertech.util.helper.LogHelper;
 import io.endertech.util.helper.StringHelper;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.EntityLivingBase;
@@ -29,7 +28,7 @@ public class TileHealthPad extends TilePad
 {
     public static final int[] RECEIVE = {0, 1 * 2000, 10 * 2000};
     public static final int[] CAPACITY = {-1, 1 * 2000000, 10 * 1000000};
-    public static final int[] TICKS_PER_HEAL = {10, 40, 20 };
+    public static final int[] TICKS_PER_HEAL = {10, 40, 20};
     public static byte particleSkip = 0;
     public int ticksSinceLastHealthSent = 0;
 
@@ -94,32 +93,38 @@ public class TileHealthPad extends TilePad
                     float healthPerEntity = MathHelper.floor_float(1.0F / healableEntityCount);
                     for (EntityLivingBase entity : healableEntitiesInRange)
                     {
-                        float efficiency = (float) this.calculateEfficiencyForEntity(entity);
-                        if (this.ticksSinceLastHealthSent > TICKS_PER_HEAL[meta] && worldObj.rand.nextInt(TICKS_PER_HEAL[meta] / 4) == 0)
+                        if ((entity.getHealth() < entity.getMaxHealth() && entity.isEntityAlive()) || GeneralConfig.healthPadForceAlwaysSendHealth)
                         {
-                            int costForHalfHeart = MathHelper.floor_float(GeneralConfig.healthPadChargeCostPerHalfHeart * healthPerEntity);
-                            costForHalfHeart += (1 - efficiency) * costForHalfHeart;
-                            int couldExtract = this.extractEnergy(costForHalfHeart, meta, true);
-                            if (this.isCreative || couldExtract == costForHalfHeart)
+                            float efficiency = (float) this.calculateEfficiencyForEntity(entity);
+                            if (this.ticksSinceLastHealthSent > TICKS_PER_HEAL[meta] && worldObj.rand.nextInt(TICKS_PER_HEAL[meta] / 4) == 0)
                             {
-                                this.extractEnergy(costForHalfHeart, meta, false);
+                                int costForHalfHeart = MathHelper.floor_float(GeneralConfig.healthPadChargeCostPerHalfHeart * healthPerEntity);
+                                costForHalfHeart += (1 - efficiency) * costForHalfHeart;
+                                int couldExtract = this.extractEnergy(costForHalfHeart, meta, true);
+                                if (this.isCreative || couldExtract == costForHalfHeart)
+                                {
+                                    this.extractEnergy(costForHalfHeart, meta, false);
 
-//                                LogHelper.info("Health per entity: " + healthPerEntity);
-//                                LogHelper.info("Efficiency: " + efficiency);
-//                                LogHelper.info("Healing half a heart cost: " + couldExtract);
+                                    //                                LogHelper.info("Health per entity: " + healthPerEntity);
+                                    //                                LogHelper.info("Efficiency: " + efficiency);
+                                    //                                LogHelper.info("Healing half a heart cost: " + couldExtract);
 
-                                entity.heal(1);
-                                this.ticksSinceLastHealthSent = 0;
-                            } else {
-//                                LogHelper.info("Tried to extract " + costForHalfHeart + " managed " + couldExtract + ", not healing");
+                                    entity.heal(1);
+                                    this.ticksSinceLastHealthSent = 0;
+                                } else
+                                {
+                                    //                                LogHelper.info("Tried to extract " + costForHalfHeart + " managed " + couldExtract + ", not healing");
+                                }
+                            } else
+                            {
+                                if (this.ticksSinceLastHealthSent < 100) this.ticksSinceLastHealthSent++;
                             }
-                        } else {
-                            if (this.ticksSinceLastHealthSent < 100)
-                                this.ticksSinceLastHealthSent++;
-                        }
 
-                        sentHealth += (healthPerEntity * efficiency);
+                            sentHealth += (healthPerEntity * efficiency);
+                        }
                     }
+                } else {
+                    this.ticksSinceLastHealthSent = 0;
                 }
             }
 
@@ -192,8 +197,6 @@ public class TileHealthPad extends TilePad
         if (this.isCreative) currenttip.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
         else
             currenttip.add(LocalisationHelper.localiseString("info.charge", StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(blockMeta)) + " RF"));
-
-        currenttip.add(LocalisationHelper.localiseString("info.sent", this.sentHealth + " health"));
 
         return currenttip;
     }

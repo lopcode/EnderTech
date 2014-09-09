@@ -85,7 +85,7 @@ public class TileChargePad extends TilePad
         return itemsToCharge;
     }
 
-    public List<Entity> getChargeableEntitesInAABB(AxisAlignedBB aabb)
+    public List<Entity> getChargeableEntitiesInAABB(AxisAlignedBB aabb)
     {
         List<Entity> chargeableEntitiesInRange = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
         List<EntityItem> chargeableItemsInRange = this.worldObj.getEntitiesWithinAABB(EntityItem.class, aabb);
@@ -178,7 +178,7 @@ public class TileChargePad extends TilePad
             if (totalChargeSendable > 0)
             {
                 AxisAlignedBB front = this.getAABBInFront(2);
-                List<Entity> ownersInRange = this.getChargeableEntitesInAABB(front);
+                List<Entity> ownersInRange = this.getChargeableEntitiesInAABB(front);
 
                 int totalChargeForEntity = (int) (((double) totalChargeSendable) / ownersInRange.size());
                 if (ownersInRange.size() > 0)

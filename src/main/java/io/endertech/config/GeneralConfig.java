@@ -14,6 +14,8 @@ public class GeneralConfig
     public static int GUITopLeftYOffset;
     public static int GUITopLeftXOffset;
     public static int healthPadChargeCostPerHalfHeart;
+    public static boolean healthPadForceAlwaysSendHealth;
+
     private static Configuration generalConfig;
 
     protected static void init(File configFile)
@@ -41,6 +43,7 @@ public class GeneralConfig
             GUITopLeftYOffset = generalConfig.get("rendering", "Rendering.GUITopLeftYOffset", 0).getInt(0);
 
             healthPadChargeCostPerHalfHeart = generalConfig.get("healthpad", "HealthPad.ChargePerHalfHeart", 192000).getInt(192000);
+            healthPadForceAlwaysSendHealth = generalConfig.get("healthpad", "HealthPad.ForceAlwaysSendHealth", false).getBoolean(false);
         } catch (Exception e)
         {
             LogHelper.error(LocalisationHelper.localiseString("error.config.general.load"));
