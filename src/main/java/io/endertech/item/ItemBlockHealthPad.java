@@ -74,7 +74,7 @@ public class ItemBlockHealthPad extends ItemBlockBasic implements IEnergyContain
                 list.add(LocalisationHelper.localiseString("info.charge.receive", StringHelper.getEnergyString(TileHealthPad.RECEIVE[stack.getItemDamage()]) + " RF/t"));
             }
 
-            list.add(LocalisationHelper.localiseString("info.charge.send", StringHelper.getEnergyString(TileHealthPad.SEND[stack.getItemDamage()]) + " health"));
+            list.add("Ticks per heal: " + TileHealthPad.TICKS_PER_HEAL[stack.getItemDamage()]);
         } else
         {
             list.add(StringHelper.holdShiftForDetails);

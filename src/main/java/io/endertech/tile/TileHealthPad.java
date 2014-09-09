@@ -5,17 +5,22 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.endertech.config.GeneralConfig;
 import io.endertech.fx.EntityHealthPadFX;
 import io.endertech.gui.client.GuiHealthPad;
 import io.endertech.gui.container.ContainerHealthPad;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.helper.LocalisationHelper;
+import io.endertech.util.helper.LogHelper;
 import io.endertech.util.helper.StringHelper;
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.List;
 import java.util.Random;
@@ -23,11 +28,12 @@ import java.util.Random;
 public class TileHealthPad extends TilePad
 {
     public static final int[] RECEIVE = {0, 1 * 2000, 10 * 2000};
-    public static final int[] SEND = {10 * 1000000, 1 * 2000, 10 * 2000};
     public static final int[] CAPACITY = {-1, 1 * 2000000, 10 * 1000000};
+    public static final int[] TICKS_PER_HEAL = {10, 40, 20 };
     public static byte particleSkip = 0;
+    public int ticksSinceLastHealthSent = 0;
 
-    public int sentHealth = 0;
+    public float sentHealth = 0;
 
     public TileHealthPad()
     {
@@ -53,7 +59,7 @@ public class TileHealthPad extends TilePad
 
     public int getMaxSendRate(int meta)
     {
-        return SEND[meta];
+        return GeneralConfig.healthPadChargeCostPerHalfHeart * 2;
     }
 
     @Override
@@ -72,8 +78,50 @@ public class TileHealthPad extends TilePad
         {
             boolean oldActive = this.isActive;
             this.isActive = this.sentHealth > 0;
+            this.sentHealth = 0;
 
-            sentHealth = 1;
+            int totalChargeUseable = this.extractEnergy(getMaxSendRate(meta), meta, true);
+            float totalHealthSendable = MathHelper.floor_float((float) totalChargeUseable / GeneralConfig.healthPadChargeCostPerHalfHeart);
+            if (this.isCreative) totalHealthSendable = 8.0F;
+
+            if (totalHealthSendable >= 1)
+            {
+                AxisAlignedBB front = this.getAABBInFront(2);
+                List<EntityLivingBase> healableEntitiesInRange = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, front);
+                int healableEntityCount = healableEntitiesInRange.size();
+                if (healableEntityCount > 0)
+                {
+                    float healthPerEntity = MathHelper.floor_float(1.0F / healableEntityCount);
+                    for (EntityLivingBase entity : healableEntitiesInRange)
+                    {
+                        float efficiency = (float) this.calculateEfficiencyForEntity(entity);
+                        if (this.ticksSinceLastHealthSent > TICKS_PER_HEAL[meta] && worldObj.rand.nextInt(TICKS_PER_HEAL[meta] / 4) == 0)
+                        {
+                            int costForHalfHeart = MathHelper.floor_float(GeneralConfig.healthPadChargeCostPerHalfHeart * healthPerEntity);
+                            costForHalfHeart += (1 - efficiency) * costForHalfHeart;
+                            int couldExtract = this.extractEnergy(costForHalfHeart, meta, true);
+                            if (this.isCreative || couldExtract == costForHalfHeart)
+                            {
+                                this.extractEnergy(costForHalfHeart, meta, false);
+
+//                                LogHelper.info("Health per entity: " + healthPerEntity);
+//                                LogHelper.info("Efficiency: " + efficiency);
+//                                LogHelper.info("Healing half a heart cost: " + couldExtract);
+
+                                entity.heal(1);
+                                this.ticksSinceLastHealthSent = 0;
+                            } else {
+//                                LogHelper.info("Tried to extract " + costForHalfHeart + " managed " + couldExtract + ", not healing");
+                            }
+                        } else {
+                            if (this.ticksSinceLastHealthSent < 100)
+                                this.ticksSinceLastHealthSent++;
+                        }
+
+                        sentHealth += (healthPerEntity * efficiency);
+                    }
+                }
+            }
 
             this.chargeFromGUISlot();
 
@@ -108,7 +156,8 @@ public class TileHealthPad extends TilePad
     public PacketETBase getPacket()
     {
         PacketETBase packet = super.getPacket();
-        packet.addInt(this.sentHealth);
+        packet.addFloat(this.sentHealth);
+        packet.addInt(this.ticksSinceLastHealthSent);
 
         return packet;
     }
@@ -118,11 +167,13 @@ public class TileHealthPad extends TilePad
     {
         super.handleTilePacket(tilePacket, isServer);
 
-        int sentHealth = tilePacket.getInt();
+        float sentHealth = tilePacket.getFloat();
+        int ticksSinceLastHealthSent = tilePacket.getInt();
 
         if (!isServer)
         {
             this.sentHealth = sentHealth;
+            this.ticksSinceLastHealthSent = ticksSinceLastHealthSent;
         }
     }
 

@@ -17,6 +17,7 @@ import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.NBTHelper;
 import io.endertech.util.helper.RenderHelper;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -333,6 +334,24 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
 
         if (this.isActive) return blockPad.getActiveIcon(blockMeta);
         else return blockPad.getInactiveIcon(blockMeta);
+    }
+
+    public double calculateEfficiencyForEntity(Entity entity)
+    {
+        double xDiff = Math.abs(((this.xCoord + 0.5D) - entity.posX) * orientation.offsetX);
+        double yDiff = Math.abs(((this.yCoord + 0.5D) - entity.posY) * orientation.offsetY);
+        double zDiff = Math.abs(((this.zCoord + 0.5D) - entity.posZ) * orientation.offsetZ);
+        double distance = xDiff + yDiff + zDiff - 0.5;
+        if (orientation == ForgeDirection.DOWN) distance -= 1.5;
+        if (distance < 0.3) distance = 0;
+        if (distance > 1.5) distance = 1.5;
+
+        double efficiency = ((2.0 - distance) / 2.0);
+        if (distance < 0.9) efficiency += 0.2;
+        efficiency = Math.max(0.5, efficiency);
+        efficiency = Math.min(1, efficiency);
+
+        return efficiency;
     }
 
     public abstract int getMaxEnergyStored(int meta);
