@@ -198,8 +198,8 @@ public class EnderTech
             GameRegistry.addRecipe(enderTankController, new Object[] {"IEI", "EFE", "ITI", 'I', enderiumIngot, 'F', machineResonant, 'T', tesseract, 'E', enderEyeStack});
             GameRegistry.addRecipe(enderTankGlass, new Object[] {"GIG", "EFE", "GIG", 'I', enderiumIngot, 'G', hardenedGlass, 'F', machineResonant, 'E', enderEyeStack});
 
-            GameRegistry.addRecipe(BlockChargePad.itemChargePadResonant, new Object[] {"IEI", "CFC", "IAI", 'I', enderiumIngot, 'F', machineResonant, 'E', enderEyeStack, 'C', goldenApple, 'T', tesseract, 'A', capacitorResonant});
-            GameRegistry.addRecipe(BlockChargePad.itemChargePadRedstone, new Object[] {"IEI", "CFC", "IAI", 'I', electrumIngot, 'F', machineRedstone, 'E', enderEyeStack, 'C', goldenApple, 'T', tesseract, 'A', capacitorReinforced});
+            GameRegistry.addRecipe(BlockChargePad.itemChargePadResonant, new Object[] {"IEI", "CFC", "IAI", 'I', enderiumIngot, 'F', machineResonant, 'E', enderEyeStack, 'C', powerCoilElectrumStack, 'T', tesseract, 'A', capacitorResonant});
+            GameRegistry.addRecipe(BlockChargePad.itemChargePadRedstone, new Object[] {"IEI", "CFC", "IAI", 'I', electrumIngot, 'F', machineRedstone, 'E', enderEyeStack, 'C', powerCoilElectrumStack, 'T', tesseract, 'A', capacitorReinforced});
 
             GameRegistry.addRecipe(BlockHealthPad.itemHealthPadResonant, new Object[] {"IEI", "CFC", "IAI", 'I', enderiumIngot, 'F', machineResonant, 'E', enderEyeStack, 'C', goldenApple, 'T', tesseract, 'A', capacitorResonant});
             GameRegistry.addRecipe(BlockHealthPad.itemHealthPadRedstone, new Object[] {"IEI", "CFC", "IAI", 'I', electrumIngot, 'F', machineRedstone, 'E', enderEyeStack, 'C', goldenApple, 'T', tesseract, 'A', capacitorReinforced});
