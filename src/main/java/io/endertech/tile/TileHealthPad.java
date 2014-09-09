@@ -210,7 +210,7 @@ public class TileHealthPad extends TilePad
     {
         if (meta == 0) return 0.9F;
         else if (meta == 2) return 0.75F;
-        else return 0.5F;
+        else return 0.6F;
     }
 
     @Override
