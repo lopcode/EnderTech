@@ -183,4 +183,9 @@ public class TileET extends TileEntity implements ITilePacketHandler, IETWailaPr
     {
         return;
     }
+
+    public String getName()
+    {
+        return this.tileName;
+    }
 }

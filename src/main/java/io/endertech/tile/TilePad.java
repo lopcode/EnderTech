@@ -7,17 +7,21 @@ import cofh.lib.util.helpers.EnergyHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.endertech.EnderTech;
+import io.endertech.block.BlockPad;
 import io.endertech.config.GeneralConfig;
 import io.endertech.network.PacketETBase;
 import io.endertech.util.IChargeableFromSlot;
 import io.endertech.util.IOutlineDrawer;
 import io.endertech.util.RGBA;
+import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.NBTHelper;
 import io.endertech.util.helper.RenderHelper;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.awt.*;
@@ -37,6 +41,14 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
         super();
 
         this.inventory = new ItemStack[INVENTORY_SIZE];
+    }
+
+    public String getName()
+    {
+        Block block = this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord);
+        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+
+        return LocalisationHelper.localiseString(block.getUnlocalizedName() + "." + blockMeta + ".name");
     }
 
     public static void writeDefaultTag(NBTTagCompound nbtTagCompound)
@@ -308,6 +320,19 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
     {
         int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
         return getMaxEnergyStored(blockMeta);
+    }
+
+    public IIcon getFrontIcon()
+    {
+        Block block = this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord);
+
+        if (!(block instanceof BlockPad)) return null;
+
+        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        BlockPad blockPad = (BlockPad) block;
+
+        if (this.isActive) return blockPad.getActiveIcon(blockMeta);
+        else return blockPad.getInactiveIcon(blockMeta);
     }
 
     public abstract int getMaxEnergyStored(int meta);

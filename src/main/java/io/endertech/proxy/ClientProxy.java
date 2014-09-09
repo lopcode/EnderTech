@@ -57,8 +57,7 @@ public class ClientProxy extends CommonProxy
     @SubscribeEvent
     public void registerIcons(TextureStitchEvent.Pre event)
     {
-        if (event.map.getTextureType() == 1)
-            return;
+        if (event.map.getTextureType() == 1) return;
 
         DevETFluids.fluidChargedEnderStill = event.map.registerIcon("endertech:fluids/charged_ender_still");
         DevETFluids.fluidChargedEnderFlowing = event.map.registerIcon("endertech:fluids/charged_ender_flow");

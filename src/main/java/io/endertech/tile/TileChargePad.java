@@ -6,7 +6,6 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import io.endertech.block.BlockChargePad;
 import io.endertech.fx.EntityChargePadFX;
 import io.endertech.gui.client.GuiChargePad;
 import io.endertech.gui.container.ContainerChargePad;
@@ -14,7 +13,6 @@ import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.StringHelper;
-import net.minecraft.block.Block;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -24,7 +22,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
@@ -340,14 +337,6 @@ public class TileChargePad extends TilePad
         else return 1.5F;
     }
 
-    public String getName()
-    {
-        Block block = this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord);
-        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-
-        return LocalisationHelper.localiseString(block.getUnlocalizedName() + "." + blockMeta + ".name");
-    }
-
     @Override
     public Object getGuiClient(InventoryPlayer inventory)
     {
@@ -358,18 +347,5 @@ public class TileChargePad extends TilePad
     public Object getGuiServer(InventoryPlayer inventory)
     {
         return new ContainerChargePad(inventory, this);
-    }
-
-    public IIcon getFrontIcon()
-    {
-        Block block = this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord);
-
-        if (!(block instanceof BlockChargePad)) return null;
-
-        int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        BlockChargePad blockChargePad = (BlockChargePad) block;
-
-        if (this.isActive) return blockChargePad.getActiveIcon(blockMeta);
-        else return blockChargePad.getInactiveIcon(blockMeta);
     }
 }

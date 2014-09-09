@@ -5,14 +5,15 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import io.endertech.client.render.IconRegistry;
-import io.endertech.fx.EntityChargePadFX;
 import io.endertech.fx.EntityHealthPadFX;
+import io.endertech.gui.client.GuiHealthPad;
+import io.endertech.gui.container.ContainerHealthPad;
 import io.endertech.network.PacketETBase;
 import io.endertech.reference.Strings;
 import io.endertech.util.helper.LocalisationHelper;
 import io.endertech.util.helper.StringHelper;
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -210,5 +211,17 @@ public class TileHealthPad extends TilePad
         if (meta == 0) return 0.9F;
         else if (meta == 2) return 0.75F;
         else return 0.5F;
+    }
+
+    @Override
+    public Object getGuiClient(InventoryPlayer inventory)
+    {
+        return new GuiHealthPad(inventory, this);
+    }
+
+    @Override
+    public Object getGuiServer(InventoryPlayer inventory)
+    {
+        return new ContainerHealthPad(inventory, this);
     }
 }
