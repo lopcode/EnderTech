@@ -120,6 +120,17 @@
                     "downloadType": "sequential"
                 }
             ]
+        },
+        {
+            "mcCompat": [ "1.7.10" ],
+            "name": "0.2.0.341",
+            "installType": "forgeMod",
+            "urls": [
+                {
+                    "url": "http://minecraft.curseforge.com/mc-mods/223428-endertech/files/2213959/download",
+                    "downloadType": "sequential"
+                }
+            ]
         }
     ]
 }
