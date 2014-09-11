@@ -290,7 +290,13 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
 
             if (candidate == null)
             {
-                LogHelper.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation"));
+                if (ServerHelper.isServerWorld(this.worldObj))
+                {
+                    LogHelper.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation"));
+                    LogHelper.error(this.toString());
+                    LogHelper.error(candidate.toString());
+                }
+
                 if (this.tank.getFluidAmount() >= assimilatedController.tank.getFluidAmount()) candidate = this;
                 else candidate = assimilatedController;
             }
@@ -485,7 +491,8 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
             ControllerTank otherTank = (ControllerTank) otherController;
             if ((this.getStoredEnergy() > 0 || this.tank.getFluidAmount() > 0) && (otherTank.getStoredEnergy() > 0 || otherTank.tank.getFluidAmount() > 0))
             {
-                LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.tank.destructive_assimilation_check"));
+                if (ServerHelper.isServerWorld(this.worldObj))
+                    LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.tank.destructive_assimilation_check"));
             }
         }
 
