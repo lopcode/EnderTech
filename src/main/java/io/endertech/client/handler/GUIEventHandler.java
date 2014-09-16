@@ -31,66 +31,58 @@ public class GUIEventHandler extends Gui
     @SubscribeEvent
     public void onGameOverlayRender(RenderGameOverlayEvent event)
     {
-        if (event.isCancelable() || event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE)
-        {
+        if (event.isCancelable() || event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE) return;
+
+        if (!(mc.renderViewEntity instanceof EntityPlayer)) return;
+
+        EntityPlayer player = (EntityPlayer) mc.renderViewEntity;
+
+        if (player == null || !mc.inGameHasFocus || !Minecraft.isGuiEnabled()) return;
+
+        if (player.inventory.getCurrentItem() == null || !(player.inventory.getCurrentItem().getItem() instanceof ItemExchanger))
             return;
-        }
 
-        if ((mc.renderViewEntity instanceof EntityPlayer))
+        ItemExchanger exchanger = (ItemExchanger) player.inventory.getCurrentItem().getItem();
+        ItemStack exchangerStack = player.inventory.getCurrentItem();
+        ItemStack source = exchanger.getSourceItemStack(player.inventory.getCurrentItem());
+
+        if (source == null) return;
+
+        //LogHelper.info("Rendering item");
+
+        if (player.inventory.inventoryChanged || this.lastExchangeSource == null || !source.isItemEqual(this.lastExchangeSource))
         {
-            EntityPlayer player = (EntityPlayer) mc.renderViewEntity;
+            this.lastExchangeSourceCount = InventoryHelper.getExtractableQuantity(player.inventory, source);
 
-            if ((player != null) && (mc.inGameHasFocus) && (Minecraft.isGuiEnabled()))
-            {
-                if (player.inventory.getCurrentItem() != null)
-                {
-                    if ((player.inventory.getCurrentItem().getItem() instanceof ItemExchanger))
-                    {
-                        ItemExchanger exchanger = (ItemExchanger) player.inventory.getCurrentItem().getItem();
-                        ItemStack exchangerStack = player.inventory.getCurrentItem();
-                        ItemStack source = exchanger.getSourceItemStack(player.inventory.getCurrentItem());
-                        if (source != null)
-                        {
-                            //LogHelper.info("Rendering item");
-
-                            if (player.inventory.inventoryChanged || this.lastExchangeSource == null || !source.isItemEqual(this.lastExchangeSource))
-                            {
-                                this.lastExchangeSourceCount = InventoryHelper.getExtractableQuantity(player.inventory, source);
-
-                                player.inventory.inventoryChanged = false;
-                                this.lastExchangeSource = source;
-                            }
-
-                            // I have no idea what I'm doing
-
-                            GL11.glPushMatrix();
-                            GL11.glDisable(GL11.GL_LIGHTING);
-
-                            GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
-                            GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-                            GL11.glEnable(GL11.GL_LIGHTING);
-
-                            net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
-                            ri.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, this.lastExchangeSource, 2 + GeneralConfig.GUITopLeftXOffset, 2 + GeneralConfig.GUITopLeftYOffset);
-
-                            GL11.glDisable(GL11.GL_LIGHTING);
-                            GL11.glPushMatrix();
-
-                            String am = Integer.toString(this.lastExchangeSourceCount);
-                            if (exchanger.isCreative(exchangerStack))
-                            {
-                                am = LocalisationHelper.localiseString("gui.exchanger.radius.infinite");
-                            }
-
-                            FontHelper.drawItemQuantity(mc.fontRenderer, 3 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, am);
-                            FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, 1.0, LocalisationHelper.localiseString("gui.exchanger.radius", exchanger.getTargetRadius(exchangerStack)));
-
-                            GL11.glPopMatrix();
-                            GL11.glPopMatrix();
-                        }
-                    }
-                }
-            }
+            player.inventory.inventoryChanged = false;
+            this.lastExchangeSource = source;
         }
+
+        // I have no idea what I'm doing
+
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_LIGHTING);
+
+        GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+        GL11.glEnable(GL11.GL_LIGHTING);
+
+        net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
+        ri.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, this.lastExchangeSource, 2 + GeneralConfig.GUITopLeftXOffset, 2 + GeneralConfig.GUITopLeftYOffset);
+
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glPushMatrix();
+
+        String am = Integer.toString(this.lastExchangeSourceCount);
+        if (exchanger.isCreative(exchangerStack))
+        {
+            am = LocalisationHelper.localiseString("gui.exchanger.radius.infinite");
+        }
+
+        FontHelper.drawItemQuantity(mc.fontRenderer, 3 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, am);
+        FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, 1.0, LocalisationHelper.localiseString("gui.exchanger.radius", exchanger.getTargetRadius(exchangerStack)));
+
+        GL11.glPopMatrix();
+        GL11.glPopMatrix();
     }
 }
