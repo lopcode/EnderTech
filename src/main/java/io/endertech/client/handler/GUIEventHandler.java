@@ -53,7 +53,7 @@ public class GUIEventHandler extends Gui
                         {
                             //LogHelper.info("Rendering item");
 
-                            if (player.inventory.inventoryChanged || !source.isItemEqual(this.lastExchangeSource))
+                            if (player.inventory.inventoryChanged || this.lastExchangeSource == null || !source.isItemEqual(this.lastExchangeSource))
                             {
                                 this.lastExchangeSourceCount = InventoryHelper.getExtractableQuantity(player.inventory, source);
 
