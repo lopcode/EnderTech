@@ -60,8 +60,8 @@ public class Exchange
         Block worldBlock = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
         int worldMeta = world.getBlockMetadata(blockCoord.x, blockCoord.y, blockCoord.z);
 
-        if (worldBlock.getBlockHardness(world, blockCoord.x, blockCoord.y, blockCoord.z) < 0) return false;
         if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
+        if (worldBlock.getBlockHardness(world, blockCoord.x, blockCoord.y, blockCoord.z) < 0) return false;
         if (!isBlockExposedWithExchangerExceptions(world, blockCoord.x, blockCoord.y, blockCoord.z) && radius > 0)
             return false;
 
