@@ -49,21 +49,6 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
         return stack.getItemDamage() == Types.CREATIVE.ordinal();
     }
 
-    public static boolean isBlockSuitableForSelection(World world, BlockCoord blockCoord, ItemStack stack)
-    {
-        if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
-
-        if (world.getTileEntity(blockCoord.x, blockCoord.y, blockCoord.z) != null) return false;
-
-        Block block = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
-
-        if (BlockHelper.softBlocks.contains(block)) return false;
-
-        if (!isCreative(stack) && creativeOverrideBlocks.contains(block)) return false;
-
-        return true;
-    }
-
     @Override
     public int getMaxEnergyStored(ItemStack stack)
     {
@@ -146,7 +131,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
             Block source = player.worldObj.getBlock(x, y, z);
             int sourceMeta = player.worldObj.getBlockMetadata(x, y, z);
 
-            if (ItemExchanger.isBlockSuitableForSelection(world, new BlockCoord(x, y, z), itemstack))
+            if (Exchange.blockSuitableForSelection(new BlockCoord(x, y, z), world, source, sourceMeta, itemstack))
             {
                 LogHelper.debug("Setting source block to " + source.getLocalizedName());
                 setSourceBlock(itemstack, new ItemStack(source, 1, sourceMeta));
@@ -315,7 +300,9 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
         if (event.player.isSneaking())
         {
-            if (!ItemExchanger.isBlockSuitableForSelection(world, target, event.player.getCurrentEquippedItem()))
+            Block block = world.getBlock(target.x, target.y, target.z);
+            int blockMeta = world.getBlockMetadata(target.x, target.y, target.z);
+            if (!Exchange.blockSuitableForSelection(target, world, block, blockMeta, event.player.getCurrentEquippedItem()))
                 RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Red.setAlpha(0.6f), 2.0f, event.partialTicks);
             else
                 RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Green.setAlpha(0.6f), 2.0f, event.partialTicks);

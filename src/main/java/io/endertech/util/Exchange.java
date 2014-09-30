@@ -53,23 +53,32 @@ public class Exchange
         }
     }
 
-    public static boolean blockSuitableForExchange(BlockCoord blockCoord, World world, Block source, int sourceMeta, ItemStack target, ItemStack itemStack, int radius)
+    public static boolean blockSuitableForSelection(BlockCoord blockCoord, World world, Block block, int blockMeta, ItemStack itemStack)
     {
         if (world.getTileEntity(blockCoord.x, blockCoord.y, blockCoord.z) != null) return false;
 
+        if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
+        if (block.getBlockHardness(world, blockCoord.x, blockCoord.y, blockCoord.z) < 0) return false;
+        if (BlockHelper.softBlocks.contains(block)) return false;
+
+        if (!ItemExchanger.isCreative(itemStack) && ItemExchanger.creativeOverrideBlocks.contains(block)) return false;
+
+        return true;
+    }
+
+    public static boolean blockSuitableForExchange(BlockCoord blockCoord, World world, Block source, int sourceMeta, ItemStack target, ItemStack itemStack, int radius)
+    {
         Block worldBlock = world.getBlock(blockCoord.x, blockCoord.y, blockCoord.z);
         int worldMeta = world.getBlockMetadata(blockCoord.x, blockCoord.y, blockCoord.z);
 
-        if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
-        if (worldBlock.getBlockHardness(world, blockCoord.x, blockCoord.y, blockCoord.z) < 0) return false;
+        if (!blockSuitableForSelection(blockCoord, world, worldBlock, worldMeta, itemStack)) return false;
+
         if (!isBlockExposedWithExchangerExceptions(world, blockCoord.x, blockCoord.y, blockCoord.z) && radius > 0)
             return false;
 
         if (source != worldBlock || sourceMeta != worldMeta) return false;
         if (target.isItemEqual(new ItemStack(source, 1, sourceMeta))) return false;
 
-        if (!ItemExchanger.isCreative(itemStack) && ItemExchanger.creativeOverrideBlocks.contains(worldBlock))
-            return false;
 
         return true;
     }
