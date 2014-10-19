@@ -3,6 +3,7 @@ package io.endertech.proxy;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -78,7 +79,7 @@ public class ClientProxy extends CommonProxy
     @SubscribeEvent
     public void initializeIcons(TextureStitchEvent.Post event)
     {
-        if (EnderTech.loadDevModeContent)
+        if (EnderTech.loadDevModeContent && Loader.isModLoaded("ThermalExpansion"))
         {
             DevETFluids.fluidChargedEnder.setIcons(DevETFluids.fluidChargedEnderStill, DevETFluids.fluidChargedEnderFlowing);
         }

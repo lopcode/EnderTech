@@ -2,6 +2,8 @@
 build
 .gradle
 
+.DS_Store
+
 # Minecraft
 run
 
