@@ -47,7 +47,7 @@ warning.multiblock.consuming.same_reference_coordinate=[%s] Encountered two cont
 warning.multiblock.audit=[%s] Controller found %d dead parts during an audit, %d parts remain attached
 warning.multiblock.controller.dead_but_world_not_tracked=Controller %d in world %s marked as dead, but that world is not tracked! Controller is being ignored.
 warning.multiblock.tank.null_controller_assembly=Tank part at (%d, %d, %d) is being assembled without being attached to a tank. Attempting to auto-heal. Fully destroying and re-building this tank is recommended if errors persist.
-
+warning.thermalexpansion.missing=Thermal Expansion was not loaded whilst registering recipes. No recipes have been registered for EnderTech!
 # Asserts
 assert.multiblock.part.detached=[assert] Part @ (%d, %d, %d) should be detached already, but detected that it was not. This is not a fatal error, and will be repaired, but is unusual.
 

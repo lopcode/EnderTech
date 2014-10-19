@@ -42,7 +42,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import java.io.File;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION_NUMBER, certificateFingerprint = Reference.FINGERPRINT, dependencies = "required-after:ThermalExpansion@[1.7.10R4.0.0B1,)")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION_NUMBER, certificateFingerprint = Reference.FINGERPRINT, dependencies = "after:ThermalExpansion@[1.7.10R4.0.0B1,)")
 public class EnderTech
 {
     public static final CreativeTabs tabET = new CreativeTabET();
@@ -203,6 +203,8 @@ public class EnderTech
 
             GameRegistry.addRecipe(BlockHealthPad.itemHealthPadResonant, new Object[] {"IEI", "CFC", "IAI", 'I', enderiumIngot, 'F', machineResonant, 'E', enderEyeStack, 'C', goldenApple, 'T', tesseract, 'A', capacitorResonant});
             GameRegistry.addRecipe(BlockHealthPad.itemHealthPadRedstone, new Object[] {"IEI", "CFC", "IAI", 'I', electrumIngot, 'F', machineRedstone, 'E', enderEyeStack, 'C', goldenApple, 'T', tesseract, 'A', capacitorReinforced});
+        } else {
+            LogHelper.warn(LocalisationHelper.localiseString("warning.thermalexpansion.missing"));
         }
     }
 }
