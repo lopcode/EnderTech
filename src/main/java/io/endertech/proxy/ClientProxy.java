@@ -66,7 +66,13 @@ public class ClientProxy extends CommonProxy
         String[] types = {"Side", "Top", "Bottom"};
         for (String type : types)
         {
-            IconRegistry.addAndRegisterIcon("Machine_Redstone_" + type, Textures.TE3_TEXTURE_BASE + type, event.map);
+            if (Loader.isModLoaded("ThermalExpansion"))
+            {
+                IconRegistry.addAndRegisterIcon("Machine_Redstone_" + type, Textures.TE3_TEXTURE_BASE + type, event.map);
+            } else
+            {
+                IconRegistry.addAndRegisterIcon("Machine_Redstone_" + type, Textures.REDSTONE_TEXTURE_BASE + type, event.map);
+            }
             IconRegistry.addAndRegisterIcon("Machine_Creative_" + type, Textures.CREATIVE_TEXTURE_BASE + type, event.map);
             IconRegistry.addAndRegisterIcon("Machine_Resonant_" + type, Textures.ENDER_RESONANT_BASE + type, event.map);
         }
