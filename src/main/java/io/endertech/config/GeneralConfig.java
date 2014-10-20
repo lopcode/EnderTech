@@ -25,7 +25,7 @@ public class GeneralConfig
         {
             generalConfig.load();
 
-            tankStorageMultiplier = generalConfig.get("tank", "Tank.StorageMultiplier", 128).getInt(128);
+            tankStorageMultiplier = generalConfig.get("tank", "Tank.StorageMultiplier", 512).getInt(512);
             if (tankStorageMultiplier < 1)
             {
                 tankStorageMultiplier = 1;
