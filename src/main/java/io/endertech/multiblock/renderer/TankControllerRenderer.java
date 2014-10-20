@@ -6,6 +6,7 @@ import io.endertech.multiblock.block.BlockTankController;
 import io.endertech.multiblock.controller.ControllerTank;
 import io.endertech.multiblock.tile.TileTankController;
 import io.endertech.util.BlockCoord;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -75,6 +76,10 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
         if (!(tile instanceof TileTankController)) return;
 
         TileTankController tank = (TileTankController) tile;
+
+        Block tempBlock = tile.getBlockType();
+        if (!(tempBlock instanceof BlockTankController)) return;
+
         BlockTankController block = (BlockTankController) tile.getBlockType();
         int meta = tile.getBlockMetadata();
 
