@@ -40,6 +40,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
     public ItemExchanger()
     {
         super();
+        this.setNoRepair();
     }
 
     public static boolean isCreative(ItemStack stack)
