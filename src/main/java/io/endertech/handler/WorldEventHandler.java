@@ -113,7 +113,7 @@ public class WorldEventHandler
 
         int hardnessCost = ((int) blockHardness) * ItemConfig.itemExchangerHardnessCost;
 
-        int exchangeCost = baseCost + radiusCost + hardnessCost;
+        int exchangeCost = baseCost + (radiusCost * exchange.currentRadius) + hardnessCost;
         if (exchangeCost < ItemConfig.itemExchangerMinimumCost) exchangeCost = ItemConfig.itemExchangerMinimumCost;
         if (exchangeCost > ItemConfig.itemExchangerMaximumCost) exchangeCost = ItemConfig.itemExchangerMaximumCost;
 
