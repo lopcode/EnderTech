@@ -60,18 +60,17 @@ public class GUIEventHandler extends Gui
 
         // I have no idea what I'm doing
 
-        GL11.glPushMatrix();
-        GL11.glDisable(GL11.GL_LIGHTING);
+        net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
 
         GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glEnable(GL11.GL_LIGHTING);
 
-        net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
         ri.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, this.lastExchangeSource, 2 + GeneralConfig.GUITopLeftXOffset, 2 + GeneralConfig.GUITopLeftYOffset);
+        net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
 
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glPushMatrix();
+        GL11.glDisable(32826);
+        GL11.glDisable(GL11.GL_COLOR_MATERIAL);
 
         String am = Integer.toString(this.lastExchangeSourceCount);
         if (exchanger.isCreative(exchangerStack))
@@ -82,7 +81,6 @@ public class GUIEventHandler extends Gui
         FontHelper.drawItemQuantity(mc.fontRenderer, 3 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, am);
         FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, 1.0, LocalisationHelper.localiseString("gui.exchanger.radius", exchanger.getTargetRadius(exchangerStack)));
 
-        GL11.glPopMatrix();
-        GL11.glPopMatrix();
+        net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
     }
 }
