@@ -21,10 +21,10 @@ public class ItemConfig
         try
         {
             itemConfig.load();
-            itemExchangerBaseCost = itemConfig.get("item.general", "Exchanger.BaseCost", 4096).getInt();
-            itemExchangerRadiusCost = itemConfig.get("item.general", "Exchanger.RadiusCost", 256).getInt(256);
-            itemExchangerHardnessCost = itemConfig.get("item.general", "Exchanger.HardnessCost", 128).getInt(128);
-            itemExchangerMinimumCost = itemConfig.get("item.general", "Exchanger.MinimumCost", 4096).getInt(4096);
+            itemExchangerBaseCost = itemConfig.get("item.general", "Exchanger.BaseCost", 2048).getInt();
+            itemExchangerRadiusCost = itemConfig.get("item.general", "Exchanger.RadiusCost", 128).getInt(256);
+            itemExchangerHardnessCost = itemConfig.get("item.general", "Exchanger.HardnessCost", 64).getInt(64);
+            itemExchangerMinimumCost = itemConfig.get("item.general", "Exchanger.MinimumCost", 2048).getInt(2048);
             itemExchangerMaximumCost = itemConfig.get("item.general", "Exchanger.MaximumCost", 16384).getInt(16384);
             itemExchangerMaxRadius = itemConfig.get("item.general", "Exchanger.MaxRadius", 8).getInt(8);
 
