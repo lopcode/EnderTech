@@ -42,7 +42,7 @@ public class BlockMultiblockGlass extends BlockET implements ITileEntityProvider
         setStepSound(soundTypeGlass);
         setHardness(10.0f);
         setResistance(20.0f);
-        setBlockName("multiblockGlass");
+        setBlockName("enderTankMultiblockGlass");
         this.setBlockTextureName(TEXTURE_BASE);
         setCreativeTab(EnderTech.tabET);
 

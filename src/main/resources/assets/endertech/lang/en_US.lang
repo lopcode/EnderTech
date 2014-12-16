@@ -15,7 +15,7 @@ tile.enderTankPart.0.name=Ender Tank Frame
 tile.enderTankPart.1.name=Ender Tank Valve
 tile.enderTankPart.2.name=Ender Tank Energy Input
 tile.enderTankController.0.name=Ender Tank Controller
-tile.multiblockGlass.0.name=Ender Tank Glass
+tile.enderTankMultiblockGlass.0.name=Ender Tank Glass
 
 tile.chargePad.0.name=Creative Charge Pad
 tile.chargePad.1.name=Redstone Charge Pad
