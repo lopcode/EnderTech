@@ -297,7 +297,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
                 {
                     LogHelper.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation"));
                     LogHelper.error(this.toString());
-                    LogHelper.error("candidate tank was null");
+                    LogHelper.error(candidate.toString());
                 }
             }
 
