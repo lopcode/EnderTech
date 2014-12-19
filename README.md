@@ -54,7 +54,7 @@ If you want to see in-development content you must enable it in the 'general.cfg
 ##Builds
 Signed jars are available on CurseForge and Hydria. There are two types of build, Promoted and Dev. Promoted builds are on both services, but Dev builds are only available on Jenkins. Use a Promoted build first.
 
-Promoted: http://minecraft.curseforge.com/mc-mods/223428-endertech
+Promoted: http://www.curse.com/mc-mods/minecraft/223428-endertech
 
 Dev and Promoted: http://hydria.drakon.io/job/EnderTech/
 
