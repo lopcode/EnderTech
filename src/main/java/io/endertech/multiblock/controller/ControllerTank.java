@@ -290,15 +290,15 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
 
             if (candidate == null)
             {
+                if (this.tank.getFluidAmount() >= assimilatedController.tank.getFluidAmount()) candidate = this;
+                else candidate = assimilatedController;
+
                 if (ServerHelper.isServerWorld(this.worldObj))
                 {
                     LogHelper.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation"));
                     LogHelper.error(this.toString());
-                    LogHelper.error(candidate.toString());
+                    LogHelper.error("candidate tank was null");
                 }
-
-                if (this.tank.getFluidAmount() >= assimilatedController.tank.getFluidAmount()) candidate = this;
-                else candidate = assimilatedController;
             }
 
             setRandomNumber(candidate.getRandomNumber());
