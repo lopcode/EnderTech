@@ -60,17 +60,21 @@ public class GUIEventHandler extends Gui
 
         // I have no idea what I'm doing
 
-        net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
+        // Null check prevents NPEs in vanilla renderItemAndEffectIntoGUI for items which drop the wrong thing
+        if (this.lastExchangeSource.getItem() != null) {
+            net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
 
-        GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
-        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-        GL11.glEnable(GL11.GL_LIGHTING);
+            GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
+            GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+            GL11.glEnable(GL11.GL_LIGHTING);
 
-        ri.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, this.lastExchangeSource, 2 + GeneralConfig.GUITopLeftXOffset, 2 + GeneralConfig.GUITopLeftYOffset);
-        net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
+            ri.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, this.lastExchangeSource, 2 + GeneralConfig.GUITopLeftXOffset, 2 + GeneralConfig.GUITopLeftYOffset);
 
-        GL11.glDisable(32826);
-        GL11.glDisable(GL11.GL_COLOR_MATERIAL);
+            net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
+
+            GL11.glDisable(32826);
+            GL11.glDisable(GL11.GL_COLOR_MATERIAL);
+        }
 
         String am = Integer.toString(this.lastExchangeSourceCount);
         if (exchanger.isCreative(exchangerStack))

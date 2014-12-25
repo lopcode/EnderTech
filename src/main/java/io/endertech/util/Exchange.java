@@ -2,10 +2,7 @@ package io.endertech.util;
 
 import io.endertech.item.ItemExchanger;
 import io.endertech.util.helper.BlockHelper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFence;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -17,6 +14,7 @@ public class Exchange
 {
     public static final int radiusTicksDefault = 10;
     public static final Set<Block> specialBlocks = new HashSet<Block>();
+    public static final Set<Block> blacklistedBlocks = new HashSet<Block>();
     public BlockCoord origin = null;
     public int radius;
     public int currentRadius = 1;
@@ -51,6 +49,16 @@ public class Exchange
                 specialBlocks.add(block);
             }
         }
+
+        for (Object o : Block.blockRegistry)
+        {
+            Block block = (Block) o;
+
+            if (block instanceof BlockRedstoneLight)
+            {
+                blacklistedBlocks.add(block);
+            }
+        }
     }
 
     public static boolean blockSuitableForSelection(BlockCoord blockCoord, World world, Block block, int blockMeta, ItemStack itemStack)
@@ -58,6 +66,7 @@ public class Exchange
         if (world.getTileEntity(blockCoord.x, blockCoord.y, blockCoord.z) != null) return false;
 
         if (world.isAirBlock(blockCoord.x, blockCoord.y, blockCoord.z)) return false;
+        if (blacklistedBlocks.contains(block)) return false;
         if (block.getBlockHardness(world, blockCoord.x, blockCoord.y, blockCoord.z) < 0) return false;
         if (BlockHelper.softBlocks.contains(block)) return false;
 
