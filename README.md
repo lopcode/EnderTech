@@ -9,7 +9,7 @@ Some features are often in development, so try to use Promoted builds in your wo
 
 Unless we talk about it first and I agree, I'm very unlikely to accept pull requests. GitHub is used to show the source and manage issues alone.
 
-Curse link: http://minecraft.curseforge.com/mc-mods/223428-endertech
+Curse link: http://www.curse.com/mc-mods/minecraft/223428-endertech
 
 __FAQs__, progress, modpack permissions / etc: https://github.com/Drayshak/EnderTech/wiki
 
