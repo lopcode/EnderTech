@@ -1,0 +1,100 @@
+# Item localisations
+item.endertech.exchanger.exchangerRedstone.name=Redstone Austauscher
+item.endertech.exchanger.exchangerResonant.name=Resonanter Austauscher
+item.endertech.exchanger.exchangerCreative.name=Kreativer Austauscher
+
+# Creative tab
+itemGroup.EnderTechAll=EnderTech: Alles
+
+# Blocks
+tile.enderTank.name=Ender-Tank
+tile.chargedPlane.0.name=Aufgeladenes Feld
+tile.enderTankPart.0.name=Ender-Tank-Hülle
+tile.enderTankPart.1.name=Ender-Tank-Klappe
+tile.enderTankPart.2.name=Ender-Tank-Stromanschluss
+tile.enderTankController.0.name=Ender-Tank-Controller
+tile.enderTankMultiblockGlass.0.name=Ender-Tank-Glas
+
+tile.chargePad.0.name=Kreatives Aufladepad
+tile.chargePad.1.name=Redstone Aufladepad
+tile.chargePad.2.name=Resonantes Aufladepad
+
+tile.healthPad.0.name=Kreatives Heilungspad
+tile.healthPad.1.name=Redstone Heilungspad
+tile.healthPad.2.name=Resonantes Heilungspad
+
+# Fluids
+tile.fluid.chargePad.0.name=Geladenes Ender
+fluid.chargedEnder=Geladenes Ender
+item.endertech.bucket.bucketChargedEnder.name=Geladenes Ender Eimer
+
+# Keys
+key.endertech.tools=EnderTech Tool Tastaturkürzel
+
+# General
+general.direction.pre=Meine Richtung ist: %s
+
+# Warnings
+warning.fingerprint.missing=Der Fingerabdruck der .jar-Datei fehlt, dieses Mod könnte manipuliert sein.
+warning.no_tile_entity=Ich habe keine Tile-Entity :(
+warning.tank.dismantle_loss=Durch Entfernen dieses Tank-Blocks werden die Inhalte zerstört, wenn er nicht mit einer Spitzhacke abgebaut wird.
+warning.multiblock.tank.destructive_assimilation_check=WARNING: A check occurred which is usually the precursor to two tanks with contents being joined. Don't try to join two tanks with contents in them!
+warning.multiblock.part.double_adding=[%s] Controller %s fügt den Part %d @ %s doppelt hinzu. Das ist nicht gewöhnlich. Sollte sich der Tank weiterhin ungewöhnlich verhalten, bitte ihn abbauen und neu errichten.
+warning.multiblock.part.double_removing=[%s] Part (%d) @ %d, %d, %d, wird doppelt entfernt. Das ist ungewöhnlich und kann Probleme hervorrufen. Wenn sich der Reaktor ungewöhnlich verhält, bitte abbauen und neu errichten.
+warning.multiblock.consuming.same_reference_coordinate=[%s] Zwei Controller verweisen auf den selben Block. Die verbundenen Parts werden überprüft und es erneut versucht.
+warning.multiblock.audit=[%s] Controller hat %d nicht mehr verbundene Parts entdeckt, %d Parts scheinen noch dran zu sein.
+warning.multiblock.controller.dead_but_world_not_tracked=Controller %d in der Welt %s ist als nicht mehr aktiv markiert, aber die Welt wird nicht überprüft! Dieser Controller wird ignoriert.
+warning.multiblock.tank.null_controller_assembly=Tank-Part bei (%d, %d, %d) wird ohne Tank aufgebaut. EnderTech versucht sich wiederherzustellen. Diesen Tank komplett abzubauen und neu aufzustellen ist empfohlen, wenn Fehler auftauchen.
+warning.thermalexpansion.missing=Thermal Expansion war während der Registrierung der Crafting-Rezepte nicht geladen. EnderTech hat keine Crafting-Rezepte registriert!
+
+# Asserts
+assert.multiblock.part.detached=[assert] Part @ (%d, %d, %d) müsste bereits nicht mehr verbunden sein, ist es aber offenbar. Das ist kein fataler Fehler (und wird behoben), aber ist ungewöhnlich.
+
+# Errors
+error.fingerprint.tampered=Fingerabdrücke stimmen nicht mitüberein – dieses Mod wurde manipuliert!
+error.config.general.load=Fehler beim Laden der Konfiguration
+error.config.block.load=Fehler beim Laden der Block-Konfiguration
+error.config.item.load=Fehler beim Laden der Item-Konfugiration
+error.multiblock.tank.destructive_assimilation=WARNUNG: Zwei Tanks wurden gleichgemacht, die beide zuvor etwas beinhalteten. Das sollte eigentlich nie passieren. Bitte dies dem EnderTech-Mod-Autor melden. Der Tank mit dem meisten Inhalt wurde gewählt.
+error.multiblock.consuming.different_classes=Es wird versucht, zwei Multiblöcke mit zwei verschiedenen Master-Klassen zusammenzuführen – das sollte eigentlich nie passieren!
+error.multiblock.consuming.my_controller=Mein Controller (%d): Grösse (%d), Parts: %s
+error.multiblock.consuming.other_controller=Anderer Controller (%d): Grösse (%d), Koordinaten: %s
+error.multiblock.consuming.same_reference_coordinate=[%s] Zwei Controller verweisen auf dieselben Koordinaten und haben trotzdem beide irgendwie gültige Parts – das sollte eigentlich nie passieren!
+error.multiblock.tickend.merge_pool=Das Multiblock System überprüfte einen zusammengeführten Pool mit Grösse %d, hat aber keine Master-Candidates gefunden. Das sollte eigentlich nie passieren!
+error.multiblock.tickend.non_empty_controller=Es wurde ein nicht leerer Controller gefunden! Er wird gezwungen, die Blöcke zu verlieren und sich zu entfernen. Das sollte eigentlich nie passieren!
+
+# Info
+info.postinit.recipes=Crafting-Rezepte registrieren
+info.multiblock.construction.last_failure_reason.pre=Letzter Grund, warum der Multiblock sich nicht bilden konnte:
+info.multiblock.construction.no_controller=Der Block ist nicht mit einem Tank verbunden. Lag oder ein Bug könnte die Ursache sein. Falls das Problem weiterhin besteht, bitte den Block abbauen und neu platzieren.
+info.multiblock.tank.connecting_destructive=Jemand hat versucht, bei %s zwei gebildete Tanks miteinander zu verbinden - Der Prozess wird abgebrochen.
+info.charge=Energie: %s
+info.charge.receive=Aufladen: %s
+info.charge.send=Senden: %s
+info.sent=Gesendet: %s
+info.exchanger.source=Quellblock: %s
+info.exchanger.shift_to_select_source=Rechtsklick und Shift gedrückt halten, um Quelle zu wählen
+info.exchanger.radius=Radius: %s
+info.multiblock.part.unsuitable.frame=%d, %d, %d - Dieser Block kann nicht für das Maschinengehäuse gewählt werden.
+info.multiblock.part.unsuitable.top=%d, %d, %d - Dieser Block kann nicht für das Maschinendach gewählt werden.
+info.multiblock.part.unsuitable.bottom=%d, %d, %d - Dieser Block kann nicht für den Maschinenboden gewählt werden.
+info.multiblock.part.unsuitable.sides=%d, %d, %d - Dieser Block kann nicht für das Maschinengehäuse gewählt werden.
+info.multiblock.part.unsuitable.interior=%d, %d, %d - Dieser Block kann nicht für in die Maschine gewählt werden.
+info.multiblock.assembled_status=Gebaut:
+info.multiblock.not_assembled=Nicht gebaut
+info.multiblock.rectangular.dimensions_wrong=Die Maschine ist zu %s, sie darf nur %s %d Blöcke in die %s-Dimension sein.
+info.multiblock.rectangular.part_not_compatible=Der Part bei %d, %d, %d ist inkompatibel für den Maschinentyp %s
+info.hold_for_details.hold=Für Details
+info.hold_for_details.shift=Shift
+info.hold_for_details.for_details=halten
+info.infinite=Unendlich
+info.active=Aktiv
+info.inactive=Inaktiv
+info.multiblock.tank.part.unsuitable.frame=%d, %d, %d - Nur Ender-Tank-Hüllen können für das Gehäuse benutzt werden.
+info.multiblock.tank.part.unsuitable.top=%d, %d, %d - Dieser Part kann nicht als Tank-Dach genutzt werden.
+info.multiblock.tank.part.unsuitable.bottom=%d, %d, %d - Dieser Part kann nicht als Tank-Boden genutzt werden.
+info.multiblock.tank.part.unsuitable.interior=%d, %d, %d - Der Ender-Tank muss innen einen Hohlraum haben.
+
+# GUI
+gui.exchanger.radius=Radius: %s
+gui.exchanger.radius.infinite=Unendlich
