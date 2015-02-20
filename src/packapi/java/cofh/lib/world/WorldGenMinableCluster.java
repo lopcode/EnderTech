@@ -72,61 +72,82 @@ public class WorldGenMinableCluster extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random random, int x, int y, int z) {
+	public boolean generate(World world, Random rand, int x, int y, int z) {
 
-		if (genClusterSize < 4) {
-			return generateTiny(world, random, x, y, z);
+		int blocks = genClusterSize;
+		if (blocks < 4) { // HACK: at 1 and 2 no ores are ever generated. at 3 only 1/3 veins generate
+			return generateTiny(world, rand, x, y, z);
 		}
-		float f = random.nextFloat() * (float) Math.PI;
-		double d0 = x + 8 + MathHelper.sin(f) * genClusterSize / 8.0F;
-		double d1 = x + 8 - MathHelper.sin(f) * genClusterSize / 8.0F;
-		double d2 = z + 8 + MathHelper.cos(f) * genClusterSize / 8.0F;
-		double d3 = z + 8 - MathHelper.cos(f) * genClusterSize / 8.0F;
-		double d4 = y + random.nextInt(3) - 2;
-		double d5 = y + random.nextInt(3) - 2;
+		float f = rand.nextFloat() * (float) Math.PI;
+		// despite naming, these are not exactly min/max. more like direction
+		float xMin = x + 8 + (MathHelper.sin(f) * blocks) / 8F;
+		float xMax = x + 8 - (MathHelper.sin(f) * blocks) / 8F;
+		float zMin = z + 8 + (MathHelper.cos(f) * blocks) / 8F;
+		float zMax = z + 8 - (MathHelper.cos(f) * blocks) / 8F;
+		float yMin = (y + rand.nextInt(3)) - 2;
+		float yMax = (y + rand.nextInt(3)) - 2;
+
+		// optimization so this subtraction doesn't occur every time in the loop
+		xMax -= xMin;
+		yMax -= yMin;
+		zMax -= zMin;
 
 		boolean r = false;
-		for (int l = 0; l <= genClusterSize; l++) {
-			double d6 = d0 + (d1 - d0) * l / genClusterSize;
-			double d7 = d4 + (d5 - d4) * l / genClusterSize;
-			double d8 = d2 + (d3 - d2) * l / genClusterSize;
-			double d9 = random.nextDouble() * genClusterSize / 16.0D;
-			double d10 = (MathHelper.sin(l * (float) Math.PI / genClusterSize) + 1.0F) * d9 + 1.0D;
-			double d11 = (MathHelper.sin(l * (float) Math.PI / genClusterSize) + 1.0F) * d9 + 1.0D;
-			int i1 = MathHelper.floor_double(d6 - d10 / 2.0D);
-			int j1 = MathHelper.floor_double(d7 - d11 / 2.0D);
-			int k1 = MathHelper.floor_double(d8 - d10 / 2.0D);
-			int l1 = MathHelper.floor_double(d6 + d10 / 2.0D);
-			int i2 = MathHelper.floor_double(d7 + d11 / 2.0D);
-			int j2 = MathHelper.floor_double(d8 + d10 / 2.0D);
+		for (int i = 0; i <= blocks; i++) {
 
-			for (int k2 = i1; k2 <= l1; k2++) {
-				double d12 = (k2 + 0.5D - d6) / (d10 / 2.0D);
+			float xCenter = xMin + (xMax * i) / blocks;
+			float yCenter = yMin + (yMax * i) / blocks;
+			float zCenter = zMin + (zMax * i) / blocks;
 
-				if (d12 * d12 < 1.0D) {
-					for (int l2 = j1; l2 <= i2; l2++) {
-						double d13 = (l2 + 0.5D - d7) / (d11 / 2.0D);
+			// preserved as nextDouble to ensure the rand gets ticked the same amount
+			float size = ((float) rand.nextDouble() * blocks) / 16f;
 
-						if (d12 * d12 + d13 * d13 < 1.0D) {
-							for (int i3 = k1; i3 <= j2; i3++) {
-								double d14 = (i3 + 0.5D - d8) / (d10 / 2.0D);
+			float hMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1f) * size + 1f) * .5f;
+			float vMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1f) * size + 1f) * .5f;
 
-								if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D) {
+			int xStart = MathHelper.floor_float(xCenter - hMod);
+			int yStart = MathHelper.floor_float(yCenter - vMod);
+			int zStart = MathHelper.floor_float(zCenter - hMod);
 
-									r |= generateBlock(world, k2, l2, i3, genBlock, cluster);
-								}
-							}
+			int xStop = MathHelper.floor_float(xCenter + hMod);
+			int yStop = MathHelper.floor_float(yCenter + vMod);
+			int zStop = MathHelper.floor_float(zCenter + hMod);
+
+			for (int blockX = xStart; blockX <= xStop; blockX++) {
+				float xDistSq = ((blockX + .5f) - xCenter) / hMod;
+				xDistSq *= xDistSq;
+				if (xDistSq >= 1f) {
+					continue;
+				}
+
+				for (int blockY = yStart; blockY <= yStop; blockY++) {
+					float yDistSq = ((blockY + .5f) - yCenter) / vMod;
+					yDistSq *= yDistSq;
+					float xyDistSq = yDistSq + xDistSq;
+					if (xyDistSq >= 1f) {
+						continue;
+					}
+
+					for (int blockZ = zStart; blockZ <= zStop; blockZ++) {
+						float zDistSq = ((blockZ + .5f) - zCenter) / hMod;
+						zDistSq *= zDistSq;
+						if (zDistSq + xyDistSq >= 1f) {
+							continue;
 						}
+
+						r |= generateBlock(world, blockX, blockY, blockZ, genBlock, cluster);
 					}
 				}
 			}
 		}
+
 		return r;
 	}
 
 	public boolean generateTiny(World world, Random random, int x, int y, int z) {
 
 		boolean r = false;
+		// not <=; generating up to clusterSize blocks
 		for (int i = 0; i < genClusterSize; i++) {
 			int d0 = x + random.nextInt(2);
 			int d1 = y + random.nextInt(2);
@@ -137,19 +158,49 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		return r;
 	}
 
-	public static boolean generateBlock(World world, int x, int y, int z, WeightedRandomBlock[] mat, List<WeightedRandomBlock> o) {
+	public static boolean canGenerateInBlock(World world, int x, int y, int z, WeightedRandomBlock[] mat) {
 
-		boolean r = false;
+		if (mat == null || mat.length == 0)
+			return true;
+
 		Block block = world.getBlock(x, y, z);
-		l: for (int j = 0, e = mat.length; j < e; ++j) {
+		for (int j = 0, e = mat.length; j < e; ++j) {
 			WeightedRandomBlock genBlock = mat[j];
-			if ((-1 == genBlock.metadata || genBlock.metadata == world.getBlockMetadata(x, y, z)) && block.isReplaceableOreGen(world, x, y, z, genBlock.block)) {
-				WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, o);
-				r |= world.setBlock(x, y, z, ore.block, ore.metadata, 2);
-				break l;
+			if ((-1 == genBlock.metadata || genBlock.metadata == world.getBlockMetadata(x, y, z)) &&
+					(block.isReplaceableOreGen(world, x, y, z, genBlock.block) || block.isAssociatedBlock(genBlock.block))) {
+				return true;
 			}
 		}
-		return r;
+		return false;
+	}
+
+	public static boolean generateBlock(World world, int x, int y, int z, WeightedRandomBlock[] mat, List<WeightedRandomBlock> o) {
+
+		if (mat == null || mat.length == 0)
+			return generateBlock(world, x, y, z, o);
+
+		if (canGenerateInBlock(world, x, y, z, mat)) {
+			return generateBlock(world, x, y, z, o);
+		}
+		return false;
+	}
+
+	public static boolean generateBlock(World world, int x, int y, int z, List<WeightedRandomBlock> o) {
+
+		WeightedRandomBlock ore = selectBlock(world, o);
+		if (ore == null)
+			return false;
+		return world.setBlock(x, y, z, ore.block, ore.metadata, 2);
+	}
+
+	public static WeightedRandomBlock selectBlock(World world, List<WeightedRandomBlock> o) {
+
+		int size = o.size();
+		if (size == 0)
+			return null;
+		if (size > 1)
+			return (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, o);
+		return o.get(0);
 	}
 
 }

@@ -24,10 +24,10 @@ repositories {
     }
 
     // Pulsar
-    maven {
-        name 'Drakon.io Arca'
-        url "http://arca.drakon.io/"
-    }
+    //maven {
+    //    name 'Drakon.io Arca'
+    //    url "http://arca.drakon.io/"
+    //}
 
     maven { // The repo from which to get waila
         name "Mobius Repo"
@@ -84,11 +84,11 @@ configurations {
 
 dependencies {
     //compile fileTree(dir: 'lib', includes: ['*.jar'])
-    shade 'io.drakon:Pulsar:0.3.0'
+    //shade 'io.drakon:Pulsar:0.3.0'
     //compile name: 'ForgeMultipart', version: "${config.minecraft_version}-${config.FMP_version}", ext: 'jar'
     //compile name: 'CodeChickenLib', version: "${config.minecraft_version}-${config.CCLIB_version}", ext: 'jar'
     //compile name: 'NotEnoughItems', version: "${config.NEI_version}", type: 'jar'
-    compile "mcp.mobius.waila:Waila:1.5.3a_1.7.10"
+    compile "mcp.mobius.waila:Waila:1.5.9_1.7.10"
 
     // Dependencies that do not provide an easy way to grab them with Gradle must be included manually
     // List of shame:
@@ -138,7 +138,7 @@ minecraft {
 
     replace "@VERSION@", "${config.minecraft_version}-${config.mod_version}.${project.buildInfo.build_number}"
 
-    srgExtra "PK: io/drakon/pulsar io/endertech/repack/pulsar"
+    //srgExtra "PK: io/drakon/pulsar io/endertech/repack/pulsar"
 }
 
 version = "${config.minecraft_version}-${config.mod_version}.${project.buildInfo.build_number}"

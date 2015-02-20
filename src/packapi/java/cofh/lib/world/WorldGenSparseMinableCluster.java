@@ -1,7 +1,6 @@
 package cofh.lib.world;
 
-import static cofh.lib.world.WorldGenMinableCluster.fabricateList;
-import static cofh.lib.world.WorldGenMinableCluster.generateBlock;
+import static cofh.lib.world.WorldGenMinableCluster.*;
 
 import cofh.lib.util.WeightedRandomBlock;
 
@@ -59,7 +58,7 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int chunkX, int y, int chunkZ) {
+	public boolean generate(World world, Random rand, int x, int y, int z) {
 
 		int blocks = genClusterSize;
 		float f = rand.nextFloat() * (float) Math.PI;
@@ -76,16 +75,17 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 			++blocks;
 		}
 		// }
-		float xMin = chunkX + 8 + (MathHelper.sin(f) * blocks) / 8F;
-		float xMax = chunkX + 8 - (MathHelper.sin(f) * blocks) / 8F;
-		float zMin = chunkZ + 8 + (MathHelper.cos(f) * blocks) / 8F;
-		float zMax = chunkZ + 8 - (MathHelper.cos(f) * blocks) / 8F;
+		float xMin = x + 8 + (MathHelper.sin(f) * blocks) / 8F;
+		float xMax = x + 8 - (MathHelper.sin(f) * blocks) / 8F;
+		float zMin = z + 8 + (MathHelper.cos(f) * blocks) / 8F;
+		float zMax = z + 8 - (MathHelper.cos(f) * blocks) / 8F;
 
 		// optimization so this subtraction doesn't occur every time in the loop
 		xMax -= xMin;
 		yMax -= yMin;
 		zMax -= zMin;
 
+		boolean r = false;
 		for (int i = 0; i <= blocks; i++) {
 
 			float xCenter = xMin + (xMax * i) / blocks;
@@ -123,18 +123,18 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 
 					for (int blockZ = zStart; blockZ <= zStop; blockZ++) {
 						float zDistSq = ((blockZ + .5f) - zCenter) / hMod;
-						xDistSq *= zDistSq;
+						zDistSq *= zDistSq;
 						if (zDistSq + xyDistSq >= 1f) {
 							continue;
 						}
 
-						generateBlock(world, blockX, blockY, blockZ, genBlock, cluster);
+						r |= generateBlock(world, blockX, blockY, blockZ, genBlock, cluster);
 					}
 				}
 			}
 		}
 
-		return true;
+		return r;
 	}
 
 }

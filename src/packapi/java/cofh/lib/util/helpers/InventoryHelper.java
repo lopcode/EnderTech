@@ -13,9 +13,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * This class contains helper functions related to Inventories and Inventory manipulation.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class InventoryHelper {
 
@@ -37,21 +37,23 @@ public class InventoryHelper {
 
 	/**
 	 * Add an ItemStack to an inventory. Return true if the entire stack was added.
-	 * 
+	 *
 	 * @param inventory
 	 *            The inventory.
 	 * @param stack
 	 *            ItemStack to add.
 	 * @param startIndex
 	 *            First slot to attempt to add into. Does not loop around fully.
+	 * @param endIndex
+	 *            Final slot to attempt to add into. Should be at most length - 1
 	 */
-	public static boolean addItemStackToInventory(ItemStack[] inventory, ItemStack stack, int startIndex) {
+	public static boolean addItemStackToInventory(ItemStack[] inventory, ItemStack stack, int startIndex, int endIndex) {
 
 		if (stack == null) {
 			return true;
 		}
 		int openSlot = -1;
-		for (int i = startIndex; i < inventory.length; i++) {
+		for (int i = startIndex; i <= endIndex; i++) {
 			if (ItemHelper.itemsEqualForCrafting(stack, inventory[i]) && inventory[i].getMaxStackSize() > inventory[i].stackSize) {
 				int hold = inventory[i].getMaxStackSize() - inventory[i].stackSize;
 				if (hold >= stack.stackSize) {
@@ -72,6 +74,14 @@ public class InventoryHelper {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Shortcut method for above, assumes ending slot is length - 1
+	 */
+	public static boolean addItemStackToInventory(ItemStack[] inventory, ItemStack stack, int startIndex) {
+
+		return addItemStackToInventory(inventory, stack, startIndex, inventory.length - 1);
 	}
 
 	/**
@@ -228,7 +238,7 @@ public class InventoryHelper {
 		if (!inventory.isItemValidForSlot(slot, stack)) {
 			return stack;
 		}
-		int stackLimit = inventory.getInventoryStackLimit();
+		int stackLimit = Math.min(inventory.getInventoryStackLimit(), stack.getMaxStackSize());
 		return stackLimit >= stack.stackSize ? null : stack.splitStack(stack.stackSize - stackLimit);
 	}
 

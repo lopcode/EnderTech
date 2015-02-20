@@ -32,13 +32,13 @@ public class SlotViewOnly extends Slot {
 	}
 
 	@Override
-	public ItemStack decrStackSize(int par1) {
+	public ItemStack decrStackSize(int i) {
 
 		return null;
 	}
 
 	@Override
-	public boolean canTakeStack(EntityPlayer p) {
+	public boolean canTakeStack(EntityPlayer player) {
 
 		return false;
 	}

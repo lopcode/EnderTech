@@ -1,6 +1,6 @@
 package io.endertech.util.helper;
 
-import io.drakon.pulsar.control.PulseManager;
+//import io.drakon.pulsar.control.PulseManager;
 import io.endertech.EnderTech;
 import io.endertech.modules.dev.DevEnvironmentPulse;
 import static io.endertech.reference.Reference.MOD_ID;
@@ -12,7 +12,7 @@ import static io.endertech.reference.Reference.MOD_ID;
  */
 public class ModuleHelper
 {
-    public static final PulseManager pulsar = new PulseManager(MOD_ID, MOD_ID + "-Modules");
+    //public static final PulseManager pulsar = new PulseManager(MOD_ID, MOD_ID + "-Modules");
     private static boolean modulesConfigured = false;
 
     private ModuleHelper() {} // No touchy.
@@ -23,7 +23,7 @@ public class ModuleHelper
 
         if (EnderTech.loadDevModeContent)
         {
-            pulsar.registerPulse(new DevEnvironmentPulse());
+            //pulsar.registerPulse(new DevEnvironmentPulse());
         }
 
         modulesConfigured = true;

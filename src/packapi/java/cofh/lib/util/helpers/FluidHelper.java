@@ -18,20 +18,28 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
 /**
  * Contains various helper functions to assist with {@link Fluid} and Fluid-related manipulation and interaction.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class FluidHelper {
 
-	public static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
-	public static final FluidStack LAVA = new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME);
+	public static final int BUCKET_VOLUME = FluidContainerRegistry.BUCKET_VOLUME;
+
+	public static final Fluid WATER_FLUID = FluidRegistry.WATER;
+	public static final Fluid LAVA_FLUID = FluidRegistry.LAVA;
+
+	public static final FluidStack WATER = new FluidStack(WATER_FLUID, BUCKET_VOLUME);
+	public static final FluidStack LAVA = new FluidStack(LAVA_FLUID, BUCKET_VOLUME);
+
+	public static final FluidTankInfo[] NULL_TANK_INFO = new FluidTankInfo[]{};
 
 	private FluidHelper() {
 
@@ -225,10 +233,10 @@ public class FluidHelper {
 	public static Fluid lookupFluidForBlock(Block block) {
 
 		if (block == Blocks.flowing_water) {
-			return FluidRegistry.WATER;
+			return WATER_FLUID;
 		}
 		if (block == Blocks.flowing_lava) {
-			return FluidRegistry.LAVA;
+			return LAVA_FLUID;
 		}
 		return FluidRegistry.lookupFluidForBlock(block);
 	}

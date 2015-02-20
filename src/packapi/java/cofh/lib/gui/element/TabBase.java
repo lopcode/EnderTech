@@ -12,16 +12,19 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * Base class for a tab element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public abstract class TabBase extends ElementBase {
 
 	public static int tabExpandSpeed = 8;
 
-	public static int LEFT = 0;
-	public static int RIGHT = 1;
+	public static final int LEFT = 0;
+	public static final int RIGHT = 1;
+
+	protected int offsetX = 0;
+	protected int offsetY = 0;
 
 	public boolean open;
 	public boolean fullyOpen;
@@ -32,8 +35,8 @@ public abstract class TabBase extends ElementBase {
 	public int textColor = 0x000000;
 	public int backgroundColor = 0xffffff;
 
-	public int currentShiftX = 0;
-	public int currentShiftY = 0;
+	protected int currentShiftX = 0;
+	protected int currentShiftY = 0;
 
 	public int minWidth = 22;
 	public int maxWidth = 124;
@@ -64,10 +67,18 @@ public abstract class TabBase extends ElementBase {
 		}
 	}
 
+	public TabBase setOffsets(int x, int y) {
+
+		offsetX = x;
+		offsetY = y;
+
+		return this;
+	}
+
 	public void draw(int x, int y) {
 
-		posX = x;
-		posY = y;
+		posX = x + offsetX;
+		posY = y + offsetY;
 		draw();
 	}
 
@@ -155,15 +166,18 @@ public abstract class TabBase extends ElementBase {
 	 */
 	protected int posXOffset() {
 
-		return posX() + offset();
+		return posX() + sideOffset();
 	}
 
-	protected int offset() {
+	protected int sideOffset() {
 
 		return (side == LEFT ? 4 : 2);
 	}
 
 	public boolean intersectsWith(int mouseX, int mouseY, int shiftX, int shiftY) {
+
+		shiftX += offsetX;
+		shiftY += offsetY;
 
 		if (side == LEFT) {
 			if (mouseX <= shiftX && mouseX >= shiftX - currentWidth && mouseY >= shiftY && mouseY <= shiftY + currentHeight) {
@@ -178,6 +192,12 @@ public abstract class TabBase extends ElementBase {
 	public boolean isFullyOpened() {
 
 		return fullyOpen;
+	}
+
+	public void setCurrentShift(int x, int y) {
+
+		currentShiftX = x + offsetX;
+		currentShiftY = y + offsetY;
 	}
 
 	public void setFullyOpen() {
@@ -210,7 +230,12 @@ public abstract class TabBase extends ElementBase {
 
 	public Rectangle4i getBounds() {
 
-		return new Rectangle4i(posX() + gui.getGuiLeft(), posY + gui.getGuiTop(), currentWidth, currentHeight);
+		if (isVisible()) {
+			return new Rectangle4i(posX() + gui.getGuiLeft(), posY + gui.getGuiTop(), currentWidth, currentHeight);
+		} else {
+			return new Rectangle4i(posX() + gui.getGuiLeft(), posY + gui.getGuiTop(), 0, 0);
+		}
+
 	}
 
 }

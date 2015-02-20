@@ -1,20 +1,15 @@
 package cofh.lib.util;
 
-import cofh.lib.util.helpers.ItemHelper;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 /**
  * Wrapper for an Item/Metadata combination post 1.7. Quick and dirty, allows for Integer-based Hashes without collisions.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
-public final class ItemWrapper {
-
-	public Item item;
-	public int metadata;
+public final class ItemWrapper extends ComparableItem {
 
 	public static ItemWrapper fromItemStack(ItemStack stack) {
 
@@ -23,31 +18,23 @@ public final class ItemWrapper {
 
 	public ItemWrapper(Item item, int metadata) {
 
-		this.item = item;
-		this.metadata = metadata;
+		super(item, metadata);
 	}
 
 	public ItemWrapper(ItemStack stack) {
 
-		this.item = stack.getItem();
-		this.metadata = ItemHelper.getItemDamage(stack);
+		super(stack);
 	}
 
-	public ItemWrapper set(ItemStack stack) {
+	public ItemWrapper(ItemWrapper stack) {
 
-		if (stack != null) {
-			this.item = stack.getItem();
-			this.metadata = ItemHelper.getItemDamage(stack);
-		} else {
-			this.item = null;
-			this.metadata = 0;
-		}
-		return this;
+		super(stack);
 	}
 
-	public boolean isEqual(ItemWrapper other) {
+	@Override
+	public ItemWrapper clone() {
 
-		return other != null && item == other.item && metadata == other.metadata;
+		return new ItemWrapper(this);
 	}
 
 	@Override
@@ -57,12 +44,6 @@ public final class ItemWrapper {
 			return false;
 		}
 		return isEqual((ItemWrapper) o);
-	}
-
-	@Override
-	public int hashCode() {
-
-		return metadata | Item.getIdFromItem(item) << 16;
 	}
 
 }

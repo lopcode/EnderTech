@@ -12,12 +12,24 @@ public class InventoryContainerItemWrapper implements IInventory {
 	private final ContainerInventoryItem container;
 	private final ItemStack inventory;
 	private final IInventoryContainerItem inventoryItem;
+	private boolean dirty = false;
 
 	public InventoryContainerItemWrapper(ContainerInventoryItem gui, ItemStack stack) {
 
 		container = gui;
 		inventory = stack;
 		inventoryItem = (IInventoryContainerItem) stack.getItem();
+
+		if (inventory.stackTagCompound == null) {
+			inventory.setTagCompound(new NBTTagCompound());
+		}
+	}
+
+	public boolean getDirty() {
+
+		boolean r = dirty;
+		dirty = false;
+		return r;
 	}
 
 	public ItemStack getContainerStack() {
@@ -97,6 +109,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 	@Override
 	public void markDirty() {
 
+		dirty = true;
 		container.onSlotChanged();
 	}
 

@@ -39,7 +39,8 @@ public class ElementFluidTankSizeable extends ElementFluidTank
         }
     }
 
-    int getScaled()
+    @Override
+    protected int getScaled()
     {
         return tank.getFluidAmount() * sizeY / tank.getCapacity();
     }

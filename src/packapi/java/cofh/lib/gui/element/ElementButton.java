@@ -125,6 +125,18 @@ public class ElementButton extends ElementBase {
 		hoverY = pos;
 	}
 
+	public ElementButton setDisabledX(int pos) {
+
+		disabledX = pos;
+		return this;
+	}
+
+	public ElementButton setDisabledY(int pos) {
+
+		disabledY = pos;
+		return this;
+	}
+
 	public void setActive() {
 
 		setEnabled(true);

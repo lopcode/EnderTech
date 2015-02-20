@@ -31,9 +31,9 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 /**
  * Contains various helper functions to assist with {@link Item} and {@link ItemStack} manipulation and interaction.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public final class ItemHelper {
 
@@ -161,6 +161,9 @@ public final class ItemHelper {
 
 	public static ItemStack consumeItem(ItemStack stack) {
 
+		if (stack == null)
+			return null;
+
 		Item item = stack.getItem();
 		boolean largerStack = stack.stackSize > 1;
 		// vanilla only alters the stack passed to hasContainerItem/etc. when the size is >1
@@ -181,6 +184,59 @@ public final class ItemHelper {
 			return ret;
 		}
 		return largerStack ? stack : null;
+	}
+
+	public static ItemStack consumeItem(ItemStack stack, EntityPlayer player) {
+
+		if (stack == null)
+			return null;
+
+		Item item = stack.getItem();
+		boolean largerStack = stack.stackSize > 1;
+		// vanilla only alters the stack passed to hasContainerItem/etc. when the size is >1
+
+		if (largerStack) {
+			stack.stackSize -= 1;
+		}
+
+		if (item.hasContainerItem(stack)) {
+			ItemStack ret = item.getContainerItem(stack);
+
+			if (ret == null || (ret.isItemStackDamageable() && ret.getItemDamage() > ret.getMaxDamage()))
+				ret = null;
+
+			if (stack.stackSize < 1)
+				return ret;
+
+			if (ret != null && !player.inventory.addItemStackToInventory(ret))
+				player.func_146097_a(ret, false, true);
+		}
+
+		if (stack.stackSize > 0)
+			return stack;
+		return null;
+	}
+
+	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack, EntityPlayer entityplayer, boolean allowDrop) {
+
+		return disposePlayerItem(stack, dropStack, entityplayer, allowDrop, true);
+	}
+
+	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack, EntityPlayer entityplayer, boolean allowDrop, boolean allowReplace) {
+
+		if (entityplayer == null || entityplayer.capabilities.isCreativeMode)
+			return true;
+		if (allowReplace && stack.stackSize <= 1) {
+			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, dropStack);
+			return true;
+		} else if (allowDrop) {
+			stack.stackSize -= 1;
+			if (dropStack != null && !entityplayer.inventory.addItemStackToInventory(dropStack)) {
+				entityplayer.func_146097_a(dropStack, false, true);
+			}
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -359,6 +415,21 @@ public final class ItemHelper {
 		return new ShapedOreRecipe(result, recipe);
 	}
 
+	public static final IRecipe ShapedRecipe(Block result, int s, Object... recipe) {
+
+		return new ShapedOreRecipe(stack(result, s), recipe);
+	}
+
+	public static final IRecipe ShapedRecipe(Item result, int s, Object... recipe) {
+
+		return new ShapedOreRecipe(stack(result, s), recipe);
+	}
+
+	public static final IRecipe ShapedRecipe(ItemStack result, int s, Object... recipe) {
+
+		return new ShapedOreRecipe(cloneStack(result, s), recipe);
+	}
+
 	public static final IRecipe ShapelessRecipe(Block result, Object... recipe) {
 
 		return new ShapelessOreRecipe(result, recipe);
@@ -372,6 +443,21 @@ public final class ItemHelper {
 	public static final IRecipe ShapelessRecipe(ItemStack result, Object... recipe) {
 
 		return new ShapelessOreRecipe(result, recipe);
+	}
+
+	public static final IRecipe ShapelessRecipe(Block result, int s, Object... recipe) {
+
+		return new ShapelessOreRecipe(stack(result, s), recipe);
+	}
+
+	public static final IRecipe ShapelessRecipe(Item result, int s, Object... recipe) {
+
+		return new ShapelessOreRecipe(stack(result, s), recipe);
+	}
+
+	public static final IRecipe ShapelessRecipe(ItemStack result, int s, Object... recipe) {
+
+		return new ShapelessOreRecipe(cloneStack(result, s), recipe);
 	}
 
 	/* CRAFTING HELPER FUNCTIONS */
@@ -597,6 +683,26 @@ public final class ItemHelper {
 		return true;
 	}
 
+	public static boolean addTwoWayStorageRecipe(ItemStack one, ItemStack nine) {
+
+		return addStorageRecipe(one, nine) && addReverseStorageRecipe(nine, one);
+	}
+
+	public static boolean addTwoWayStorageRecipe(ItemStack one, String one_ore, ItemStack nine, String nine_ore) {
+
+		return addStorageRecipe(one, nine_ore) && addReverseStorageRecipe(nine, one_ore);
+	}
+
+	public static boolean addSmallTwoWayStorageRecipe(ItemStack one, ItemStack four) {
+
+		return addSmallStorageRecipe(one, four) && addSmallReverseStorageRecipe(four, one);
+	}
+
+	public static boolean addSmallTwoWayStorageRecipe(ItemStack one, String one_ore, ItemStack four, String four_ore) {
+
+		return addSmallStorageRecipe(one, four_ore) && addSmallReverseStorageRecipe(four, one_ore);
+	}
+
 	// }
 
 	// SMELTING{
@@ -700,6 +806,8 @@ public final class ItemHelper {
 		FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", stack);
 	}
 
+	// RECIPE{
+
 	public static void addRecipe(IRecipe recipe) {
 
 		GameRegistry.addRecipe(recipe);
@@ -715,10 +823,62 @@ public final class ItemHelper {
 		GameRegistry.addRecipe(out, recipe);
 	}
 
+	public static void addShapedRecipe(Item out, Object... recipe) {
+
+		addRecipe(new ItemStack(out), recipe);
+	}
+
+	public static void addShapedRecipe(Block out, Object... recipe) {
+
+		addRecipe(new ItemStack(out), recipe);
+	}
+
 	public static void addShapelessRecipe(ItemStack out, Object... recipe) {
 
 		GameRegistry.addShapelessRecipe(out, recipe);
 	}
+
+	public static void addShapelessRecipe(Item out, Object... recipe) {
+
+		addShapelessRecipe(new ItemStack(out), recipe);
+	}
+
+	public static void addShapelessRecipe(Block out, Object... recipe) {
+
+		addShapelessRecipe(new ItemStack(out), recipe);
+	}
+
+	public static void addShapedOreRecipe(ItemStack out, Object... recipe) {
+
+		GameRegistry.addRecipe(ShapedRecipe(out, recipe));
+	}
+
+	public static void addShapedOreRecipe(Item out, Object... recipe) {
+
+		GameRegistry.addRecipe(ShapedRecipe(out, recipe));
+	}
+
+	public static void addShapedOreRecipe(Block out, Object... recipe) {
+
+		GameRegistry.addRecipe(ShapedRecipe(out, recipe));
+	}
+
+	public static void addShapelessOreRecipe(ItemStack out, Object... recipe) {
+
+		GameRegistry.addRecipe(ShapelessRecipe(out, recipe));
+	}
+
+	public static void addShapelessOreRecipe(Item out, Object... recipe) {
+
+		GameRegistry.addRecipe(ShapelessRecipe(out, recipe));
+	}
+
+	public static void addShapelessOreRecipe(Block out, Object... recipe) {
+
+		GameRegistry.addRecipe(ShapelessRecipe(out, recipe));
+	}
+
+	// }
 
 	/* EMPOWERED ITEM HELPERS */
 	public static boolean isPlayerHoldingEmpowerableItem(EntityPlayer player) {
@@ -771,13 +931,10 @@ public final class ItemHelper {
 
 	public static boolean areItemsEqual(Item itemA, Item itemB) {
 
-		if (itemA == itemB) {
-			return true;
-		}
 		if (itemA == null | itemB == null) {
 			return false;
 		}
-		return itemA.equals(itemB);
+		return itemA == itemB || itemA.equals(itemB);
 	}
 
 	public static final boolean isPlayerHoldingItem(Class<?> item, EntityPlayer player) {
@@ -803,51 +960,36 @@ public final class ItemHelper {
 
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == stackB) {
-			return true;
-		}
 		if (stackA == null | stackB == null) {
 			return false;
 		}
-		return stackA.getItem().equals(stackB.getItem());
+		return areItemsEqual(stackA.getItem(), stackB.getItem());
 	}
 
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
-		if (stackA == stackB) {
-			return true;
-		}
 		return itemsEqualWithoutMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
 	}
 
 	public static boolean itemsEqualWithMetadata(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == stackB) {
-			return true;
-		}
 		return itemsEqualWithoutMetadata(stackA, stackB) && (stackA.getHasSubtypes() == false || stackA.getItemDamage() == stackB.getItemDamage());
 	}
 
 	public static boolean itemsEqualWithMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
-		if (stackA == stackB) {
-			return true;
-		}
 		return itemsEqualWithMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
 	}
 
 	public static boolean itemsIdentical(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == stackB) {
-			return true;
-		}
 		return itemsEqualWithoutMetadata(stackA, stackB) && (stackA.getItemDamage() == stackB.getItemDamage())
 				&& doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound);
 	}
 
 	public static boolean doNBTsMatch(NBTTagCompound nbtA, NBTTagCompound nbtB) {
 
-		if (nbtA == nbtB) {
+		if (nbtA == null & nbtB == null) {
 			return true;
 		}
 		if (nbtA != null & nbtB != null) {

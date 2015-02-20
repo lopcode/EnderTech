@@ -1,22 +1,26 @@
 package cofh.lib.gui.element;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import cofh.lib.gui.GuiBase;
 
 import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * Base class for a modular GUI element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public abstract class ElementBase {
 
 	protected GuiBase gui;
 	protected ResourceLocation texture;
+	private FontRenderer fontRenderer;
 
 	protected int posX;
 	protected int posY;
@@ -120,6 +124,29 @@ public abstract class ElementBase {
 		gui.drawSizedModalRect(x, y, width, height, color);
 	}
 
+	public void drawStencil(int xStart, int yStart, int xEnd, int yEnd, int flag) {
+
+		glDisable(GL_TEXTURE_2D);
+		glStencilFunc(GL_ALWAYS, flag, flag);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		glStencilMask(1);
+		glColorMask(false, false, false, false);
+		glDepthMask(false);
+
+		Tessellator.instance.startDrawingQuads();
+		Tessellator.instance.addVertex(xStart, yEnd, 0);
+		Tessellator.instance.addVertex(xEnd, yEnd, 0);
+		Tessellator.instance.addVertex(xEnd, yStart, 0);
+		Tessellator.instance.addVertex(xStart, yStart, 0);
+		Tessellator.instance.draw();
+
+		glEnable(GL_TEXTURE_2D);
+		glStencilFunc(GL_EQUAL, flag, flag);
+		glStencilMask(0);
+		glColorMask(true, true, true, true);
+		glDepthMask(true);
+	}
+
 	public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
 
 		gui.drawSizedTexturedModalRect(x, y, u, v, width, height, texW, texH);
@@ -158,6 +185,17 @@ public abstract class ElementBase {
 		return false;
 	}
 
+	public FontRenderer getFontRenderer() {
+
+		return fontRenderer == null ? gui.getFontRenderer() : fontRenderer;
+	}
+
+	public ElementBase setFontRenderer(FontRenderer renderer) {
+
+		fontRenderer = renderer;
+		return this;
+	}
+
 	public final String getName() {
 
 		return name;
@@ -166,11 +204,6 @@ public abstract class ElementBase {
 	public final GuiBase getContainerScreen() {
 
 		return gui;
-	}
-
-	public final FontRenderer getFontRenderer() {
-
-		return gui.getFontRenderer();
 	}
 
 	/**

@@ -39,6 +39,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import java.io.File;
 
@@ -83,8 +84,8 @@ public class EnderTech
         }
 
         // Pulsar module loading
-        ModuleHelper.setupModules();
-        ModuleHelper.pulsar.preInit(event);
+        //ModuleHelper.setupModules();
+        //ModuleHelper.pulsar.preInit(event);
 
         // Packet handler
         PacketHandler.instance.init();
@@ -126,7 +127,7 @@ public class EnderTech
         PacketKeyPressed.init();
 
         // Pulsar loading
-        ModuleHelper.pulsar.init(event);
+        //ModuleHelper.pulsar.init(event);
 
         // Renderers
         proxy.registerTESRs();
@@ -151,7 +152,7 @@ public class EnderTech
     public void postInit(FMLPostInitializationEvent event)
     {
         // Pulsar loading
-        ModuleHelper.pulsar.postInit(event);
+        //ModuleHelper.pulsar.postInit(event);
 
         // Packet postInit
         PacketHandler.instance.postInit();

@@ -1,5 +1,6 @@
 package io.endertech.multiblock.block;
 
+import cofh.api.block.IBlockAppearance;
 import cofh.api.block.IDismantleable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -11,6 +12,7 @@ import io.endertech.multiblock.tile.TileTankPart;
 import io.endertech.proxy.CommonProxy;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.IOutlineDrawer;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -24,6 +26,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import java.util.ArrayList;
 import java.util.List;
 

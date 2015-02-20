@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -281,10 +282,59 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		return world.getTileEntity(x, y, z);
 	}
 
+	public Block getBlock(World world) {
+
+		return world.getBlock(x, y, z);
+	}
+
 	@SuppressWarnings("unchecked")
 	public <T> T getTileEntity(World world, Class<T> targetClass) {
 
 		TileEntity te = world.getTileEntity(x, y, z);
+		if (targetClass.isInstance(te)) {
+			return (T) te;
+		} else {
+			return null;
+		}
+	}
+
+	public static ForgeDirection getDirection(int xS, int yS, int zS, int x, int y, int z) {
+
+		int dir = 0;
+		if (y < yS)
+			dir |= 1;
+		else if (y != yS)
+			dir |= 2;
+		if (z < zS)
+			dir |= 4;
+		else if (z != zS)
+			dir |= 8;
+		if (x < xS)
+			dir |= 16;
+		else if (x != xS)
+			dir |= 32;
+		switch (dir) {
+		case 2: return ForgeDirection.UP;
+		case 1: return ForgeDirection.DOWN;
+		case 4: return ForgeDirection.WEST;
+		case 8: return ForgeDirection.EAST;
+		case 16: return ForgeDirection.NORTH;
+		case 32: return ForgeDirection.SOUTH;
+		default: return ForgeDirection.UNKNOWN;
+		}
+	}
+
+	public static TileEntity getTileEntityRaw(World world, int x, int y, int z) {
+
+		if (!world.blockExists(x,  y, z))
+			return null;
+		return world.getChunkFromBlockCoords(x, z).getTileEntityUnsafe(x & 15, y, z & 15);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getTileEntityRaw(World world, int x, int y, int z, Class<T> targetClass) {
+
+		TileEntity te = getTileEntityRaw(world, x, y, z);
 		if (targetClass.isInstance(te)) {
 			return (T) te;
 		} else {
@@ -301,7 +351,7 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 	public static TileEntity getAdjacentTileEntity(TileEntity start, ForgeDirection dir) {
 
 		final int x = start.xCoord + dir.offsetX, y = start.yCoord + dir.offsetY, z = start.zCoord + dir.offsetZ;
-		return start.getWorldObj().getTileEntity(x, y, z);
+		return getTileEntityRaw(start.getWorldObj(), x, y, z);
 	}
 
 	@SuppressWarnings("unchecked")

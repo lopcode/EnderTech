@@ -16,12 +16,13 @@ public class ContainerInventoryItem extends Container {
 	protected final InventoryContainerItemWrapper containerWrapper;
 	protected final EntityPlayer player;
 	protected final int containerIndex;
+	protected boolean valid = true;
 
 	public ContainerInventoryItem(ItemStack stack, InventoryPlayer inventory) {
 
-		containerWrapper = new InventoryContainerItemWrapper(this, stack);
 		player = inventory.player;
 		containerIndex = inventory.currentItem;
+		containerWrapper = new InventoryContainerItemWrapper(this, stack);
 	}
 
 	public ItemStack getContainerStack() {
@@ -34,14 +35,36 @@ public class ContainerInventoryItem extends Container {
 		return containerWrapper.getInventoryName();
 	}
 
+	@Override
+	public void detectAndSendChanges() {
+
+		ItemStack item = player.inventory.mainInventory[containerIndex];
+		if (item == null || item.getItem() != containerWrapper.getContainerStack().getItem()) {
+			valid = false;
+			return;
+		}
+		super.detectAndSendChanges();
+	}
+
 	public void onSlotChanged() {
 
-		player.inventory.mainInventory[containerIndex] = containerWrapper.getContainerStack();
+		ItemStack item = player.inventory.mainInventory[containerIndex];
+		if (valid && item != null && item.getItem() == containerWrapper.getContainerStack().getItem()) {
+			player.inventory.mainInventory[containerIndex] = containerWrapper.getContainerStack();
+		}
 	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 
+		boolean e = containerWrapper.getDirty();
+		if (!valid) {
+			if (e) {
+				// erase the held item: it was probably taken from the fake inventory
+				player.inventory.setItemStack(null);
+			}
+			return false;
+		}
 		return true;
 	}
 
@@ -53,7 +76,7 @@ public class ContainerInventoryItem extends Container {
 
 		int invPlayer = 27;
 		int invFull = invPlayer + 9;
-		int invTile = invFull + (containerWrapper.getSizeInventory());
+		int invTile = invFull + containerWrapper.getSizeInventory();
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stackInSlot = slot.getStack();
@@ -117,10 +140,10 @@ public class ContainerInventoryItem extends Container {
 				if (!this.field_94537_h.isEmpty()) {
 					itemstack3 = inventoryPlayer.getItemStack().copy();
 					i1 = inventoryPlayer.getItemStack().stackSize;
-					Iterator iterator = this.field_94537_h.iterator();
+					Iterator<Slot> iterator = this.field_94537_h.iterator();
 
 					while (iterator.hasNext()) {
-						Slot slot1 = (Slot) iterator.next();
+						Slot slot1 = iterator.next();
 
 						if (slot1 != null && func_94527_a(slot1, inventoryPlayer.getItemStack(), true) && slot1.isItemValid(inventoryPlayer.getItemStack())
 								&& inventoryPlayer.getItemStack().stackSize >= this.field_94537_h.size() && this.canDragIntoSlot(slot1)) {

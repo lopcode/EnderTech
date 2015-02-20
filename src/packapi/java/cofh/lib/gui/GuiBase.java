@@ -31,7 +31,7 @@ import org.lwjgl.opengl.GL12;
 
 /**
  * Base class for a modular GUIs. Works with Elements {@link ElementBase} and Tabs {@link TabBase} which are both modular elements.
- * 
+ *
  * @author King Lemming
  */
 public abstract class GuiBase extends GuiContainer {
@@ -53,8 +53,6 @@ public abstract class GuiBase extends GuiContainer {
 
 	protected List<String> tooltip = new LinkedList<String>();
 	protected boolean tooltips = true;
-
-	// protected boolean tooltips = !Loader.isModLoaded("NotEnoughItems");
 
 	public static void playSound(String name, float volume, float pitch) {
 
@@ -187,27 +185,46 @@ public abstract class GuiBase extends GuiContainer {
 				return;
 			}
 		}
+
 		TabBase tab = getTabAtPosition(mX, mY);
-		if (tab != null && !tab.onMousePressed(mX, mY, mouseButton)) {
-			for (int i = tabs.size(); i-- > 0;) {
-				TabBase other = tabs.get(i);
-				if (other != tab && other.open && other.side == tab.side) {
-					other.toggleOpen();
+		if (tab != null) {
+			int tMx = mX;
+
+			if (!tab.onMousePressed(tMx, mY, mouseButton)) {
+				for (int i = tabs.size(); i-- > 0;) {
+					TabBase other = tabs.get(i);
+					if (other != tab && other.open && other.side == tab.side) {
+						other.toggleOpen();
+					}
 				}
+				tab.toggleOpen();
+				return;
 			}
-			tab.toggleOpen();
-			return;
 		}
+
 		mX += guiLeft;
 		mY += guiTop;
 
-		// TODO: Look into a better solution for this.
 		if (tab != null) {
-			xSize += tab.currentWidth;
+			switch (tab.side) {
+			case TabBase.LEFT:
+				guiLeft -= tab.currentWidth;
+				break;
+			case TabBase.RIGHT:
+				xSize += tab.currentWidth;
+				break;
+			}
 		}
 		super.mouseClicked(mX, mY, mouseButton);
 		if (tab != null) {
-			xSize -= tab.currentWidth;
+			switch (tab.side) {
+			case TabBase.LEFT:
+				guiLeft += tab.currentWidth;
+				break;
+			case TabBase.RIGHT:
+				xSize -= tab.currentWidth;
+				break;
+			}
 		}
 	}
 
@@ -389,8 +406,7 @@ public abstract class GuiBase extends GuiContainer {
 			if (!tab.isVisible() || tab.side == TabBase.RIGHT) {
 				continue;
 			}
-			tab.currentShiftX = xShift;
-			tab.currentShiftY = yShift;
+			tab.setCurrentShift(xShift, yShift);
 			if (tab.intersectsWith(mX, mY, xShift, yShift)) {
 				return tab;
 			}
@@ -405,8 +421,7 @@ public abstract class GuiBase extends GuiContainer {
 			if (!tab.isVisible() || tab.side == TabBase.LEFT) {
 				continue;
 			}
-			tab.currentShiftX = xShift;
-			tab.currentShiftY = yShift;
+			tab.setCurrentShift(xShift, yShift);
 			if (tab.intersectsWith(mX, mY, xShift, yShift)) {
 				return tab;
 			}
@@ -503,6 +518,16 @@ public abstract class GuiBase extends GuiContainer {
 		drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
 	}
 
+	public void drawColorIcon(IIcon icon, int x, int y, int spriteSheet) {
+
+		if (spriteSheet == 0) {
+			RenderHelper.setBlockTextureSheet();
+		} else {
+			RenderHelper.setItemTextureSheet();
+		}
+		drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
+	}
+
 	public void drawIcon(String iconName, int x, int y, int spriteSheet) {
 
 		drawIcon(getIcon(iconName), x, y, spriteSheet);
@@ -540,6 +565,37 @@ public abstract class GuiBase extends GuiContainer {
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
+	}
+
+	public void drawSizedRect(int x1, int y1, int x2, int y2, int color) {
+
+		int temp;
+
+		if (x1 < x2) {
+			temp = x1;
+			x1 = x2;
+			x2 = temp;
+		}
+		if (y1 < y2) {
+			temp = y1;
+			y1 = y2;
+			y2 = temp;
+		}
+
+		float a = (color >> 24 & 255) / 255.0F;
+		float r = (color >> 16 & 255) / 255.0F;
+		float g = (color >> 8 & 255) / 255.0F;
+		float b = (color & 255) / 255.0F;
+		Tessellator tessellator = Tessellator.instance;
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glColor4f(r, g, b, a);
+		tessellator.startDrawingQuads();
+		tessellator.addVertex(x1, y2, this.zLevel);
+		tessellator.addVertex(x2, y2, this.zLevel);
+		tessellator.addVertex(x2, y1, this.zLevel);
+		tessellator.addVertex(x1, y1, this.zLevel);
+		tessellator.draw();
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 
 	public void drawSizedTexturedModalRect(int x, int y, int u, int v, int width, int height, float texW, float texH) {
