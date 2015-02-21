@@ -56,9 +56,7 @@ Signed jars are available on CurseForge and Hydria. There are two types of build
 
 Promoted: http://www.curse.com/mc-mods/minecraft/223428-endertech
 
-Dev and Promoted: http://hydria.drakon.io/job/EnderTech/
-
-A [Quickmod](http://multimc.org/posts/introducing-quickmods.html) file is manually maintained for Curse builds. Add "github://Drayshak@EnderTech/endertech-curse.qm" to MultiMC and you'll be able to automatically download new versions.
+*Dev builds will be coming back soon™*
 
 ##Building
 This mod uses Forge's Gradle wrapper for pretty easy setup and building. There are better guides around the internet for using it, and I don't do anything particularly special.
