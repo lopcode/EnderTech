@@ -1,0 +1,101 @@
+# Note: these are GB spellings by default
+
+# Item localisations
+item.endertech.exchanger.exchangerRedstone.name=紅石交換器
+item.endertech.exchanger.exchangerResonant.name=諧律交換器
+item.endertech.exchanger.exchangerCreative.name=創造交換器
+
+# Creative tab
+itemGroup.EnderTechAll=終界科技|全
+
+# Blocks
+tile.enderTank.name=終界水槽
+tile.chargedPlane.0.name=充能面板
+tile.enderTankPart.0.name=終界水槽框架
+tile.enderTankPart.1.name=終界水槽流體閥
+tile.enderTankPart.2.name=終界水槽能源輸入
+tile.enderTankController.0.name=終界水槽控制器
+tile.enderTankMultiblockGlass.0.name=終界水槽玻璃
+
+tile.chargePad.0.name=創造充能平台
+tile.chargePad.1.name=紅石充能平台
+tile.chargePad.2.name=諧律充能平台
+
+tile.healthPad.0.name=創造回復平台
+tile.healthPad.1.name=紅石回復平台
+tile.healthPad.2.name=諧律回復平台
+
+# Fluids
+tile.fluid.chargePad.0.name=充能終界液
+fluid.chargedEnder=充能終界液
+item.endertech.bucket.bucketChargedEnder.name=充能終界液桶
+
+# Keys
+key.endertech.tools=終界科技綁定工具
+
+# General
+general.direction.pre=我的方向是: %s
+
+# Warnings
+warning.fingerprint.missing=指紋驗證遺失於jar檔 - 這個模組已被篡改！
+warning.no_tile_entity=我沒有實體 :(
+warning.tank.dismantle_loss=拆解這個水槽方塊將摧毀水槽的內容.你必須用十字鎬打破它.
+warning.multiblock.tank.destructive_assimilation_check=WARNING: 發生問題,通常是兩個水槽內容被加入,不要試圖連接兩個水槽包於其中！
+warning.multiblock.part.double_adding=[%s] 控制器 %s 被雙重加入 %d @ %s. 這是異常的.如果您遇到奇怪的行為,請拆掉機器並重建.
+warning.multiblock.part.double_removing=[%s] 雙重移除 (%d) @ %d, %d, %d, 這個是意未料到的,可能會引起問題. 如果遇到異常情況,請拆掉反應堆並重建它.
+warning.multiblock.consuming.same_reference_coordinate=[%s] 遇到兩個控制器有相同的參考坐標,請重新檢察連接和重試.
+warning.multiblock.audit=[%s] 控制器發現 %d 無用部位在審核過程中，%d 部位仍然保持連接
+warning.multiblock.controller.dead_but_world_not_tracked=控制器 %d 在世界 %s 被標記為無用, 但那個世界不再追蹤了.控制器已忽略.
+warning.multiblock.tank.null_controller_assembly=水槽部位 (%d, %d, %d) 沒有連接至水槽. 嘗試自動修復. 建議完全破壞並重新建立,如果錯誤仍然存在話.
+warning.thermalexpansion.missing=精煉機械 未載入並同時未註冊合成配方. 終界科技 沒有註冊合成配方!
+# Asserts
+assert.multiblock.part.detached=[判定] 部位 @ (%d, %d, %d) 應該已經分離,但檢測卻沒有. 這並不是一個嚴重錯誤,並且將被修復,但這是不尋常的.
+
+# Errors
+error.fingerprint.tampered=指紋驗證不符 - 這個模組已被篡改！
+error.config.general.load=無法載入一般設定
+error.config.block.load=無法載入方塊設定
+error.config.item.load=無法載入物品設定
+error.multiblock.tank.destructive_assimilation=WARNING: 兩個先前具有內容物的水槽被同化了.這不應該會發生的.請回告給 終界科技 的作者.具有最大內容的槽才被選定.
+error.multiblock.consuming.different_classes=嘗試合併兩個不同等級的多重方塊 - 這不應該會發生的!
+error.multiblock.consuming.my_controller=我的控制器 (%d): 大小 (%d), 使用部分: %s
+error.multiblock.consuming.other_controller=別人的控制器 (%d): 大小 (%d), 座標: %s
+error.multiblock.consuming.same_reference_coordinate=[%s] Two controllers with the same reference coord that somehow both have valid parts - this should never happen!
+error.multiblock.tickend.merge_pool=Multiblock system checked a merge pool of size %d, found no master candidates. This should never happen.
+error.multiblock.tickend.non_empty_controller=Found a non-empty controller. Forcing it to shed its blocks and die. This should never happen!
+
+# Info
+info.postinit.recipes=Registering recipes
+info.multiblock.construction.last_failure_reason.pre=Last reason for not being able to assemble:
+info.multiblock.construction.no_controller=Block is not connected to a tank. This could be due to lag, or a bug. If the problem persists, try breaking and re-placing the block.
+info.multiblock.tank.connecting_destructive=Someone tried to connect two previously formed tanks at %s - stopping them.
+info.charge=Charge: %s
+info.charge.receive=Receive: %s
+info.charge.send=Send: %s
+info.sent=Sent: %s
+info.exchanger.source=Source block: %s
+info.exchanger.shift_to_select_source=Use while sneaking to choose source.
+info.exchanger.radius=Radius: %s
+info.multiblock.part.unsuitable.frame=%d, %d, %d - Block is not valid for use in the machine's frame
+info.multiblock.part.unsuitable.top=%d, %d, %d - Block is not valid for use in the machine's top
+info.multiblock.part.unsuitable.bottom=%d, %d, %d - Block is not valid for use in the machine's bottom
+info.multiblock.part.unsuitable.sides=%d, %d, %d - Block is not valid for use in the machine's sides
+info.multiblock.part.unsuitable.interior=%d, %d, %d - Block is not valid for use in the machine's interior
+info.multiblock.assembled_status=Assembled:
+info.multiblock.not_assembled=Not assembled
+info.multiblock.rectangular.dimensions_wrong=Machine is too %s, it may be at %s %d blocks in the %s dimension
+info.multiblock.rectangular.part_not_compatible=Part @ %d, %d, %d is incompatible with machines of type %s
+info.hold_for_details.hold=Hold
+info.hold_for_details.shift=Shift
+info.hold_for_details.for_details=for Details
+info.infinite=Infinite
+info.active=Active
+info.inactive=Inactive
+info.multiblock.tank.part.unsuitable.frame=%d, %d, %d - Only frames may be used as part of a tank's frame
+info.multiblock.tank.part.unsuitable.top=%d, %d, %d - This part is not suitable for the tank's top face
+info.multiblock.tank.part.unsuitable.bottom=%d, %d, %d - This part is not suitable for the tank's bottom face
+info.multiblock.tank.part.unsuitable.interior=%d, %d, %d - The interior of the tank must be hollow
+
+# GUI
+gui.exchanger.radius=半徑: %s
+gui.exchanger.radius.infinite=無限
