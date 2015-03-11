@@ -1,0 +1,101 @@
+# Note: these are GB spellings by default
+
+# Item localisations
+item.endertech.exchanger.exchangerRedstone.name=紅石交換器
+item.endertech.exchanger.exchangerResonant.name=諧律交換器
+item.endertech.exchanger.exchangerCreative.name=創造交換器
+
+# Creative tab
+itemGroup.EnderTechAll=終界科技|全
+
+# Blocks
+tile.enderTank.name=終界水槽
+tile.chargedPlane.0.name=充能面板
+tile.enderTankPart.0.name=終界水槽框架
+tile.enderTankPart.1.name=終界水槽流體閥
+tile.enderTankPart.2.name=終界水槽能源輸入
+tile.enderTankController.0.name=終界水槽控制器
+tile.enderTankMultiblockGlass.0.name=終界水槽玻璃
+
+tile.chargePad.0.name=創造充能平台
+tile.chargePad.1.name=紅石充能平台
+tile.chargePad.2.name=諧律充能平台
+
+tile.healthPad.0.name=創造回復平台
+tile.healthPad.1.name=紅石回復平台
+tile.healthPad.2.name=諧律回復平台
+
+# Fluids
+tile.fluid.chargePad.0.name=充能終界液
+fluid.chargedEnder=充能終界液
+item.endertech.bucket.bucketChargedEnder.name=充能終界液桶
+
+# Keys
+key.endertech.tools=終界科技綁定工具
+
+# General
+general.direction.pre=我的方向是: %s
+
+# Warnings
+warning.fingerprint.missing=指紋驗證遺失於jar檔 - 這個模組已被篡改！
+warning.no_tile_entity=我沒有實體 :(
+warning.tank.dismantle_loss=拆解這個水槽方塊將摧毀水槽的內容.你必須用十字鎬破壞他.
+warning.multiblock.tank.destructive_assimilation_check=警告: 發生問題,通常是兩個水槽內容被加入,不要試圖連接兩個水槽包於其中！
+warning.multiblock.part.double_adding=[%s] 控制器 %s 被雙重加入部位 %d @ %s. 這是異常的.如果您遇到奇怪的行為,請拆掉機器並重建.
+warning.multiblock.part.double_removing=[%s] 雙重去除部位 (%d) @ %d, %d, %d, 這個是意未料到的,可能會引起問題. 如果遇到異常情況,請拆掉反應堆並重建它.
+warning.multiblock.consuming.same_reference_coordinate=[%s] 遇到兩個控制器有相同的參考坐標,請重新檢察連接和重試.
+warning.multiblock.audit=[%s] 控制器發現 %d 無用部位在審核過程中，%d 部位仍然保持連接
+warning.multiblock.controller.dead_but_world_not_tracked=控制器 %d 在世界 %s 被標記為無用, 但那個世界已不再追蹤了.控制器已忽略.
+warning.multiblock.tank.null_controller_assembly=水槽部位 (%d, %d, %d) 沒有連接至水槽. 嘗試自動修復. 建議完全破壞並重新建立,如果錯誤仍然存在話.
+warning.thermalexpansion.missing=精煉機械 未載入並同時未註冊合成配方. 終界科技 沒有註冊合成配方!
+# Asserts
+assert.multiblock.part.detached=[判定] 部位 @ (%d, %d, %d) 應該已經分離,但檢測卻沒有. 這並不是一個嚴重錯誤,並且將被修復,但這是不尋常的.
+
+# Errors
+error.fingerprint.tampered=指紋驗證不符 - 這個模組已被篡改！
+error.config.general.load=無法載入一般設定
+error.config.block.load=無法載入方塊設定
+error.config.item.load=無法載入物品設定
+error.multiblock.tank.destructive_assimilation=WARNING: 兩個已經具有內容物的水槽被同化了.這不應該會發生的.請回告給 終界科技 的作者.具有最大內容的槽才被選定.
+error.multiblock.consuming.different_classes=嘗試合併兩個不同類的多重方塊 - 這不應該發生的!
+error.multiblock.consuming.my_controller=我的控制器 (%d): 大小 (%d), 使用部分: %s
+error.multiblock.consuming.other_controller=別人的控制器 (%d): 大小 (%d), 座標: %s
+error.multiblock.consuming.same_reference_coordinate=[%s] 兩個控制器具有相同的參考坐標,不知怎的,都具有有效的部分 - 這不應該發生!
+error.multiblock.tickend.merge_pool=多重方塊系統檢查大小%d的合併池,發現無主要的適當選擇可用.這不應該發生!
+error.multiblock.tickend.non_empty_controller=發現一個不是空的控制器.迫使它脫離它的方塊和失效.這應該不會發生!
+
+# Info
+info.postinit.recipes=註冊合成配方
+info.multiblock.construction.last_failure_reason.pre=不能夠組裝的最後一個原因:
+info.multiblock.construction.no_controller=方塊未連接到一個水槽.這可能是由於LAG或錯誤.如果問題仍然存在,請嘗試拆除並重新放置方塊.
+info.multiblock.tank.connecting_destructive=有人試圖連接兩個已經形成的水槽在%s - 阻止他們!
+info.charge=充電: %s
+info.charge.receive=接收: %s
+info.charge.send=發送: %s
+info.sent=發送: %s
+info.exchanger.source=來源方塊: %s
+info.exchanger.shift_to_select_source=潛行來選擇來源.
+info.exchanger.radius=半徑: %s
+info.multiblock.part.unsuitable.frame=%d, %d, %d - 在機器的框架使用的方塊是無效的
+info.multiblock.part.unsuitable.top=%d, %d, %d - 在機器的頂部使用的方塊是無效的
+info.multiblock.part.unsuitable.bottom=%d, %d, %d - 在機器的底部使用的方塊是無效的
+info.multiblock.part.unsuitable.sides=%d, %d, %d - 在機器的側面使用的方塊是無效的
+info.multiblock.part.unsuitable.interior=%d, %d, %d - 在機器內部使用的方塊是無效的
+info.multiblock.assembled_status=已組裝:
+info.multiblock.not_assembled=未組裝
+info.multiblock.rectangular.dimensions_wrong=機器太 %s, 他可能會在 %s %d 方塊於 %s 維度
+info.multiblock.rectangular.part_not_compatible=部位 @ %d, %d, %d 與機器的 %s 類型不相容
+info.hold_for_details.hold=按住
+info.hold_for_details.shift=Shift
+info.hold_for_details.for_details=來看詳細內容
+info.infinite=無限
+info.active=啟動
+info.inactive=未啟動
+info.multiblock.tank.part.unsuitable.frame=%d, %d, %d - 只有框架可以用來作為水槽的框架部分.
+info.multiblock.tank.part.unsuitable.top=%d, %d, %d - 這部分不適合水槽的頂部
+info.multiblock.tank.part.unsuitable.bottom=%d, %d, %d - 這部分不適合水槽的底部
+info.multiblock.tank.part.unsuitable.interior=%d, %d, %d - 該水槽的內部必須是中空的
+
+# GUI
+gui.exchanger.radius=半徑: %s
+gui.exchanger.radius.infinite=無限
