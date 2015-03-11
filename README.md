@@ -56,7 +56,7 @@ Signed jars are available on CurseForge and Hydria. There are two types of build
 
 Promoted: http://www.curse.com/mc-mods/minecraft/223428-endertech
 
-*Dev builds will be coming back soon™*
+Dev builds (currently *unsigned*): http://hopper.bunnies.io/job/EnderTech/
 
 ##Building
 This mod uses Forge's Gradle wrapper for pretty easy setup and building. There are better guides around the internet for using it, and I don't do anything particularly special.
