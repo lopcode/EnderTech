@@ -1,0 +1,102 @@
+# Note: these are GB spellings by default
+
+# Item localisations
+item.endertech.exchanger.exchangerRedstone.name=Échangeur de redstone
+item.endertech.exchanger.exchangerResonant.name=Échangeur résonant
+item.endertech.exchanger.exchangerCreative.name=Échangeur créatif
+
+# Creative tab
+itemGroup.EnderTechAll=EnderTech
+
+# Blocks
+tile.enderTank.name=Tank des limbes
+tile.chargedPlane.0.name=Plan chargé
+tile.enderTankPart.0.name=Charpente de tank des limbes
+tile.enderTankPart.1.name=Vanne de tank des limbes
+tile.enderTankPart.2.name=Entrée d'énergie de tank des limbes
+tile.enderTankController.0.name=Contrôleur de tank des limbes
+tile.enderTankMultiblockGlass.0.name=Verre de tank des limbes
+
+tile.chargePad.0.name=Plaque de recharge créative
+tile.chargePad.1.name=Plaque de recharge de redstone
+tile.chargePad.2.name=Plaque de recharge résonante
+
+tile.healthPad.0.name=Plaque régénérante créative
+tile.healthPad.1.name=Plaque régénérante de redstone
+tile.healthPad.2.name=Plaque régénérante résonante
+
+# Fluids
+tile.fluid.chargePad.0.name=Eau des limbes chargée
+fluid.chargedEnder=Eau des limbes chargée
+item.endertech.bucket.bucketChargedEnder.name=Chaudière d'eau des limbes chargée
+
+# Keys
+key.endertech.tools=Touches d'outils d'EnderTech
+
+# General
+general.direction.pre=Ma direction : %s
+
+# Warnings
+warning.fingerprint.missing=L'empreinte est manquante du fichier jar, ce mod pourrait avoir été falsifié !
+warning.no_tile_entity=Je n'ai pas une entité de bloc :(
+warning.tank.dismantle_loss=Démonter ce bloc de tank va détruire le contenu de la tank. Vous devez le détruire avec une pioche.
+warning.multiblock.tank.destructive_assimilation_check=AVERTISSEMENT : Une vérification est survenue qui est actuellement le précurseur de deux tanks avec du contenu qui se sont jointes. N'essayez pas de joindre deux tanks avec du contenu dedans !
+warning.multiblock.part.double_adding=[%s] Le contrôleur %s est en train de double-ajouter la partie %d @ %s. Ceci est inhabituel. Si vous rencontrez un drôle de comportement, veuillez démolir la machine et la reconstruire.
+warning.multiblock.part.double_removing=[%s] Double-retrait de la partie (%d) @ %d, %d, %d survenu. Ceci n'est pas prévu et peut causer des problèmes. Si vous rencontrez des problèmes, veuillez démolir le réacteur et le reconstruire.
+warning.multiblock.consuming.same_reference_coordinate=[%s] Cas de deux contrôleurs avec la même coordonnée de référence rencontré. Vérifiez les parties connectées et réessayez.
+warning.multiblock.audit=[%s] Le contrôleur a trouvé %d parties mortes durant sa vérification, %d parties restent attachées.
+warning.multiblock.controller.dead_but_world_not_tracked=Le contrôleur %d dans le monde %s est marqué comme mort, mais ce monde n'est pas suivi ! Le contrôleur est ignoré.
+warning.multiblock.tank.null_controller_assembly=La partie du tank aux coordonnées (%d, %d, %d) est assemblée sans être attachée à une tank. Tentative d'auto-complétion. Détruire complètement et reconstruire cette tank est recommandé si des erreurs persistent.
+warning.thermalexpansion.missing=Thermal Expansion n'était pas chargé durant l'enregistrement de recettes. Aucune recette n'a été enregistrée pour EnderTech !
+
+# Asserts
+assert.multiblock.part.detached=[assert] La partie @ (%d, %d, %d) devrait déjà être détachée, mais a été détectée qu'elle ne l'était pas. Ce n'est pas une erreur fatale, et sera réparée, mais c'est inhabituel.
+
+# Errors
+error.fingerprint.tampered=L'empreinte du fichier jar ne correspond pas, ce mod a été falsifié !
+error.config.general.load=Échec de chargement de la configuration générale
+error.config.block.load=Échec de chargement de la configuration des blocs
+error.config.item.load=Échec de chargement de la configuration des objets
+error.multiblock.tank.destructive_assimilation=AVERTISSEMENT : deux tanks ont été assimilées que les deux avaient précédemment du contenu. Cela ne devrait jamais se produire. Veuillez reporter cela à l'auteur du mod d'EnderTech. La tank avec le plus de contenu a été choisie.
+error.multiblock.consuming.different_classes=Tentative de fusionner deux multiblocs avec différentes classes maîtresses - cela ne devrait jamais se produire !
+error.multiblock.consuming.my_controller=Mon contrôleur (%d) : taille (%d), parties : %s
+error.multiblock.consuming.other_controller=Autre contrôleur (%d) : taille (%d), coordonnées : %s
+error.multiblock.consuming.same_reference_coordinate=[%s] Deux contrôleurs avec la même coordonnée de référence ont tout deux des parties valides en quelque sorte - cela ne devrait jamais se produire !
+error.multiblock.tickend.merge_pool=Le système de multiblocs a vérifié un bassin de fusion de taille %d, et trouvé aucun candidat maître. Cela ne devrait jamais se produire !
+error.multiblock.tickend.non_empty_controller=Contrôleur non-vide trouvé, le forçant à perdre ses blocs et mourir. Cela ne devrait jamais se produire !
+
+# Info
+info.postinit.recipes=Enregistrement des recettes
+info.multiblock.construction.last_failure_reason.pre=La dernière raison pour ne pas avoir été capable d'assembler :
+info.multiblock.construction.no_controller=Le bloc n'est pas connecté à une tank. Cela pourrait être dû au lag ou à un bogue. Si le problème persiste, essayez d'enlever le bloc et de le replacer.
+info.multiblock.tank.connecting_destructive=Quelqu'un a essayé de connecter deux tanks précédemment formées à %s - les arrêtant.
+info.charge=Charge : %s
+info.charge.receive=Reçoit : %s
+info.charge.send=Envoie : %s
+info.sent=Envoyé : %s
+info.exchanger.source=Bloc source : %s
+info.exchanger.shift_to_select_source=Utilisez tout en étant accroupi(e) pour choisir la source.
+info.exchanger.radius=Rayon : %s
+info.multiblock.part.unsuitable.frame=%d, %d, %d - Le bloc n'est pas valide pour être utilisé dans le cadre de la machine
+info.multiblock.part.unsuitable.top=%d, %d, %d - Le bloc n'est pas valide pour être utilisé dans le haut de la machine
+info.multiblock.part.unsuitable.bottom=%d, %d, %d - Le bloc n'est pas valide pour être utilisé dans le bas de la machine
+info.multiblock.part.unsuitable.sides=%d, %d, %d - Le bloc n'est pas valide pour être utilisé dans les côtés de la machine
+info.multiblock.part.unsuitable.interior=%d, %d, %d - Le bloc n'est pas valide pour être utilisé dans l'intérieur de la machine
+info.multiblock.assembled_status=Assemblée :
+info.multiblock.not_assembled=Non-assemblée
+info.multiblock.rectangular.dimensions_wrong=La machine est trop %s, elle peut être à %s %d blocs dans la dimension %s
+info.multiblock.rectangular.part_not_compatible=La partie @ %d, %d, %d est incompatible avec les machines de type %s
+info.hold_for_details.hold=Maintenez
+info.hold_for_details.shift=Maj
+info.hold_for_details.for_details=pour avoir des détails
+info.infinite=Infinie
+info.active=Active
+info.inactive=Inactive
+info.multiblock.tank.part.unsuitable.frame=%d, %d, %d - Seules les cadres peuvent être utilisées comme partie de cadre d'une tank
+info.multiblock.tank.part.unsuitable.top=%d, %d, %d - Cette partie n'est pas appropriée pour la face du dessus de la tank
+info.multiblock.tank.part.unsuitable.bottom=%d, %d, %d - Cette partie n'est pas appropriée pour la face du dessous de la tank
+info.multiblock.tank.part.unsuitable.interior=%d, %d, %d - L'intérieur de la tank doit être creuse
+
+# GUI
+gui.exchanger.radius=Rayon : %s
+gui.exchanger.radius.infinite=infini
