@@ -52,11 +52,11 @@ Blocks, items and mechanics (including recipes and usage) are documented as they
 If you want to see in-development content you must enable it in the 'general.cfg' config file after one run. Be warned: this in-development content will likely disappear or break your world!.
 
 ##Builds
-Signed jars are available on CurseForge and Hydria. There are two types of build, Promoted and Dev. Promoted builds are on both services, but Dev builds are only available on Jenkins. Use a Promoted build first.
+Signed jars are available on CurseForge and Hopper. There are two types of build, Promoted and Dev. Promoted builds are on both services, but Dev builds are only available on Jenkins. Use a Promoted build first.
 
 Promoted: http://www.curse.com/mc-mods/minecraft/223428-endertech
 
-*Dev builds will be coming back soon™*
+Dev builds (currently *unsigned*): http://hopper.bunnies.io/job/EnderTech/
 
 ##Building
 This mod uses Forge's Gradle wrapper for pretty easy setup and building. There are better guides around the internet for using it, and I don't do anything particularly special.
