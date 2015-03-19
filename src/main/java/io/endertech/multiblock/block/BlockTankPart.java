@@ -196,7 +196,7 @@ public class BlockTankPart extends BlockET implements ITileEntityProvider, IOutl
         if (metadata == VALVE_BASE) return new TileTankValve();
         if (metadata == ENERGY_INPUT_BASE) return new TileTankEnergyInput();
 
-        throw new IllegalArgumentException("Unrecognized metadata");
+        throw new IllegalArgumentException("Unrecognized metadata: " + metadata);
     }
 
     @Override
