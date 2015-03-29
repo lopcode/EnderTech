@@ -1,4 +1,4 @@
-![EnderTech Logo](https://raw.githubusercontent.com/Drayshak/EnderTech/d838d9282bd30014de1fbc4772e0522d1bb30fa8/src/main/resources/assets/endertech/textures/logo.png)
+![EnderTech Logo](https://raw.githubusercontent.com/voxelcarrot/EnderTech/d838d9282bd30014de1fbc4772e0522d1bb30fa8/src/main/resources/assets/endertech/textures/logo.png)
 
 #EnderTech
 
@@ -11,17 +11,17 @@ Unless we talk about it first and I agree, I'm very unlikely to accept pull requ
 
 Curse link: http://www.curse.com/mc-mods/minecraft/223428-endertech
 
-__FAQs__, progress, modpack permissions / etc: https://github.com/Drayshak/EnderTech/wiki
+__FAQs__, progress, modpack permissions / etc: https://github.com/voxelcarrot/EnderTech/wiki
 
 If you want to talk about the mod, there's an IRC channel on Esper: #EnderTech
 
 ##License and terms
 Things I want you to do:
 * Learn from the source,
-  * Include a thank-you, or put me in your credits (as "Drayshak"),
+  * Include a thank-you, or put me in your credits (as "voxelcarrot"),
 * Include it in a modpack (public or private),
 * If you're feeling generous:
-  * Tell me you enjoy using the mod in IRC (Esper/#EnderTech) or on Twitter ([@Drayshak](https://twitter.com/drayshak)),
+  * Tell me you enjoy using the mod in IRC (Esper/#EnderTech) or on Twitter ([@voxelcarrot](https://twitter.com/voxelcarrot)),
 * Enjoy the mod.
 
 Things I don't want you to do:
@@ -47,7 +47,7 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ##Documentation
-Blocks, items and mechanics (including recipes and usage) are documented as they're completed in the [Wiki](https://github.com/Drayshak/EnderTech/wiki).
+Blocks, items and mechanics (including recipes and usage) are documented as they're completed in the [Wiki](https://github.com/voxelcarrot/EnderTech/wiki).
 
 If you want to see in-development content you must enable it in the 'general.cfg' config file after one run. Be warned: this in-development content will likely disappear or break your world!.
 
