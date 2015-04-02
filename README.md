@@ -26,9 +26,9 @@ Things I want you to do:
 
 Things I don't want you to do:
 * Copy large sections of source (functions and ideas are examples of things that are, generally, fine),
-* Redistribute custom built jars (all the jars on Hydria are signed appropriately),
+* Redistribute custom built jars (all the jars on Hopper are signed appropriately),
   * Building your own jar is fine, but don't make it public,
-  * Redistributing a signed jar from Hydria is fine.
+  * Redistributing a signed jar from Hopper is fine.
 * Copy ideas and pass them off as your own,
 * Make money from the mod (no paywalls, adf.ly links, charging for access to items or any other bullshit like that).
 
