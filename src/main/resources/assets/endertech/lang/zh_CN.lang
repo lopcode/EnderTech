@@ -1,0 +1,97 @@
+# Note: these are GB spellings by default
+
+# Item localisations
+item.endertech.exchanger.exchangerRedstone.name=红石替换器
+item.endertech.exchanger.exchangerResonant.name=谐振替换器
+item.endertech.exchanger.exchangerCreative.name=创造替换器
+
+# Creative tab
+itemGroup.EnderTechAll=末影科技
+
+# Blocks
+tile.enderTank.name=末影水槽
+tile.chargedPlane.0.name=Charged Plane
+tile.enderTankPart.0.name=末影水槽框架
+tile.enderTankPart.1.name=末影水槽阀门
+tile.enderTankPart.2.name=末影水槽能量端口
+tile.enderTankController.0.name=末影水槽主控器
+tile.multiblockGlass.0.name=末影水槽玻璃
+
+tile.chargePad.0.name=创造充能平台
+tile.chargePad.1.name=红石充能平台
+tile.chargePad.2.name=谐振充能平台
+
+# Fluids
+tile.fluid.chargePad.0.name=Charged Ender
+fluid.chargedEnder=Charged Ender
+item.endertech.bucket.bucketChargedEnder.name=Charged Ender Bucket
+
+# Keys
+key.endertech.tools=末影科技
+
+# General
+general.direction.pre=My direction is: %s
+
+# Warnings
+warning.fingerprint.missing=校验不匹配, 该Mod可能被篡改!
+warning.no_tile_entity=I don't have a tile entity :(
+warning.tank.dismantle_loss=Dismantling this tank block will destroy the tanks' contents. You must break it with a pickaxe.
+warning.multiblock.tank.destructive_assimilation_check=WARNING: A check occurred which is usually the precursor to two tanks with contents being joined. Don't try to join two tanks with contents in them!
+warning.multiblock.part.double_adding=[%s] Controller %s is double-adding part %d @ %s. This is unusual. If you encounter odd behavior, please tear down the machine and rebuild it.
+warning.multiblock.part.double_removing=[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. If you encounter anomalies, please tear down the reactor and rebuild it.
+warning.multiblock.consuming.same_reference_coordinate=[%s] Encountered two controllers with the same reference coordinate. Auditing connected parts and retrying.
+warning.multiblock.audit=[%s] Controller found %d dead parts during an audit, %d parts remain attached
+warning.multiblock.controller.dead_but_world_not_tracked=Controller %d in world %s marked as dead, but that world is not tracked! Controller is being ignored.
+warning.multiblock.tank.null_controller_assembly=Tank part at (%d, %d, %d) is being assembled without being attached to a tank. Attempting to auto-heal. Fully destroying and re-building this tank is recommended if errors persist.
+
+# Asserts
+assert.multiblock.part.detached=[assert] Part @ (%d, %d, %d) should be detached already, but detected that it was not. This is not a fatal error, and will be repaired, but is unusual.
+
+# Errors
+error.fingerprint.tampered=校验不匹配 - 该Mod可能被篡改!
+error.config.general.load=Failed to load general config
+error.config.block.load=Failed to load block config
+error.config.item.load=Failed to load item config
+error.multiblock.tank.destructive_assimilation=WARNING: Two tanks were assimilated that both previously had contents. This should never happen. Please report this to the EnderTech mod author. The tank with the largest contents has been chosen.
+error.multiblock.consuming.different_classes=Attempting to merge two multiblocks with different master classes - this should never happen!
+error.multiblock.consuming.my_controller=My Controller (%d): size (%d), parts: %s
+error.multiblock.consuming.other_controller=Other Controller (%d): size (%d), coords: %s
+error.multiblock.consuming.same_reference_coordinate=[%s] Two controllers with the same reference coord that somehow both have valid parts - this should never happen!
+error.multiblock.tickend.merge_pool=Multiblock system checked a merge pool of size %d, found no master candidates. This should never happen.
+error.multiblock.tickend.non_empty_controller=Found a non-empty controller. Forcing it to shed its blocks and die. This should never happen!
+
+# Info
+info.postinit.recipes=Registering recipes
+info.multiblock.construction.last_failure_reason.pre=不能完成搭建的原因:
+info.multiblock.construction.no_controller=方块未连接成水槽. 可能是延迟的原因, 或是一个Bug. 如果问题任然存在, 你可以重新放置某个方块.
+info.multiblock.tank.connecting_destructive=Someone tried to connect two previously formed tanks at %s - stopping them.
+info.charge=充能: %s
+info.charge.receive=接收: %s
+info.charge.send=传输: %s
+info.sent=传输: %s
+info.exchanger.source=更替目标方块: %s
+info.exchanger.shift_to_select_source=蹲伏时右键选择更替目标方块.
+info.exchanger.radius=半径范围: %s
+info.multiblock.part.unsuitable.frame=%d, %d, %d - 该方块不能用作水槽的顶部
+info.multiblock.part.unsuitable.top=%d, %d, %d - 该方块不能用作水槽的顶部
+info.multiblock.part.unsuitable.bottom=%d, %d, %d - 该方块不能用作水槽的底部
+info.multiblock.part.unsuitable.sides=%d, %d, %d - 该方块不能用作水槽的侧部
+info.multiblock.part.unsuitable.interior=%d, %d, %d - 该方块不能放置于水槽内部
+info.multiblock.assembled_status=搭建:
+info.multiblock.not_assembled=未完成搭建
+info.multiblock.rectangular.dimensions_wrong=Machine is too %s, it may be at %s %d blocks in the %s dimension
+info.multiblock.rectangular.part_not_compatible=Part @ %d, %d, %d is incompatible with machines of type %s
+info.hold_for_details.hold=按住
+info.hold_for_details.shift=Shift
+info.hold_for_details.for_details=显示详细信息
+info.infinite=无限
+info.active=充能中
+info.inactive=关闭
+info.multiblock.tank.part.unsuitable.frame=%d, %d, %d - 只有末影水槽框架才能用作水槽的框架
+info.multiblock.tank.part.unsuitable.top=%d, %d, %d - 这不适合用作水槽的顶面
+info.multiblock.tank.part.unsuitable.bottom=%d, %d, %d - 这不适合用作水槽的底面
+info.multiblock.tank.part.unsuitable.interior=%d, %d, %d - 水槽的内部必须是空的
+
+# GUI
+gui.exchanger.radius=半径范围: %s
+gui.exchanger.radius.infinite=无限
