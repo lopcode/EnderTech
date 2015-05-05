@@ -295,9 +295,19 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
 
                 if (ServerHelper.isServerWorld(this.worldObj))
                 {
-                    LogHelper.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation"));
-                    LogHelper.error(this.toString());
-                    LogHelper.error(candidate.toString());
+                    if(this.getRandomNumber() == candidate.getRandomNumber()
+                            && this.tank.getFluid() == candidate.tank.getFluid()
+                            && this.getEnergyStored() == candidate.getEnergyStored()) {
+                        // Strange edge case with loading:
+                        //  Two identical controller were merged
+                        //  Seems to be an issue with lag and loading order?
+                        //  Not actually destructive either way - log a different message
+                        LogHelper.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation_same"));
+                    } else {
+                        LogHelper.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation"));
+                        LogHelper.error(this.toString());
+                        LogHelper.error(candidate.toString());
+                    }
                 }
             }
 
