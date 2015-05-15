@@ -272,9 +272,9 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     @Override
     protected void onAssimilate(MultiblockControllerBase assimilated)
     {
-        LogHelper.debug("Assimilation occurred: ");
-        LogHelper.debug("Me: " + this.toString());
-        LogHelper.debug("Assimilated: " + assimilated.toString());
+        //LogHelper.debug("Assimilation occurred: ");
+        //LogHelper.debug("Me: " + this.toString());
+        //LogHelper.debug("Assimilated: " + assimilated.toString());
 
         if (assimilated instanceof ControllerTank)
         {
@@ -302,7 +302,10 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
                         //  Two identical controller were merged
                         //  Seems to be an issue with lag and loading order?
                         //  Not actually destructive either way - log a different message
-                        LogHelper.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation_same"));
+
+                        //LogHelper.(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation_same"));
+                        //Lazy removal of logging
+                        int i = 1;
                     } else {
                         LogHelper.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation"));
                         LogHelper.error(this.toString());
@@ -316,7 +319,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
             this.storedEnergy = candidate.storedEnergy;
         }
 
-        LogHelper.debug("Result: " + this.toString());
+        //LogHelper.debug("Result: " + this.toString());
     }
 
     @Override
