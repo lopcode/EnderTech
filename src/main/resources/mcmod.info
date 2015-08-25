@@ -4,7 +4,7 @@
     "description": "Ender themed technological expansion.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "https://github.com/voxelcarrot/EnderTech",
+    "url": "https://github.com/carrotengineer/EnderTech",
     "updateUrl": "",
     "authorList": ["voxelcarrot", "Arkan"],
     "credits": "voxelcarrot, Arkan",

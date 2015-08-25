@@ -1,4 +1,4 @@
-![EnderTech Logo](https://raw.githubusercontent.com/voxelcarrot/EnderTech/d838d9282bd30014de1fbc4772e0522d1bb30fa8/src/main/resources/assets/endertech/textures/logo.png)
+![EnderTech Logo](https://raw.githubusercontent.com/carrotengineer/EnderTech/d838d9282bd30014de1fbc4772e0522d1bb30fa8/src/main/resources/assets/endertech/textures/logo.png)
 
 #EnderTech
 
@@ -11,7 +11,7 @@ Unless we talk about it first and I agree, I'm very unlikely to accept pull requ
 
 Curse link: http://www.curse.com/mc-mods/minecraft/223428-endertech
 
-__FAQs__, progress, modpack permissions / etc: https://github.com/voxelcarrot/EnderTech/wiki
+__FAQs__, progress, modpack permissions / etc: https://github.com/carrotengineer/EnderTech/wiki
 
 If you want to talk about the mod, there's an IRC channel on Esper: #EnderTech
 
@@ -21,7 +21,7 @@ Things I want you to do:
   * Include a thank-you, or put me in your credits (as "voxelcarrot"),
 * Include it in a modpack (public or private),
 * If you're feeling generous:
-  * Tell me you enjoy using the mod in IRC (Esper/#EnderTech) or on Twitter ([@voxelcarrot](https://twitter.com/voxelcarrot)),
+  * Tell me you enjoy using the mod in IRC (Esper/#EnderTech) or on Twitter ([@carrotengineer](https://twitter.com/carrotengineer)),
 * Enjoy the mod.
 
 Things I don't want you to do:
@@ -38,7 +38,7 @@ The source code of this project is licensed under the terms of the ISC license, 
 Art and other assets are licensed under the terms of the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) license (also linked in the [LICENSE](LICENSE.md) file).
 
 ##Documentation
-Blocks, items and mechanics (including recipes and usage) are documented as they're completed in the [Wiki](https://github.com/voxelcarrot/EnderTech/wiki).
+Blocks, items and mechanics (including recipes and usage) are documented as they're completed in the [Wiki](https://github.com/carrotengineer/EnderTech/wiki).
 
 If you want to see in-development content you must enable it in the 'general.cfg' config file after one run. Be warned: this in-development content will likely disappear or break your world!.
 
