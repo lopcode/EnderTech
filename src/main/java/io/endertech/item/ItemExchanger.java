@@ -126,12 +126,6 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
     {
         LogHelper.debug("Exchanger use on " + x + " " + y + " " + z);
 
-        if (player instanceof FakePlayer) {
-            LogHelper.debug("Fake player tried to use an Exchanger. Bailing.");
-
-            return false;
-        }
-
         if (player.isSneaking())
         {
             LogHelper.debug("Shift right click");
