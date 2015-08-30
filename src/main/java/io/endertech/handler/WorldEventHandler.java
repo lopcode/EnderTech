@@ -7,11 +7,13 @@ import io.endertech.item.ItemExchanger;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.Exchange;
 import io.endertech.util.Geometry;
+import io.endertech.util.helper.LogHelper;
 import io.endertech.util.inventory.InventoryHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
@@ -140,6 +142,15 @@ public class WorldEventHandler
             return ExchangeResult.FAIL_NO_SOURCE_BLOCKS;
         }
 
+        ItemStack beforeConsumedStack = exchange.player.inventory.getStackInSlot(sourceSlot);
+        int beforeConsumedSize = (beforeConsumedStack == null) ? 0 : beforeConsumedStack.stackSize;
+
+        if (beforeConsumedSize == 1 && (exchange.player instanceof FakePlayer)) {
+            LogHelper.debug("Not consuming item as it is the last in a Fake Player's stack: " + exchange.player.getPosition(1.0F));
+
+            return ExchangeResult.FAIL_SOURCE_NOT_CONSUMED;
+        }
+
         if (!exchanger.isCreative(exchangerStack))
         {
             ArrayList<ItemStack> droppedItems = block.getDrops(exchange.player.worldObj, blockCoord.x, blockCoord.y, blockCoord.z, exchange.sourceMeta, 0);
@@ -152,10 +163,12 @@ public class WorldEventHandler
             boolean didPutItemsInInventory = InventoryHelper.checkAndPutItemStacksInToInventory(exchange.player.inventory, droppedItems);
             if (didPutItemsInInventory)
             {
-                ItemStack oldStack = exchange.player.inventory.getStackInSlot(sourceSlot);
-                ItemStack newStack = InventoryHelper.consumeItem(exchange.player.inventory, sourceSlot);
+                ItemStack itemsConsumed = InventoryHelper.consumeItem(exchange.player.inventory, sourceSlot);
 
-                if (newStack.stackSize >= oldStack.stackSize) {
+                ItemStack afterConsumedStack = exchange.player.inventory.getStackInSlot(sourceSlot);
+                int afterConsumedSize = (afterConsumedStack == null) ? 0 : afterConsumedStack.stackSize;
+
+                if (itemsConsumed == null || itemsConsumed.stackSize < 1 || afterConsumedSize >= beforeConsumedSize) {
                     // Didn't actually reduce the stack size. Bail.
                     return ExchangeResult.FAIL_SOURCE_NOT_CONSUMED;
                 }
