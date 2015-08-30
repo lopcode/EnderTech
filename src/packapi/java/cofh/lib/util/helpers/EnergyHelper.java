@@ -6,6 +6,8 @@ import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,11 +22,20 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public class EnergyHelper {
 
-	public final int RF_PER_MJ = 10; // Official Ratio of RF to MJ (BuildCraft)
-	public final int RF_PER_EU = 4; // Official Ratio of RF to EU (IndustrialCraft)
+	public static final int RF_PER_MJ = 10; // Official Ratio of RF to MJ (BuildCraft)
+	public static final int RF_PER_EU = 4; // Official Ratio of RF to EU (IndustrialCraft)
 
 	private EnergyHelper() {
 
+	}
+
+	/* NBT TAG HELPER */
+	public static void addEnergyInformation(ItemStack stack, List<String> list) {
+
+		if (stack.getItem() instanceof IEnergyContainerItem) {
+			list.add(StringHelper.localize("info.cofh.charge") + ": " + StringHelper.getScaledNumber(stack.stackTagCompound.getInteger("Energy")) + " / "
+					+ StringHelper.getScaledNumber(((IEnergyContainerItem) stack.getItem()).getMaxEnergyStored(stack)) + " RF");
+		}
 	}
 
 	/* IEnergyContainer Interaction */

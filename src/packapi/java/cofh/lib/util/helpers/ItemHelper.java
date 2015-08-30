@@ -4,6 +4,7 @@ import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
 import cofh.api.item.IEmpowerableItem;
 import cofh.api.item.IInventoryContainerItem;
+import cofh.api.item.IMultiModeItem;
 import cofh.lib.util.OreDictionaryProxy;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -161,8 +162,9 @@ public final class ItemHelper {
 
 	public static ItemStack consumeItem(ItemStack stack) {
 
-		if (stack == null)
+		if (stack == null) {
 			return null;
+		}
 
 		Item item = stack.getItem();
 		boolean largerStack = stack.stackSize > 1;
@@ -171,7 +173,6 @@ public final class ItemHelper {
 		if (largerStack) {
 			stack.stackSize -= 1;
 		}
-
 		if (item.hasContainerItem(stack)) {
 			ItemStack ret = item.getContainerItem(stack);
 
@@ -183,13 +184,15 @@ public final class ItemHelper {
 			}
 			return ret;
 		}
+
 		return largerStack ? stack : null;
 	}
 
 	public static ItemStack consumeItem(ItemStack stack, EntityPlayer player) {
 
-		if (stack == null)
+		if (stack == null) {
 			return null;
+		}
 
 		Item item = stack.getItem();
 		boolean largerStack = stack.stackSize > 1;
@@ -198,23 +201,21 @@ public final class ItemHelper {
 		if (largerStack) {
 			stack.stackSize -= 1;
 		}
-
 		if (item.hasContainerItem(stack)) {
 			ItemStack ret = item.getContainerItem(stack);
 
-			if (ret == null || (ret.isItemStackDamageable() && ret.getItemDamage() > ret.getMaxDamage()))
+			if (ret == null || (ret.isItemStackDamageable() && ret.getItemDamage() > ret.getMaxDamage())) {
 				ret = null;
-
-			if (stack.stackSize < 1)
+			}
+			if (stack.stackSize < 1) {
 				return ret;
-
-			if (ret != null && !player.inventory.addItemStackToInventory(ret))
+			}
+			if (ret != null && !player.inventory.addItemStackToInventory(ret)) {
 				player.func_146097_a(ret, false, true);
+			}
 		}
 
-		if (stack.stackSize > 0)
-			return stack;
-		return null;
+		return largerStack ? stack : null;
 	}
 
 	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack, EntityPlayer entityplayer, boolean allowDrop) {
@@ -224,10 +225,12 @@ public final class ItemHelper {
 
 	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack, EntityPlayer entityplayer, boolean allowDrop, boolean allowReplace) {
 
-		if (entityplayer == null || entityplayer.capabilities.isCreativeMode)
+		if (entityplayer == null || entityplayer.capabilities.isCreativeMode) {
 			return true;
+		}
 		if (allowReplace && stack.stackSize <= 1) {
-			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, dropStack);
+			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, null);
+			entityplayer.inventory.addItemStackToInventory(dropStack);
 			return true;
 		} else if (allowDrop) {
 			stack.stackSize -= 1;
@@ -399,7 +402,7 @@ public final class ItemHelper {
 		return new ItemStack(t, s, WILDCARD_VALUE);
 	}
 
-	/* CREATING *OreRecipes */
+	/* CREATING OreRecipes */
 	public static final IRecipe ShapedRecipe(Block result, Object... recipe) {
 
 		return new ShapedOreRecipe(result, recipe);
@@ -467,7 +470,7 @@ public final class ItemHelper {
 		if (gear == null || !oreNameExists(ingot)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', "ingotIron"));
+		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', "ingotIron"));
 		return true;
 	}
 
@@ -476,7 +479,7 @@ public final class ItemHelper {
 		if (gear == null || !oreNameExists(ingot) || !oreNameExists(center)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -485,7 +488,7 @@ public final class ItemHelper {
 		if (gear == null | center == null || !oreNameExists(ingot)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -494,7 +497,7 @@ public final class ItemHelper {
 		if (gear == null | ingot == null || !oreNameExists(center)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -513,7 +516,7 @@ public final class ItemHelper {
 		if (gear == null || !oreNameExists(ingot) || !oreNameExists(center)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -522,7 +525,7 @@ public final class ItemHelper {
 		if (gear == null | center == null || !oreNameExists(ingot)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -531,7 +534,7 @@ public final class ItemHelper {
 		if (gear == null | ingot == null || !oreNameExists(center)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -561,7 +564,7 @@ public final class ItemHelper {
 		if (out == null | eight == null || !oreNameExists(one)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
+		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
 		return true;
 	}
 
@@ -570,7 +573,7 @@ public final class ItemHelper {
 		if (out == null | one == null || !oreNameExists(eight)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
+		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
 		return true;
 	}
 
@@ -579,7 +582,7 @@ public final class ItemHelper {
 		if (out == null || !oreNameExists(one) || !oreNameExists(eight)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
+		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
 		return true;
 	}
 
@@ -600,7 +603,7 @@ public final class ItemHelper {
 		if (out == null || !oreNameExists(in)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(out, "XXX", "XXX", 'X', in));
+		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XXX", 'X', in));
 		return true;
 	}
 
@@ -612,7 +615,7 @@ public final class ItemHelper {
 		if (nine == null || !oreNameExists(one)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapelessOreRecipe(cloneStack(nine, 9), one));
+		GameRegistry.addRecipe(ShapelessRecipe(cloneStack(nine, 9), one));
 		return true;
 	}
 
@@ -630,7 +633,7 @@ public final class ItemHelper {
 		if (four == null || !oreNameExists(one)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapelessOreRecipe(cloneStack(four, 4), one));
+		GameRegistry.addRecipe(ShapelessRecipe(cloneStack(four, 4), one));
 		return true;
 	}
 
@@ -651,7 +654,7 @@ public final class ItemHelper {
 		if (one == null || !oreNameExists(nine)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapelessOreRecipe(one, nine, nine, nine, nine, nine, nine, nine, nine, nine));
+		GameRegistry.addRecipe(ShapelessRecipe(one, nine, nine, nine, nine, nine, nine, nine, nine, nine));
 		return true;
 	}
 
@@ -670,7 +673,7 @@ public final class ItemHelper {
 		if (one == null || !oreNameExists(four)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(one, "XX", "XX", 'X', four));
+		GameRegistry.addRecipe(ShapedRecipe(one, "XX", "XX", 'X', four));
 		return true;
 	}
 
@@ -901,6 +904,37 @@ public final class ItemHelper {
 		return empowerableItem.setEmpoweredState(equipped, !empowerableItem.isEmpowered(equipped));
 	}
 
+	/* MULTIMODE ITEM HELPERS */
+	public static boolean isPlayerHoldingMultiModeItem(EntityPlayer player) {
+
+		Item equipped = player.getCurrentEquippedItem() != null ? player.getCurrentEquippedItem().getItem() : null;
+		return equipped instanceof IMultiModeItem;
+	}
+
+	public static boolean incrHeldMultiModeItemState(EntityPlayer player) {
+
+		ItemStack equipped = player.getCurrentEquippedItem();
+		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
+
+		return multiModeItem.incrMode(equipped);
+	}
+
+	public static boolean decrHeldMultiModeItemState(EntityPlayer player) {
+
+		ItemStack equipped = player.getCurrentEquippedItem();
+		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
+
+		return multiModeItem.incrMode(equipped);
+	}
+
+	public static boolean setHeldMultiModeItemState(EntityPlayer player, int mode) {
+
+		ItemStack equipped = player.getCurrentEquippedItem();
+		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
+
+		return multiModeItem.setMode(equipped, mode);
+	}
+
 	/**
 	 * Determine if a player is holding a registered Fluid Container.
 	 */
@@ -958,35 +992,61 @@ public final class ItemHelper {
 		return itemsEqualWithMetadata(stack, player.getCurrentEquippedItem());
 	}
 
+	/**
+	 * Determine if the damage of two ItemStacks is equal. Assumes both itemstacks are of type A.
+	 */
+	public static boolean itemsDamageEqual(ItemStack stackA, ItemStack stackB) {
+
+		return (!stackA.getHasSubtypes() && stackA.getMaxDamage() == 0) || (getItemDamage(stackA) == getItemDamage(stackB));
+	}
+
+	/**
+	 * Determine if two ItemStacks have the same Item.
+	 */
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == null | stackB == null) {
+		if (stackA == null || stackB == null) {
 			return false;
 		}
 		return areItemsEqual(stackA.getItem(), stackB.getItem());
 	}
 
+	/**
+	 * Determine if two ItemStacks have the same Item and NBT.
+	 */
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
 		return itemsEqualWithoutMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
 	}
 
+	/**
+	 * Determine if two ItemStacks have the same Item and damage.
+	 */
 	public static boolean itemsEqualWithMetadata(ItemStack stackA, ItemStack stackB) {
 
-		return itemsEqualWithoutMetadata(stackA, stackB) && (stackA.getHasSubtypes() == false || stackA.getItemDamage() == stackB.getItemDamage());
+		return itemsEqualWithoutMetadata(stackA, stackB) && itemsDamageEqual(stackA, stackB);
 	}
 
+	/**
+	 * Determine if two ItemStacks have the same Item, damage, and NBT.
+	 */
 	public static boolean itemsEqualWithMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
 		return itemsEqualWithMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
 	}
 
+	/**
+	 * Determine if two ItemStacks have the same Item, identical damage, and NBT.
+	 */
 	public static boolean itemsIdentical(ItemStack stackA, ItemStack stackB) {
 
-		return itemsEqualWithoutMetadata(stackA, stackB) && (stackA.getItemDamage() == stackB.getItemDamage())
+		return itemsEqualWithoutMetadata(stackA, stackB) && getItemDamage(stackA) == getItemDamage(stackB)
 				&& doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound);
 	}
 
+	/**
+	 * Determine if two NBTTagCompounds are equal.
+	 */
 	public static boolean doNBTsMatch(NBTTagCompound nbtA, NBTTagCompound nbtB) {
 
 		if (nbtA == null & nbtB == null) {
@@ -1001,8 +1061,7 @@ public final class ItemHelper {
 	public static boolean itemsEqualForCrafting(ItemStack stackA, ItemStack stackB) {
 
 		return itemsEqualWithoutMetadata(stackA, stackB)
-				&& (!stackA.getHasSubtypes() || ((stackA.getItemDamage() == OreDictionary.WILDCARD_VALUE || stackB.getItemDamage() == OreDictionary.WILDCARD_VALUE) || stackB
-						.getItemDamage() == stackA.getItemDamage()));
+				&& (!stackA.getHasSubtypes() || ((getItemDamage(stackA) == OreDictionary.WILDCARD_VALUE || getItemDamage(stackB) == OreDictionary.WILDCARD_VALUE) || getItemDamage(stackB) == getItemDamage(stackA)));
 	}
 
 	public static boolean craftingEquivalent(ItemStack checked, ItemStack source, String oreDict, ItemStack output) {

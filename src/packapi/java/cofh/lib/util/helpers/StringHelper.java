@@ -1,6 +1,7 @@
 package cofh.lib.util.helpers;
 
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.EnumRarity;
@@ -49,17 +50,22 @@ public final class StringHelper {
 
 	public static String camelCase(String input) {
 
-		return input.substring(0, 1).toLowerCase() + input.substring(1);
+		return input.substring(0, 1).toLowerCase(Locale.US) + input.substring(1);
 	}
 
 	public static String titleCase(String input) {
 
-		return input.substring(0, 1).toUpperCase() + input.substring(1);
+		return input.substring(0, 1).toUpperCase(Locale.US) + input.substring(1);
 	}
 
 	public static String localize(String key) {
 
 		return StatCollector.translateToLocal(key);
+	}
+
+	public static String getKeyName(int key) {
+
+		return key < 0 ? StatCollector.translateToLocalFormatted("key.mouseButton", key + 101) : Keyboard.getKeyName(key);
 	}
 
 	public static String getFluidName(FluidStack stack) {
@@ -137,9 +143,14 @@ public final class StringHelper {
 		return BRIGHT_GREEN + localize(key) + END;
 	}
 
+	public static String getNoticeText(String key) {
+
+		return ORANGE + localize(key) + END;
+	}
+
 	public static String getFlavorText(String key) {
 
-		return LIGHT_GRAY + ITALIC + localize(key) + END;
+		return LIGHT_GRAY + localize(key) + END;
 	}
 
 	public static String getRarity(int level) {
@@ -171,9 +182,14 @@ public final class StringHelper {
 		return localize("info.cofh.tutorial.tabConfiguration.0");
 	}
 
-	public static String tutorialTabOperation() {
+	public static String tutorialTabConfigurationEnergy() {
 
 		return localize("info.cofh.tutorial.tabConfiguration.1");
+	}
+
+	public static String tutorialTabConfigurationOperation() {
+
+		return localize("info.cofh.tutorial.tabConfiguration.2");
 	}
 
 	public static String tutorialTabRedstone() {

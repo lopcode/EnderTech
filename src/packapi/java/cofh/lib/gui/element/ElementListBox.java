@@ -19,16 +19,16 @@ public class ElementListBox extends ElementBase {
 	public int textColor = new GuiColor(150, 150, 150, 255).getColor();
 	public int selectedTextColor = new GuiColor(255, 255, 255, 255).getColor();
 
-	private final int _marginTop = 2;
-	private final int _marginLeft = 2;
-	private final int _marginRight = 2;
-	private final int _marginBottom = 2;
+	protected int _marginTop = 2;
+	protected int _marginLeft = 2;
+	protected int _marginRight = 2;
+	protected int _marginBottom = 2;
 
-	private final List<IListBoxElement> _elements = new LinkedList<IListBoxElement>();
+	protected final List<IListBoxElement> _elements = new LinkedList<IListBoxElement>();
 
-	private int _firstIndexDisplayed;
-	private int _selectedIndex;
-	private int scrollHoriz;
+	protected int _firstIndexDisplayed;
+	protected int _selectedIndex;
+	protected int scrollHoriz;
 
 	public ElementListBox(GuiBase containerScreen, int x, int y, int width, int height) {
 
@@ -47,12 +47,27 @@ public class ElementListBox extends ElementBase {
 
 	public void remove(IListBoxElement element) {
 
-		_elements.remove(element);
+		int e = _elements.indexOf(element);
+		if (_elements.remove(element)) {
+			if (e < _firstIndexDisplayed) {
+				--_firstIndexDisplayed;
+			}
+			if (e < _selectedIndex) {
+				--_selectedIndex;
+			}
+		}
 	}
 
 	public void removeAt(int index) {
 
+		_firstIndexDisplayed = scrollHoriz = 0;
+		_selectedIndex = -1;
 		_elements.remove(index);
+	}
+
+	public void removeAll() {
+
+		_elements.clear();
 	}
 
 	public int getInternalWidth() {
@@ -103,6 +118,36 @@ public class ElementListBox extends ElementBase {
 		return getContentLeft() + getContentWidth();
 	}
 
+	public ElementListBox setTextColor(Number textColor, Number selectedTextColor) {
+
+		if (textColor != null) {
+			this.textColor = textColor.intValue();
+		}
+		if (selectedTextColor != null) {
+			this.selectedTextColor = selectedTextColor.intValue();
+		}
+		return this;
+	}
+
+	public ElementListBox setSelectionColor(Number selectedLineColor) {
+
+		if (selectedLineColor != null) {
+			this.selectedLineColor = selectedLineColor.intValue();
+		}
+		return this;
+	}
+
+	public ElementListBox setBackgroundColor(Number backgroundColor, Number borderColor) {
+
+		if (backgroundColor != null) {
+			this.backgroundColor = backgroundColor.intValue();
+		}
+		if (borderColor != null) {
+			this.borderColor = borderColor.intValue();
+		}
+		return this;
+	}
+
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
@@ -116,29 +161,35 @@ public class ElementListBox extends ElementBase {
 		int heightDrawn = 0;
 		int nextElement = _firstIndexDisplayed;
 
-		glDisable(GL_LIGHTING);
 		glPushMatrix();
+		glDisable(GL_LIGHTING);
 
 		glEnable(GL_STENCIL_TEST);
-		glClear(GL_STENCIL_BUFFER_BIT);
 		drawStencil(getContentLeft(), getContentTop(), getContentRight(), getContentBottom(), 1);
 
+		glPushMatrix();
 		glTranslated(-scrollHoriz, 0, 0);
 
 		int e = _elements.size();
 		while (nextElement < e && heightDrawn <= getContentHeight()) {
-			if (nextElement == _selectedIndex) {
-				_elements.get(nextElement).draw(this, getContentLeft(), getContentTop() + heightDrawn, selectedLineColor, selectedTextColor);
-			} else {
-				_elements.get(nextElement).draw(this, getContentLeft(), getContentTop() + heightDrawn, backgroundColor, textColor);
-			}
-			heightDrawn += _elements.get(nextElement).getHeight();
+			heightDrawn += drawElement(nextElement, getContentLeft(), getContentTop() + heightDrawn);
 			nextElement++;
 		}
-
-		glDisable(GL_STENCIL_TEST);
-
 		glPopMatrix();
+		glDisable(GL_STENCIL_TEST);
+		glPopMatrix();
+	}
+
+	protected int drawElement(int elementIndex, int x, int y) {
+
+		IListBoxElement element = _elements.get(elementIndex);
+		if (elementIndex == _selectedIndex) {
+			element.draw(this, x, y, selectedLineColor, selectedTextColor);
+		} else {
+			element.draw(this, x, y, backgroundColor, textColor);
+		}
+
+		return element.getHeight();
 	}
 
 	@Override
@@ -190,11 +241,9 @@ public class ElementListBox extends ElementBase {
 			heightDisplayed += _elements.get(i).getHeight();
 			elementsDisplayed++;
 		}
-
 		if (_firstIndexDisplayed + elementsDisplayed < _elements.size()) {
 			_firstIndexDisplayed++;
 		}
-
 		onScrollV(_firstIndexDisplayed);
 	}
 
@@ -221,13 +270,17 @@ public class ElementListBox extends ElementBase {
 	public int getLastScrollPosition() {
 
 		int position = _elements.size() - 1;
-		int heightUsed = _elements.get(position).getHeight();
-
-		while (position > 0 && heightUsed < sizeY) {
-			position--;
-			heightUsed += _elements.get(position).getHeight();
+		if (position < 0) {
+			return 0;
 		}
+		int heightUsed = 0;
 
+		while (position >= 0 && heightUsed < sizeY) {
+			heightUsed += _elements.get(position--).getHeight();
+		}
+		if (heightUsed > sizeY) {
+			++position;
+		}
 		return position + 1;
 	}
 
@@ -253,12 +306,15 @@ public class ElementListBox extends ElementBase {
 
 	public IListBoxElement getSelectedElement() {
 
+		if (_selectedIndex == -1 || _selectedIndex >= _elements.size()) {
+			return null;
+		}
 		return _elements.get(_selectedIndex);
 	}
 
 	public void setSelectedIndex(int index) {
 
-		if (index >= 0 && index < _elements.size() && index != _selectedIndex) {
+		if (index >= -1 && index != _selectedIndex && index < _elements.size()) {
 			_selectedIndex = index;
 			onSelectionChanged(_selectedIndex, getSelectedElement());
 		}

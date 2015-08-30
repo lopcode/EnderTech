@@ -18,9 +18,9 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * Contains various helper functions to assist with rendering.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public final class RenderHelper {
 
@@ -95,6 +95,47 @@ public final class RenderHelper {
 		tessellator.setNormal(1.0F, 0.0F, 0.0F);
 		renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, texture);
 
+		tessellator.draw();
+	}
+
+	public static void renderBlockFace(RenderBlocks renderer, IIcon texture, int face, double translateX, double translateY, double translateZ) {
+
+		Tessellator tessellator = Tessellator.instance;
+		Block block = Blocks.stone;
+
+		if (texture == null || face < 0 || face > 5) {
+			return;
+		}
+		renderer.setRenderBoundsFromBlock(block);
+		GL11.glTranslated(translateX, translateY, translateZ);
+		tessellator.startDrawingQuads();
+
+		switch (face) {
+		case 0:
+			tessellator.setNormal(0.0F, -1.0F, 0.0F);
+			renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, texture);
+			break;
+		case 1:
+			tessellator.setNormal(0.0F, 1.0F, 0.0F);
+			renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, texture);
+			break;
+		case 2:
+			tessellator.setNormal(0.0F, 0.0F, -1.0F);
+			renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, texture);
+			break;
+		case 3:
+			tessellator.setNormal(0.0F, 0.0F, 1.0F);
+			renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, texture);
+			break;
+		case 4:
+			tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+			renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, texture);
+			break;
+		case 5:
+			tessellator.setNormal(1.0F, 0.0F, 0.0F);
+			renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, texture);
+			break;
+		}
 		tessellator.draw();
 	}
 
@@ -174,6 +215,11 @@ public final class RenderHelper {
 	public static final void enableGUIStandardItemLighting() {
 
 		net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
+	}
+
+	public static void enableStandardItemLighting() {
+
+		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
 	}
 
 }

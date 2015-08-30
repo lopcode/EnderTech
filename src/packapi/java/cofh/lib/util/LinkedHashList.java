@@ -7,12 +7,14 @@ import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 @SuppressWarnings("unchecked")
-public class LinkedHashList<E extends Object> extends AbstractCollection<E> implements Cloneable {
-	// TODO: implements List<E>, java.io.Serializable
+public class LinkedHashList<E extends Object> extends AbstractCollection<E> implements List<E>, Cloneable, java.io.Serializable {
+
+	private static final long serialVersionUID = -642033533165934945L;
 
 	protected static final class Entry {
 
@@ -29,18 +31,9 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		}
 	}
 
-	protected static int hash(Object n) {
+	protected static int roundUpToPowerOf2(int number) {
 
-		int h = n == null ? 0 : n.hashCode();
-		h ^= (h >>> 20) ^ (h >>> 12);
-		return h ^ (h >>> 7) ^ (h >>> 4);
-	}
-
-	private static int roundUpToPowerOf2(int number) {
-
-		return number >= Ints.MAX_POWER_OF_TWO
-				? Ints.MAX_POWER_OF_TWO
-						: (number > 2) ? Integer.highestOneBit((number - 1) << 1) : 2;
+		return number >= Ints.MAX_POWER_OF_TWO ? Ints.MAX_POWER_OF_TWO : (number > 2) ? Integer.highestOneBit((number - 1) << 1) : 2;
 	}
 
 	protected transient Entry head;
@@ -71,29 +64,24 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		addAll(col);
 	}
 
+	protected int hash(Object n) {
+
+		int h = n == null ? 0 : n.hashCode();
+		h ^= (h >>> 20) ^ (h >>> 12);
+		return h ^ (h >>> 7) ^ (h >>> 4);
+	}
+
 	@Override
 	public int size() {
 
 		return size;
 	}
 
-	@Override
-	public boolean add(E e) {
+	protected synchronized boolean add(E obj, int hash) {
 
-		return push(e);
-	}
-
-	public E get(int index) {
-
-		checkElementIndex(index);
-		return (E) index(index).key;
-	}
-
-	public boolean push(E obj) {
-
-		int hash = hash(obj);
-		if (seek(obj, hash) != null)
+		if (seek(obj, hash) != null) {
 			return false;
+		}
 
 		Entry e;
 		++modCount;
@@ -101,27 +89,124 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		rehashIfNecessary();
 		e.prev = tail;
 		e.next = null;
-		if (tail != null)
+		if (tail != null) {
 			tail.next = e;
-		else
+		} else {
 			head = e;
+		}
 		tail = e;
 		return true;
+	}
+
+	@Override
+	public boolean add(E obj) {
+
+		int hash = hash(obj);
+		return add(obj, hash);
+	}
+
+	@Override
+	public E set(int index, E obj) {
+
+		checkElementIndex(index);
+
+		int hash = hash(obj);
+		if (seek(obj, hash) != null) {
+			// return null;
+			throw new IllegalArgumentException("Duplicate entries not allowed");
+		}
+
+		++modCount;
+		Entry e = index(index);
+		delete(e);
+		insert(new Entry(obj, hash));
+
+		return (E) e.key;
+	}
+
+	@Override
+	public synchronized void add(int index, E obj) {
+
+		checkPositionIndex(index);
+
+		int hash = hash(obj);
+		if (seek(obj, hash) != null) {
+			throw new IllegalArgumentException("Duplicate entries not allowed");
+		}
+
+		if (index == size) {
+			add(obj, hash);
+			return;
+		}
+
+		++modCount;
+		Entry e = index(index);
+		Entry n = new Entry(obj, hash);
+		n.next = e.next;
+		n.prev = e;
+		e.next = n;
+		if (n.next != null) {
+			n.next.prev = n;
+		}
+		insert(n);
+		rehashIfNecessary();
+	}
+
+	@Override
+	public boolean addAll(int index, Collection<? extends E> c) {
+
+		if (c.size() == 0) {
+			return false;
+		}
+
+		for (E e : c) {
+			add(index++, e);
+		}
+
+		return true;
+	}
+
+	@Override
+	public E get(int index) {
+
+		checkElementIndex(index);
+		return (E) index(index).key;
+	}
+
+	@Override
+	public int indexOf(Object o) {
+
+		Entry v = seek(o, hash(o));
+		if (v == null) {
+			return -1;
+		}
+		Entry n = head;
+		for (int i = 0; n != tail; ++i) {
+			if (v == n) {
+				return i;
+			}
+			n = n.next;
+		}
+		return size;
+	}
+
+	@Override
+	public int lastIndexOf(Object o) {
+
+		return indexOf(o);
+	}
+
+	public boolean push(E obj) {
+
+		int hash = hash(obj);
+		return add(obj, hash);
 	}
 
 	public E pop() {
 
 		Entry e = tail;
 		if (e != null) {
-			++modCount;
-			delete(e);
-			tail = e.prev;
-			e.prev = null;
-			if (tail != null)
-				tail.next = null;
-			else
-				head = null;
-			return (E) e.key;
+			return unlink(e);
 		}
 		return null;
 	}
@@ -138,37 +223,14 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 
 	public boolean unshift(E obj) {
 
-		int hash = hash(obj);
-		if (seek(obj, hash) != null)
-			return false;
-
-		Entry e;
-		++modCount;
-		insert(e = new Entry(obj, hash));
-		rehashIfNecessary();
-		e.next = head;
-		e.prev = null;
-		if (head != null)
-			head.prev = e;
-		else
-			tail = e;
-		head = e;
-		return true;
+		return linkBefore(obj, head);
 	}
 
 	public E shift() {
 
 		Entry e = head;
 		if (e != null) {
-			++modCount;
-			delete(e);
-			head = e.next;
-			e.next = null;
-			if (head != null)
-				head.prev = null;
-			else
-				tail = null;
-			return (E) e.key;
+			return unlink(e);
 		}
 		return null;
 	}
@@ -183,11 +245,22 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 	public boolean remove(Object obj) {
 
 		Entry e = seek(obj, hash(obj));
-		if (e == null)
+		if (e == null) {
 			return false;
+		}
 
 		unlink(e);
 		return true;
+	}
+
+	@Override
+	public E remove(int index) {
+
+		checkElementIndex(index);
+
+		Entry oldValue = index(index);
+
+		return unlink(oldValue);
 	}
 
 	protected Entry index(int index) {
@@ -195,40 +268,45 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		Entry x;
 		if (index < (size >> 1)) {
 			x = head;
-			for (int i = index; i --> 0; )
+			for (int i = index; i-- > 0;) {
 				x = x.next;
+			}
 		} else {
 			x = tail;
-			for (int i = size - 1; i --> index; )
+			for (int i = size - 1; i-- > index;) {
 				x = x.prev;
+			}
 		}
 		return x;
 	}
 
 	protected Entry seek(Object obj, int hash) {
 
-		for (Entry entry = hashTable[hash & mask];
-				entry != null;
-				entry = entry.nextInBucket)
-			if (hash == entry.hash && Objects.equal(obj, entry.key))
+		for (Entry entry = hashTable[hash & mask]; entry != null; entry = entry.nextInBucket) {
+			if (hash == entry.hash && Objects.equal(obj, entry.key)) {
 				return entry;
+			}
+		}
 
 		return null;
 	}
 
 	protected void insert(Entry entry) {
 
-		int bucket = entry.hash & mask;
-		entry.nextInBucket = hashTable[bucket];
-		hashTable[bucket] = entry;
+		synchronized (hashTable) {
+			int bucket = entry.hash & mask;
+			entry.nextInBucket = hashTable[bucket];
+			hashTable[bucket] = entry;
+		}
 		++size;
 	}
 
-	protected boolean linkBefore(E obj, Entry succ) {
+	protected synchronized boolean linkBefore(E obj, Entry succ) {
 
 		int hash = hash(obj);
-		if (seek(obj, hash) != null)
+		if (seek(obj, hash) != null) {
 			return false;
+		}
 
 		final Entry pred = succ.prev;
 		final Entry newNode = new Entry(obj, hash);
@@ -238,10 +316,11 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		newNode.next = succ;
 		newNode.prev = pred;
 		succ.prev = newNode;
-		if (pred == null)
+		if (pred == null) {
 			head = newNode;
-		else
+		} else {
 			pred.next = newNode;
+		}
 		return true;
 	}
 
@@ -265,8 +344,9 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		--size;
 	}
 
-	protected E unlink(Entry x) {
+	protected synchronized E unlink(Entry x) {
 
+		modCount++;
 		final E element = (E) x.key;
 		final Entry next = x.next;
 		final Entry prev = x.prev;
@@ -286,20 +366,19 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		}
 
 		delete(x);
-		modCount++;
 		return element;
 	}
 
 	protected void rehashIfNecessary() {
 
 		Entry[] old = hashTable, newTable;
-		if (size > old.length * 2 && old.length < Ints.MAX_POWER_OF_TWO)
+		if (size > old.length * 2 && old.length < Ints.MAX_POWER_OF_TWO) {
 			synchronized (hashTable) {
 				int newTableSize = old.length * 2, newMask = newTableSize - 1;
-				newTable = hashTable = new Entry[newTableSize];
+				newTable = new Entry[newTableSize];
 				mask = newMask;
 
-				for (int bucket = old.length; bucket --> 0 ; ) {
+				for (int bucket = old.length; bucket-- > 0;) {
 					Entry entry = old[bucket];
 					while (entry != null) {
 						Entry nextEntry = entry.nextInBucket;
@@ -309,7 +388,52 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 						entry = nextEntry;
 					}
 				}
+				hashTable = newTable;
 			}
+		}
+	}
+
+	private void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
+
+		// Write out element count, and any hidden stuff
+		int expectedModCount = modCount;
+		s.defaultWriteObject();
+
+		// Write out size as capacity for behavioural compatibility with clone()
+		s.writeInt(size);
+
+		// Write out all elements in the proper order.
+		Entry n = head;
+		for (int i = 0; i < size; i++) {
+			s.writeObject(n);
+			n = n.next;
+		}
+
+		if (modCount != expectedModCount) {
+			throw new ConcurrentModificationException();
+		}
+	}
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
+
+		head = tail = null;
+		hashTable = new Entry[8];
+		mask = 7;
+		size = 0;
+
+		// Read in size, and any hidden stuff
+		s.defaultReadObject();
+
+		// Read in capacity
+		int size = s.readInt();
+
+		if (size > 0) {
+
+			// Read in all elements in the proper order.
+			for (int i = 0; i < size; i++) {
+				add((E) s.readObject());
+			}
+		}
 	}
 
 	@Override
@@ -319,16 +443,25 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 	}
 
 	@Override
+	public List<E> subList(int fromIndex, int toIndex) {
+
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public Iterator<E> iterator() {
 
 		return listIterator();
 	}
 
+	@Override
 	public ListIterator<E> listIterator() {
 
 		return listIterator(0);
 	}
 
+	@Override
 	public ListIterator<E> listIterator(int index) {
 
 		checkPositionIndex(index);
@@ -352,19 +485,21 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 
 	protected String outOfBoundsMsg(int index) {
 
-		return "Index: "+index+", Size: "+size;
+		return "Index: " + index + ", Size: " + size;
 	}
 
 	protected void checkElementIndex(int index) {
 
-		if (!isElementIndex(index))
+		if (!isElementIndex(index)) {
 			throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+		}
 	}
 
 	protected void checkPositionIndex(int index) {
 
-		if (!isPositionIndex(index))
+		if (!isPositionIndex(index)) {
 			throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+		}
 	}
 
 	protected class ListItr implements ListIterator<E> {
@@ -390,8 +525,9 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		public E next() {
 
 			checkForComodification();
-			if (!hasNext())
+			if (!hasNext()) {
 				throw new NoSuchElementException();
+			}
 
 			lastReturned = next;
 			next = next.next;
@@ -409,8 +545,9 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		public E previous() {
 
 			checkForComodification();
-			if (!hasPrevious())
+			if (!hasPrevious()) {
 				throw new NoSuchElementException();
+			}
 
 			lastReturned = next = (next == null) ? tail : next.prev;
 			nextIndex--;
@@ -433,15 +570,17 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		public void remove() {
 
 			checkForComodification();
-			if (lastReturned == null)
+			if (lastReturned == null) {
 				throw new IllegalStateException();
+			}
 
 			Entry lastNext = lastReturned.next;
 			unlink(lastReturned);
-			if (next == lastReturned)
+			if (next == lastReturned) {
 				next = lastNext;
-			else
+			} else {
 				nextIndex--;
+			}
 			lastReturned = null;
 			expectedModCount++;
 		}
@@ -450,8 +589,9 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		public void set(E e) {
 
 			checkForComodification();
-			if (lastReturned == null)
+			if (lastReturned == null) {
 				throw new IllegalStateException();
+			}
 
 			linkBefore(e, lastReturned);
 			unlink(lastReturned);
@@ -464,18 +604,20 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 
 			checkForComodification();
 			lastReturned = null;
-			if (next == null)
+			if (next == null) {
 				push(e);
-			else
+			} else {
 				linkBefore(e, next);
+			}
 			nextIndex++;
 			expectedModCount++;
 		}
 
 		protected final void checkForComodification() {
 
-			if (modCount != expectedModCount)
+			if (modCount != expectedModCount) {
 				throw new ConcurrentModificationException();
+			}
 		}
 
 	}

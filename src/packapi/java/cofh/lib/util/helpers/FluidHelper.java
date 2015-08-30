@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -39,25 +40,37 @@ public class FluidHelper {
 	public static final FluidStack WATER = new FluidStack(WATER_FLUID, BUCKET_VOLUME);
 	public static final FluidStack LAVA = new FluidStack(LAVA_FLUID, BUCKET_VOLUME);
 
-	public static final FluidTankInfo[] NULL_TANK_INFO = new FluidTankInfo[]{};
+	public static final FluidTankInfo[] NULL_TANK_INFO = new FluidTankInfo[] {};
 
 	private FluidHelper() {
 
 	}
 
 	/* IFluidContainer Interaction */
+	public static int fillFluidContainerItem(ItemStack container, FluidStack resource, boolean doFill) {
+
+		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
+	}
+
+	public static FluidStack drainFluidContainerItem(ItemStack container, int maxDrain, boolean doDrain) {
+
+		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain)
+				: null;
+	}
+
 	public static FluidStack extractFluidFromHeldContainer(EntityPlayer player, int maxDrain, boolean doDrain) {
 
 		ItemStack container = player.getCurrentEquippedItem();
 
-		return isFluidContainerItem(container) ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
+		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain)
+				: null;
 	}
 
 	public static int insertFluidIntoHeldContainer(EntityPlayer player, FluidStack resource, boolean doFill) {
 
 		ItemStack container = player.getCurrentEquippedItem();
 
-		return isFluidContainerItem(container) ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
+		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
 	}
 
 	public static boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
@@ -123,22 +136,24 @@ public class FluidHelper {
 			if (fluid == null || returnStack == null) {
 				return false;
 			}
+			if (ServerHelper.isClientWorld(world)) {
+				return true;
+			}
 			if (!player.capabilities.isCreativeMode) {
 				if (container.stackSize == 1) {
-					container = container.copy();
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, returnStack);
-				} else if (!player.inventory.addItemStackToInventory(returnStack)) {
-					return false;
+					container.stackSize--;
+					if (container.stackSize <= 0) {
+						container = null;
+					}
+				} else {
+					if (ItemHelper.disposePlayerItem(player.getCurrentEquippedItem(), returnStack, player, true)) {
+						player.openContainer.detectAndSendChanges();
+						((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+					}
 				}
-				handler.drain(ForgeDirection.UNKNOWN, fluid.amount, true);
-				container.stackSize--;
-
-				if (container.stackSize <= 0) {
-					container = null;
-				}
-			} else {
-				handler.drain(ForgeDirection.UNKNOWN, fluid.amount, true);
 			}
+			handler.drain(ForgeDirection.UNKNOWN, fluid.amount, true);
 			return true;
 		}
 		return false;
@@ -151,14 +166,19 @@ public class FluidHelper {
 
 		if (fluid != null) {
 			if (handler.fill(ForgeDirection.UNKNOWN, fluid, false) == fluid.amount || player.capabilities.isCreativeMode) {
+				ItemStack returnStack = FluidContainerRegistry.drainFluidContainer(container);
 				if (ServerHelper.isClientWorld(world)) {
 					return true;
 				}
-				handler.fill(ForgeDirection.UNKNOWN, fluid, true);
-
 				if (!player.capabilities.isCreativeMode) {
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemHelper.consumeItem(container));
+					if (ItemHelper.disposePlayerItem(player.getCurrentEquippedItem(), returnStack, player, true)) {
+						if (ServerHelper.isServerWorld(world)) {
+							player.openContainer.detectAndSendChanges();
+							((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+						}
+					}
 				}
+				handler.fill(ForgeDirection.UNKNOWN, fluid, true);
 				return true;
 			}
 		}
@@ -193,7 +213,7 @@ public class FluidHelper {
 	/* HELPERS */
 	public static boolean isValidFluidStack(FluidStack fluid) {
 
-		return fluid == null ? false : fluid.fluidID == 0 ? false : FluidRegistry.getFluidName(fluid) != null;
+		return fluid == null ? false : FluidRegistry.getFluidName(fluid) != null;
 	}
 
 	public static int getFluidLuminosity(FluidStack fluid) {
@@ -206,7 +226,7 @@ public class FluidHelper {
 		return fluid == null ? 0 : fluid.getLuminosity();
 	}
 
-	public static FluidStack getFluidFromWorld(World world, int x, int y, int z) {
+	public static FluidStack getFluidFromWorld(World world, int x, int y, int z, boolean doDrain) {
 
 		Block bId = world.getBlock(x, y, z);
 		int bMeta = world.getBlockMetadata(x, y, z);
@@ -225,9 +245,14 @@ public class FluidHelper {
 			}
 		} else if (bId instanceof IFluidBlock) {
 			IFluidBlock block = (IFluidBlock) bId;
-			return block.drain(world, x, y, z, true);
+			return block.drain(world, x, y, z, doDrain);
 		}
 		return null;
+	}
+
+	public static FluidStack getFluidFromWorld(World world, int x, int y, int z) {
+
+		return getFluidFromWorld(world, x, y, z, false);
 	}
 
 	public static Fluid lookupFluidForBlock(Block block) {

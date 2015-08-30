@@ -166,8 +166,15 @@ public abstract class GuiBase extends GuiContainer {
 			if (tab != null && tab.onMouseWheel(mouseX, mouseY, wheelMovement)) {
 				return;
 			}
+
+			if(onMouseWheel(mouseX, mouseY, wheelMovement))
+				return;
 		}
 		super.handleMouseInput();
+	}
+
+	protected boolean onMouseWheel(int mouseX, int mouseY, int wheelMovement) {
+		return false;
 	}
 
 	@Override
@@ -208,7 +215,7 @@ public abstract class GuiBase extends GuiContainer {
 		if (tab != null) {
 			switch (tab.side) {
 			case TabBase.LEFT:
-				guiLeft -= tab.currentWidth;
+				// guiLeft -= tab.currentWidth;
 				break;
 			case TabBase.RIGHT:
 				xSize += tab.currentWidth;
@@ -219,7 +226,7 @@ public abstract class GuiBase extends GuiContainer {
 		if (tab != null) {
 			switch (tab.side) {
 			case TabBase.LEFT:
-				guiLeft += tab.currentWidth;
+				// guiLeft += tab.currentWidth;
 				break;
 			case TabBase.RIGHT:
 				xSize -= tab.currentWidth;
@@ -310,25 +317,40 @@ public abstract class GuiBase extends GuiContainer {
 	 */
 	protected void drawTabs(float partialTick, boolean foreground) {
 
-		if (foreground) {
-			return; // TODO:
-		}
 		int yPosRight = 4;
 		int yPosLeft = 4;
 
-		for (int i = 0; i < tabs.size(); i++) {
-			TabBase tab = tabs.get(i);
-			tab.update();
-			if (!tab.isVisible()) {
-				continue;
+		if (foreground) {
+			for (int i = 0; i < tabs.size(); i++) {
+				TabBase tab = tabs.get(i);
+				tab.update();
+				if (!tab.isVisible()) {
+					continue;
+				}
+				if (tab.side == TabBase.LEFT) {
+					tab.drawForeground(mouseX, mouseY);
+					yPosLeft += tab.currentHeight;
+				} else {
+					tab.drawForeground(mouseX, mouseY);
+					yPosRight += tab.currentHeight;
+				}
 			}
-			// TODO: convert these over to foreground/background (maybe logic for top/bottom tabs?)
-			if (tab.side == TabBase.LEFT) {
-				tab.draw(0, yPosLeft);
-				yPosLeft += tab.currentHeight;
-			} else {
-				tab.draw(xSize, yPosRight);
-				yPosRight += tab.currentHeight;
+		} else {
+			for (int i = 0; i < tabs.size(); i++) {
+				TabBase tab = tabs.get(i);
+				tab.update();
+				if (!tab.isVisible()) {
+					continue;
+				}
+				if (tab.side == TabBase.LEFT) {
+					tab.setPosition(0, yPosLeft);
+					tab.drawBackground(mouseX, mouseY, partialTick);
+					yPosLeft += tab.currentHeight;
+				} else {
+					tab.setPosition(xSize, yPosRight);
+					tab.drawBackground(mouseX, mouseY, partialTick);
+					yPosRight += tab.currentHeight;
+				}
 			}
 		}
 	}
@@ -354,7 +376,7 @@ public abstract class GuiBase extends GuiContainer {
 		}
 		ElementBase element = getElementAtPosition(mouseX, mouseY);
 
-		if (element != null) {
+		if (element != null && element.isVisible()) {
 			element.addTooltip(tooltip);
 		}
 	}
@@ -473,6 +495,31 @@ public abstract class GuiBase extends GuiContainer {
 	public void drawButton(String iconName, int x, int y, int spriteSheet, int mode) {
 
 		drawButton(getIcon(iconName), x, y, spriteSheet, mode);
+	}
+
+
+	public void drawItemStack(ItemStack stack, int x, int y, boolean drawOverlay, String overlayTxt) {
+
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glPushMatrix();
+		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
+		this.zLevel = 200.0F;
+		itemRender.zLevel = 200.0F;
+
+		FontRenderer font = null;
+		if (stack != null) font = stack.getItem().getFontRenderer(stack);
+		if (font == null) font = fontRendererObj;
+
+		itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), stack, x, y);
+
+		if (drawOverlay)
+			itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, x, y - (this.draggedStack == null ? 0 : 8), overlayTxt);
+
+		this.zLevel = 0.0F;
+		itemRender.zLevel = 0.0F;
+		GL11.glPopMatrix();
+		GL11.glDisable(GL11.GL_LIGHTING);
 	}
 
 	/**
