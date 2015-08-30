@@ -124,14 +124,34 @@ public class InventoryHelper
         return stack;
     }
 
-    public static void consumeItem(IInventory inventory, int slot)
+    public static ItemStack consumeItem(IInventory inventory, int slot)
     {
-        inventory.decrStackSize(slot, 1);
+        return inventory.decrStackSize(slot, 1);
     }
 
     public static ItemStack insertItem(IInventory inventory, ItemStack stack, boolean simulate)
     {
         return insertItem(new InventoryAbstracted(inventory), stack, simulate);
+    }
+
+    public static boolean canPutItemStacksInToInventory(IInventory inventory, ArrayList<ItemStack> itemStacks)
+    {
+        for (ItemStack droppedItem : itemStacks)
+        {
+            if (InventoryHelper.insertItem(inventory, droppedItem, true) != null) return false;
+        }
+
+        return true;
+    }
+
+    public static boolean canPutItemStacksInToInventory(InventoryAbstracted inventory, ArrayList<ItemStack> itemStacks)
+    {
+        for (ItemStack droppedItem : itemStacks)
+        {
+            if (InventoryHelper.insertItem(inventory, droppedItem, true) != null) return false;
+        }
+
+        return true;
     }
 
     public static boolean checkAndPutItemStacksInToInventory(IInventory inventory, ArrayList<ItemStack> itemStacks)
@@ -141,9 +161,8 @@ public class InventoryHelper
 
     public static boolean checkAndPutItemStacksInToInventory(InventoryAbstracted inventory, ArrayList<ItemStack> itemStacks)
     {
-        for (ItemStack droppedItem : itemStacks)
-        {
-            if (InventoryHelper.insertItem(inventory, droppedItem, true) != null) return false;
+        if (!canPutItemStacksInToInventory(inventory, itemStacks)) {
+            return false;
         }
 
         for (ItemStack droppedItem : itemStacks)

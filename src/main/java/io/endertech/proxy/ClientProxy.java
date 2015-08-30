@@ -85,9 +85,9 @@ public class ClientProxy extends CommonProxy
     @SubscribeEvent
     public void initializeIcons(TextureStitchEvent.Post event)
     {
-        if (EnderTech.loadDevModeContent && Loader.isModLoaded("ThermalExpansion"))
-        {
-            DevETFluids.fluidChargedEnder.setIcons(DevETFluids.fluidChargedEnderStill, DevETFluids.fluidChargedEnderFlowing);
-        }
+//        if (EnderTech.loadDevModeContent && Loader.isModLoaded("ThermalExpansion"))
+//        {
+//            DevETFluids.fluidChargedEnder.setIcons(DevETFluids.fluidChargedEnderStill, DevETFluids.fluidChargedEnderFlowing);
+//        }
     }
 }

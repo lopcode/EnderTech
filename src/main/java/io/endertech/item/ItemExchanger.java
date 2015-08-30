@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -124,6 +125,12 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
     public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float xFloat, float yFloat, float zFloat)
     {
         LogHelper.debug("Exchanger use on " + x + " " + y + " " + z);
+
+        if (player instanceof FakePlayer) {
+            LogHelper.debug("Fake player tried to use an Exchanger. Bailing.");
+
+            return false;
+        }
 
         if (player.isSneaking())
         {

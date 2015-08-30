@@ -88,6 +88,7 @@ public class WorldEventHandler
                     case FAIL_ENERGY:
                     case FAIL_NO_SOURCE_BLOCKS:
                     case FAIL_INVENTORY_SPACE:
+                    case FAIL_SOURCE_NOT_CONSUMED:
                         stop = true;
                         removals.add(exchange);
                         break;
@@ -142,10 +143,23 @@ public class WorldEventHandler
         if (!exchanger.isCreative(exchangerStack))
         {
             ArrayList<ItemStack> droppedItems = block.getDrops(exchange.player.worldObj, blockCoord.x, blockCoord.y, blockCoord.z, exchange.sourceMeta, 0);
+            boolean canPutItemsInInventory = InventoryHelper.canPutItemStacksInToInventory(exchange.player.inventory, droppedItems);
+
+            if (!canPutItemsInInventory) {
+                return ExchangeResult.FAIL_INVENTORY_SPACE;
+            }
+
             boolean didPutItemsInInventory = InventoryHelper.checkAndPutItemStacksInToInventory(exchange.player.inventory, droppedItems);
             if (didPutItemsInInventory)
             {
-                InventoryHelper.consumeItem(exchange.player.inventory, sourceSlot);
+                ItemStack oldStack = exchange.player.inventory.getStackInSlot(sourceSlot);
+                ItemStack newStack = InventoryHelper.consumeItem(exchange.player.inventory, sourceSlot);
+
+                if (newStack.stackSize >= oldStack.stackSize) {
+                    // Didn't actually reduce the stack size. Bail.
+                    return ExchangeResult.FAIL_SOURCE_NOT_CONSUMED;
+                }
+
                 performExchange(exchange, blockCoord, exchanger, world, exchangeCost);
             } else return ExchangeResult.FAIL_INVENTORY_SPACE;
         } else performExchange(exchange, blockCoord, exchanger, world, exchangeCost);
@@ -165,6 +179,7 @@ public class WorldEventHandler
         FAIL_ENERGY,
         FAIL_MISMATCH,
         FAIL_NO_SOURCE_BLOCKS,
+        FAIL_SOURCE_NOT_CONSUMED,
         FAIL_INVENTORY_SPACE,
         FAIL_BLOCK_NOT_REPLACEABLE,
         FAIL_BLOCK_NOT_EXPOSED,
