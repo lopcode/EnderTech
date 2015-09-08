@@ -137,22 +137,23 @@ public class WorldEventHandler
 
         int sourceSlot = InventoryHelper.findFirstItemStack(exchange.player.inventory, exchange.target);
 
-        if (sourceSlot < 0 && !exchanger.isCreative(exchangerStack))
+        boolean isCreativeExchanger = ItemExchanger.isCreative(exchangerStack);
+
+        if (sourceSlot < 0 && !isCreativeExchanger)
         {
             return ExchangeResult.FAIL_NO_SOURCE_BLOCKS;
         }
 
-        ItemStack beforeConsumedStack = exchange.player.inventory.getStackInSlot(sourceSlot);
-        int beforeConsumedSize = (beforeConsumedStack == null) ? 0 : beforeConsumedStack.stackSize;
+        if (!isCreativeExchanger) {
+            ItemStack beforeConsumedStack = exchange.player.inventory.getStackInSlot(sourceSlot);
+            int beforeConsumedSize = (beforeConsumedStack == null) ? 0 : beforeConsumedStack.stackSize;
 
-        if (beforeConsumedSize == 1 && (exchange.player instanceof FakePlayer)) {
-            LogHelper.debug("Not consuming item as it is the last in a Fake Player's stack: " + exchange.player.getPosition(1.0F));
+            if (beforeConsumedSize == 1 && (exchange.player instanceof FakePlayer)) {
+                LogHelper.debug("Not consuming item as it is the last in a Fake Player's stack: " + exchange.player.getPosition(1.0F));
 
-            return ExchangeResult.FAIL_SOURCE_NOT_CONSUMED;
-        }
+                return ExchangeResult.FAIL_SOURCE_NOT_CONSUMED;
+            }
 
-        if (!exchanger.isCreative(exchangerStack))
-        {
             ArrayList<ItemStack> droppedItems = block.getDrops(exchange.player.worldObj, blockCoord.x, blockCoord.y, blockCoord.z, exchange.sourceMeta, 0);
             boolean canPutItemsInInventory = InventoryHelper.canPutItemStacksInToInventory(exchange.player.inventory, droppedItems);
 
