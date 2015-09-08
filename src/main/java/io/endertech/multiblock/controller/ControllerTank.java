@@ -592,7 +592,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
     public int receiveEnergy(int maxReceive, boolean simulate)
     {
         int energy = this.getStoredEnergy();
-        int energyReceived = Math.min(ControllerTank.MAX_ENERGY_STORAGE - energy, Math.min(TileTankEnergyInput.MAX_INPUT_RATE, maxReceive));
+        int energyReceived = Math.min(ControllerTank.MAX_ENERGY_STORAGE - energy, Math.min(GeneralConfig.maxTankEnergyInputRate, maxReceive));
 
         if (!simulate)
         {
@@ -738,7 +738,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         ItemStack chargeItemStack = this.inventory[chargeSlot];
         if (!this.hasChargeSlot() || !EnergyHelper.isEnergyContainerItem(chargeItemStack)) return;
 
-        int chargeAmount = Math.min(TileTankEnergyInput.MAX_INPUT_RATE, ControllerTank.MAX_ENERGY_STORAGE - this.getEnergyStored());
+        int chargeAmount = Math.min(GeneralConfig.maxTankEnergyInputRate, ControllerTank.MAX_ENERGY_STORAGE - this.getEnergyStored());
 
         IEnergyContainerItem energyContainerItem = (IEnergyContainerItem) chargeItemStack.getItem();
         if (energyContainerItem == null) return;

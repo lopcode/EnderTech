@@ -15,10 +15,12 @@ public class GeneralConfig
     public static int GUITopLeftXOffset;
     public static int healthPadChargeCostPerHalfHeart;
     public static boolean healthPadForceAlwaysSendHealth;
+    public static int maxTankEnergyInputRate;
 
     private static Configuration generalConfig;
 
     private static int TANK_MULTIPLIER_MAX = Integer.MAX_VALUE;
+    private static int TANK_ENERGY_INPUT_MAX = Integer.MAX_VALUE;
 
     protected static void init(File configFile)
     {
@@ -35,6 +37,16 @@ public class GeneralConfig
             if (tankStorageMultiplier > TANK_MULTIPLIER_MAX)
             {
                 tankStorageMultiplier = TANK_MULTIPLIER_MAX;
+            }
+
+            maxTankEnergyInputRate = generalConfig.get("tank", "Tank.MaxEnergyInputRate", 20000).getInt(20000);
+            if (maxTankEnergyInputRate < 1)
+            {
+                maxTankEnergyInputRate = 1;
+            }
+            if (maxTankEnergyInputRate > TANK_ENERGY_INPUT_MAX)
+            {
+                maxTankEnergyInputRate = TANK_ENERGY_INPUT_MAX;
             }
 
             debugRender = generalConfig.get("rendering", "Rendering.Debug", false).getBoolean(false);

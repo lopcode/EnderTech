@@ -10,8 +10,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileTankEnergyInput extends TileTankPart implements IEnergyHandler
 {
-    public static final int MAX_INPUT_RATE = 10 * 1000;
-
     public static void init()
     {
         GameRegistry.registerTileEntity(TileTankEnergyInput.class, "tile.endertech." + Strings.Blocks.TANK_ENERGY_INPUT_NAME);
