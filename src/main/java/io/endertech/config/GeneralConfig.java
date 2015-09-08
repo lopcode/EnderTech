@@ -18,6 +18,8 @@ public class GeneralConfig
 
     private static Configuration generalConfig;
 
+    private static int TANK_MULTIPLIER_MAX = Integer.MAX_VALUE;
+
     protected static void init(File configFile)
     {
         generalConfig = new Configuration(configFile);
@@ -30,9 +32,9 @@ public class GeneralConfig
             {
                 tankStorageMultiplier = 1;
             }
-            if (tankStorageMultiplier > 1024)
+            if (tankStorageMultiplier > TANK_MULTIPLIER_MAX)
             {
-                tankStorageMultiplier = 1024;
+                tankStorageMultiplier = TANK_MULTIPLIER_MAX;
             }
 
             debugRender = generalConfig.get("rendering", "Rendering.Debug", false).getBoolean(false);

@@ -4,6 +4,7 @@ import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyStorage;
 import cofh.lib.util.helpers.EnergyHelper;
 import cofh.lib.util.helpers.ServerHelper;
+import com.google.common.math.IntMath;
 import io.endertech.config.GeneralConfig;
 import io.endertech.multiblock.IMultiblockPart;
 import io.endertech.multiblock.MultiblockControllerBase;
@@ -60,8 +61,8 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         attachedControllers = new HashSet<TileTankController>();
         attachedValves = new HashSet<TileTankValve>();
         attachedEnergyInputs = new HashSet<TileTankEnergyInput>();
-        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * GeneralConfig.tankStorageMultiplier);
-        lastTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * GeneralConfig.tankStorageMultiplier);
+        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME);
+        lastTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME);
 
         this.inventory = new ItemStack[1];
     }
@@ -179,7 +180,15 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         BlockCoord dimensionCoord = new BlockCoord(maxCoord.x - minCoord.x - 1, maxCoord.y - minCoord.y - 1, maxCoord.z - minCoord.z - 1);
 
         int interiorSize = dimensionCoord.x * dimensionCoord.y * dimensionCoord.z;
-        int tankCapacity = interiorSize * FluidContainerRegistry.BUCKET_VOLUME * GeneralConfig.tankStorageMultiplier;
+        int internalCapacity = interiorSize * FluidContainerRegistry.BUCKET_VOLUME;
+
+        int tankCapacity;
+        try {
+            tankCapacity = IntMath.checkedMultiply(internalCapacity, GeneralConfig.tankStorageMultiplier);
+        } catch (ArithmeticException e) {
+            tankCapacity = Integer.MAX_VALUE;
+        }
+
         this.tank.setCapacity(tankCapacity);
 
         if (this.lastTank != null) this.lastTank.setCapacity(tankCapacity);

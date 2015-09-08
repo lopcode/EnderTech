@@ -178,7 +178,7 @@ public class TankControllerRenderer extends TileEntitySpecialRenderer implements
                     setOpacity = true;
                     stopLevel = unitHeights;
                     opacity = (float) ((controller.lastTank.getFluidAmount() + controller.renderAddition) / capacity);
-                    if (opacity < 0.10F) opacity = 0.10F;
+                    if (opacity < 0.20F) opacity = 0.20F;
                 }
             }
 
