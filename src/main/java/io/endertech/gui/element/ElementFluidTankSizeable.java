@@ -1,6 +1,7 @@
 package io.endertech.gui.element;
 
 import cofh.lib.gui.element.ElementFluidTank;
+import com.google.common.math.IntMath;
 import io.endertech.config.GeneralConfig;
 import io.endertech.gui.client.GuiETBase;
 import net.minecraftforge.fluids.Fluid;
@@ -20,6 +21,9 @@ public class ElementFluidTankSizeable extends ElementFluidTank
     public void drawBackground(int mouseX, int mouseY, float gameTicks)
     {
         int amount = this.getScaled();
+        if (amount <= 2 && tank.getFluidAmount() > 0) {
+            amount = 2;
+        }
 
         FluidStack fluidStack = tank.getFluid();
         if (fluidStack == null) return;
@@ -42,6 +46,14 @@ public class ElementFluidTankSizeable extends ElementFluidTank
     @Override
     protected int getScaled()
     {
-        return tank.getFluidAmount() * sizeY / tank.getCapacity();
+        long fluidAmount = (long) tank.getFluidAmount();
+        long tankCapacity = (long) tank.getCapacity();
+
+        long scaledY = (fluidAmount * sizeY) / tankCapacity;
+        if (scaledY > sizeY) {
+            scaledY = sizeY;
+        }
+
+        return (int) scaledY;
     }
 }
