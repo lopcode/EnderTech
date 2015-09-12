@@ -13,6 +13,7 @@ public class ItemConfig
     public static int itemExchangerMaxRadius;
     public static int itemExchangerMinimumCost;
     public static int itemExchangerMaximumCost;
+    public static boolean itemExchangerSilkTouch;
     private static Configuration itemConfig;
 
     protected static void init(File configFile)
@@ -27,6 +28,7 @@ public class ItemConfig
             itemExchangerMinimumCost = itemConfig.get("item.general", "Exchanger.MinimumCost", 2048).getInt(2048);
             itemExchangerMaximumCost = itemConfig.get("item.general", "Exchanger.MaximumCost", 16384).getInt(16384);
             itemExchangerMaxRadius = itemConfig.get("item.general", "Exchanger.MaxRadius", 8).getInt(8);
+            itemExchangerSilkTouch = itemConfig.get("item.general", "Exchanger.SilkTouch", true).getBoolean(true);
 
             if (itemExchangerMaxRadius < 1)
             {

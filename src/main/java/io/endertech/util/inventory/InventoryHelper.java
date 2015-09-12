@@ -3,6 +3,7 @@ package io.endertech.util.inventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
+import java.util.List;
 
 public class InventoryHelper
 {
@@ -134,7 +135,7 @@ public class InventoryHelper
         return insertItem(new InventoryAbstracted(inventory), stack, simulate);
     }
 
-    public static boolean canPutItemStacksInToInventory(IInventory inventory, ArrayList<ItemStack> itemStacks)
+    public static boolean canPutItemStacksInToInventory(IInventory inventory, List<ItemStack> itemStacks)
     {
         for (ItemStack droppedItem : itemStacks)
         {
@@ -144,7 +145,7 @@ public class InventoryHelper
         return true;
     }
 
-    public static boolean canPutItemStacksInToInventory(InventoryAbstracted inventory, ArrayList<ItemStack> itemStacks)
+    public static boolean canPutItemStacksInToInventory(InventoryAbstracted inventory, List<ItemStack> itemStacks)
     {
         for (ItemStack droppedItem : itemStacks)
         {
@@ -154,12 +155,12 @@ public class InventoryHelper
         return true;
     }
 
-    public static boolean checkAndPutItemStacksInToInventory(IInventory inventory, ArrayList<ItemStack> itemStacks)
+    public static boolean checkAndPutItemStacksInToInventory(IInventory inventory, List<ItemStack> itemStacks)
     {
         return checkAndPutItemStacksInToInventory(new InventoryAbstracted(inventory), itemStacks);
     }
 
-    public static boolean checkAndPutItemStacksInToInventory(InventoryAbstracted inventory, ArrayList<ItemStack> itemStacks)
+    public static boolean checkAndPutItemStacksInToInventory(InventoryAbstracted inventory, List<ItemStack> itemStacks)
     {
         if (!canPutItemStacksInToInventory(inventory, itemStacks)) {
             return false;

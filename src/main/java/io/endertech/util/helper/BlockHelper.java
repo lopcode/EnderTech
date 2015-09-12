@@ -5,12 +5,18 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.BlockFluidBase;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class BlockHelper
@@ -78,5 +84,31 @@ public class BlockHelper
     public static boolean areBlocksEqual(IBlockAccess blockAccess, Block block, int meta, int x, int y, int z, ForgeDirection direction)
     {
         return (block == blockAccess.getBlock(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ) && meta == blockAccess.getBlockMetadata(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ));
+    }
+
+    // Silk Touch
+
+    public static ItemStack createItemStackForBlock(Block block, int meta)
+    {
+        int itemMeta = 0;
+        Item item = Item.getItemFromBlock(block);
+
+        if (item != null && item.getHasSubtypes())
+        {
+            itemMeta = meta;
+        }
+
+        return new ItemStack(item, 1, itemMeta);
+    }
+
+    public static List<ItemStack> createSilkTouchStack(Block block, int meta) {
+        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        ItemStack itemstack = createItemStackForBlock(block, meta);
+
+        if (itemstack != null) {
+            items.add(itemstack);
+        }
+
+        return items;
     }
 }

@@ -7,6 +7,7 @@ import io.endertech.item.ItemExchanger;
 import io.endertech.util.BlockCoord;
 import io.endertech.util.Exchange;
 import io.endertech.util.Geometry;
+import io.endertech.util.helper.BlockHelper;
 import io.endertech.util.helper.LogHelper;
 import io.endertech.util.inventory.InventoryHelper;
 import net.minecraft.block.Block;
@@ -154,7 +155,7 @@ public class WorldEventHandler
                 return ExchangeResult.FAIL_SOURCE_NOT_CONSUMED;
             }
 
-            ArrayList<ItemStack> droppedItems = block.getDrops(exchange.player.worldObj, blockCoord.x, blockCoord.y, blockCoord.z, exchange.sourceMeta, 0);
+            List<ItemStack> droppedItems = this.harvestBlockWithSilkTouchIfRequired(block, exchange, blockCoord);
             boolean canPutItemsInInventory = InventoryHelper.canPutItemStacksInToInventory(exchange.player.inventory, droppedItems);
 
             if (!canPutItemsInInventory) {
@@ -179,6 +180,16 @@ public class WorldEventHandler
         } else performExchange(exchange, blockCoord, exchanger, world, exchangeCost);
 
         return ExchangeResult.SUCCESS;
+    }
+
+    private List<ItemStack> harvestBlockWithSilkTouchIfRequired(Block block, Exchange exchange, BlockCoord blockCoord) {
+        boolean canSilkTouch = block.canSilkHarvest(exchange.player.worldObj, exchange.player, blockCoord.x, blockCoord.y, blockCoord.z, exchange.sourceMeta);
+
+        if (canSilkTouch && ItemConfig.itemExchangerSilkTouch) {
+            return BlockHelper.createSilkTouchStack(block, exchange.sourceMeta);
+        } else {
+            return block.getDrops(exchange.player.worldObj, blockCoord.x, blockCoord.y, blockCoord.z, exchange.sourceMeta, 0);
+        }
     }
 
     private void performExchange(Exchange exchange, BlockCoord blockCoord, ItemExchanger exchanger, World world, int exchangeCost)
