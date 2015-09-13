@@ -1,7 +1,9 @@
 package io.endertech.block;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import io.endertech.EnderTech;
 import io.endertech.item.ItemBlockChargePad;
+import io.endertech.item.ItemBlockConduit;
 import io.endertech.item.ItemBlockHealthPad;
 import io.endertech.multiblock.block.BlockMultiblockGlass;
 import io.endertech.multiblock.block.BlockTankController;
@@ -17,6 +19,7 @@ public class ETBlocks
     public static Block blockMultiblockGlass;
     public static Block blockChargePad;
     public static Block blockHealthPad;
+    public static Block blockConduit;
 
     public static void init()
     {
@@ -37,5 +40,13 @@ public class ETBlocks
         ((BlockTankController) blockTankController).init();
         ((BlockChargePad) blockChargePad).init();
         ((BlockHealthPad) blockHealthPad).init();
+
+        if (EnderTech.loadDevModeContent)
+        {
+            // Conduit (item router)
+            blockConduit = new BlockConduit();
+            GameRegistry.registerBlock(blockConduit, ItemBlockConduit.class, Strings.Blocks.CONDUIT_NAME);
+            ((BlockConduit) blockConduit).init();
+        }
     }
 }

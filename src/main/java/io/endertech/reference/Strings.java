@@ -25,5 +25,6 @@ public class Strings
         public static final String TANK_CONTROLLER_NAME = "enderTankController";
         public static final String TANK_ENERGY_INPUT_NAME = "enderTankEnergyInput";
         public static final String FLUID_CHARGED_ENDER_NAME = "fluid.chargedEnder";
+        public static final String CONDUIT_NAME = "conduit";
     }
 }

@@ -25,6 +25,10 @@ tile.healthPad.0.name=Creative Health Pad
 tile.healthPad.1.name=Redstone Health Pad
 tile.healthPad.2.name=Resonant Health Pad
 
+tile.conduit.0.name=Creative Conduit
+tile.conduit.1.name=Redstone Conduit
+tile.conduit.2.name=Resonant Conduit
+
 # Fluids
 tile.fluid.chargePad.0.name=Charged Ender
 fluid.chargedEnder=Charged Ender
