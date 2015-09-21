@@ -92,6 +92,7 @@ public class WorldEventHandler
                     case FAIL_NO_SOURCE_BLOCKS:
                     case FAIL_INVENTORY_SPACE:
                     case FAIL_SOURCE_NOT_CONSUMED:
+                    case FAIL_NULL_ITEM:
                         stop = true;
                         removals.add(exchange);
                         break;
@@ -156,8 +157,21 @@ public class WorldEventHandler
             }
 
             List<ItemStack> droppedItems = this.harvestBlockWithSilkTouchIfRequired(block, exchange, blockCoord);
-            boolean canPutItemsInInventory = InventoryHelper.canPutItemStacksInToInventory(exchange.player.inventory, droppedItems);
 
+            boolean containsNullItemInDroppedItems = false;
+            for (ItemStack droppedItem : droppedItems) {
+                if (droppedItem.getItem() == null) {
+                    LogHelper.warn("Player " + exchange.player.getDisplayName() + " tried to exchange a null item - bailing the entire exchange: " + droppedItem.toString());
+                    containsNullItemInDroppedItems = true;
+                    break;
+                }
+            }
+
+            if (containsNullItemInDroppedItems) {
+                return ExchangeResult.FAIL_NULL_ITEM;
+            }
+
+            boolean canPutItemsInInventory = InventoryHelper.canPutItemStacksInToInventory(exchange.player.inventory, droppedItems);
             if (!canPutItemsInInventory) {
                 return ExchangeResult.FAIL_INVENTORY_SPACE;
             }
@@ -206,6 +220,7 @@ public class WorldEventHandler
         FAIL_NO_SOURCE_BLOCKS,
         FAIL_SOURCE_NOT_CONSUMED,
         FAIL_INVENTORY_SPACE,
+        FAIL_NULL_ITEM,
         FAIL_BLOCK_NOT_REPLACEABLE,
         FAIL_BLOCK_NOT_EXPOSED,
         SUCCESS
