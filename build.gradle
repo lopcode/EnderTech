@@ -88,7 +88,10 @@ dependencies {
     //compile name: 'ForgeMultipart', version: "${config.minecraft_version}-${config.FMP_version}", ext: 'jar'
     //compile name: 'CodeChickenLib', version: "${config.minecraft_version}-${config.CCLIB_version}", ext: 'jar'
     //compile name: 'NotEnoughItems', version: "${config.NEI_version}", type: 'jar'
-    compile "mcp.mobius.waila:Waila:1.5.9_1.7.10"
+    compile "mcp.mobius.waila:Waila:${config.WAILA_version}_${config.minecraft_version}:dev"
+    compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
+    compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
+    compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
 
     // Dependencies that do not provide an easy way to grab them with Gradle must be included manually
     // List of shame:
