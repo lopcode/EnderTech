@@ -14,6 +14,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.BlockFluidBase;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -88,22 +90,20 @@ public class BlockHelper
 
     // Silk Touch
 
-    public static ItemStack createItemStackForBlock(Block block, int meta)
-    {
-        int itemMeta = 0;
-        Item item = Item.getItemFromBlock(block);
-
-        if (item != null && item.getHasSubtypes())
-        {
-            itemMeta = meta;
-        }
-
-        return new ItemStack(item, 1, itemMeta);
-    }
-
+    // NOTE: Reflection performance warning
     public static List<ItemStack> createSilkTouchStack(Block block, int meta) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        ItemStack itemstack = createItemStackForBlock(block, meta);
+        ItemStack itemstack = null;
+
+        try {
+            Method createStackedBlock = block.getClass().getDeclaredMethod("createStackedBlock", int.class);
+            createStackedBlock.setAccessible(true);
+            itemstack = (ItemStack) createStackedBlock.invoke(block, meta);
+        } catch (NoSuchMethodException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
+        } catch (InvocationTargetException e) {
+        }
 
         if (itemstack != null) {
             items.add(itemstack);
