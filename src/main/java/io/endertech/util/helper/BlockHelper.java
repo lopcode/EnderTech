@@ -11,9 +11,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.BlockFluidBase;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -86,8 +87,8 @@ public class BlockHelper
         return (block == blockAccess.getBlock(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ) && meta == blockAccess.getBlockMetadata(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ));
     }
 
-    // Silk Touch
 
+    // Silk Touch
     public static ItemStack createItemStackForBlock(Block block, int meta)
     {
         int itemMeta = 0;
@@ -100,10 +101,24 @@ public class BlockHelper
 
         return new ItemStack(item, 1, itemMeta);
     }
-
     public static List<ItemStack> createSilkTouchStack(Block block, int meta) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        ItemStack itemstack = createItemStackForBlock(block, meta);
+        ItemStack itemstack = null;
+
+        // Some Blocks override the createStackedBlock method, Redstone Ore for example
+        // If we call the same as for all others we may crash (https://github.com/carrotengineer/EnderTech/issues/62)
+        try {
+            Method createStackedBlock = block.getClass().getDeclaredMethod("createStackedBlock", int.class);
+            createStackedBlock.setAccessible(true);
+            itemstack = (ItemStack) createStackedBlock.invoke(block, meta);
+        }catch (NoSuchMethodException e){
+            // For all others we have:
+            itemstack = createItemStackForBlock(block, meta);
+        } catch (SecurityException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
+        } catch (InvocationTargetException e) {
+        }
 
         if (itemstack != null) {
             items.add(itemstack);
