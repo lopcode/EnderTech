@@ -96,13 +96,25 @@ public class BlockHelper
         ItemStack itemstack = null;
 
         try {
-            Method createStackedBlock = block.getClass().getDeclaredMethod("createStackedBlock", int.class);
+            Method createStackedBlock = block.getClass().getDeclaredMethod("func_149644_j", int.class); // # createStackedBlock
             createStackedBlock.setAccessible(true);
             itemstack = (ItemStack) createStackedBlock.invoke(block, meta);
         } catch (NoSuchMethodException e) {
+            LogHelper.warn("NoSuchMethod:");
+            e.printStackTrace();
         } catch (IllegalArgumentException e) {
+            LogHelper.warn("IllegalArgument");
+            e.printStackTrace();
         } catch (IllegalAccessException e) {
+            LogHelper.warn("IllegalAccess");
+            e.printStackTrace();
         } catch (InvocationTargetException e) {
+            LogHelper.warn("InvocationTargetException");
+            e.printStackTrace();
+        }
+
+        if (itemstack == null) {
+            return null;
         }
 
         if (itemstack != null) {

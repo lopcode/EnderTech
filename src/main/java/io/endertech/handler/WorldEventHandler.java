@@ -157,6 +157,10 @@ public class WorldEventHandler
             }
 
             List<ItemStack> droppedItems = this.harvestBlockWithSilkTouchIfRequired(block, exchange, blockCoord);
+            if (droppedItems == null) {
+                LogHelper.warn("Player " + exchange.player.getDisplayName() + " tried to exchange something, but the droppedItems were null - bailing the entire exchange: " + block.toString());
+                return ExchangeResult.FAIL_NULL_ITEM;
+            }
 
             boolean containsNullItemInDroppedItems = false;
             for (ItemStack droppedItem : droppedItems) {
