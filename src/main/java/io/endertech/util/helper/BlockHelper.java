@@ -5,13 +5,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.BlockFluidBase;
 
 import java.lang.reflect.InvocationTargetException;
@@ -96,7 +94,7 @@ public class BlockHelper
         ItemStack itemstack = null;
 
         try {
-            Method createStackedBlock = block.getClass().getDeclaredMethod("func_149644_j", int.class); // # createStackedBlock
+            Method createStackedBlock = Block.class.getDeclaredMethod("func_149644_j", int.class); // # createStackedBlock
             createStackedBlock.setAccessible(true);
             itemstack = (ItemStack) createStackedBlock.invoke(block, meta);
         } catch (NoSuchMethodException e) {
@@ -117,9 +115,7 @@ public class BlockHelper
             return null;
         }
 
-        if (itemstack != null) {
-            items.add(itemstack);
-        }
+        items.add(itemstack);
 
         return items;
     }
