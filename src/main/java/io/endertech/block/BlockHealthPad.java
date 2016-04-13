@@ -67,13 +67,13 @@ public class BlockHealthPad extends BlockPad
     @Override
     public IIcon getActiveIcon(int meta)
     {
-        return IconRegistry.getIcon("HealthPad_" + TextureHelper.metaToType(meta) + "_Active");
+        return IconRegistry.getIcon("HealthPad_" + TextureHelper.INSTANCE.metaToType(meta) + "_Active");
     }
 
     @Override
     public IIcon getInactiveIcon(int meta)
     {
-        return IconRegistry.getIcon("HealthPad_" + TextureHelper.metaToType(meta) + "_Inactive");
+        return IconRegistry.getIcon("HealthPad_" + TextureHelper.INSTANCE.metaToType(meta) + "_Inactive");
     }
 
     public static enum Types

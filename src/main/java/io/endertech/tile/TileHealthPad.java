@@ -197,7 +197,7 @@ public class TileHealthPad extends TilePad
         int blockMeta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
         if (this.isCreative) currenttip.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
         else
-            currenttip.add(LocalisationHelper.localiseString("info.charge", StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(blockMeta)) + " RF"));
+            currenttip.add(LocalisationHelper.localiseString("info.charge", StringHelper.INSTANCE.getEnergyString(this.storedEnergy) + " / " + StringHelper.INSTANCE.getEnergyString(this.getMaxEnergyStored(blockMeta)) + " RF"));
 
         return currenttip;
     }

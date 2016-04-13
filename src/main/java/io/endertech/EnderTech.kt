@@ -1,172 +1,166 @@
-package io.endertech;
+package io.endertech
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import io.endertech.block.BlockChargePad;
-import io.endertech.block.BlockHealthPad;
-import io.endertech.block.ETBlocks;
-import io.endertech.client.handler.GUIEventHandler;
-import io.endertech.client.handler.KeyBindingHandler;
-import io.endertech.config.ConfigHandler;
-import io.endertech.config.GeneralConfig;
-import io.endertech.creativetab.CreativeTabET;
-import io.endertech.gui.GuiHandler;
-import io.endertech.item.ETItems;
-import io.endertech.multiblock.block.BlockMultiblockGlass;
-import io.endertech.multiblock.block.BlockTankController;
-import io.endertech.multiblock.block.BlockTankPart;
-import io.endertech.network.PacketHandler;
-import io.endertech.network.PacketKeyPressed;
-import io.endertech.network.PacketTile;
-import io.endertech.proxy.CommonProxy;
-import io.endertech.reference.Reference;
-import io.endertech.util.Exchange;
-import io.endertech.util.fluid.BucketHandler;
-import io.endertech.util.helper.BlockHelper;
-import io.endertech.util.helper.LocalisationHelper;
-import io.endertech.util.helper.LogHelper;
-import io.endertech.util.helper.ModuleHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.launchwrapper.Launch;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import java.io.File;
+import io.endertech.block.BlockChargePad
+import io.endertech.block.BlockHealthPad
+import io.endertech.block.ETBlocks
+import io.endertech.client.handler.GUIEventHandler
+import io.endertech.client.handler.KeyBindingHandler
+import io.endertech.config.ConfigHandler
+import io.endertech.config.GeneralConfig
+import io.endertech.creativetab.CreativeTabET
+import io.endertech.gui.GuiHandler
+import io.endertech.item.ETItems
+import io.endertech.multiblock.block.BlockMultiblockGlass
+import io.endertech.multiblock.block.BlockTankController
+import io.endertech.multiblock.block.BlockTankPart
+import io.endertech.network.PacketHandler
+import io.endertech.network.PacketKeyPressed
+import io.endertech.network.PacketTile
+import io.endertech.proxy.CommonProxy
+import io.endertech.reference.Reference
+import io.endertech.util.Exchange
+import io.endertech.util.fluid.BucketHandler
+import io.endertech.util.helper.BlockHelper
+import io.endertech.util.helper.LocalisationHelper
+import io.endertech.util.helper.LogHelper
+import io.endertech.util.helper.ModuleHelper
+import net.minecraft.client.Minecraft
+import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.init.Items
+import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.launchwrapper.Launch
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.common.Loader
+import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.common.Mod.EventHandler
+import net.minecraftforge.fml.common.SidedProxy
+import net.minecraftforge.fml.common.event.*
+import net.minecraftforge.fml.common.network.NetworkRegistry
+import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.oredict.OreDictionary
+import net.minecraftforge.oredict.ShapedOreRecipe
+import java.io.File
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION_NUMBER, certificateFingerprint = Reference.FINGERPRINT, dependencies = "after:ThermalExpansion@[1.7.10R4.0.0B1,)")
-public class EnderTech
-{
-    public static final CreativeTabs tabET = new CreativeTabET();
-    public static final GuiHandler guiHandler = new GuiHandler();
-    @SuppressWarnings("unused")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION_NUMBER,
+        certificateFingerprint = Reference.FINGERPRINT, modLanguageAdapter = "io.drakon.forge.kotlin.KotlinAdapter")
+@Suppress("unused") // event handlers
+object EnderTech {
+
+    val tabET: CreativeTabs = CreativeTabET()
+    val guiHandler = GuiHandler()
+
     @Mod.Instance(Reference.MOD_ID)
-    public static EnderTech instance;
+    @JvmStatic
+    var instance: EnderTech? = null
+
     @SidedProxy(clientSide = "io.endertech.proxy.ClientProxy", serverSide = "io.endertech.proxy.CommonProxy")
-    public static CommonProxy proxy;
-    public static boolean loadDevModeContent = false;
-    public static Item capacitor;
+    @JvmStatic
+    var proxy: CommonProxy? = null
+
+    var loadDevModeContent = false
+    var capacitor: Item? = null
+
+    init {
+        // Pulsar module loading
+        ModuleHelper.setupModules()
+    }
 
     @EventHandler
-    @SuppressWarnings("unused")
-    public void invalidFingerprint(FMLFingerprintViolationEvent event)
-    {
-        if (Reference.FINGERPRINT.equals("@FINGERPRINT@"))
-        {
-            LogHelper.warn(LocalisationHelper.localiseString("warning.fingerprint.missing"));
-        } else
-        {
-            LogHelper.fatal(LocalisationHelper.localiseString("error.fingerprint.tampered"));
+    fun invalidFingerprint(event: FMLFingerprintViolationEvent) {
+        if (Reference.FINGERPRINT == "@FINGERPRINT@") {
+            LogHelper.warn(LocalisationHelper.localiseString("warning.fingerprint.missing"))
+        } else {
+            LogHelper.fatal(LocalisationHelper.localiseString("error.fingerprint.tampered"))
         }
     }
 
     @EventHandler
-    @SuppressWarnings("unused")
-    public void preInit(FMLPreInitializationEvent event)
-    {
+    fun preInit(event: FMLPreInitializationEvent) {
         // Configuration
-        ConfigHandler.init(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + Reference.CHANNEL_NAME.toLowerCase() + File.separator);
+        ConfigHandler.init(event.modConfigurationDirectory.absolutePath + File.separator + Reference.CHANNEL_NAME.toLowerCase() + File.separator)
 
-        LogHelper.debug("Loaded config");
+        LogHelper.debug("Loaded config")
 
-        if ((Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment") || GeneralConfig.forceLoadDevContent)
-        {
-            loadDevModeContent = true;
+        if (Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean || GeneralConfig.forceLoadDevContent) {
+            loadDevModeContent = true
         }
 
-        // Pulsar module loading
-        //ModuleHelper.setupModules();
-        //ModuleHelper.pulsar.preInit(event);
-
         // Packet handler
-        PacketHandler.instance.init();
+        PacketHandler.instance.init()
 
         // Version checker
 
         // Tick handlers
-        proxy.registerTickerHandlers();
+        proxy.registerTickerHandlers()
 
         // KeyBinding handler
-        if (FMLCommonHandler.instance().getSide().isClient())
-        {
-            KeyBindingHandler.init();
+        if (FMLCommonHandler.instance().side.isClient) {
+            KeyBindingHandler.init()
         }
 
         // Sound handler
 
         // Blocks
-        ETBlocks.init();
+        ETBlocks.init()
 
         // Items
-        ETItems.init();
+        ETItems.init()
 
         // Fluids
-        BucketHandler.initialize();
+        BucketHandler.initialize()
 
-        LogHelper.debug("preInit complete");
+        LogHelper.debug("preInit complete")
     }
 
     @EventHandler
-    @SuppressWarnings("unused")
-    public void init(FMLInitializationEvent event)
-    {
+    fun init(event: FMLInitializationEvent) {
         // GUI
-        NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
+        //NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 
         // Packets
-        PacketTile.init();
-        PacketKeyPressed.init();
+        PacketTile.init()
+        PacketKeyPressed.init()
 
         // Pulsar loading
         //ModuleHelper.pulsar.init(event);
 
         // Renderers
-        proxy.registerTESRs();
+        proxy.registerTESRs()
 
-        proxy.registerRenderers();
+        proxy.registerRenderers()
 
-        proxy.registerItemRenderers();
+        proxy.registerItemRenderers()
 
         // Waila
-        FMLInterModComms.sendMessage("Waila", "register", "io.endertech.integration.waila.MultiblockWailaProvider.callbackRegister");
-        FMLInterModComms.sendMessage("Waila", "register", "io.endertech.integration.waila.GenericWailaProvider.callbackRegister");
+        //FMLInterModComms.sendMessage("Waila", "register", "io.endertech.integration.waila.MultiblockWailaProvider.callbackRegister");
+        //FMLInterModComms.sendMessage("Waila", "register", "io.endertech.integration.waila.GenericWailaProvider.callbackRegister");
 
-        LogHelper.debug("init complete");
+        LogHelper.debug("init complete")
 
         // IMC
 
-        MinecraftForge.EVENT_BUS.register(proxy);
+        MinecraftForge.EVENT_BUS.register(proxy)
     }
 
     @EventHandler
-    @SuppressWarnings("unused")
-    public void postInit(FMLPostInitializationEvent event)
-    {
+    fun postInit(event: FMLPostInitializationEvent) {
         // Pulsar loading
         //ModuleHelper.pulsar.postInit(event);
 
         // Packet postInit
-        PacketHandler.instance.postInit();
+        PacketHandler.instance.postInit()
 
-        if (FMLCommonHandler.instance().getSide().isClient())
-        {
-            MinecraftForge.EVENT_BUS.register(new GUIEventHandler((Minecraft.getMinecraft())));
+        if (FMLCommonHandler.instance().side.isClient) {
+            MinecraftForge.EVENT_BUS.register(GUIEventHandler(Minecraft.getMinecraft()))
         }
 
-        BlockHelper.initSoftBlocks();
-        Exchange.initSpecialBlocks();
+        BlockHelper.initSoftBlocks()
+        Exchange.initSpecialBlocks()
 
-        LogHelper.info(LocalisationHelper.localiseString("info.postinit.recipes"));
-        if (Loader.isModLoaded("ThermalExpansion"))
+        LogHelper.info(LocalisationHelper.localiseString("info.postinit.recipes"))
+        /*if (Loader.isModLoaded("ThermalExpansion"))
         {
             ItemStack capacitorReinforced = GameRegistry.findItemStack("ThermalExpansion", "capacitorReinforced", 1);
             ItemStack capacitorResonant = GameRegistry.findItemStack("ThermalExpansion", "capacitorResonant", 1);
@@ -207,6 +201,6 @@ public class EnderTech
             GameRegistry.addRecipe(BlockHealthPad.itemHealthPadRedstone, new Object[] {"IEI", "CFC", "IAI", 'I', electrumIngot, 'F', machineRedstone, 'E', enderEyeStack, 'C', goldenApple, 'T', tesseract, 'A', capacitorReinforced});
         } else {
             LogHelper.warn(LocalisationHelper.localiseString("warning.thermalexpansion.missing"));
-        }
+        }*/
     }
 }

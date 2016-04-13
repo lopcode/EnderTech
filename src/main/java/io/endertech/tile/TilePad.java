@@ -55,7 +55,7 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
     public static void writeDefaultTag(NBTTagCompound nbtTagCompound)
     {
         nbtTagCompound.setInteger("Energy", 0);
-        NBTHelper.writeInventoryToNBT(nbtTagCompound, new ItemStack[INVENTORY_SIZE]);
+        NBTHelper.INSTANCE.writeInventoryToNBT(nbtTagCompound, new ItemStack[INVENTORY_SIZE]);
     }
 
     @Override
@@ -159,7 +159,7 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
 
         if (nbtTagCompound.hasKey("Inventory"))
         {
-            this.inventory = NBTHelper.readInventoryFromNBT(nbtTagCompound, INVENTORY_SIZE);
+            this.inventory = NBTHelper.INSTANCE.readInventoryFromNBT(nbtTagCompound, INVENTORY_SIZE);
         }
     }
 
@@ -175,7 +175,7 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
     public void writeStateToNBT(NBTTagCompound nbtTagCompound)
     {
         nbtTagCompound.setInteger("Energy", this.storedEnergy);
-        NBTHelper.writeInventoryToNBT(nbtTagCompound, this.inventory);
+        NBTHelper.INSTANCE.writeInventoryToNBT(nbtTagCompound, this.inventory);
     }
 
     @Override
@@ -251,7 +251,7 @@ public abstract class TilePad extends TileInventory implements IReconfigurableFa
         if (GeneralConfig.debugRender)
         {
             AxisAlignedBB front = this.getAABBInFront(2);
-            RenderHelper.renderAABBOutline(event.context, event.player, front, RGBA.Red.setAlpha(0.6f), 2.0f, event.partialTicks);
+            RenderHelper.INSTANCE.renderAABBOutline(event.context, event.player, front, RGBA.Red.setAlpha(0.6f), 2.0f, event.partialTicks);
             return true;
         } else
         {

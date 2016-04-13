@@ -60,7 +60,7 @@ public class GeneralConfig
             healthPadForceAlwaysSendHealth = generalConfig.get("healthpad", "HealthPad.ForceAlwaysSendHealth", false).getBoolean(false);
         } catch (Exception e)
         {
-            LogHelper.error(LocalisationHelper.localiseString("error.config.general.load"));
+            LogHelper.INSTANCE.error(LocalisationHelper.localiseString("error.config.general.load"));
         } finally
         {
             generalConfig.save();

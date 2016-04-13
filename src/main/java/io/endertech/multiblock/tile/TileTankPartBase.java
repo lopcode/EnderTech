@@ -44,7 +44,7 @@ public abstract class TileTankPartBase extends RectangularMultiblockTileEntityBa
         {
             if (GeneralConfig.debugRender)
             {
-                RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Red.setAlpha(0.6f), 2.0f, event.partialTicks);
+                RenderHelper.INSTANCE.renderBlockOutline(event.context, event.player, target, RGBA.Red.setAlpha(0.6f), 2.0f, event.partialTicks);
                 return true;
             } else
             {

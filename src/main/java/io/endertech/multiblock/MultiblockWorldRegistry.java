@@ -208,7 +208,7 @@ public class MultiblockWorldRegistry
 
                 if (newMaster == null)
                 {
-                    LogHelper.fatal(LocalisationHelper.localiseString("error.multiblock.tickend.merge_pool", mergePool.size()));
+                    LogHelper.INSTANCE.fatal(LocalisationHelper.localiseString("error.multiblock.tickend.merge_pool", mergePool.size()));
                 } else
                 {
                     // Merge all the other machines into the master machine, then unregister them
@@ -268,7 +268,7 @@ public class MultiblockWorldRegistry
                 // Validate that they are empty/dead, then unregister them.
                 if (!controller.isEmpty())
                 {
-                    LogHelper.fatal(LocalisationHelper.localiseString("error.multiblock.tickend.non_empty_controller"));
+                    LogHelper.INSTANCE.fatal(LocalisationHelper.localiseString("error.multiblock.tickend.non_empty_controller"));
                     detachedParts.addAll(controller.detachAllBlocks());
                 }
 

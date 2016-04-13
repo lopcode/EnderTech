@@ -67,13 +67,13 @@ public class BlockChargePad extends BlockPad
     @Override
     public IIcon getActiveIcon(int meta)
     {
-        return IconRegistry.getIcon("ChargePad_" + TextureHelper.metaToType(meta) + "_Active");
+        return IconRegistry.getIcon("ChargePad_" + TextureHelper.INSTANCE.metaToType(meta) + "_Active");
     }
 
     @Override
     public IIcon getInactiveIcon(int meta)
     {
-        return IconRegistry.getIcon("ChargePad_" + TextureHelper.metaToType(meta) + "_Inactive");
+        return IconRegistry.getIcon("ChargePad_" + TextureHelper.INSTANCE.metaToType(meta) + "_Inactive");
     }
 
     public static enum Types

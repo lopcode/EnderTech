@@ -57,7 +57,7 @@ public class ItemBlockHealthPad extends ItemBlockBasic implements IEnergyContain
     {
         super.addInformation(stack, player, list, check);
 
-        if (KeyHelper.isShiftDown())
+        if (KeyHelper.INSTANCE.isShiftDown())
         {
             this.checkAndSetDefaultTag(stack);
 
@@ -66,12 +66,12 @@ public class ItemBlockHealthPad extends ItemBlockBasic implements IEnergyContain
                 list.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
             } else
             {
-                list.add(LocalisationHelper.localiseString("info.charge", StringHelper.getEnergyString(this.getEnergyStored(stack)) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(stack)) + " RF"));
+                list.add(LocalisationHelper.localiseString("info.charge", StringHelper.INSTANCE.getEnergyString(this.getEnergyStored(stack)) + " / " + StringHelper.INSTANCE.getEnergyString(this.getMaxEnergyStored(stack)) + " RF"));
             }
 
             if (!isCreative(stack))
             {
-                list.add(LocalisationHelper.localiseString("info.charge.receive", StringHelper.getEnergyString(TileHealthPad.RECEIVE[stack.getItemDamage()]) + " RF/t"));
+                list.add(LocalisationHelper.localiseString("info.charge.receive", StringHelper.INSTANCE.getEnergyString(TileHealthPad.RECEIVE[stack.getItemDamage()]) + " RF/t"));
             }
 
             list.add("Ticks per heal: " + TileHealthPad.TICKS_PER_HEAL[stack.getItemDamage()]);

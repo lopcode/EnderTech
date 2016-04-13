@@ -94,7 +94,7 @@ public class Exchange
 
     public static boolean isBlockExposedWithExchangerExceptions(World world, int x, int y, int z)
     {
-        return BlockHelper.isBlockExposed(world, x, y, z) || isBlockNextToException(world, x, y, z);
+        return BlockHelper.INSTANCE.isBlockExposed(world, x, y, z) || isBlockNextToException(world, x, y, z);
     }
 
     public static boolean isBlockNextToException(World world, int x, int y, int z)

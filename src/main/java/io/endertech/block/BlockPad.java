@@ -167,17 +167,17 @@ public abstract class BlockPad extends BlockET implements ITileEntityProvider, I
 
     public IIcon getTopIcon(int meta)
     {
-        return IconRegistry.getIcon("Machine_" + TextureHelper.metaToType(meta) + "_Top");
+        return IconRegistry.getIcon("Machine_" + TextureHelper.INSTANCE.metaToType(meta) + "_Top");
     }
 
     public IIcon getBottomIcon(int meta)
     {
-        return IconRegistry.getIcon("Machine_" + TextureHelper.metaToType(meta) + "_Bottom");
+        return IconRegistry.getIcon("Machine_" + TextureHelper.INSTANCE.metaToType(meta) + "_Bottom");
     }
 
     public IIcon getSideIcon(int meta)
     {
-        return IconRegistry.getIcon("Machine_" + TextureHelper.metaToType(meta) + "_Side");
+        return IconRegistry.getIcon("Machine_" + TextureHelper.INSTANCE.metaToType(meta) + "_Side");
     }
 
 }

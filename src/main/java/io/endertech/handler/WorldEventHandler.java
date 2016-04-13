@@ -151,21 +151,21 @@ public class WorldEventHandler
             int beforeConsumedSize = (beforeConsumedStack == null) ? 0 : beforeConsumedStack.stackSize;
 
             if (beforeConsumedSize == 1 && (exchange.player instanceof FakePlayer)) {
-                LogHelper.debug("Not consuming item as it is the last in a Fake Player's stack: " + exchange.player.getPosition(1.0F));
+                LogHelper.INSTANCE.debug("Not consuming item as it is the last in a Fake Player's stack: " + exchange.player.getPosition(1.0F));
 
                 return ExchangeResult.FAIL_SOURCE_NOT_CONSUMED;
             }
 
             List<ItemStack> droppedItems = this.harvestBlockWithSilkTouchIfRequired(block, exchange, blockCoord);
             if (droppedItems == null) {
-                LogHelper.warn("Player " + exchange.player.getDisplayName() + " tried to exchange something, but the droppedItems were null - bailing the entire exchange: " + block.toString());
+                LogHelper.INSTANCE.warn("Player " + exchange.player.getDisplayName() + " tried to exchange something, but the droppedItems were null - bailing the entire exchange: " + block.toString());
                 return ExchangeResult.FAIL_NULL_ITEM;
             }
 
             boolean containsNullItemInDroppedItems = false;
             for (ItemStack droppedItem : droppedItems) {
                 if (droppedItem.getItem() == null) {
-                    LogHelper.warn("Player " + exchange.player.getDisplayName() + " tried to exchange a null item - bailing the entire exchange: " + droppedItem.toString());
+                    LogHelper.INSTANCE.warn("Player " + exchange.player.getDisplayName() + " tried to exchange a null item - bailing the entire exchange: " + droppedItem.toString());
                     containsNullItemInDroppedItems = true;
                     break;
                 }
@@ -204,7 +204,7 @@ public class WorldEventHandler
         boolean canSilkTouch = block.canSilkHarvest(exchange.player.worldObj, exchange.player, blockCoord.x, blockCoord.y, blockCoord.z, exchange.sourceMeta);
 
         if (canSilkTouch && ItemConfig.itemExchangerSilkTouch) {
-            return BlockHelper.createSilkTouchStack(block, exchange.sourceMeta);
+            return BlockHelper.INSTANCE.createSilkTouchStack(block, exchange.sourceMeta);
         } else {
             return block.getDrops(exchange.player.worldObj, blockCoord.x, blockCoord.y, blockCoord.z, exchange.sourceMeta, 0);
         }

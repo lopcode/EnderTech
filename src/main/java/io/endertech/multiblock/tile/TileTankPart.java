@@ -113,7 +113,7 @@ public class TileTankPart extends TileTankPartBase implements IOutlineDrawer
 
         if (this.getMultiblockController() == null)
         {
-            LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.tank.null_controller_assembly", xCoord, yCoord, zCoord));
+            LogHelper.INSTANCE.warn(LocalisationHelper.localiseString("warning.multiblock.tank.null_controller_assembly", xCoord, yCoord, zCoord));
             this.onAttached(multiblockController);
         }
 

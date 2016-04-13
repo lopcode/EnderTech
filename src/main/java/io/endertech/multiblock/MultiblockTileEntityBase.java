@@ -85,7 +85,7 @@ public abstract class MultiblockTileEntityBase extends IMultiblockPart
     {
         if (this.controller != null)
         {
-            LogHelper.info(LocalisationHelper.localiseString("assert.multiblock.part.detached", xCoord, yCoord, zCoord));
+            LogHelper.INSTANCE.info(LocalisationHelper.localiseString("assert.multiblock.part.detached", xCoord, yCoord, zCoord));
             this.controller = null;
         }
     }

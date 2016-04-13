@@ -124,7 +124,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
 
         if (!connectedParts.add(part))
         {
-            LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.part.double_adding", (worldObj.isRemote ? "CLIENT" : "SERVER"), hashCode(), part.hashCode(), coord));
+            LogHelper.INSTANCE.warn(LocalisationHelper.localiseString("warning.multiblock.part.double_adding", (worldObj.isRemote ? "CLIENT" : "SERVER"), hashCode(), part.hashCode(), coord));
         }
 
         part.onAttached(this);
@@ -253,7 +253,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
         onDetachBlock(part);
         if (!connectedParts.remove(part))
         {
-            LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.part.double_removing", worldObj.isRemote ? "CLIENT" : "SERVER", part.hashCode(), part.xCoord, part.yCoord, part.zCoord));
+            LogHelper.INSTANCE.warn(LocalisationHelper.localiseString("warning.multiblock.part.double_removing", worldObj.isRemote ? "CLIENT" : "SERVER", part.hashCode(), part.xCoord, part.yCoord, part.zCoord));
         }
 
         if (connectedParts.isEmpty())
@@ -738,15 +738,15 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
         if (res < 0) { return true; } else if (res > 0) { return false; } else
         {
             // Strip dead parts from both and retry
-            LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.consuming.same_reference_coordinate", worldObj.isRemote ? "CLIENT" : "SERVER"));
+            LogHelper.INSTANCE.warn(LocalisationHelper.localiseString("warning.multiblock.consuming.same_reference_coordinate", worldObj.isRemote ? "CLIENT" : "SERVER"));
             auditParts();
             otherController.auditParts();
 
             res = _shouldConsume(otherController);
             if (res < 0) { return true; } else if (res > 0) { return false; } else
             {
-                LogHelper.fatal(LocalisationHelper.localiseString("error.multiblock.consuming.my_controller", hashCode(), connectedParts.size(), getPartsListString()));
-                LogHelper.fatal(LocalisationHelper.localiseString("error.multiblock.consuming.other_controller", otherController.hashCode(), otherController.connectedParts.size(), otherController.getPartsListString()));
+                LogHelper.INSTANCE.fatal(LocalisationHelper.localiseString("error.multiblock.consuming.my_controller", hashCode(), connectedParts.size(), getPartsListString()));
+                LogHelper.INSTANCE.fatal(LocalisationHelper.localiseString("error.multiblock.consuming.other_controller", otherController.hashCode(), otherController.connectedParts.size(), otherController.getPartsListString()));
                 throw new IllegalArgumentException(LocalisationHelper.localiseString("error.multiblock.consuming.same_reference_coordinate", (worldObj.isRemote ? "CLIENT" : "SERVER")));
             }
 
@@ -795,7 +795,7 @@ public abstract class MultiblockControllerBase implements IOutlineDrawer, ITileP
         }
 
         connectedParts.removeAll(deadParts);
-        LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.audit", worldObj.isRemote ? "CLIENT" : "SERVER", deadParts.size(), connectedParts.size()));
+        LogHelper.INSTANCE.warn(LocalisationHelper.localiseString("warning.multiblock.audit", worldObj.isRemote ? "CLIENT" : "SERVER", deadParts.size(), connectedParts.size()));
     }
 
     /**

@@ -80,7 +80,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
     {
         super.addInformation(stack, player, list, check);
 
-        if (KeyHelper.isShiftDown())
+        if (KeyHelper.INSTANCE.isShiftDown())
         {
             if (stack.stackTagCompound == null)
             {
@@ -92,7 +92,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
                 list.add(LocalisationHelper.localiseString("info.charge", "Infinite"));
             } else
             {
-                list.add(LocalisationHelper.localiseString("info.charge", StringHelper.getEnergyString(this.getEnergyStored(stack)) + " / " + StringHelper.getEnergyString(this.getMaxEnergyStored(stack)) + " RF"));
+                list.add(LocalisationHelper.localiseString("info.charge", StringHelper.INSTANCE.getEnergyString(this.getEnergyStored(stack)) + " / " + StringHelper.INSTANCE.getEnergyString(this.getMaxEnergyStored(stack)) + " RF"));
             }
 
             //if (this.getMaxExtractRate(stack) > 0)
@@ -100,7 +100,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
             if (this.getMaxReceiveRate(stack) > 0)
             {
-                list.add(LocalisationHelper.localiseString("info.charge.receive", StringHelper.getEnergyString(this.getMaxReceiveRate(stack)) + " RF/t"));
+                list.add(LocalisationHelper.localiseString("info.charge.receive", StringHelper.INSTANCE.getEnergyString(this.getMaxReceiveRate(stack)) + " RF/t"));
             }
 
             ItemStack pb = getSourceItemStack(stack);
@@ -124,22 +124,22 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
     @Override
     public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float xFloat, float yFloat, float zFloat)
     {
-        LogHelper.debug("Exchanger use on " + x + " " + y + " " + z);
+        LogHelper.INSTANCE.debug("Exchanger use on " + x + " " + y + " " + z);
 
         if (player.isSneaking())
         {
-            LogHelper.debug("Shift right click");
+            LogHelper.INSTANCE.debug("Shift right click");
 
             Block source = player.worldObj.getBlock(x, y, z);
             int sourceMeta = player.worldObj.getBlockMetadata(x, y, z);
 
             if (Exchange.blockSuitableForSelection(new BlockCoord(x, y, z), world, source, sourceMeta, itemstack))
             {
-                LogHelper.debug("Setting source block to " + source.getLocalizedName());
+                LogHelper.INSTANCE.debug("Setting source block to " + source.getLocalizedName());
                 setSourceBlock(itemstack, new ItemStack(source, 1, sourceMeta));
             } else
             {
-                LogHelper.debug("Failed to set source block");
+                LogHelper.INSTANCE.debug("Failed to set source block");
             }
 
             return false;
@@ -226,7 +226,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
     @Override
     public void handleKey(EntityPlayer player, ItemStack itemStack, Key.KeyCode key)
     {
-        LogHelper.debug("Handling key for Exchanger " + key.toString());
+        LogHelper.INSTANCE.debug("Handling key for Exchanger " + key.toString());
 
         int radius = this.getTargetRadius(itemStack);
 
@@ -240,7 +240,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
                 radius++;
             }
 
-            LogHelper.debug("Tool Increase");
+            LogHelper.INSTANCE.debug("Tool Increase");
         } else if (key == Key.KeyCode.TOOL_DECREASE)
         {
             if (player.isSneaking())
@@ -251,7 +251,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
                 radius--;
             }
 
-            LogHelper.debug("Tool Decrease");
+            LogHelper.INSTANCE.debug("Tool Decrease");
         }
 
         if (radius > ItemConfig.itemExchangerMaxRadius)
@@ -264,7 +264,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
             radius = 1;
         }
 
-        LogHelper.debug("Setting tool radius to " + radius);
+        LogHelper.INSTANCE.debug("Setting tool radius to " + radius);
         this.setTargetRadius(itemStack, radius);
     }
 
@@ -305,9 +305,9 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
             Block block = world.getBlock(target.x, target.y, target.z);
             int blockMeta = world.getBlockMetadata(target.x, target.y, target.z);
             if (!Exchange.blockSuitableForSelection(target, world, block, blockMeta, event.player.getCurrentEquippedItem()))
-                RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Red.setAlpha(0.6f), 2.0f, event.partialTicks);
+                RenderHelper.INSTANCE.renderBlockOutline(event.context, event.player, target, RGBA.Red.setAlpha(0.6f), 2.0f, event.partialTicks);
             else
-                RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.Green.setAlpha(0.6f), 2.0f, event.partialTicks);
+                RenderHelper.INSTANCE.renderBlockOutline(event.context, event.player, target, RGBA.Green.setAlpha(0.6f), 2.0f, event.partialTicks);
 
             return true;
         }
@@ -319,7 +319,7 @@ public class ItemExchanger extends ItemExchangerBase implements IKeyHandler, IOu
 
         for (BlockCoord blockCoord : blocks)
         {
-            RenderHelper.renderBlockOutline(event.context, event.player, blockCoord, RGBA.White.setAlpha(0.6f), 2.0f, event.partialTicks);
+            RenderHelper.INSTANCE.renderBlockOutline(event.context, event.player, blockCoord, RGBA.White.setAlpha(0.6f), 2.0f, event.partialTicks);
         }
 
         return true;

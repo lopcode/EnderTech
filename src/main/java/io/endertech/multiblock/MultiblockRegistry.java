@@ -121,7 +121,7 @@ public class MultiblockRegistry
             registries.get(world).addDeadController(controller);
         } else
         {
-            LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.controller.dead_but_world_not_tracked", controller.hashCode(), world));
+            LogHelper.INSTANCE.warn(LocalisationHelper.localiseString("warning.multiblock.controller.dead_but_world_not_tracked", controller.hashCode(), world));
         }
     }
 

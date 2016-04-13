@@ -140,7 +140,7 @@ public class BlockTankPart extends BlockET implements ITileEntityProvider, IOutl
 
                         if (randomNumbers.size() > 1)
                         {
-                            LogHelper.info(LocalisationHelper.localiseString("info.multiblock.tank.connecting_destructive", new BlockCoord(x, y, z).toString()));
+                            LogHelper.INSTANCE.info(LocalisationHelper.localiseString("info.multiblock.tank.connecting_destructive", new BlockCoord(x, y, z).toString()));
                             return false;
                         }
                     }

@@ -63,7 +63,7 @@ public class ConnectedRenderBlocks extends RenderBlocks
         for (int i = 0; i < 4; i++)
         {
             dir = neighborsBySide[face][i];
-            if (BlockHelper.areBlocksEqual(blockAccess, block, meta, x, y, z, dir))
+            if (BlockHelper.INSTANCE.areBlocksEqual(blockAccess, block, meta, x, y, z, dir))
             {
                 iconIndexes[i + 1] = calculateConnectednessForSingleBlock(blockAccess, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, face);
                 iconIndexes[0] |= 1 << i;
@@ -80,7 +80,7 @@ public class ConnectedRenderBlocks extends RenderBlocks
         for (int i = 0; i < 4; i++)
         {
             dir = neighborsBySide[face][i];
-            if (BlockHelper.areBlocksEqual(blockAccess, block, meta, x, y, z, dir))
+            if (BlockHelper.INSTANCE.areBlocksEqual(blockAccess, block, meta, x, y, z, dir))
             {
                 iconIndex |= 1 << i;
             }

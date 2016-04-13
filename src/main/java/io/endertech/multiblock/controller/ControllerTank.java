@@ -216,7 +216,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         {
             if (itemStack != null)
             {
-                WorldHelper.spawnItemInWorldWithRandomness(itemStack, world, 0.3F, x, y, z, 2);
+                WorldHelper.INSTANCE.spawnItemInWorldWithRandomness(itemStack, world, 0.3F, x, y, z, 2);
             }
         }
 
@@ -316,9 +316,9 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
                         //Lazy removal of logging
                         int i = 1;
                     } else {
-                        LogHelper.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation"));
-                        LogHelper.error(this.toString());
-                        LogHelper.error(candidate.toString());
+                        LogHelper.INSTANCE.error(LocalisationHelper.localiseString("error.multiblock.tank.destructive_assimilation"));
+                        LogHelper.INSTANCE.error(this.toString());
+                        LogHelper.INSTANCE.error(candidate.toString());
                     }
                 }
             }
@@ -369,7 +369,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
         NBTTagCompound tankNBT = new NBTTagCompound();
         tank.writeToNBT(tankNBT);
         data.setTag(TANK_NAME, tankNBT);
-        NBTHelper.writeInventoryToNBT(data, this.inventory);
+        NBTHelper.INSTANCE.writeInventoryToNBT(data, this.inventory);
 
         //        LogHelper.info("Writing tank to NBT: " + this.toString());
     }
@@ -417,7 +417,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
 
         if (data.hasKey("Inventory"))
         {
-            this.inventory = NBTHelper.readInventoryFromNBT(data, 1);
+            this.inventory = NBTHelper.INSTANCE.readInventoryFromNBT(data, 1);
         }
     }
 
@@ -491,14 +491,14 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
 
         if (this.tank.getFluid() != null && this.tank.getFluidAmount() > 0)
         {
-            additions.add(StringHelper.getFluidName(this.tank.getFluid()));
+            additions.add(StringHelper.INSTANCE.getFluidName(this.tank.getFluid()));
             additions.add(this.tank.getFluidAmount() + " / " + this.tank.getCapacity() + " mB");
         } else
         {
             additions.add("Empty");
         }
 
-        additions.add(StringHelper.getEnergyString(this.storedEnergy) + " / " + StringHelper.getEnergyString(MAX_ENERGY_STORAGE) + " RF");
+        additions.add(StringHelper.INSTANCE.getEnergyString(this.storedEnergy) + " / " + StringHelper.INSTANCE.getEnergyString(MAX_ENERGY_STORAGE) + " RF");
 
 
         return additions;
@@ -514,7 +514,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
             if ((this.getStoredEnergy() > 0 || this.tank.getFluidAmount() > 0) && (otherTank.getStoredEnergy() > 0 || otherTank.tank.getFluidAmount() > 0))
             {
                 if (ServerHelper.isServerWorld(this.worldObj))
-                    LogHelper.warn(LocalisationHelper.localiseString("warning.multiblock.tank.destructive_assimilation_check"));
+                    LogHelper.INSTANCE.warn(LocalisationHelper.localiseString("warning.multiblock.tank.destructive_assimilation_check"));
             }
         }
 
@@ -551,7 +551,7 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
             Set<IMultiblockPart> connectedParts = this.getConnectedParts();
             if (connectedParts.isEmpty())
             {
-                RenderHelper.renderBlockOutline(event.context, event.player, target, RGBA.White.setAlpha(0.6f), 2.0f, event.partialTicks);
+                RenderHelper.INSTANCE.renderBlockOutline(event.context, event.player, target, RGBA.White.setAlpha(0.6f), 2.0f, event.partialTicks);
             }
 
             RGBA colour = RGBA.Blue.setAlpha(0.6f);
@@ -567,22 +567,22 @@ public class ControllerTank extends RectangularMultiblockControllerBase implemen
                 if (blockPart instanceof BlockTankController)
                 {
                     if (BlockTankController.isController(world.getBlockMetadata(partCoord.x, partCoord.y, partCoord.z)))
-                        RenderHelper.renderBlockOutline(event.context, event.player, partCoord, RGBA.White.setAlpha(0.6f), 10.0f, event.partialTicks);
+                        RenderHelper.INSTANCE.renderBlockOutline(event.context, event.player, partCoord, RGBA.White.setAlpha(0.6f), 10.0f, event.partialTicks);
 
                 } else
                 {
-                    RenderHelper.renderBlockOutline(event.context, event.player, partCoord, colour, 2.0f, event.partialTicks);
+                    RenderHelper.INSTANCE.renderBlockOutline(event.context, event.player, partCoord, colour, 2.0f, event.partialTicks);
                 }
 
                 if (part.isMultiblockSaveDelegate())
-                    RenderHelper.renderBlockOutline(event.context, event.player, partCoord, RGBA.Red, 10.0f, event.partialTicks);
+                    RenderHelper.INSTANCE.renderBlockOutline(event.context, event.player, partCoord, RGBA.Red, 10.0f, event.partialTicks);
             }
         } else
         {
             BlockCoord minCoord = this.getMinimumCoord();
             BlockCoord maxCoord = this.getMaximumCoord();
             AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(minCoord.x, minCoord.y, minCoord.z, maxCoord.x + 1, maxCoord.y + 1, maxCoord.z + 1);
-            RenderHelper.renderAABBOutline(event.context, event.player, aabb, RGBA.Black, 1.0f, event.partialTicks);
+            RenderHelper.INSTANCE.renderAABBOutline(event.context, event.player, aabb, RGBA.Black, 1.0f, event.partialTicks);
         }
 
         return true;

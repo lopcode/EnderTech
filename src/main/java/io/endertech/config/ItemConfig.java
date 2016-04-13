@@ -40,7 +40,7 @@ public class ItemConfig
             }
         } catch (Exception e)
         {
-            LogHelper.error(LocalisationHelper.localiseString("error.config.item.load"));
+            LogHelper.INSTANCE.error(LocalisationHelper.localiseString("error.config.item.load"));
         } finally
         {
             itemConfig.save();

@@ -68,11 +68,11 @@ public class KeyBindingHandler
 
                     if (player.worldObj.isRemote)
                     {
-                        LogHelper.debug("Remote, sent " + keyCode.toString() + " to server");
+                        LogHelper.INSTANCE.debug("Remote, sent " + keyCode.toString() + " to server");
                         new PacketKeyPressed().sendKeyPressedPacket(keyCode);
                     } else
                     {
-                        LogHelper.debug("Client, handling key press: " + keyCode.toString());
+                        LogHelper.INSTANCE.debug("Client, handling key press: " + keyCode.toString());
                         ((IKeyHandler) player.getCurrentEquippedItem().getItem()).handleKey(player, equippedItem, keyCode);
                     }
                 }

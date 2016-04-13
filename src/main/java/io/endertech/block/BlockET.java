@@ -69,7 +69,7 @@ public class BlockET extends Block
         {
             for (ItemStack itemStack : drops)
             {
-                WorldHelper.spawnItemInWorldWithRandomness(itemStack, world, 0.3F, x, y, z, 2);
+                WorldHelper.INSTANCE.spawnItemInWorldWithRandomness(itemStack, world, 0.3F, x, y, z, 2);
             }
         }
 

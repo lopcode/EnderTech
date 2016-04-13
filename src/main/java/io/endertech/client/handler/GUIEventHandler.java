@@ -82,8 +82,8 @@ public class GUIEventHandler extends Gui
             am = LocalisationHelper.localiseString("gui.exchanger.radius.infinite");
         }
 
-        FontHelper.drawItemQuantity(mc.fontRenderer, 3 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, am);
-        FontHelper.renderText(mc.fontRenderer, 2 + 16 + 2 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, 1.0, LocalisationHelper.localiseString("gui.exchanger.radius", exchanger.getTargetRadius(exchangerStack)));
+        FontHelper.INSTANCE.drawItemQuantity(mc.fontRenderer, 3 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, am);
+        FontHelper.INSTANCE.renderText(mc.fontRenderer, 2 + 16 + 2 + GeneralConfig.GUITopLeftXOffset, 3 + GeneralConfig.GUITopLeftYOffset, 1.0, LocalisationHelper.localiseString("gui.exchanger.radius", exchanger.getTargetRadius(exchangerStack)));
 
         net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
     }
