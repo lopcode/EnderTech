@@ -2,6 +2,8 @@
 
 #EnderTech
 
+##No longer in active development!
+
 ##Introduction
 This is my first foray in to Minecraft modding. It's intended to be a tech and Ender themed mod, starting at around Thermal Expansion's end-game. It will contain powerful, relatively expensive mechanics, with some configurability. The defaults will maintain a balance that makes my own game more fun.
 
