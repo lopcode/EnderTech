@@ -1,10 +1,10 @@
 ![EnderTech Logo](https://raw.githubusercontent.com/carrotengineer/EnderTech/d838d9282bd30014de1fbc4772e0522d1bb30fa8/src/main/resources/assets/endertech/textures/logo.png)
 
-#EnderTech
+# EnderTech
 
-##No longer in active development!
+## No longer in active development!
 
-##Introduction
+## Introduction
 This is my first foray in to Minecraft modding. It's intended to be a tech and Ender themed mod, starting at around Thermal Expansion's end-game. It will contain powerful, relatively expensive mechanics, with some configurability. The defaults will maintain a balance that makes my own game more fun.
 
 Some features are often in development, so try to use Promoted builds in your world. It's still no guarantee that a recipe or cost won't change, but I'll try to make sure things carry over where possible.
